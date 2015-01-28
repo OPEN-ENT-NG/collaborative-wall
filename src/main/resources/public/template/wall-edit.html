@@ -1,0 +1,37 @@
+<div class="row">
+
+    <h2 ng-if="!wall._id">
+        <i18n>wall.head.create</i18n>
+    </h2>
+    <h2 ng-if="wall._id">
+        <i18n>wall.head.modify</i18n>
+    </h2>
+    
+    <article class="twelve cell">
+        <form name="form">
+            <!-- Title -->
+            <label class="twelve cell"><i18n>wall.label.name</i18n></label> 
+            <input class="twelve cell" type="text" ng-model="wall.name" required /> 
+
+            <!-- Images -->
+            <div class="twelve cell">
+                <label class="twelve cell"><i18n>wall.label.image</i18n></label>
+                <div class="two cell">
+                    <image-select ng-model="wall.icon" default="/img/illustrations/wall-default.png" thumbnails="[{ width: 290, height: 290 }]"></image-select>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <label class="twelve cell"><i18n>wall.label.description</i18n></label> 
+            <textarea class="twelve cell" ng-model="wall.description" required></textarea> 
+
+            <!-- Controls -->
+            <div class="vertical-spacing-twice twelve cell">
+                <button class="right-magnet" ng-click="saveWall()" ng-disabled="form.$invalid">
+                    <i18n>save</i18n>
+                </button>
+                <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelWallEdit()" />
+            </div>
+        </form>
+    </article>
+</div>

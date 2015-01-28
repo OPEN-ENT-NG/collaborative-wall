@@ -1,0 +1,17 @@
+  	{
+      "name": "net.atos~collaborativewall~0.1-SNAPSHOT",
+      "config": {
+        "main" : "net.atos.entng.collaborativewall.CollaborativeWall",
+        "port" : 8071,
+        "app-name" : "CollaborativeWall",
+        "app-address" : "/collaborativewall",
+        "app-icon" : "collaborativewall-large",
+        "host": "${host}",
+        "ssl" : $ssl,
+        "userbook-host": "${host}",
+        "integration-mode" : "HTTP",
+        "app-registry.port" : 8012,
+        "mode" : "${mode}",
+        "entcore.port" : 8009
+      }
+    }

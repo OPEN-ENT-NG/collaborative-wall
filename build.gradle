@@ -1,0 +1,69 @@
+apply from: "gradle/vertx.gradle"
+apply plugin: 'scala'
+
+dependencies {
+	compile "org.entcore:common:$entCoreVersion"
+  testCompile "org.entcore:tests:$entCoreVersion"
+}
+
+javadoc {
+  options.encoding = 'UTF-8'
+  classpath = configurations.provided
+  classpath += configurations.compile
+}
+
+task testJar(type: Jar) {
+  classifier = 'tests'
+  from sourceSets.test.output
+}
+
+task deploymentJar(type: Jar) {
+  classifier = 'deployment'
+  from 'deployment'
+}
+
+artifacts {
+  archives testJar
+  archives deploymentJar
+}
+
+repositories {
+    maven {
+        url "http://maven.web-education.net/nexus/content/groups/public"
+    }
+}
+
+def configurePom(def pom) {
+	pom.project {
+		description 'Poll'
+		inceptionYear '2014'
+		packaging 'zip'
+		url 'http://code.web-education.net/ong/poll'
+
+		developers {
+			developer {
+				id 'mgam'
+				name 'Mathieu GAMONNET'
+				email 'mathieu.gamonnet@atos.net'
+			}
+		}
+
+		scm {
+			url 'git@code.web-education.net:ong/poll.git'
+		}
+
+		properties {
+			setProperty('project.build.sourceEncoding', 'UTF8')
+		}
+	}
+}
+
+task deploy( type:Copy, dependsOn: 'classes', description: 'Assemble the module into the remote mods directory' ) {
+  into "../../springboard-neo/mods/$moduleName"
+  from compileJava
+  from 'src/main/resources'
+  into( 'lib' ) {
+    from configurations.compile
+  }
+}
+

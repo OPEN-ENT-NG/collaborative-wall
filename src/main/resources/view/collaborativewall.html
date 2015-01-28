@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{#i18n}}wall.title{{/i18n}}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <link rel="stylesheet" type="text/css" href="/collaborativewall/public/css/custom.css">
+        
+        <script src="{{#infra}}js/loader.js{{/infra}}" type="text/javascript" id="context"></script>
+        <script src="/collaborativewall/public/js/model.js" type="text/javascript"></script>
+        <script src="/collaborativewall/public/js/controller.js" type="text/javascript"></script>
+        <script type="text/ng-template" id="empty"></script>
+    </head>
+    <body ng-controller="WallController">
+        <portal>
+            <div class="row patchwork">
+                <container template="main" class="flexible content cell"></container>
+                <container template="walls" class="flexible navigation" ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"></container>
+            </div>
+        </portal>
+    </div>
+    </body>
+</html>

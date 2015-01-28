@@ -1,0 +1,32 @@
+{
+	"wall.title": "Collaborative wall",
+	
+	"wall.head.create": "Create a new wall",
+	"wall.head.modify": "Modify a wall",
+	"wall.label.name": "Name",
+	"wall.label.image": "Associate an image",
+	"wall.label.description": "Description",
+	
+	"wall.delete.confirm": "Do you really want to delete this wall?",
+	"wall.save.info": "Wall updated",
+	
+	"wall.new": "New wall",
+	"wall.create": "Create",
+	
+	"wall.read": "Reader",
+	"wall.contrib": "Contributor",
+	"wall.manager": "Manager",
+	
+	"group.Teacher" : "All teachers of the group {0}.",
+	"group.Personnel" : "All staff of the group {0}.",
+	"group.Student" : "All students of the group {0}.",
+	"group.Relative" : "All parents of the group {0}.",
+	"group.school.Teacher" : "All teachers of {0}.",
+	"group.school.Personnel" : "All staff of {0}.",
+	"group.school.Student" : "All students of {0}.",
+	"group.school.Relative" : "All parents of {0}.",
+	"group.class.Teacher" : "All teachers of the class {0}.",
+	"group.class.Personnel" : "All staff of the class {0}.",
+	"group.class.Student" : "All students of the class {0}.",
+	"group.class.Relative" : "All parents of the class {0}."
+}

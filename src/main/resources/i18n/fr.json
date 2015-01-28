@@ -1,0 +1,32 @@
+{
+	"wall.title": "Mur collaboratif",
+	
+	"wall.head.create": "Creation d'un nouveau mur",
+	"wall.head.modify": "Modification d'un mur",
+	"wall.label.name": "Nom",
+	"wall.label.image": "Associer une image",
+	"wall.label.description": "Description",
+	
+	"wall.delete.confirm": "Voulez-vous vraiment supprimer ce mur ?",
+	"wall.save.info": "Mur mis à jour",
+	
+	"wall.new": "Nouveau mur",
+	"wall.create": "Créer",
+	
+	"wall.read": "Lecteur",
+	"wall.contrib": "Contributeur",
+	"wall.manager": "Gestionnaire",
+	
+	"group.Teacher" : "Tous les enseignants du groupe {0}.",
+	"group.Personnel" : "Tous les personnels du groupe {0}.",
+	"group.Student" : "Tous les élèves du groupe {0}.",
+	"group.Relative" : "Tous les parents du groupe {0}.",
+	"group.school.Teacher" : "Tous les enseignants de l'{0}.",
+	"group.school.Personnel" : "Tous les personnels de l'{0}.",
+	"group.school.Student" : "Tous les élèves de l'{0}.",
+	"group.school.Relative" : "Tous les parents de l'{0}.",
+	"group.class.Teacher" : "Tous les enseignants de la classe {0}.",
+	"group.class.Personnel" : "Tous les personnels de la classe {0}.",
+	"group.class.Student" : "Tous les élèves de la classe {0}.",
+	"group.class.Relative" : "Tous les parents de la classe {0}."
+}
