@@ -2,7 +2,7 @@
 	"wall.title": "Collaborative wall",
 	
 	"wall.head.create": "Create a new wall",
-	"wall.head.modify": "Modify a wall",
+	"wall.head.modify": "Modify the wall",
 	"wall.label.name": "Name",
 	"wall.label.image": "Associate an image",
 	"wall.label.description": "Description",
@@ -13,9 +13,11 @@
 	"wall.new": "New wall",
 	"wall.create": "Create",
 	
-	"wall.read": "Reader",
-	"wall.contrib": "Contributor",
-	"wall.manager": "Manager",
+	"wall.fullscreen.open": "Open wall",
+	
+	"collaborativewall.read": "Reader",
+	"collaborativewall.contrib": "Contributor",
+	"collaborativewall.manager": "Manager",
 	
 	"group.Teacher" : "All teachers of the group {0}.",
 	"group.Personnel" : "All staff of the group {0}.",

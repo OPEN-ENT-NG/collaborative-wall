@@ -35,10 +35,10 @@ repositories {
 
 def configurePom(def pom) {
 	pom.project {
-		description 'Poll'
-		inceptionYear '2014'
+		description 'Collaborative Wall'
+		inceptionYear '2015'
 		packaging 'zip'
-		url 'http://code.web-education.net/ong/poll'
+		url 'http://code.web-education.net/ong/collaborative-wall'
 
 		developers {
 			developer {
@@ -49,7 +49,7 @@ def configurePom(def pom) {
 		}
 
 		scm {
-			url 'git@code.web-education.net:ong/poll.git'
+			url 'git@code.web-education.net:ong/collaborative-wall.git'
 		}
 
 		properties {

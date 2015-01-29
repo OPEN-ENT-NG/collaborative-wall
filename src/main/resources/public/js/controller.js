@@ -122,9 +122,17 @@ function WallController($scope, template, model) {
      * @param wall the wall to share.
      * @param event the current event.
      */
-    $scope.shareWall = function(wall, event){
+    $scope.shareWall = function(wall, event) {
         $scope.wall = wall;
         $scope.display.showPanel = true;
         event.stopPropagation();
     };
+    
+    /**
+     * Allows to open the given wall in full screen.
+     * @param wall a wall to open in full screen.
+     */
+    $scope.openWallFullScreen = function(wall) {
+        
+    }
 }

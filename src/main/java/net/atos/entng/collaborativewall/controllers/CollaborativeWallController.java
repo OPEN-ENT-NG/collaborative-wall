@@ -97,14 +97,14 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @Put("/share/json/:id")
     @ApiDoc("Allows to update the current sharing of the collaborative wall given by its identifier")
     @SecuredAction(value = "collaborativewall.manager", type = ActionType.RESOURCE)
-    public void sharePollSubmit(HttpServerRequest request) {
+    public void shareCollaborativeWallSubmit(HttpServerRequest request) {
         shareJsonSubmit(request, null);
     }
 
     @Put("/share/remove/:id")
     @ApiDoc("Allows to remove the current sharing of the collaborative wall given by its identifier")
     @SecuredAction(value = "collaborativewall.manager", type = ActionType.RESOURCE)
-    public void removeSharePoll(HttpServerRequest request) {
+    public void removeShareCollaborativeWall(HttpServerRequest request) {
         removeShare(request, false);
     }
 

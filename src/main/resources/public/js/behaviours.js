@@ -8,7 +8,7 @@ var wallBehaviours = {
      */
     resources : {
         contrib : {
-            right : 'net-atos-entng-collaborativewall-controllers-CollaborativeWallController|vote'
+            right : 'net-atos-entng-collaborativewall-controllers-CollaborativeWallController|update'
         },
         manage : {
             right : 'net-atos-entng-collaborativewall-controllers-CollaborativeWallController|delete'
@@ -21,18 +21,13 @@ var wallBehaviours = {
      */
     workflow : {
         create : 'net.atos.entng.collaborativewall.controllers.CollaborativeWallController|create'
-    },
-
-    /**
-     * Special rights for the sniplet part.
-     */
-    viewRights : [ "net-atos-entng-collaborativewall-controllers-CollaborativeWallController|list" ]
+    }
 };
 
 /**
  * Register behaviours.
  */
-Behaviours.register('wall', {
+Behaviours.register('collaborativewall', {
     behaviours : wallBehaviours,
 
     /**

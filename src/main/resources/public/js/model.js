@@ -85,6 +85,6 @@ model.build = function() {
                 }
             }.bind(this));
         },
-        behaviours: 'wall'
+        behaviours: 'collaborativewall'
     });
 };
