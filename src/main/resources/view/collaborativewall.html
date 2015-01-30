@@ -13,11 +13,14 @@
     </head>
     <body ng-controller="WallController">
         <portal>
-            <div class="row patchwork">
+            <div ng-if="!error" class="row patchwork">
                 <container template="main" class="flexible content cell"></container>
                 <container template="walls" class="flexible navigation" ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"></container>
             </div>
-        </portal>
+            <div ng-if="error" class="row">
+                <container template="error"></container>
+            </div>
+    </portal>
     </div>
     </body>
 </html>

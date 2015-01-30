@@ -1,19 +1,46 @@
 
 /**
+ * Allows to define routes of collaborative walls application.
+ */
+routes.define(function($routeProvider){
+    $routeProvider
+      .when('/view/:wallId', {
+        action: 'displayFullScreen'
+      })
+      .otherwise({
+        action: 'mainPage'
+      });
+});
+
+/**
  * Controller for walls. All methods contained in this controller can be called
  * from the view.
  * @param $scope Angular JS model.
  * @param template all templates.
  * @param model the wall model.
+ * @param route route system.
  */
-function WallController($scope, template, model) {
+function WallController($scope, template, model, route) {
     $scope.template = template;
     $scope.walls = model.walls;
     $scope.me = model.me;
     $scope.display = {};
-
-    // By default open the walls list
-    template.open('walls', 'wall-list');
+    $scope.error = false;
+    
+    // Action according to the current given route.
+    route({
+        displayFullScreen: function(params) {
+            walls.one('sync', function() {
+                var wall = walls.find(function(w) {
+                    return w._id === params.wallId;
+                });
+                $scope.openWallFullScreen(wall);
+            });
+        },
+        mainPage: function(){
+            template.open('walls', 'wall-list');
+        }
+    });
 
     /**
      * Allows to open the given wall into the "main" div using the
@@ -114,6 +141,8 @@ function WallController($scope, template, model) {
     $scope.removeWall = function() {
         $scope.wall.delete();
         delete $scope.display.confirmDeleteWall;
+        delete $scope.wall;
+        template.close('main');
     };
     
     /**
@@ -133,6 +162,23 @@ function WallController($scope, template, model) {
      * @param wall a wall to open in full screen.
      */
     $scope.openWallFullScreen = function(wall) {
-        
-    }
+        if (wall) {
+            $scope.wall = wall;
+            $scope.error = false;
+            template.close('main');
+            template.open('walls', 'wall-full');
+        } else {
+            $scope.wall = undefined;
+            $scope.error = true;
+            template.open('error', '404');
+        }
+    };
+    
+    /**
+     * Allows to return to the list of walls.
+     */
+    $scope.closeWallFullScreen= function() {
+        template.close('main');
+        template.open('walls', 'wall-list');
+    };
 }
