@@ -78,6 +78,13 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
             }
         });
     }
+    
+    @Put("/contribute/:id")
+    @ApiDoc("Allows to contribute to the wall associated to the given identifier")
+    @SecuredAction(value = "collaborativewall.contrib", type = ActionType.RESOURCE)
+    public void contribute(HttpServerRequest request) {
+        update(request);
+    }
 
     @Override
     @Delete("/:id")

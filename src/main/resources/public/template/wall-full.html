@@ -6,7 +6,7 @@
 <div class="board" ng-dblclick="addNote()">
     <div ng-repeat="n in wall.notes" class="note" ng-class="{ selected: n === note }" ng-dblclick="editNote(n, $event)">
         <div class="control">
-            <span ng-if="me._id === n.owner._id" ng-click="removeNote($index)">x</span>
+            <span ng-if="me.userId === n.owner.userId" ng-click="removeNote($index)">x</span>
         </div>
         <div class="note-content">
             <div class="row" ng-if="n === note">

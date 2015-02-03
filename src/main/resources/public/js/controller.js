@@ -193,10 +193,12 @@ function WallController($scope, template, model, route) {
         
         var newNote = new Note();
         newNote.content = "";
-        newNote.owner = $scope.me;
+        newNote.owner = {};
+        newNote.owner.userId = $scope.me.userId;
+        newNote.owner.displayName = $scope.me.displayName;
         
         $scope.wall.notes.push(newNote);
-        $scope.wall.update();
+        $scope.wall.contribute();
     };
     
     /**
@@ -208,7 +210,7 @@ function WallController($scope, template, model, route) {
             var notes = $scope.wall.notes;
             if (notes && index >= 0 && index < notes.length) {
                 notes.splice(index, 1);
-                $scope.wall.update();
+                $scope.wall.contribute();
             }
         }
     };
@@ -218,14 +220,14 @@ function WallController($scope, template, model, route) {
      */
     $scope.editNote = function(note, event) {
         event.stopPropagation();
-        if (note && note.owner && note.owner._id === $scope.me._id) {
+        if (note && note.owner && note.owner.userId === $scope.me.userId) {
             $scope.note = note;
         }
     };
     
     $scope.saveNote = function() {
         if ($scope.note) {
-            $scope.wall.update();
+            $scope.wall.contribute();
             delete $scope.note;
         }
     };

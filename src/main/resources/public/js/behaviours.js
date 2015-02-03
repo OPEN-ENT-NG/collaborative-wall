@@ -8,7 +8,7 @@ var wallBehaviours = {
      */
     resources : {
         contrib : {
-            right : 'net-atos-entng-collaborativewall-controllers-CollaborativeWallController|update'
+            right : 'net-atos-entng-collaborativewall-controllers-CollaborativeWallController|contribute'
         },
         manage : {
             right : 'net-atos-entng-collaborativewall-controllers-CollaborativeWallController|delete'

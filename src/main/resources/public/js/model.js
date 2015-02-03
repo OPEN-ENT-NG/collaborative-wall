@@ -38,10 +38,23 @@ Wall.prototype.create = function(callback) {
 /**
  * Allows to update the wall. This method calls the REST web service to persist
  * data.
- * @param callback a function to call after create.
+ * @param callback a function to call after update.
  */
 Wall.prototype.update = function(callback) {
     http().putJson('/collaborativewall/' + this._id, this).done(function() {
+        if(typeof callback === 'function'){
+            callback();
+        }
+    });
+};
+
+/**
+ * Allows to contribute to the wall. This method calls the REST web service to persist
+ * data.
+ * @param callback a function to call after update.
+ */
+Wall.prototype.contribute = function(callback) {
+    http().putJson('/collaborativewall/contribute/' + this._id, this).done(function() {
         if(typeof callback === 'function'){
             callback();
         }
