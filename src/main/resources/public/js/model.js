@@ -5,6 +5,11 @@
 function Wall() {}
 
 /**
+ * Model to create a note.
+ */
+function Note() {}
+
+/**
  * Allows to save the wall. If the wall is new and does not have any id set,
  * this method calls the create method otherwise it calls the update method.
  * @param callback a function to call after saving.
@@ -37,7 +42,6 @@ Wall.prototype.create = function(callback) {
  */
 Wall.prototype.update = function(callback) {
     http().putJson('/collaborativewall/' + this._id, this).done(function() {
-        notify.info('wall.save.info');
         if(typeof callback === 'function'){
             callback();
         }
@@ -66,7 +70,8 @@ Wall.prototype.toJSON = function() {
     return {
         icon: this.icon,
         name: this.name,
-        description: this.description
+        description: this.description,
+        notes: this.notes
     }
 };
 

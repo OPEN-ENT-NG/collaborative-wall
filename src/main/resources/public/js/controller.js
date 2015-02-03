@@ -37,7 +37,7 @@ function WallController($scope, template, model, route) {
                 $scope.openWallFullScreen(wall);
             });
         },
-        mainPage: function(){
+        mainPage: function() {
             template.open('walls', 'wall-list');
         }
     });
@@ -165,6 +165,7 @@ function WallController($scope, template, model, route) {
         if (wall) {
             $scope.wall = wall;
             $scope.error = false;
+            $scope.note = undefined;
             template.close('main');
             template.open('walls', 'wall-full');
         } else {
@@ -180,5 +181,56 @@ function WallController($scope, template, model, route) {
     $scope.closeWallFullScreen= function() {
         template.close('main');
         template.open('walls', 'wall-list');
+    };
+    
+    /**
+     * Allows to add a new note into the current wall.
+     */
+    $scope.addNote = function() {
+        if ($scope.wall.notes === undefined) {
+            $scope.wall.notes = [];
+        }
+        
+        var newNote = new Note();
+        newNote.content = "";
+        newNote.owner = $scope.me;
+        
+        $scope.wall.notes.push(newNote);
+        $scope.wall.update();
+    };
+    
+    /**
+     * Allows to remove a note at the given index.
+     * @param index the index of the note to remove of the list
+     */
+    $scope.removeNote = function(index) {
+        if ($scope.wall) {  
+            var notes = $scope.wall.notes;
+            if (notes && index >= 0 && index < notes.length) {
+                notes.splice(index, 1);
+                $scope.wall.update();
+            }
+        }
+    };
+    
+    /**
+     * @param event the current event.
+     */
+    $scope.editNote = function(note, event) {
+        event.stopPropagation();
+        if (note && note.owner && note.owner._id === $scope.me._id) {
+            $scope.note = note;
+        }
+    };
+    
+    $scope.saveNote = function() {
+        if ($scope.note) {
+            $scope.wall.update();
+            delete $scope.note;
+        }
+    };
+    
+    $scope.cancelNote = function() {
+        delete $scope.note;
     };
 }
