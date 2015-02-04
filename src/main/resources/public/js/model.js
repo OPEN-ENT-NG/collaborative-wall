@@ -92,6 +92,8 @@ Wall.prototype.toJSON = function() {
  * Allows to create a model and load the list of walls from the backend.
  */
 model.build = function() {
+    collaborativeWallExtension.addDirectives(module);
+    
     this.makeModel(Wall);
     
     this.collection(Wall, {

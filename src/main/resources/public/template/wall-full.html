@@ -4,17 +4,19 @@
     <p>[[wall.description]]</p>
 </div>
 <div class="board" ng-dblclick="addNote()">
-    <div ng-repeat="n in wall.notes" class="note" ng-class="{ selected: n === note }" ng-dblclick="editNote(n, $event)">
-        <div class="control">
-            <span ng-if="me.userId === n.owner.userId" ng-click="removeNote($index)">x</span>
+    <draggable-sticky ng-repeat="n in wall.notes" class="note" ng-dblclick="editNote(n, $event)">
+        <div class="row">
+            <div class="eleven cell draggable">&nbsp;</div>
+            <div class="one cell" ng-if="me.userId === n.owner.userId" ng-click="removeNote($index)">x</div>
         </div>
-        <div class="note-content">
-            <div class="row" ng-if="n === note">
+        <div class="row">
+            <div class="twelve cell" ng-if="n === note">
                 <html-inline-editor ng-model="note.content"></html-inline-editor>
                 <input type="button" class="right-magnet" i18n-value="save" ng-click="saveNote()" />
                 <input type="button" class="right-magnet cancel" i18n-value="cancel" ng-click="cancelNote()" />
             </div>
             <div ng-if="n !== note" bind-html="n.content"></div>
         </div>
-    </div>
+        <footer class="row"><small>[[n.owner.username]]</small></footer>
+    </draggable-sticky>
 </div>

@@ -1,4 +1,6 @@
 
+
+
 /**
  * Allows to define routes of collaborative walls application.
  */
@@ -26,7 +28,7 @@ function WallController($scope, template, model, route) {
     $scope.me = model.me;
     $scope.display = {};
     $scope.error = false;
-    
+
     // Action according to the current given route.
     route({
         displayFullScreen: function(params) {
@@ -190,12 +192,14 @@ function WallController($scope, template, model, route) {
         if ($scope.wall.notes === undefined) {
             $scope.wall.notes = [];
         }
-        
+
         var newNote = new Note();
         newNote.content = "";
         newNote.owner = {};
         newNote.owner.userId = $scope.me.userId;
-        newNote.owner.displayName = $scope.me.displayName;
+        newNote.owner.username = $scope.me.username;
+        newNote.x = 0;
+        newNote.y = 0;
         
         $scope.wall.notes.push(newNote);
         $scope.wall.contribute();

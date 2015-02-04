@@ -6,6 +6,8 @@
 
 .board {
     background: url("/collaborativewall/public/img/background.jpg") repeat scroll 0 0 #800000;
+    position: relative;
+    overflow: auto;
     min-height: 600px;
     width: 100%;
 }
@@ -22,13 +24,9 @@
 }
 
 .board .note.selected {
-
+    
 }
 
-.board .note .control {
-    float: right;
-}
-
-.board .note .note-content {
-
+.board .draggable {
+    cursor: move;
 }
