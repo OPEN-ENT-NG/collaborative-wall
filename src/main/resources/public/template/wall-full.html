@@ -1,10 +1,16 @@
 <h1><i class="wall"></i><i18n ng-click="closeWallFullScreen()">wall.title</i18n></h1>
+
 <div class="row">
     <h2>[[wall.name]]</h2>
     <p>[[wall.description]]</p>
 </div>
-<div class="board" ng-dblclick="addNote()">
-    <draggable-sticky ng-repeat="n in wall.notes" class="note" ng-dblclick="editNote(n, $event)">
+
+<div class="row" ng-init="themes= ['default.jpg', 'wood.jpg', 'paper.jpg']">
+    <div ng-repeat="t in themes" class="board-background-button one cell" style="background-image:url('/collaborativewall/public/img/[[t]]')" ng-click="wall.background='/collaborativewall/public/img/[[t]]'"></div>
+</div>
+
+<board class="board" ng-dblclick="addNote()">
+    <sticky ng-repeat="n in wall.notes" class="note" ng-dblclick="editNote(n, $event)">
         <div class="row">
             <div class="eleven cell draggable">&nbsp;</div>
             <div class="one cell" ng-if="me.userId === n.owner.userId" ng-click="removeNote($index)">x</div>
@@ -17,6 +23,6 @@
             </div>
             <div ng-if="n !== note" bind-html="n.content"></div>
         </div>
-        <footer class="row"><small>[[n.owner.username]]</small></footer>
-    </draggable-sticky>
-</div>
+        <footer class="row bottom-locked"><small>[[n.owner.username]]</small></footer>
+    </sticky>
+</board>

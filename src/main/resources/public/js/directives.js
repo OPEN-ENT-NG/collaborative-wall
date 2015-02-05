@@ -1,6 +1,11 @@
 var collaborativeWallExtension = {
     addDirectives : function(module) {
-        module.directive('draggableSticky', function($document) {
+
+        /**
+         * Directive to display sticky note. This directive allows to move the
+         * note.
+         */
+        module.directive('sticky', function($document) {
             return {
                 restrict : 'E',
                 link : function($scope, $element, attr) {
@@ -14,6 +19,11 @@ var collaborativeWallExtension = {
                     updateUI();
 
                     var draggableZone = angular.element($element[0].querySelector('.draggable'));
+
+                    draggableZone.css({
+                        "cursor" : "move"
+                    });
+
                     draggableZone.on('mousedown', function(event) {
                         // Prevent default dragging of selected content
                         event.preventDefault();
@@ -34,11 +44,11 @@ var collaborativeWallExtension = {
                         if (x < 0) {
                             x = 0;
                         }
-                        
+
                         if (y < 0) {
                             y = 0;
                         }
-                        
+
                         $scope.n.x = x;
                         $scope.n.y = y;
 
@@ -61,11 +71,37 @@ var collaborativeWallExtension = {
                      */
                     function updateUI() {
                         $element.css({
-                            position : 'absolute',
-                            top : y + 'px',
-                            left : x + 'px'
+                            "position" : "absolute",
+                            "top" : y + "px",
+                            "left" : x + "px"
                         });
                     }
+                }
+            }
+        });
+
+        module.directive('board', function($document) {
+            return {
+                restrict : 'E',
+                link : function($scope, $element, attr) {
+
+                    $scope.$watch("wall.background", function() {
+                        var background = $scope.wall.background;
+                        if (!background) {
+                            background = "/collaborativewall/public/img/default.jpg";
+                        }
+
+                        $element.css({
+                            "position" : "relative",
+                            "display" : "block",
+                            "background-image" : "url(" + background + ")",
+                            "background-repeat" : "no-repeat",
+                            "background-position" : "center fixed",
+                            "background-size" : "cover"
+                        });
+
+                        $scope.wall.contribute();
+                    });
                 }
             }
         });
