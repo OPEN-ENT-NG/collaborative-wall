@@ -1,22 +1,33 @@
 <h1><i class="wall"></i><i18n ng-click="closeWallFullScreen()">wall.title</i18n></h1>
 
 <div class="row">
-    <h2>[[wall.name]]</h2>
-    <p>[[wall.description]]</p>
-</div>
-
-<div class="row">
-    <div ng-repeat="t in themes" class="board-background-button one cell" ng-style="{'background-image': 'url(' + t + ')'}" ng-click="updateBackground(t)"></div>
-    <div class="board-background-button last-button one cell">
-        <image-select ng-model="wall.background" ng-change="updateBackground()" default="/img/icons/folder-large.png" thumbnails="[{ width: 120, height: 120 }]"></image-select>
+    <div class="two cell">
+        <img skin-src="/img/illustrations/wall-default.png" ng-if="wall.icon === undefined" />
+        <img ng-src="[[wall.icon]]?thumbnail=120x120" ng-if="wall.icon !== undefined" />
+    </div>
+    <div class="ten cell">
+        <h2>[[wall.name]]</h2>
+        <p>[[wall.description]]</p>
     </div>
 </div>
+
+<behaviour name="contrib" resource="wall">
+    <div class="row">
+        <div ng-repeat="t in themes" class="board-background-button one cell" ng-style="{'background-image': 'url(' + t + ')'}" ng-click="updateBackground(t)" ng-class="{ selected : t === wall.background }"></div>
+        <div class="divider cell"></div>
+        <div class="board-background-button one cell">
+            <image-select ng-model="wall.background" ng-change="updateBackground()" default="/img/icons/folder-large.png" thumbnails="[{ width: 120, height: 120 }]"></image-select>
+        </div>
+    </div>
+</behaviour>
 
 <board class="board" ng-dblclick="addNote()">
     <sticky ng-repeat="n in wall.notes" class="note" ng-dblclick="editNote(n, $event)">
         <div class="row">
-            <div class="eleven cell draggable">&nbsp;</div>
-            <div class="one cell" ng-if="me.userId === n.owner.userId" ng-click="removeNote($index)">x</div>
+            <behaviour name="contrib" resource="wall">
+                <div class="eleven cell draggable">&nbsp;</div>
+            </behaviour>
+            <div class="one cell" ng-if="hasRight(wall, n)" ng-click="removeNote($index)">x</div>
         </div>
         <div class="row">
             <div class="twelve cell" ng-if="n === note">

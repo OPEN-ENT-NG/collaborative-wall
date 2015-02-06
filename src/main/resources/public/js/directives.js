@@ -18,20 +18,22 @@ var collaborativeWallExtension = {
 
                     updateUI();
 
+                    // Add a draggable zone
                     var draggableZone = angular.element($element[0].querySelector('.draggable'));
-
-                    draggableZone.css({
-                        "cursor" : "move"
-                    });
-
-                    draggableZone.on('mousedown', function(event) {
-                        // Prevent default dragging of selected content
-                        event.preventDefault();
-                        startX = event.screenX - x;
-                        startY = event.screenY - y;
-                        $document.on('mousemove', mousemove);
-                        $document.on('mouseup', mouseup);
-                    });
+                    if (draggableZone) {
+                        draggableZone.css({
+                            "cursor" : "move"
+                        });
+    
+                        draggableZone.on('mousedown', function(event) {
+                            // Prevent default dragging of selected content
+                            event.preventDefault();
+                            startX = event.screenX - x;
+                            startY = event.screenY - y;
+                            $document.on('mousemove', mousemove);
+                            $document.on('mouseup', mouseup);
+                        });
+                    }
 
                     /**
                      * Allows to change the sticky note position

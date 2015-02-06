@@ -188,6 +188,10 @@ function WallController($scope, template, model, route) {
         template.open('walls', 'wall-list');
     };
     
+    /**
+     * Allows to set the given theme for the current wall and save it.
+     * @param theme a path to an image.
+     */
     $scope.updateBackground = function(theme) {
         if (theme) {
             $scope.wall.background = theme;
@@ -230,15 +234,19 @@ function WallController($scope, template, model, route) {
     };
     
     /**
+     * Allows to edit the given note.
      * @param event the current event.
      */
     $scope.editNote = function(note, event) {
         event.stopPropagation();
-        if (note && note.owner && note.owner.userId === $scope.me.userId) {
+        if ($scope.hasRight($scope.wall, note)) {
             $scope.note = note;
         }
     };
     
+    /**
+     * Allows to save the current editing note.
+     */
     $scope.saveNote = function() {
         if ($scope.note) {
             $scope.wall.contribute();
@@ -246,7 +254,20 @@ function WallController($scope, template, model, route) {
         }
     };
     
+    /**
+     * Allows to cancel the current editing note.
+     */
     $scope.cancelNote = function() {
         delete $scope.note;
+    };
+    
+    /**
+     * Allows to get if the current logged user can edit or remove a note. Only
+     * the owner of the wall or the owner of the note can do those actions. The
+     * user must have contributor rights.
+     * @return true if the current user can edit or delete the given note.
+     */
+    $scope.hasRight = function(wall, note) {
+        return wall && wall.myRights.contrib && ((note && note.owner && note.owner.userId === $scope.me.userId) || (wall.owner.userId === $scope.me.userId));
     };
 }

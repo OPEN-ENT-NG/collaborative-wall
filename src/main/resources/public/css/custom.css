@@ -9,13 +9,20 @@
     background-size: cover;
     cursor: pointer;
     height: 64px;
-    margin-right: 10px;
+    margin-right: 5px;
     overflow: hidden;
+    border: 3px solid #fff;
 }
 
-.last-button {
+.board-background-button.selected,
+.board-background-button:hover {
+    border-color: #aaa;
+}
+
+.divider {
     border-left: 5px solid #ccc;
-    padding-left: 10px;
+    margin-right: 5px;
+    height: 64px;
 }
 
 .board {
