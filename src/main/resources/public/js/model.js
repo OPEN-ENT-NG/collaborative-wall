@@ -84,6 +84,7 @@ Wall.prototype.toJSON = function() {
         icon: this.icon,
         name: this.name,
         description: this.description,
+        background: this.background,
         notes: this.notes
     }
 };

@@ -26,6 +26,9 @@ function WallController($scope, template, model, route) {
     $scope.template = template;
     $scope.walls = model.walls;
     $scope.me = model.me;
+
+    $scope.themes=['/collaborativewall/public/img/default.jpg', '/collaborativewall/public/img/wood.jpg', '/collaborativewall/public/img/paper.jpg'];
+    
     $scope.display = {};
     $scope.error = false;
 
@@ -184,6 +187,13 @@ function WallController($scope, template, model, route) {
         template.close('main');
         template.open('walls', 'wall-list');
     };
+    
+    $scope.updateBackground = function(theme) {
+        if (theme) {
+            $scope.wall.background = theme;
+        }
+        $scope.wall.contribute();
+    }
     
     /**
      * Allows to add a new note into the current wall.

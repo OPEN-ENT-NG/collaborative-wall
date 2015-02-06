@@ -3,9 +3,6 @@
     "type": "object",
     "additionalProperties": false,
     "properties": {
-        "_id": {
-            "type": "string"
-        },
         "icon": {
             "type": "string"
         },
@@ -13,6 +10,9 @@
             "type": "string"
         },
         "description": {
+            "type": "string"
+        },
+        "background": {
             "type": "string"
         },
         "notes": {

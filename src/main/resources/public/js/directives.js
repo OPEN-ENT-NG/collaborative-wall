@@ -80,11 +80,23 @@ var collaborativeWallExtension = {
             }
         });
 
+        /**
+         * Directive to create a board to display sticky notes. This directive
+         * manage the background.
+         */
         module.directive('board', function($document) {
             return {
                 restrict : 'E',
                 link : function($scope, $element, attr) {
 
+                    $element.css({
+                        "position" : "relative",
+                        "display" : "block",
+                        "background-repeat" : "no-repeat",
+                        "background-position" : "center fixed",
+                        "background-size" : "cover"
+                    });
+                    
                     $scope.$watch("wall.background", function() {
                         var background = $scope.wall.background;
                         if (!background) {
@@ -92,15 +104,8 @@ var collaborativeWallExtension = {
                         }
 
                         $element.css({
-                            "position" : "relative",
-                            "display" : "block",
                             "background-image" : "url(" + background + ")",
-                            "background-repeat" : "no-repeat",
-                            "background-position" : "center fixed",
-                            "background-size" : "cover"
                         });
-
-                        $scope.wall.contribute();
                     });
                 }
             }

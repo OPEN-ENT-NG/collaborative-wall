@@ -6,10 +6,16 @@
 
 .board-background-button {
     background-position: center center;
+    background-size: cover;
     cursor: pointer;
-    position: relative;
     height: 64px;
     margin-right: 10px;
+    overflow: hidden;
+}
+
+.last-button {
+    border-left: 5px solid #ccc;
+    padding-left: 10px;
 }
 
 .board {

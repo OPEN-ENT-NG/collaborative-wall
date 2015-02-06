@@ -5,8 +5,11 @@
     <p>[[wall.description]]</p>
 </div>
 
-<div class="row" ng-init="themes= ['default.jpg', 'wood.jpg', 'paper.jpg']">
-    <div ng-repeat="t in themes" class="board-background-button one cell" style="background-image:url('/collaborativewall/public/img/[[t]]')" ng-click="wall.background='/collaborativewall/public/img/[[t]]'"></div>
+<div class="row">
+    <div ng-repeat="t in themes" class="board-background-button one cell" ng-style="{'background-image': 'url(' + t + ')'}" ng-click="updateBackground(t)"></div>
+    <div class="board-background-button last-button one cell">
+        <image-select ng-model="wall.background" ng-change="updateBackground()" default="/img/icons/folder-large.png" thumbnails="[{ width: 120, height: 120 }]"></image-select>
+    </div>
 </div>
 
 <board class="board" ng-dblclick="addNote()">
