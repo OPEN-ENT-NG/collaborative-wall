@@ -5,7 +5,7 @@
         "port" : 8071,
         "app-name" : "CollaborativeWall",
         "app-address" : "/collaborativewall",
-        "app-icon" : "collaborativewall-large",
+        "app-icon" : "collaborative-wall-large",
         "host": "${host}",
         "ssl" : $ssl,
         "userbook-host": "${host}",

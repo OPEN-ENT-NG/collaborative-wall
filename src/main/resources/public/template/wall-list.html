@@ -1,4 +1,4 @@
-<h1><i class="wall"></i><i18n ng-click="cancelWallEdit()">wall.title</i18n></h1>
+<h1><i class="collaborative-wall"></i><i18n ng-click="cancelWallEdit()">wall.title</i18n></h1>
 
 <div class="items">
 	<div workflow="collaborativewall.create" class="twelve cell">
@@ -10,7 +10,7 @@
 	<hr />
 	<div class="row" ng-repeat="w in walls.all" ng-click="openWall(w)" ng-class="{ selected: w._id === wall._id }">
         <div class="cell">
-            <img ng-if="w.icon === undefined" class="cell" skin-src="/img/illustrations/wall-default.png" />
+            <img ng-if="w.icon === undefined" class="cell" skin-src="/img/illustrations/collaborative-wall-default.png" />
             <img ng-if="w.icon !== undefined" class="cell" ng-src="[[w.icon]]?thumbnail=120x120" />
         </div>
 		<article>

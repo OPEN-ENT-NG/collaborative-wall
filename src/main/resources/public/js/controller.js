@@ -249,6 +249,7 @@ function WallController($scope, template, model, route) {
      */
     $scope.saveNote = function() {
         if ($scope.note) {
+            $scope.note.lastEdit = moment().toDate();
             $scope.wall.contribute();
             delete $scope.note;
         }

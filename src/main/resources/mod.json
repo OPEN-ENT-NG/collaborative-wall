@@ -7,5 +7,5 @@
     "userbook-host" : "http://localhost:8003",
     "app-name" : "CollaborativeWall",
     "app-address" : "http://localhost:8071/collaborativewall",
-    "app-icon" : "collaborativewall-large"
+    "app-icon" : "collaborative-wall-large"
 }
