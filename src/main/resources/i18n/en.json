@@ -1,19 +1,19 @@
 {
-	"wall.title": "Collaborative wall",
+	"collaborativewall.title": "Collaborative wall",
 	
-	"wall.head.create": "Create a new wall",
-	"wall.head.modify": "Modify the wall",
-	"wall.label.name": "Name",
-	"wall.label.image": "Associate an image",
-	"wall.label.description": "Description",
+	"collaborativewall.head.create": "Create a new wall",
+	"collaborativewall.head.modify": "Modify the wall",
+	"collaborativewall.label.name": "Name",
+	"collaborativewall.label.image": "Associate an image",
+	"collaborativewall.label.description": "Description",
 	
-	"wall.delete.confirm": "Do you really want to delete this wall?",
+	"collaborativewall.delete.confirm": "Do you really want to delete this wall?",
 	
-	"wall.new": "New wall",
-	"wall.create": "Create",
+	"collaborativewall.new": "New wall",
+	"collaborativewall.create": "Create",
 	
-	"wall.fullscreen.open": "Open wall",
-	
+	"collaborativewall.fullscreen.open": "Open wall",
+
 	"collaborativewall.read": "Reader",
 	"collaborativewall.contrib": "Contributor",
 	"collaborativewall.manager": "Manager",

@@ -1,19 +1,19 @@
 {
-	"wall.title": "Mur collaboratif",
+	"collaborativewall.title": "Mur collaboratif",
 	
-	"wall.head.create": "Creation d'un nouveau mur",
-	"wall.head.modify": "Modification du mur",
-	"wall.label.name": "Nom",
-	"wall.label.image": "Associer une image",
-	"wall.label.description": "Description",
+	"collaborativewall.head.create": "Creation d'un nouveau mur",
+	"collaborativewall.head.modify": "Modification du mur",
+	"collaborativewall.label.name": "Nom",
+	"collaborativewall.label.image": "Associer une image",
+	"collaborativewall.label.description": "Description",
 	
-	"wall.delete.confirm": "Voulez-vous vraiment supprimer ce mur ?",
+	"collaborativewall.delete.confirm": "Voulez-vous vraiment supprimer ce mur ?",
 	
-	"wall.new": "Nouveau mur",
-	"wall.create": "Créer",
+	"collaborativewall.new": "Nouveau mur",
+	"collaborativewall.create": "Créer",
 	
-	"wall.fullscreen.open": "Ouvrir le mur",
-	
+	"collaborativewall.fullscreen.open": "Ouvrir le mur",
+
 	"collaborativewall.read": "Lecteur",
 	"collaborativewall.contrib": "Contributeur",
 	"collaborativewall.manager": "Gestionnaire",

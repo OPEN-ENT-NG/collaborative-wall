@@ -35,8 +35,8 @@ function WallController($scope, template, model, route) {
     // Action according to the current given route.
     route({
         displayFullScreen: function(params) {
-            walls.one('sync', function() {
-                var wall = walls.find(function(w) {
+            $scope.walls.one('sync', function() {
+                var wall = $scope.walls.find(function(w) {
                     return w._id === params.wallId;
                 });
                 $scope.openWallFullScreen(wall);

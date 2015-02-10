@@ -76,5 +76,38 @@ Behaviours.register('collaborativewall', {
      */
     resourceRights : function() {
         return [ 'read', 'contrib', 'manager' ]
+    },
+
+    /**
+     * Allows to load all walls to display in the linker.
+     * @param callback function to call after load.
+     * @return a list of objects containing :
+     * <ul>
+     * <li>title</li>
+     * <li>ownerName</li>
+     * <li>owner</li>
+     * <li>icon</li>
+     * <li>path</li>
+     * <li>id</li>
+     * </ul>
+     */
+    loadResources : function(callback) {
+        http().get('/collaborativewall/list/all').done(function(walls) {
+
+            this.resources = _.map(walls, function(wall) {
+                return {
+                    title : wall.name,
+                    ownerName : wall.owner.displayName,
+                    owner : wall.owner.userId,
+                    icon : wall.icon ? wall.icon : '/img/illustrations/collaborative-wall-default.png',
+                    path : '/collaborativewall#/view/' + wall._id,
+                    id : wall._id
+                };
+            });
+
+            if (typeof callback === 'function') {
+                callback(this.resources);
+            }
+        }.bind(this));
     }
 });
