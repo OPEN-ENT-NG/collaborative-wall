@@ -27,7 +27,7 @@
             <behaviour name="contrib" resource="wall">
                 <div class="eleven cell draggable">&nbsp;</div>
             </behaviour>
-            <div class="one cell" ng-if="hasRight(wall, n)" ng-click="removeNote($index)">x</div>
+            <div class="one cell" ng-click="removeNote($index)" ng-if="hasRight(wall, n)">x</div>
         </div>
         <div class="row">
             <div class="twelve cell" ng-if="n === note">
@@ -37,6 +37,9 @@
             </div>
             <div ng-if="n !== note" bind-html="n.content"></div>
         </div>
-        <footer class="row bottom-locked"><small>[[n.owner.username]]</small></footer>
+        <footer class="row information">
+            <div class="row"><small><a ng-href="/userbook/annuaire#[[n.owner.userId]]">[[n.owner.username]]</a></small></div>
+            <div class="row"><small>[[n.lastEdit | date:"dd/MM/yyyy 'à' H:mm"]]</small></div>
+        </footer>
     </sticky>
 </board>

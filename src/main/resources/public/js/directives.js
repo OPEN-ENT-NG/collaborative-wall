@@ -34,6 +34,26 @@ var collaborativeWallExtension = {
                             $document.on('mouseup', mouseup);
                         });
                     }
+                    
+                    // Information zone
+                    var informationZone = angular.element($element[0].querySelector('.information'));
+                    if (informationZone) {
+                        informationZone.css({
+                            "display" : "none"
+                        });
+                        
+                        $element.on('mouseenter', function(event) {
+                            informationZone.css({
+                                "display" : "block"
+                            });
+                        });
+                        
+                        $element.on('mouseleave', function(event) {
+                            informationZone.css({
+                                "display" : "none"
+                            });
+                        });
+                    }
 
                     /**
                      * Allows to change the sticky note position
