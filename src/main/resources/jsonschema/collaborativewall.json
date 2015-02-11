@@ -16,7 +16,37 @@
             "type": "string"
         },
         "notes": {
-        	"type": "array"
+        	"type": "array",
+        	"items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "content": {
+                        "type": "string"
+                    },
+                    "owner": {
+                    	"type": "object",
+                		"additionalProperties": false,
+                		"properties": {
+                			"userId": {
+                				"type": "string"
+                			},
+                			"username": {
+                				"type": "string"
+                			}
+                		}
+                    },
+                    "lastEdit": {
+                    	"type": "string"
+                    },
+                    "x": {
+                        "type": "integer"
+                    },
+                    "y": {
+                        "type": "integer"
+                    }
+                }
+            }
         }
     },
     "required": [
