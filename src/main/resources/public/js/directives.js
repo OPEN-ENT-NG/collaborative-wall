@@ -116,18 +116,8 @@ var collaborativeWallExtension = {
                         "display" : "block",
                         "background-repeat" : "no-repeat",
                         "background-position" : "center fixed",
-                        "background-size" : "cover"
-                    });
-                    
-                    $scope.$watch("wall.background", function() {
-                        var background = $scope.wall.background;
-                        if (!background) {
-                            background = "/collaborativewall/public/img/default.jpg";
-                        }
-
-                        $element.css({
-                            "background-image" : "url(" + background + ")",
-                        });
+                        "background-size" : "cover",
+                        "background-image" : "url(" + $scope.wall.background + ")"
                     });
                 }
             }

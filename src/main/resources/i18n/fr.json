@@ -5,6 +5,7 @@
 	"collaborativewall.head.modify": "Modification du mur",
 	"collaborativewall.label.name": "Nom",
 	"collaborativewall.label.image": "Associer une image",
+	"collaborativewall.label.background" : "Choisir une image de fond",
 	"collaborativewall.label.description": "Description",
 	
 	"collaborativewall.delete.confirm": "Voulez-vous vraiment supprimer ce mur ?",

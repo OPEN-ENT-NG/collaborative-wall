@@ -12,11 +12,23 @@
             <!-- Title -->
             <label class="twelve cell"><i18n>collaborativewall.label.name</i18n></label> 
             <input class="twelve cell" type="text" ng-model="wall.name" required /> 
+            
+            <!-- Background -->
+            <label class="twelve cell"><i18n>collaborativewall.label.background</i18n></label> 
+            <div class="row">
+                <div ng-repeat="t in themes" class="board-background-button two cell" ng-click="wall.background = t" ng-class="{ selected : t === wall.background }">
+                    <img src="[[t]]">
+                </div>
+                <div class="divider cell">&nbsp;</div>
+                <div class="board-background-button two cell">
+                    <image-select ng-model="wall.background" default="/img/icons/folder-large.png" thumbnails="[{ width: 120, height: 120 }]"></image-select>
+                </div>
+            </div>
 
             <!-- Images -->
             <div class="twelve cell">
                 <label class="twelve cell"><i18n>collaborativewall.label.image</i18n></label>
-                <div class="two cell">
+                <div class="one cell">
                     <image-select ng-model="wall.icon" default="/img/illustrations/collaborative-wall-default.png" thumbnails="[{ width: 290, height: 290 }]"></image-select>
                 </div>
             </div>

@@ -64,6 +64,7 @@ function WallController($scope, template, model, route) {
      */
     $scope.newWall = function() {
         $scope.wall = new Wall();
+        $scope.wall.background = $scope.themes[0];
         template.open('main', 'wall-edit');
     };
 

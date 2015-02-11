@@ -11,16 +11,6 @@
     </div>
 </div>
 
-<behaviour name="contrib" resource="wall">
-    <div class="row theme-bar">
-        <div ng-repeat="t in themes" class="board-background-button one cell" ng-style="{'background-image': 'url(' + t + ')'}" ng-click="updateBackground(t)" ng-class="{ selected : t === wall.background }"></div>
-        <div class="divider cell"></div>
-        <div class="board-background-button one cell">
-            <image-select ng-model="wall.background" ng-change="updateBackground()" default="/img/icons/folder-large.png" thumbnails="[{ width: 120, height: 120 }]"></image-select>
-        </div>
-    </div>
-</behaviour>
-
 <board class="board" ng-dblclick="addNote()">
     <sticky ng-repeat="n in wall.notes" class="note" ng-dblclick="editNote(n, $event)">
         <div class="row">
@@ -29,7 +19,7 @@
             </behaviour>
             <div class="one cell" ng-click="removeNote($index)" ng-if="hasRight(wall, n)">x</div>
         </div>
-        <div class="row">
+        <div class="row note-content">
             <div class="twelve cell" ng-if="n === note">
                 <html-inline-editor ng-model="note.content"></html-inline-editor>
                 <input type="button" class="right-magnet" i18n-value="save" ng-click="saveNote()" />
