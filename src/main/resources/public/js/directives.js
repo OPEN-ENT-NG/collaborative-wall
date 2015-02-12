@@ -36,7 +36,7 @@ var collaborativeWallExtension = {
                     }
                     
                     // Information zone
-                    var informationZone = angular.element($element[0].querySelector('.information'));
+                    var informationZone = angular.element($element[0].querySelector('.note-bottom'));
                     if (informationZone) {
                         informationZone.css({
                             "display" : "none"

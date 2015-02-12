@@ -13,7 +13,7 @@
 
 <board class="board" ng-dblclick="addNote()">
     <sticky ng-repeat="n in wall.notes" class="note" ng-dblclick="editNote(n, $event)">
-        <div class="row">
+        <div class="row note-top">
             <behaviour name="contrib" resource="wall">
                 <div class="eleven cell draggable">&nbsp;</div>
             </behaviour>
@@ -27,10 +27,10 @@
             </div>
             <div ng-if="n !== note" bind-html="n.content"></div>
         </div>
-        <footer class="row information">
+        <div class="row note-bottom">
             <div class="row"><small><a ng-href="/userbook/annuaire#[[n.owner.userId]]">[[n.owner.username]]</a></small></div>
             <div class="row"><small>[[n.lastEdit | date:"dd/MM/yyyy 'à' H:mm"]]</small></div>
-        </footer>
+        </div>
     </sticky>
 </board>
 
