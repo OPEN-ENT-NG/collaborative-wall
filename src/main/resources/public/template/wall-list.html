@@ -34,23 +34,19 @@
 </div>
 
 <!-- Allows to display a confirm dialog before deleting a wall -->
-<div ng-if="display.confirmDeleteWall">
-    <lightbox show="display.confirmDeleteWall" on-close="cancelRemoveWall()">
-        <article>
-            <div class="row">
-                <i18n>collaborativewall.delete.confirm</i18n>
-            </div>
-            <div class="row">
-                <button class="right-magnet" ng-click="removeWall()"><i18n>remove</i18n></button>
-                <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelRemoveWall()" />
-            </div>
-        </article>
-    </lightbox>
-</div>
+<lightbox show="display.confirmDeleteWall" on-close="cancelRemoveWall()">
+    <article>
+        <div class="row">
+            <i18n>collaborativewall.wall.delete.confirm</i18n>
+        </div>
+        <div class="row">
+            <button class="right-magnet" ng-click="removeWall()"><i18n>remove</i18n></button>
+            <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelRemoveWall()" />
+        </div>
+    </article>
+</lightbox>
 
 <!-- Allows to display the panel to manage share rights -->
-<div ng-if="display.showPanel">
-    <lightbox show="display.showPanel" on-close="display.showPanel = false;">
-        <share-panel app-prefix="'collaborativewall'" resources="wall"></share-panel>
-    </lightbox>
-</div>
+<lightbox show="display.showPanel" on-close="display.showPanel = false;">
+    <share-panel app-prefix="'collaborativewall'" resources="wall"></share-panel>
+</lightbox>

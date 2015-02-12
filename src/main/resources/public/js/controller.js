@@ -145,9 +145,11 @@ function WallController($scope, template, model, route) {
      * Allows to remove the current wall in the scope.
      */
     $scope.removeWall = function() {
-        $scope.wall.delete();
-        delete $scope.display.confirmDeleteWall;
-        delete $scope.wall;
+        if ($scope.wall) {
+            $scope.wall.delete();
+            delete $scope.display.confirmDeleteWall;
+            delete $scope.wall;
+        }
         template.close('main');
     };
     
@@ -188,18 +190,7 @@ function WallController($scope, template, model, route) {
         template.close('main');
         template.open('walls', 'wall-list');
     };
-    
-    /**
-     * Allows to set the given theme for the current wall and save it.
-     * @param theme a path to an image.
-     */
-    $scope.updateBackground = function(theme) {
-        if (theme) {
-            $scope.wall.background = theme;
-        }
-        $scope.wall.contribute();
-    }
-    
+
     /**
      * Allows to add a new note into the current wall.
      */
@@ -221,17 +212,38 @@ function WallController($scope, template, model, route) {
     };
     
     /**
-     * Allows to remove a note at the given index.
-     * @param index the index of the note to remove of the list
+     * Allows to put the current note in the scope and set "confirmDeleteNote"
+     * variable to "true".
+     * @param note the note to delete.
+     * @param event an event.
      */
-    $scope.removeNote = function(index) {
-        if ($scope.wall) {  
+    $scope.confirmRemoveNote = function(index, event) {
+        $scope.display.deleteNoteIndex = index;
+        $scope.display.confirmDeleteNote = true;
+        event.stopPropagation();
+    };
+    
+    /**
+     * Allows to cancel the current delete process.
+     */
+    $scope.cancelRemoveNote = function() {
+        delete $scope.display.confirmDeleteNote;
+        delete $scope.display.deleteNoteIndex;
+    };
+    
+    /**
+     * Allows to remove a note at index $scope.display.deleteNoteIndex
+     */
+    $scope.removeNote = function() {
+        if ($scope.wall) {
             var notes = $scope.wall.notes;
+            var index = $scope.display.deleteNoteIndex;
             if (notes && index >= 0 && index < notes.length) {
                 notes.splice(index, 1);
                 $scope.wall.contribute();
             }
         }
+        $scope.cancelRemoveNote();
     };
     
     /**

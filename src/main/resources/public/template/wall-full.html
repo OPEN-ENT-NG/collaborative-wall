@@ -17,7 +17,7 @@
             <behaviour name="contrib" resource="wall">
                 <div class="eleven cell draggable">&nbsp;</div>
             </behaviour>
-            <div class="one cell" ng-click="removeNote($index)" ng-if="hasRight(wall, n)">x</div>
+            <div class="one cell" ng-click="confirmRemoveNote($index, $event)" ng-if="hasRight(wall, n)">x</div>
         </div>
         <div class="row note-content">
             <div class="twelve cell" ng-if="n === note">
@@ -33,3 +33,16 @@
         </footer>
     </sticky>
 </board>
+
+<!-- Allows to display a confirm dialog before deleting a note -->
+<lightbox show="display.confirmDeleteNote" on-close="cancelRemoveNote()">
+    <article>
+        <div class="row">
+            <i18n>collaborativewall.note.delete.confirm</i18n>
+        </div>
+        <div class="row">
+            <button class="right-magnet" ng-click="removeNote()"><i18n>remove</i18n></button>
+            <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelRemoveNote()" />
+        </div>
+    </article>
+</lightbox>
