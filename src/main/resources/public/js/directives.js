@@ -8,23 +8,26 @@ var collaborativeWallExtension = {
         module.directive('sticky', function($document) {
             return {
                 restrict : 'E',
-                link : function($scope, $element, attr) {
+                transclude: true,
+                replace: true,
+                template: '<div><div ng-transclude></div></div>',
+                link : function(scope, element, attr) {
 
                     var startX = 0;
                     var startY = 0;
 
-                    var x = $scope.n.x;
-                    var y = $scope.n.y;
+                    var x = scope.n.x;
+                    var y = scope.n.y;
 
                     updateUI();
 
                     // Add a draggable zone
-                    var draggableZone = angular.element($element[0].querySelector('.draggable'));
+                    var draggableZone = angular.element(element[0].querySelector('.draggable'));
                     if (draggableZone) {
                         draggableZone.css({
                             "cursor" : "move"
                         });
-    
+
                         draggableZone.on('mousedown', function(event) {
                             // Prevent default dragging of selected content
                             event.preventDefault();
@@ -34,21 +37,21 @@ var collaborativeWallExtension = {
                             $document.on('mouseup', mouseup);
                         });
                     }
-                    
+
                     // Information zone
-                    var informationZone = angular.element($element[0].querySelector('.note-bottom'));
+                    var informationZone = angular.element(element[0].querySelector('.note-bottom'));
                     if (informationZone) {
                         informationZone.css({
                             "display" : "none"
                         });
-                        
-                        $element.on('mouseenter', function(event) {
+
+                        element.on('mouseenter', function(event) {
                             informationZone.css({
                                 "display" : "block"
                             });
                         });
-                        
-                        $element.on('mouseleave', function(event) {
+
+                        element.on('mouseleave', function(event) {
                             informationZone.css({
                                 "display" : "none"
                             });
@@ -71,8 +74,8 @@ var collaborativeWallExtension = {
                             y = 0;
                         }
 
-                        $scope.n.x = x;
-                        $scope.n.y = y;
+                        scope.n.x = x;
+                        scope.n.y = y;
 
                         updateUI();
                     }
@@ -84,7 +87,7 @@ var collaborativeWallExtension = {
                     function mouseup() {
                         $document.off('mousemove', mousemove);
                         $document.off('mouseup', mouseup);
-                        $scope.wall.contribute();
+                        scope.wall.contribute();
                     }
 
                     /**
@@ -92,7 +95,7 @@ var collaborativeWallExtension = {
                      * wall. This method takes the x and y global variables.
                      */
                     function updateUI() {
-                        $element.css({
+                        element.css({
                             "position" : "absolute",
                             "top" : y + "px",
                             "left" : x + "px"
@@ -106,18 +109,22 @@ var collaborativeWallExtension = {
          * Directive to create a board to display sticky notes. This directive
          * manage the background.
          */
-        module.directive('board', function($document) {
+        module.directive('board', function() {
             return {
                 restrict : 'E',
-                link : function($scope, $element, attr) {
-
-                    $element.css({
-                        "position" : "relative",
-                        "display" : "block",
-                        "background-repeat" : "no-repeat",
-                        "background-position" : "center fixed",
-                        "background-size" : "cover",
-                        "background-image" : "url(" + $scope.wall.background + ")"
+                transclude: true,
+                replace: true,
+                template: '<div><div ng-transclude></div></div>',
+                link : function(scope, element, attr) {
+                    scope.$watch("wall", function() {
+                        element.css({
+                            "position" : "relative",
+                            "display" : "block",
+                            "background-repeat" : "no-repeat",
+                            "background-position" : "center fixed",
+                            "background-size" : "cover",
+                            "background-image" : "url(" + scope.wall.background + ")"
+                        });
                     });
                 }
             }

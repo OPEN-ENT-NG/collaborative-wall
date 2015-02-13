@@ -10,9 +10,11 @@
 	
 	"collaborativewall.wall.delete.confirm": "Do you really want to delete this wall?",
 	"collaborativewall.note.delete.confirm": "Do you really want to delete this note?",
+	"collaborativewall.note.create": "New note",
 	
 	"collaborativewall.new": "New wall",
 	"collaborativewall.create": "Create",
+	"collaborativewall.print": "Print the wall",
 	
 	"collaborativewall.fullscreen.open": "Open wall",
 

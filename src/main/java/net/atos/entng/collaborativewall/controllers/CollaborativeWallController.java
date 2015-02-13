@@ -34,6 +34,13 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     public void view(HttpServerRequest request) {
         renderView(request);
     }
+    
+    @Get("/print/wall")
+    @ApiDoc("Allows to print a wall")
+    @SecuredAction("collaborativewall.print")
+    public void print(HttpServerRequest request) {
+        renderView(request, null, "print.html", null);
+    }
 
     @Override
     @Get("/list/all")

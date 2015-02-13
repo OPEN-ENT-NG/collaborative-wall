@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html class="print">
+<head>
+	<title>{{#i18n}}collaborativewall.title{{/i18n}}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <link rel="stylesheet" type="text/css" href="/collaborativewall/public/css/custom.css">
+    
+	<script src="/collaborativewall/public/js/directives.js" type="text/javascript"></script>
+    <script src="{{#infra}}js/loader.js{{/infra}}" type="text/javascript" id="context"></script>
+    <script src="/collaborativewall/public/js/model.js" type="text/javascript"></script>
+    <script src="/collaborativewall/public/js/controller.js" type="text/javascript"></script>
+</head>
+<body ng-controller="WallController">
+	<portal-styles></portal-styles>
+
+	<div class="centered container row">
+		<section class="main">
+            <div class="row">
+                <div class="one cell">
+                    <img skin-src="/img/illustrations/collaborative-wall-default.png" ng-if="wall.icon === undefined" />
+                    <img ng-src="[[wall.icon]]?thumbnail=120x120" ng-if="wall.icon !== undefined" />
+                </div>
+                <div class="eleven cell">
+                    <h2>[[wall.name]]</h2>
+                    <p>[[wall.description]]</p>
+                </div>
+            </div>
+
+			<board class="board">
+                <sticky ng-repeat="n in wall.notes" class="note">
+                    <div class="row note-content">
+                        <div bind-html="n.content"></div>
+                    </div>
+                </sticky>
+            </board>
+		</section>
+	</div>
+
+</body>
+</html>

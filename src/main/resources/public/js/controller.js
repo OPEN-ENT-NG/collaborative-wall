@@ -9,6 +9,9 @@ routes.define(function($routeProvider){
       .when('/view/:wallId', {
         action: 'displayFullScreen'
       })
+      .when('/print/:wallId', {
+        action: 'printWall'
+      })
       .otherwise({
         action: 'mainPage'
       });
@@ -40,6 +43,14 @@ function WallController($scope, template, model, route) {
                     return w._id === params.wallId;
                 });
                 $scope.openWallFullScreen(wall);
+            });
+        },
+        printWall: function(params) {
+            $scope.walls.one('sync', function() {
+                var wall = $scope.walls.find(function(w) {
+                    return w._id === params.wallId;
+                });
+                $scope.printWall(wall);
             });
         },
         mainPage: function() {
@@ -151,6 +162,13 @@ function WallController($scope, template, model, route) {
             delete $scope.wall;
         }
         template.close('main');
+    };
+    
+    $scope.printWall = function(wall) {
+        if (wall) {
+            $scope.wall = wall;
+            setTimeout(function() { window.print(); }, 1000);
+        }
     };
     
     /**

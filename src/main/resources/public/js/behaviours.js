@@ -20,7 +20,8 @@ var wallBehaviours = {
      * with a Java method of the server.
      */
     workflow : {
-        create : 'net.atos.entng.collaborativewall.controllers.CollaborativeWallController|create'
+        create : 'net.atos.entng.collaborativewall.controllers.CollaborativeWallController|create',
+        print : 'net.atos.entng.collaborativewall.controllers.CollaborativeWallController|print'
     }
 };
 
