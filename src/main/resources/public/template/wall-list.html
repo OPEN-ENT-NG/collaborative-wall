@@ -47,6 +47,8 @@
 </lightbox>
 
 <!-- Allows to display the panel to manage share rights -->
-<lightbox show="display.showPanel" on-close="display.showPanel = false;">
-    <share-panel app-prefix="'collaborativewall'" resources="wall"></share-panel>
-</lightbox>
+<div ng-if="display.showPanel">
+    <lightbox show="display.showPanel" on-close="display.showPanel = false;">
+        <share-panel app-prefix="'collaborativewall'" resources="wall"></share-panel>
+    </lightbox>
+</div>
