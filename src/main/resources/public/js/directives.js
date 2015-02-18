@@ -8,9 +8,9 @@ var collaborativeWallExtension = {
         module.directive('sticky', function($document) {
             return {
                 restrict : 'E',
-                transclude: true,
-                replace: true,
-                template: '<div><div ng-transclude></div></div>',
+                transclude : true,
+                replace : true,
+                template : '<div><div ng-transclude></div></div>',
                 link : function(scope, element, attr) {
 
                     var startX = 0;
@@ -38,25 +38,22 @@ var collaborativeWallExtension = {
                         });
                     }
 
-                    // Information zone
+                    // Information to display on mouse over
                     var informationZone = angular.element(element[0].querySelector('.note-bottom'));
-                    if (informationZone) {
-                        informationZone.css({
-                            "display" : "none"
-                        });
+                    var buttonZone = angular.element(element[0].querySelector('.note-top-button'));
 
-                        element.on('mouseenter', function(event) {
-                            informationZone.css({
-                                "display" : "block"
-                            });
-                        });
+                    manageDisplay(informationZone, "none");
+                    manageDisplay(buttonZone, "none");
 
-                        element.on('mouseleave', function(event) {
-                            informationZone.css({
-                                "display" : "none"
-                            });
-                        });
-                    }
+                    element.on('mouseenter', function(event) {
+                        manageDisplay(informationZone, "block");
+                        manageDisplay(buttonZone, "block");
+                    });
+
+                    element.on('mouseleave', function(event) {
+                        manageDisplay(informationZone, "none");
+                        manageDisplay(buttonZone, "none");
+                    });
 
                     /**
                      * Allows to change the sticky note position
@@ -101,6 +98,21 @@ var collaborativeWallExtension = {
                             "left" : x + "px"
                         });
                     }
+
+                    /**
+                     * Allows to modify the "display" CSS properties of the
+                     * given element.
+                     * @param elt an element to modify.
+                     * @param display the text to put into the "display" CSS
+                     * properties, for example "none" or "block".
+                     */
+                    function manageDisplay(elt, display) {
+                        if (elt) {
+                            elt.css({
+                                "display" : display
+                            });
+                        }
+                    }
                 }
             }
         });
@@ -112,9 +124,9 @@ var collaborativeWallExtension = {
         module.directive('board', function() {
             return {
                 restrict : 'E',
-                transclude: true,
-                replace: true,
-                template: '<div><div ng-transclude></div></div>',
+                transclude : true,
+                replace : true,
+                template : '<div><div ng-transclude></div></div>',
                 link : function(scope, element, attr) {
                     scope.$watch("wall", function() {
                         element.css({

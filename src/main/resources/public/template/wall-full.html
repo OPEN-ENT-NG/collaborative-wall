@@ -27,9 +27,9 @@
             <behaviour name="contrib" resource="wall">
                 <div class="twelve cell draggable">&nbsp;</div>
             </behaviour>
-            <div class="cell note-top-button" ng-if="hasRight(wall, n)">
-                <img src="/collaborativewall/public/img/edit.png" ng-click="editNote(n, $event)"></i>
-                <img src="/collaborativewall/public/img/delete.png" ng-click="confirmRemoveNote($index, $event)"></i>
+            <div class="cell note-top-button">
+                <img src="/collaborativewall/public/img/edit.png" ng-if="hasRight(wall, n)" ng-click="editNote(n, $event)"></i>
+                <img src="/collaborativewall/public/img/delete.png" ng-if="hasRight(wall, n)" ng-click="confirmRemoveNote($index, $event)"></i>
             </div>
         </div>
         <div class="row note-content">
