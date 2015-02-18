@@ -55,7 +55,14 @@
 .board .note .note-content {
     min-height: 3em;
     min-width: 5em;
+    
+    max-height: 7em;
+    max-width: 10em;
+    
+    overflow: hidden;
+    
     padding: 10px;
+    margin-bottom: 10px;
 }
 
 .board .note .note-bottom {
