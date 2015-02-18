@@ -43,6 +43,13 @@
 .board .note .note-top {
     background-color: #eea;
     padding: 0 5px 0 0;
+    position: relative;
+}
+
+.board .note .note-top .note-top-button {
+    position: absolute;
+    top: 2px;
+    right: 5px;
 }
 
 .board .note .note-content {
