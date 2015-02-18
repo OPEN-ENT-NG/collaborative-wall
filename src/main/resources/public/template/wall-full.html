@@ -21,7 +21,7 @@
     </div>
 </div>
 
-<board class="board" ng-dblclick="addNote()">
+<board class="board">
     <sticky ng-repeat="n in wall.notes" class="note" ng-dblclick="editNote(n, $event)">
         <div class="row note-top">
             <behaviour name="contrib" resource="wall">

@@ -19,10 +19,12 @@ var collaborativeWallExtension = {
                     var x = scope.n.x;
                     var y = scope.n.y;
 
+                    var elt = element[0];
+
                     updateUI();
 
                     // Add a draggable zone
-                    var draggableZone = angular.element(element[0].querySelector('.draggable'));
+                    var draggableZone = angular.element(elt.querySelector('.draggable'));
                     if (draggableZone) {
                         draggableZone.css({
                             "cursor" : "move"
@@ -39,8 +41,8 @@ var collaborativeWallExtension = {
                     }
 
                     // Information to display on mouse over
-                    var informationZone = angular.element(element[0].querySelector('.note-bottom'));
-                    var buttonZone = angular.element(element[0].querySelector('.note-top-button'));
+                    var informationZone = angular.element(elt.querySelector('.note-bottom'));
+                    var buttonZone = angular.element(elt.querySelector('.note-top-button'));
 
                     manageDisplay(informationZone, "none");
                     manageDisplay(buttonZone, "none");
@@ -128,6 +130,21 @@ var collaborativeWallExtension = {
                 replace : true,
                 template : '<div><div ng-transclude></div></div>',
                 link : function(scope, element, attr) {
+                    var elt = element[0];
+
+                    // Allows to create a new sticky note under the current
+                    // cursor position
+                    element.on('dblclick', function(event) {
+                        if (event.offsetX == null) { // Firefox
+                            mouseX = event.originalEvent.layerX;
+                            mouseY = event.originalEvent.layerY;
+                        } else { // Other browsers
+                            mouseX = event.offsetX;
+                            mouseY = event.offsetY;
+                        }
+                        scope.addNote(mouseX, mouseY);
+                    });
+
                     scope.$watch("wall", function() {
                         element.css({
                             "position" : "relative",

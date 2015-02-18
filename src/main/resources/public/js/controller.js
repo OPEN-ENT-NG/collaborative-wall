@@ -211,8 +211,10 @@ function WallController($scope, template, model, route) {
 
     /**
      * Allows to add a new note into the current wall.
+     * @param x the x coordinate of the note.
+     * @param y the x coordinate of the note.
      */
-    $scope.addNote = function() {
+    $scope.addNote = function(x, y) {
         if ($scope.wall.notes === undefined) {
             $scope.wall.notes = [];
         }
@@ -222,11 +224,13 @@ function WallController($scope, template, model, route) {
         newNote.owner = {};
         newNote.owner.userId = $scope.me.userId;
         newNote.owner.username = $scope.me.username;
-        newNote.x = 0;
-        newNote.y = 0;
+        newNote.x = (x) ? x : 10;
+        newNote.y = (y) ? y : 10;
         
         $scope.wall.notes.push(newNote);
         $scope.wall.contribute();
+        
+        $scope.$apply();
     };
     
     /**
