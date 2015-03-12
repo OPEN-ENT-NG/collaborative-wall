@@ -1,6 +1,8 @@
 package net.atos.entng.collaborativewall.controllers;
 
 import org.entcore.common.mongodb.MongoDbControllerHelper;
+import org.entcore.common.user.UserInfos;
+import org.entcore.common.user.UserUtils;
 import org.vertx.java.core.Handler;
 import org.vertx.java.core.http.HttpServerRequest;
 import org.vertx.java.core.json.JsonObject;
@@ -111,8 +113,25 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @Put("/share/json/:id")
     @ApiDoc("Allows to update the current sharing of the collaborative wall given by its identifier")
     @SecuredAction(value = "collaborativewall.manager", type = ActionType.RESOURCE)
-    public void shareCollaborativeWallSubmit(HttpServerRequest request) {
-        shareJsonSubmit(request, null);
+    public void shareCollaborativeWallSubmit(final HttpServerRequest request) {
+        UserUtils.getUserInfos(eb, request, new Handler<UserInfos>(){
+            @Override
+            public void handle(final UserInfos user){
+                if (user != null) {
+                    final String id = request.params().get("id");
+                    if (id == null || id.trim().isEmpty()) {
+                        badRequest(request);
+                        return;
+                    }
+                    
+                    JsonObject params = new JsonObject();
+                    params.putString("uri", "/userbook/annuaire#" + user.getUserId() + "#" + user.getType())
+                    .putString("username", user.getUsername())
+                    .putString("cwallUri", "/collaborativewall#/view/" + id);
+                    shareJsonSubmit(request, "notify-cwall-share.html", false, params, "name");
+                }
+            }
+        });
     }
 
     @Put("/share/remove/:id")
