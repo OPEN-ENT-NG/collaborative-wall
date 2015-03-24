@@ -226,6 +226,7 @@ function WallController($scope, template, model, route) {
         newNote.owner.username = $scope.me.username;
         newNote.x = (x) ? x : 10;
         newNote.y = (y) ? y : 10;
+        newNote.zindex = $scope.wall.notes.length;
         
         $scope.wall.notes.push(newNote);
         $scope.wall.contribute();
@@ -241,6 +242,7 @@ function WallController($scope, template, model, route) {
      */
     $scope.confirmRemoveNote = function(index, event) {
         $scope.display.deleteNoteIndex = index;
+        $scope.display.noteElement = event.target.parentElement.parentElement.parentElement.parentElement;
         $scope.display.confirmDeleteNote = true;
         event.stopPropagation();
     };
@@ -251,6 +253,7 @@ function WallController($scope, template, model, route) {
     $scope.cancelRemoveNote = function() {
         delete $scope.display.confirmDeleteNote;
         delete $scope.display.deleteNoteIndex;
+        delete $scope.display.noteElement;
     };
     
     /**
@@ -261,6 +264,8 @@ function WallController($scope, template, model, route) {
             var notes = $scope.wall.notes;
             var index = $scope.display.deleteNoteIndex;
             if (notes && index >= 0 && index < notes.length) {
+                $scope.deleteZIndex(notes[index]);
+                $scope.deleteDivZIndex($scope.display.noteElement);
                 notes.splice(index, 1);
                 $scope.wall.contribute();
             }
@@ -275,6 +280,8 @@ function WallController($scope, template, model, route) {
     $scope.editNote = function(note, event) {
         event.stopPropagation();
         if ($scope.hasRight($scope.wall, note)) {
+            $scope.updateZIndex(note, true);
+            $scope.updateDivZIndex(event.currentTarget);
             $scope.note = note;
         }
     };
@@ -306,4 +313,74 @@ function WallController($scope, template, model, route) {
     $scope.hasRight = function(wall, note) {
         return wall && wall.myRights.contrib && ((note && note.owner && note.owner.userId === $scope.me.userId) || (wall.owner.userId === $scope.me.userId));
     };
+
+    /**
+    * Persist Zindex. When a note is edited, his z-index propertie is updated to the top;
+    * @param n: note , contribute: boolean
+    * 
+    */
+    $scope.updateZIndex= function(n, contribute){
+        var j= 0;
+        
+        for(var i = 0; i< $scope.wall.notes.length;i++){
+            if($scope.wall.notes[i].zindex == n.zindex){
+                j = i;
+            }
+            if($scope.wall.notes[i].zindex > n.zindex){
+                    $scope.wall.notes[i].zindex--;
+            }
+        }
+        $scope.wall.notes[j].zindex= $scope.wall.notes.length-1;
+        if(contribute){
+            $scope.wall.contribute();
+        }
+    };
+
+    /**
+    * Update html element Zindex, When a note is edited, his z-index propertie is updated to the top;
+    * @param el: element  div
+    * 
+    */
+    $scope.updateDivZIndex = function(el){
+            elts =el.parentElement.children;
+            var j = 0;
+            for ( var i = 0 ; i < elts.length; i++){
+                if(elts[i].style.zIndex ==el.style.zIndex){
+                    j= i;
+                }
+                if(elts[i].style.zIndex>el.style.zIndex){
+                    elts[i].style.zIndex--;
+                }
+            }
+            elts[j].style.zIndex = elts.length-1;
+    };
+
+    /**
+    * Reorder & Persist zindex. When a note is deleted, all z-index are reordered
+    * @param n: note 
+    * 
+    */
+    $scope.deleteZIndex = function (n){
+        for(var i = 0; i< $scope.wall.notes.length;i++){
+            if($scope.wall.notes[i].zindex > n.zindex){
+                $scope.wall.notes[i].zindex--;
+            }
+        }
+        $scope.wall.contribute();
+    };
+    
+    /**
+    * Reorder & update html element Zindex, When a note is deleted, all z-index are reordered
+    * @param el: element 
+    * 
+    */
+    $scope.deleteDivZIndex=function(el){
+        elts =el.parentElement.children;
+        for ( var i = 0 ; i < elts.length; i++){
+            if(elts[i].style.zIndex > el.style.zIndex){
+                    elts[i].style.zIndex--;
+                } 
+        }
+    };
+
 }

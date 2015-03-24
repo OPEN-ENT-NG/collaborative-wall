@@ -44,6 +44,9 @@
                     },
                     "y": {
                         "type": "integer"
+                    },
+                    "zindex": {
+                        "type": "integer"
                     }
                 }
             }

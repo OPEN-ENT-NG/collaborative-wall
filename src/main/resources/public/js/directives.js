@@ -18,6 +18,7 @@ var collaborativeWallExtension = {
 
                     var x = scope.n.x;
                     var y = scope.n.y;
+                    var zindex = scope.n.zindex;
 
                     var elt = element[0];
 
@@ -64,7 +65,6 @@ var collaborativeWallExtension = {
                     function mousemove(event) {
                         y = event.screenY - startY;
                         x = event.screenX - startX;
-
                         if (x < 0) {
                             x = 0;
                         }
@@ -75,7 +75,7 @@ var collaborativeWallExtension = {
 
                         scope.n.x = x;
                         scope.n.y = y;
-
+                        zindex = scope.n.zindex;
                         updateUI();
                     }
 
@@ -97,7 +97,8 @@ var collaborativeWallExtension = {
                         element.css({
                             "position" : "absolute",
                             "top" : y + "px",
-                            "left" : x + "px"
+                            "left" : x + "px",
+                            "z-index": zindex
                         });
                     }
 
