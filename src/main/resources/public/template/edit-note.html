@@ -1,0 +1,10 @@
+<h1><i class="collaborative-wall"></i><i18n ng-click="backToWallList()">collaborativewall.title</i18n></h1>
+
+<h2 class="ng-binding"><i18n>collaborativewall.label.noteowner</i18n> <a ng-href="/userbook/annuaire#[[note.owner.userId]]">[[note.owner.username]]</a></h2>
+
+<html-editor ng-model="note.content"></html-editor>
+
+<div class="twelve cell">
+    <input type="button" class="cell right-magnet" i18n-value="save" ng-click="saveNote()" />
+    <input type="button" class="cell right-magnet cancel" i18n-value="cancel" ng-click="cancelNote()" />
+</div>
