@@ -32,20 +32,7 @@
                 <img src="/collaborativewall/public/img/delete.png" ng-if="hasRight(wall, n)" ng-click="confirmRemoveNote($index, $event)">
             </div>
         </div>
-        <div class="row note-content" ng-class="{ selected: n === note }">
-            <div class="twelve cell" ng-if="n === note">
-                <div class="row">
-                    <div class="twelve cell">
-                        <html-editor ng-model="note.content"></html-editor>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="twelve cell">
-                        <input type="button" class="cell right-magnet" i18n-value="save" ng-click="saveNote()" />
-                        <input type="button" class="cell right-magnet cancel" i18n-value="cancel" ng-click="cancelNote()" />
-                    </div>
-                </div>
-            </div>
+        <div class="row note-content">
             <div class="twelve cell" ng-if="n !== note">
                 <div bind-html="n.content"></div>
             </div>

@@ -272,17 +272,29 @@ function WallController($scope, template, model, route) {
         }
         $scope.cancelRemoveNote();
     };
-    
+
+    /**
+     * Open wall list template and delete note in scope
+     */
+    $scope.backToWallList = function() {
+        template.open("walls","wall-list");
+        delete $scope.note;
+    };
     /**
      * Allows to edit the given note.
      * @param event the current event.
      */
     $scope.editNote = function(note, event) {
+        
         event.stopPropagation();
         if ($scope.hasRight($scope.wall, note)) {
             $scope.updateZIndex(note, true);
             $scope.updateDivZIndex(event.currentTarget);
             $scope.note = note;
+            template.open("walls","edit-note");
+        }else{
+            $scope.note = note;
+            template.open("walls","view-note");
         }
     };
     
@@ -295,12 +307,14 @@ function WallController($scope, template, model, route) {
             $scope.wall.contribute();
             delete $scope.note;
         }
+        template.open("walls","wall-full");
     };
     
     /**
      * Allows to cancel the current editing note.
      */
     $scope.cancelNote = function() {
+        template.open("walls","wall-full");
         delete $scope.note;
     };
     

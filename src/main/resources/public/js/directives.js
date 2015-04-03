@@ -72,7 +72,8 @@ var collaborativeWallExtension = {
                         if (y < 0) {
                             y = 0;
                         }
-
+                        scope.updateZIndex(scope.n,true);
+                        scope.updateDivZIndex(element.context);
                         scope.n.x = x;
                         scope.n.y = y;
                         zindex = scope.n.zindex;

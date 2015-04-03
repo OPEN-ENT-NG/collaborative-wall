@@ -7,6 +7,7 @@
 	"collaborativewall.label.image": "Associate an image",
 	"collaborativewall.label.background" : "Select a background image",
 	"collaborativewall.label.description": "Description",
+	"collaborativewall.label.noteowner": "Created by",
 	
 	"collaborativewall.wall.delete.confirm": "Do you really want to delete this wall?",
 	"collaborativewall.note.delete.confirm": "Do you really want to delete this note?",
@@ -15,6 +16,7 @@
 	"collaborativewall.new": "New wall",
 	"collaborativewall.create": "Create",
 	"collaborativewall.print": "Print the wall",
+	"collaborativewall.back": "Back",
 	
 	"collaborativewall.fullscreen.open": "Open wall",
 

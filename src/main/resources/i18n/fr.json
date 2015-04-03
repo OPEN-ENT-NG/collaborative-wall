@@ -6,15 +6,18 @@
 	"collaborativewall.label.name": "Nom",
 	"collaborativewall.label.image": "Associer une image",
 	"collaborativewall.label.background" : "Choisir une image de fond",
-	"collaborativewall.label.description": "Description",
-	
+    "collaborativewall.label.description": "Description",
+	"collaborativewall.label.noteowner": "Note crée par",
+
 	"collaborativewall.wall.delete.confirm": "Voulez-vous vraiment supprimer ce mur ?",
 	"collaborativewall.note.delete.confirm": "Voulez-vous vraiment supprimer cette note ?",
 	"collaborativewall.note.create": "Nouvelle note",
 	
 	"collaborativewall.new": "Nouveau mur",
 	"collaborativewall.create": "Créer",
-	"collaborativewall.print": "Imprimer le mur",
+    "collaborativewall.print": "Imprimer le mur",
+	"collaborativewall.back": "Retour",
+
 	
 	"collaborativewall.fullscreen.open": "Ouvrir le mur",
 
