@@ -29,11 +29,38 @@ function WallController($scope, template, model, route) {
     $scope.template = template;
     $scope.walls = model.walls;
     $scope.me = model.me;
-
+    $scope.noteColors =[[
+    '#F78181','#FF0000'],[
+    '#F79F81','#FF4000'],[
+    '#F7BE81','#FF8000'],[
+    '#F5DA81','#FFBF00'],[
+    '#F3F781','#FFFF00'],[
+    '#D8F781','#BFFF00'],[
+    '#BEF781','#80FF00'],[
+    '#9FF781','#40FF00'],[
+    '#81F781','#00FF00'],[
+    '#81F79F','#00FF40'],[
+    '#81F7BE','#00FF80'],[
+    '#81F7D8','#00FFBF'],[
+    '#81F7F3','#00FFFF'],[
+    '#81DAF5','#00BFFF'],[
+    '#81BEF7','#0080FF'],[
+    '#819FF7','#0040FF'],[
+    '#8181F7','#0000FF'],[
+    '#9F81F7','#4000FF'],[
+    '#BE81F7','#8000FF'],[
+    '#DA81F5','#BF00FF'],[
+    '#F781F3','#FF00FF'],[
+    '#F781D8','#FF00BF'],[
+    '#F781BE','#FF0080'],[
+    '#F7819F','#FF0040'],[
+    '#D8D8D8','#848484']
+    ];
     $scope.themes=['/collaborativewall/public/img/default.jpg', '/collaborativewall/public/img/wood.jpg', '/collaborativewall/public/img/paper.jpg'];
     
     $scope.display = {};
     $scope.error = false;
+    $scope.showColor =false;
 
     // Action according to the current given route.
     route({
@@ -227,7 +254,7 @@ function WallController($scope, template, model, route) {
         newNote.x = (x) ? x : 10;
         newNote.y = (y) ? y : 10;
         newNote.zindex = $scope.wall.notes.length;
-        
+        newNote.color = $scope.getUserNoteColor();
         $scope.wall.notes.push(newNote);
         $scope.wall.contribute();
         
@@ -396,5 +423,43 @@ function WallController($scope, template, model, route) {
                 } 
         }
     };
+
+    /**
+    * Set color for each user's Note
+    * @param color (head and content)
+    */
+    $scope.setColor = function(color){
+        angular.forEach($scope.wall.notes, function(note, key){
+            if(note.owner.userId==$scope.me.userId){
+                note.color = color;
+            }
+
+        });
+        $scope.wall.contribute();
+            
+    };
+
+    /**
+    * Get a color who are already used for an user
+    * @return color ( head and content)
+    *
+    */
+    $scope.getUserNoteColor = function(){
+        
+        for (var i = 0; i < $scope.wall.notes.length; i++) {
+            if($scope.wall.notes[i].owner.userId==$scope.me.userId){
+                return $scope.wall.notes[i].color;
+            }
+        };
+        return ['#F5F6CE','#F2F5A9'];
+    };
+
+    /**
+    * Switch on/off color selector
+    *
+    */
+    $scope.toogleShowColor = function(){
+        $scope.showColor = !$scope.showColor;
+    }
 
 }

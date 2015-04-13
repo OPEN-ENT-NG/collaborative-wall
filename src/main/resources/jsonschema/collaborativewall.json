@@ -47,6 +47,9 @@
                     },
                     "zindex": {
                         "type": "integer"
+                    },
+                    "color":{
+                        "type":"array"
                     }
                 }
             }
