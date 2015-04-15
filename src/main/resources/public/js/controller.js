@@ -312,7 +312,6 @@ function WallController($scope, template, model, route) {
      * @param event the current event.
      */
     $scope.editNote = function(note, event) {
-        
         event.stopPropagation();
         if ($scope.hasRight($scope.wall, note)) {
             $scope.updateZIndex(note, true);
@@ -460,6 +459,25 @@ function WallController($scope, template, model, route) {
     */
     $scope.toogleShowColor = function(){
         $scope.showColor = !$scope.showColor;
-    }
+    };
+
+    /**
+    * Display note in a lightbox
+    * @param note to display
+    *
+    */
+    $scope.viewNote = function(note){
+        $scope.note = note;
+        $scope.display.note = true;
+    };
+
+    /**
+    * Close note's lightbox
+    *
+    */
+    $scope.closeViewNote = function(){
+        $scope.display.note= false;
+        delete $scope.note;
+    };
 
 }

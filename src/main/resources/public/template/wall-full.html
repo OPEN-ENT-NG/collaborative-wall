@@ -40,6 +40,7 @@
             </behaviour>
             <div class="cell note-top-button">
                 <img src="/collaborativewall/public/img/color.png" ng-if="hasRight(wall, n)" ng-click="toogleShowColor()">
+                <img src="/collaborativewall/public/img/view.png" ng-click="viewNote(n)">
                 <img src="/collaborativewall/public/img/edit.png" ng-if="hasRight(wall, n)" ng-click="editNote(n, $event)">
                 <img src="/collaborativewall/public/img/delete.png" ng-if="hasRight(wall, n)" ng-click="confirmRemoveNote($index, $event)">
             </div>
@@ -70,6 +71,20 @@
             <div class="row">
                 <button class="right-magnet" ng-click="removeNote()"><i18n>remove</i18n></button>
                 <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelRemoveNote()" />
+            </div>
+        </article>
+    </lightbox>
+</div>
+
+<div ng-if="display.note">
+    <lightbox show="display.note" on-close="closeViewNote()">
+        <article style="overflow-y: scroll; height:100%; max-height:650px;">
+            
+            <div class="row">
+                <div bind-html="note.content"></div>
+            </div>
+            <div class="row">
+                <p class="ng-binding"><i18n>collaborativewall.label.noteowner</i18n> <a ng-href="/userbook/annuaire#[[note.owner.userId]]">[[note.owner.username]]</a></p>
             </div>
         </article>
     </lightbox>
