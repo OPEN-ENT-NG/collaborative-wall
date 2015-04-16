@@ -21,11 +21,11 @@
     </div>
 </div>
 <div>
-    <table class="cwall-colorpicker" ng-show="showColor" >
+    <table class="cwall-colorpicker" ng-show="showColor"  ng-mouseover="mouseOverColorPicker()" ng-mouseleave="mouseLeaveColorPicker()">
             <tbody>
                 <tr>
                 
-                    <td ng-repeat="c in noteColors" bgcolor="[[ c[0] ]]"  ng-click="setColor(c)"></td>
+                    <td ng-repeat="c in noteColors" bgcolor="[[ c[0] ]]"  ng-click="setColor(c,useridcolor)"></td>
                 </tr>
             </tbody>
     </table>
@@ -39,7 +39,7 @@
                 <div class="twelve cell draggable">&nbsp;</div>
             </behaviour>
             <div class="cell note-top-button">
-                <img src="/collaborativewall/public/img/color.png" ng-if="hasRight(wall, n)" ng-click="toogleShowColor()">
+                <img src="/collaborativewall/public/img/color.png" ng-if="hasRight(wall, n)" ng-click="toogleShowColor(n.owner.userId)">
                 <img src="/collaborativewall/public/img/view.png" ng-click="viewNote(n)">
                 <img src="/collaborativewall/public/img/edit.png" ng-if="hasRight(wall, n)" ng-click="editNote(n, $event)">
                 <img src="/collaborativewall/public/img/delete.png" ng-if="hasRight(wall, n)" ng-click="confirmRemoveNote($index, $event)">

@@ -425,17 +425,17 @@ function WallController($scope, template, model, route) {
 
     /**
     * Set color for each user's Note
-    * @param color (head and content)
+    * @param color (head and content) ,user's id
     */
-    $scope.setColor = function(color){
+    $scope.setColor = function(color, userIdColor){
         angular.forEach($scope.wall.notes, function(note, key){
-            if(note.owner.userId==$scope.me.userId){
+            if(note.owner.userId==userIdColor){
                 note.color = color;
             }
 
         });
         $scope.wall.contribute();
-            
+        $scope.colorPickerClicked = true;
     };
 
     /**
@@ -455,11 +455,36 @@ function WallController($scope, template, model, route) {
 
     /**
     * Switch on/off color selector
+    * @param userIdColor user's id of a note selected
+    */
+    $scope.toogleShowColor = function(userIdColor){
+        $scope.showColor = !$scope.showColor;
+        $scope.useridcolor = userIdColor
+    };
+
+    /**
+    * Keep colorpicker Open
     *
     */
-    $scope.toogleShowColor = function(){
-        $scope.showColor = !$scope.showColor;
+    $scope.mouseOverColorPicker = function(){
+        if($scope.showColor){
+            $scope.mouseIsOverColorPicker = true;
+        }
+
     };
+
+    /**
+    * Close color picker when mouse leaves color aera.
+    *
+    */
+    $scope.mouseLeaveColorPicker = function(){
+        if($scope.showColor && $scope.mouseIsOverColorPicker && $scope.colorPickerClicked){
+            $scope.showColor = false;
+            $scope.mouseIsOverColorPicker = false;
+            $scope.colorPickerClicked = false;
+        }
+    };
+
 
     /**
     * Display note in a lightbox
