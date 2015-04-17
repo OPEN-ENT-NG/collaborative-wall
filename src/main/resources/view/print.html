@@ -29,7 +29,7 @@
 
 			<board class="board">
                 <sticky ng-repeat="n in wall.notes" class="note">
-                    <div class="row note-content">
+                    <div class="row note-content" style="background:[[ n.color[0] ]];">
                         <div bind-html="n.content"></div>
                     </div>
                 </sticky>
