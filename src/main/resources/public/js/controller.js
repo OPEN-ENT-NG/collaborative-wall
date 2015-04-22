@@ -355,6 +355,16 @@ function WallController($scope, template, model, route) {
     };
 
     /**
+    * Allows user if he can edit on wall
+    * @param wall to edit
+    * @return true if user can edit wall.
+    *
+    */
+    $scope.hasWallRight = function(wall){
+        return wall && wall.myRights.contrib ;
+    };
+
+    /**
     * Persist Zindex. When a note is edited, his z-index propertie is updated to the top;
     * @param n: note , contribute: boolean
     * 

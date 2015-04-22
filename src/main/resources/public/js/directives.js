@@ -137,14 +137,16 @@ var collaborativeWallExtension = {
                     // Allows to create a new sticky note under the current
                     // cursor position
                     element.on('dblclick', function(event) {
-                        if (event.offsetX == null) { // Firefox
-                            mouseX = event.originalEvent.layerX;
-                            mouseY = event.originalEvent.layerY;
-                        } else { // Other browsers
-                            mouseX = event.offsetX;
-                            mouseY = event.offsetY;
+                        if(scope.$parent.hasWallRight(scope.$parent.wall)){
+                            if (event.offsetX == null) { // Firefox
+                                mouseX = event.originalEvent.layerX;
+                                mouseY = event.originalEvent.layerY;
+                            } else { // Other browsers
+                                mouseX = event.offsetX;
+                                mouseY = event.offsetY;
+                            }
+                            scope.addNote(mouseX, mouseY);
                         }
-                        scope.addNote(mouseX, mouseY);
                     });
 
                     scope.$watch("wall", function() {
