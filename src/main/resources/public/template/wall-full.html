@@ -38,6 +38,9 @@
             <behaviour name="contrib" resource="wall">
                 <div class="twelve cell draggable">&nbsp;</div>
             </behaviour>
+            <behaviour name="retrieve" resource="wall">
+                <div ng-if="!hasWallRight(wall)" class="twelve cell ">&nbsp;</div>
+            </behaviour>
             <div class="cell note-top-button">
                 <img src="/collaborativewall/public/img/color.png" ng-if="hasRight(wall, n)" ng-click="toogleShowColor(n.owner.userId)">
                 <img src="/collaborativewall/public/img/view.png" ng-click="viewNote(n)">

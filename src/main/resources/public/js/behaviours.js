@@ -7,6 +7,9 @@ var wallBehaviours = {
      * Resources set by the user.
      */
     resources : {
+        retrieve : {
+            right : 'net-atos-entng-collaborativewall-controllers-CollaborativeWallController|retrieve'
+        },
         contrib : {
             right : 'net-atos-entng-collaborativewall-controllers-CollaborativeWallController|contribute'
         },
