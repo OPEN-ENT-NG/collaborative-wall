@@ -67,6 +67,7 @@
 }
 .board .note .note-bottom {
     padding: 0 10px 10px;
+      width: 12em;
 }
 .cwall-note-pad{
     padding-bottom: 10px;

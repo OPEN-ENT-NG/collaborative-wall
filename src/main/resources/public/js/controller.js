@@ -351,7 +351,7 @@ function WallController($scope, template, model, route) {
      * @return true if the current user can edit or delete the given note.
      */
     $scope.hasRight = function(wall, note) {
-        return wall && wall.myRights.contrib && ((note && note.owner && note.owner.userId === $scope.me.userId) || (wall.owner.userId === $scope.me.userId));
+        return wall &&  wall.myRights.contrib && (wall.myRights.manage ||((note && note.owner && note.owner.userId === $scope.me.userId) || (wall.owner.userId === $scope.me.userId)));
     };
 
     /**
