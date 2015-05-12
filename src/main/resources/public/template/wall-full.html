@@ -3,6 +3,9 @@
         <h1><i class="collaborative-wall"></i><i18n ng-click="closeWallFullScreen()">collaborativewall.title</i18n></h1>
     </div>
     <div class="six cell contextual-buttons">
+        <a class="button cell right-magnet" ng-href="/collaborativewall/printnotes/wall?wall=[[wall._id]]" target="_blank" workflow="collaborativewall.printnotes">
+            <i18n>collaborativewall.printNotes</i18n>
+        </a>
         <a class="button cell right-magnet" ng-href="/collaborativewall/print/wall#/print/[[wall._id]]" target="_blank" workflow="collaborativewall.print">
             <i18n>collaborativewall.print</i18n>
         </a>

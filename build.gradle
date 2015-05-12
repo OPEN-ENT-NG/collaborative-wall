@@ -59,7 +59,7 @@ def configurePom(def pom) {
 }
 
 task deploy( type:Copy, dependsOn: 'classes', description: 'Assemble the module into the remote mods directory' ) {
-  into "../../springboard-neo/mods/$moduleName"
+  into "../../springboard-leo/mods/$moduleName"
   from compileJava
   from 'src/main/resources'
   into( 'lib' ) {

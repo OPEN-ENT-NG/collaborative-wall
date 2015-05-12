@@ -21,7 +21,7 @@ import fr.wseduc.webutils.request.RequestUtils;
  * @author Atos
  */
 public class CollaborativeWallController extends MongoDbControllerHelper {
-
+    
     /**
      * Default constructor.
      * @param collection MongoDB collection to request.
@@ -42,6 +42,13 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @SecuredAction("collaborativewall.print")
     public void print(HttpServerRequest request) {
         renderView(request, null, "print.html", null);
+    }
+
+    @Get("/printnotes/wall")
+    @ApiDoc("Allows to print notes")
+    @SecuredAction("collaborativewall.printnotes")
+    public void printnotes(HttpServerRequest request) {
+        renderView(request, null, "printnotes.html", null);
     }
 
     @Override

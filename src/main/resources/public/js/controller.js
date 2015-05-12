@@ -81,7 +81,22 @@ function WallController($scope, template, model, route) {
             });
         },
         mainPage: function() {
-            template.open('walls', 'wall-list');
+            if(window.location.href.indexOf('printnotes') !== -1){
+                var url = window.location.search;
+                if(url != undefined){
+                    url = url.substring(url.lastIndexOf('=')+1);
+                    $scope.walls.one('sync', function() {
+                        var wall = $scope.walls.find(function(w) {
+                            return w._id === url;
+                        });
+
+                        $scope.printNotes(wall);
+                    });
+                }
+               
+            }else{
+                template.open('walls', 'wall-list');
+            }
         }
     });
 
@@ -195,6 +210,17 @@ function WallController($scope, template, model, route) {
         if (wall) {
             $scope.wall = wall;
             setTimeout(function() { window.print(); }, 1000);
+        }
+    };
+    /**
+    * Print current note  
+    * @param wall
+    *
+    */
+    $scope.printNotes = function(wall){
+        if(wall){
+            $scope.wall = wall;
+            setTimeout(function(){window.print();}, 1000);
         }
     };
     

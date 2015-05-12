@@ -16,7 +16,9 @@
 	"collaborativewall.new": "Nouveau mur",
 	"collaborativewall.create": "Créer",
     "collaborativewall.print": "Imprimer le mur",
-	"collaborativewall.back": "Retour",
+    "collaborativewall.printNotes": "Imprimer les post-it",
+    "collaborativewall.back": "Retour",
+	"collaborativewall.last.modification.by": "Modifiée le",
 
 	
 	"collaborativewall.fullscreen.open": "Ouvrir le mur",
