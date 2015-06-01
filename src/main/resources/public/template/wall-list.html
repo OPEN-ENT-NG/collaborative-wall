@@ -1,54 +1,85 @@
-<h1><i class="collaborative-wall"></i><i18n ng-click="cancelWallEdit()">collaborativewall.title</i18n></h1>
-
 <div class="items">
-	<div workflow="collaborativewall.create" class="twelve cell">
-		<div class="cell">
-			<button ng-click="newWall()"><i18n>collaborativewall.new</i18n></button>
-		</div>
-		<i class="open-right right-magnet big-hidden" ng-click="template.close('main')"></i>
-	</div>
-	<hr />
-	<div class="row" ng-repeat="w in walls.all" ng-click="openWall(w)" ng-class="{ selected: w._id === wall._id }">
-        <div class="cell">
-            <img ng-if="w.icon === undefined" class="cell" skin-src="/img/illustrations/collaborative-wall-default.png" />
-            <img ng-if="w.icon !== undefined" class="cell" ng-src="[[w.icon]]?thumbnail=120x120" />
+    <div class="row rigid-grid">
+        <div class="four cell">
+            <autocomplete
+                    options="searchbar"
+                    ng-change="openWallFromSearchbar(selectedWall._id)"
+                    ng-model="selectedWall"
+                    ng-if="!isCreatingOrEditing()">
+            </autocomplete>
         </div>
-		<article>
-			<h1 class="truncate">[[w.name]]</h1>
-
-            <div class="bottom-locked">
-                <behaviour name="manage" resource="w">
-                    <input type="checkbox" ng-model="w.showButtons" ng-change="hideAlmostAllButtons(w)" />
-                </behaviour>
+    </div>
+    <div class="fallen dominos">
+        <div class="item" ng-repeat="w in walls.all">
+            <section class="domino cyan">
+                <div class="top" ng-click="openWallFullScreen(w)">
+                    <img ng-if="w.icon === undefined" class="cell" skin-src="/img/illustrations/collaborative-wall-default.png" />
+                    <img ng-if="w.icon !== undefined" class="cell" ng-src="[[w.icon]]?thumbnail=120x120" />
+                </div>
+                <div class="bottom">
+                    <div class="content">
+                        <div class="cell" ng-click="openWallFullScreen(w)">
+                            <strong class="truncate">[[w.name]]</strong>
+                            <br/><a ng-href="/userbook/annuaire#[[w.owner.userId]]">[[w.owner.displayName]]</a><br/> [[w.notes.length]] note(s) <br/> [[formatDate(w.modified)]]
+                        </div>
+                        <div ng-show="hasManageRight(w)" class="bottom-locked eleven vertical-spacing-twice">
+                            <input type="checkbox" data-ng-model="w.selected" class="right-magnet cell" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <!-- Lightbox to share walls -->
+    <div ng-if="display.showPanel">
+        <lightbox show="display.showPanel" on-close="display.showPanel = false;">
+            <share-panel app-prefix="'collaborativewall'" resources="walls.selection()"/>
+        </lightbox>
+    </div>
+    
+    <!-- Lightbox to confirm wiki deletion -->
+        <lightbox show="display.confirmDeleteWall" on-close="display.showConfirmDelete = false">
+        <article>
+            <div class="row">
+                <i18n>collaborativewall.wall.delete.confirm</i18n>
             </div>
-
-            <div class="small-hidden buttons" ng-class="{ hidden: !w.showButtons || w._id !== wall._id }">
-                <behaviour name="manage" resource="w">
-                    <button ng-click="editWall(w, $event)"><i18n>edit</i18n></button>
-                    <button ng-click="confirmRemoveWall(w, $event)"><i18n>remove</i18n></button>
-                    <button ng-click="shareWall(w, $event)"><i18n>share</i18n></button>
-                </behaviour>
+            <p ng-repeat="w in walls.selection()"> [[w.name]]</p>
+            <div class="row">
+                <button class="right-magnet" ng-click="removeWalls()"><i18n>remove</i18n></button>
+                <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelRemoveWalll()" />
             </div>
-		</article>
-	</div>
+        </article>
+        </lightbox>
+    
 </div>
 
-<!-- Allows to display a confirm dialog before deleting a wall -->
-<lightbox show="display.confirmDeleteWall" on-close="cancelRemoveWall()">
-    <article>
+<!-- Display actions for selected walls -->
+<section class="toggle-buttons" ng-class="{ hide: walls.selection().length === 0 }">
+    <div class="toggle">
         <div class="row">
-            <i18n>collaborativewall.wall.delete.confirm</i18n>
+            <a class="button cell" workflow="collaborativewall.print" ng-if="walls.selection().length === 1" ng-href="/collaborativewall/print/wall#/print/[[walls.selection()[0]._id]]" target="_blank">
+                <i18n>collaborativewall.print</i18n>
+            </a>
+            <a class="button cell" workflow="collaborativewall.printnotes" ng-if="walls.selection().length === 1" ng-href="/collaborativewall/printnotes/wall?wall=[[walls.selection()[0]._id]]" target="_blank">
+                <i18n>collaborativewall.printNotes</i18n>
+            </a>
+            <resource-right name="contrib" resource="walls.selection()" class="cell">
+                <button ng-if="walls.selection().length === 1"
+                    ng-click="editWall(walls.selection()[0], $event)"
+                >
+                    <i18n>properties</i18n>
+                </button>
+            </resource-right>
+            <resource-right name="manage" resource="walls.selection()" class="cell">
+                <button ng-click="display.showPanel = true">
+                    <i18n>share</i18n>
+                </button>
+            </resource-right>
+            <resource-right name="manage" resource="walls.selection()" class="cell">
+                <button ng-click="confirmRemoveWall(walls.selection()[0], $event)">
+                    <i18n>remove</i18n>
+                </button>
+            </resource-right>
         </div>
-        <div class="row">
-            <button class="right-magnet" ng-click="removeWall()"><i18n>remove</i18n></button>
-            <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelRemoveWall()" />
-        </div>
-    </article>
-</lightbox>
-
-<!-- Allows to display the panel to manage share rights -->
-<div ng-if="display.showPanel">
-    <lightbox show="display.showPanel" on-close="display.showPanel = false;">
-        <share-panel app-prefix="'collaborativewall'" resources="wall"></share-panel>
-    </lightbox>
-</div>
+    </div>
+</section>

@@ -9,11 +9,11 @@
     "collaborativewall.label.description": "Description",
 	"collaborativewall.label.noteowner": "Note crée par",
 
-	"collaborativewall.wall.delete.confirm": "Voulez-vous vraiment supprimer ce mur ?",
+	"collaborativewall.wall.delete.confirm": "Voulez-vous vraiment supprimer ce(s) mur(s) ?",
 	"collaborativewall.note.delete.confirm": "Voulez-vous vraiment supprimer cette note ?",
 	"collaborativewall.note.create": "Nouvelle note",
 	
-	"collaborativewall.new": "Nouveau mur",
+	"collaborativewall.new": "Créer un mur",
 	"collaborativewall.create": "Créer",
     "collaborativewall.print": "Imprimer le mur",
     "collaborativewall.printNotes": "Imprimer les post-it",

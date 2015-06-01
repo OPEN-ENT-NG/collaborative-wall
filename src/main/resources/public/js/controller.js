@@ -57,7 +57,7 @@ function WallController($scope, template, model, route) {
     '#F2F2F2','#E6E6E6']
     ];
     $scope.themes=['/collaborativewall/public/img/default.jpg', '/collaborativewall/public/img/wood.jpg', '/collaborativewall/public/img/paper.jpg'];
-    
+    $scope.searchbar = {}
     $scope.display = {};
     $scope.error = false;
     $scope.showColor =false;
@@ -70,6 +70,7 @@ function WallController($scope, template, model, route) {
                     return w._id === params.wallId;
                 });
                 $scope.openWallFullScreen(wall);
+                 template.open('side-panel', 'side-panel');
             });
         },
         printWall: function(params) {
@@ -95,7 +96,8 @@ function WallController($scope, template, model, route) {
                 }
                
             }else{
-                template.open('walls', 'wall-list');
+                template.open('main', 'wall-list');
+                 template.open('side-panel', 'side-panel');
             }
         }
     });
@@ -108,6 +110,7 @@ function WallController($scope, template, model, route) {
     $scope.openWall = function(wall) {
         $scope.wall = wall;
         $scope.hideAlmostAllButtons(wall);
+        // $scope.wallmodeview = true;
         template.open('main', 'wall-view');
     };
     
@@ -134,6 +137,7 @@ function WallController($scope, template, model, route) {
     $scope.editWall = function(wall, event) {
         wall.showButtons = false;
         $scope.master = wall;
+        $scope.wallmodeview = true;
         $scope.wall = angular.copy(wall);
         event.stopPropagation();
         template.open('main', 'wall-edit');
@@ -159,7 +163,9 @@ function WallController($scope, template, model, route) {
         delete $scope.master;
         delete $scope.wall;
         $scope.hideAlmostAllButtons();
-        template.close('main');
+        // template.close('main');
+        template.open('main', 'wall-list');
+        $scope.wallmodeview = false;
     };
 
     /**
@@ -168,9 +174,11 @@ function WallController($scope, template, model, route) {
      */
     $scope.saveWall = function() {
         $scope.master = angular.copy($scope.wall);
+        $scope.wallmodeview = false;
         $scope.master.save(function() {
             $scope.walls.sync(function() {
                 $scope.cancelWallEdit();
+                updateSearchBar();
             });
         });
     };
@@ -203,7 +211,8 @@ function WallController($scope, template, model, route) {
             delete $scope.display.confirmDeleteWall;
             delete $scope.wall;
         }
-        template.close('main');
+        // template.close('main');
+        template.open('main', 'wall-list');
     };
     
     $scope.printWall = function(wall) {
@@ -245,8 +254,9 @@ function WallController($scope, template, model, route) {
             $scope.wall = wall;
             $scope.error = false;
             $scope.note = undefined;
-            template.close('main');
-            template.open('walls', 'wall-full');
+            $scope.wallmodeview = true;
+            // template.close('main');
+            template.open('main', 'wall-full');
         } else {
             $scope.wall = undefined;
             $scope.error = true;
@@ -258,8 +268,8 @@ function WallController($scope, template, model, route) {
      * Allows to return to the list of walls.
      */
     $scope.closeWallFullScreen= function() {
-        template.close('main');
-        template.open('walls', 'wall-list');
+        // template.close('main');
+        template.open('main', 'wall-list');
     };
 
     /**
@@ -330,7 +340,7 @@ function WallController($scope, template, model, route) {
      * Open wall list template and delete note in scope
      */
     $scope.backToWallList = function() {
-        template.open("walls","wall-list");
+        template.open("main","wall-list");
         delete $scope.note;
     };
     /**
@@ -343,10 +353,10 @@ function WallController($scope, template, model, route) {
             $scope.updateZIndex(note, true);
             $scope.updateDivZIndex(event.currentTarget);
             $scope.note = note;
-            template.open("walls","edit-note");
+            template.open("main","edit-note");
         }else{
             $scope.note = note;
-            template.open("walls","view-note");
+            template.open("main","view-note");
         }
     };
     
@@ -359,14 +369,14 @@ function WallController($scope, template, model, route) {
             $scope.wall.contribute();
             delete $scope.note;
         }
-        template.open("walls","wall-full");
+        template.open("main","wall-full");
     };
     
     /**
      * Allows to cancel the current editing note.
      */
     $scope.cancelNote = function() {
-        template.open("walls","wall-full");
+        template.open("main","wall-full");
         delete $scope.note;
     };
     
@@ -390,6 +400,15 @@ function WallController($scope, template, model, route) {
         return wall && wall.myRights.contrib ;
     };
 
+     /**
+    * Allows user if he can edit on wall
+    * @param wall to edit
+    * @return true if user can edit wall.
+    *
+    */
+    $scope.hasManageRight = function(wall){
+        return wall && wall.myRights.manage ;
+    };
     /**
     * Persist Zindex. When a note is edited, his z-index propertie is updated to the top;
     * @param n: note , contribute: boolean
@@ -539,6 +558,83 @@ function WallController($scope, template, model, route) {
     $scope.closeViewNote = function(){
         $scope.display.note= false;
         delete $scope.note;
+    };
+
+    /**
+     * Allows to put the current poll in the scope and set "confirmDeletePoll"
+     * variable to "true".
+     * @param poll the poll to delete.
+     * @param event an event.
+     */
+    $scope.confirmRemoveWalls = function(walls, event) {
+       // $scope.poll = poll;
+        $scope.display.confirmDeletePoll = true;
+        event.stopPropagation();
+    };
+
+    /**
+    * Allows to remove several walls
+    */
+    $scope.removeWalls = function(){
+
+
+        _.map($scope.walls.selection(), function(wallToRemove){
+            wallToRemove.delete( function(){
+                // Update search bar, without any server call
+                $scope.searchbar = _.filter($scope.searchbar, function(wall){
+                    return wall._id !== wallToRemove._id;
+                });
+            });
+        });
+        delete $scope.display.confirmDeleteWall;
+    };
+
+    var updateSearchBar = function(){
+        $scope.walls.sync(function() {
+            $scope.searchbar =_.map($scope.walls.all, function(wall){
+                return {
+                    title : wall.name,
+                    _id : wall._id,
+                    toString : function() {
+                        return this.title;
+                    }
+                };
+
+           });
+        });
+    };
+    updateSearchBar();
+
+    /**
+    * Open wall from a searchbar
+    * @param wall's id
+    */
+    $scope.openWallFromSearchbar = function(wallId){
+        $scope.openWallFullScreen($scope.getWallById(wallId));
+
+    };
+
+    /**
+    * Check if an user ar editing a wall.
+    */
+    $scope.isCreatingOrEditing = function(){
+            return (template.contains('main', 'wall-full'));
+    };
+
+    /**
+    * Get a wall with an id
+    * @param Wall._id
+    * @return wall
+    */
+    $scope.getWallById = function(wallId){
+        return _.find(model.walls.all, function(wall){
+            return wall._id === wallId;
+        });
+    };
+
+    $scope.formatDate = function(dateObject){
+        console.log("hehe");
+        return moment(dateObject.$date).lang('fr').calendar();
     };
 
 }
