@@ -1,6 +1,7 @@
 package net.atos.entng.collaborativewall;
 
 import net.atos.entng.collaborativewall.controllers.CollaborativeWallController;
+import net.atos.entng.collaborativewall.service.CollaborativeWallRepositoryEvents;
 
 import org.entcore.common.http.BaseServer;
 import org.entcore.common.http.filter.ShareAndOwner;
@@ -23,6 +24,7 @@ public class CollaborativeWall extends BaseServer {
     @Override
     public void start() {
         super.start();
+        setRepositoryEvents(new CollaborativeWallRepositoryEvents());
 
         MongoDbConf conf = MongoDbConf.getInstance();
         conf.setCollection(COLLABORATIVE_WALL_COLLECTION);
