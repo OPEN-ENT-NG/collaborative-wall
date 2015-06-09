@@ -7,7 +7,9 @@
 	"collaborativewall.label.image": "Associer une image",
 	"collaborativewall.label.background" : "Choisir une image de fond",
     "collaborativewall.label.description": "Description",
-	"collaborativewall.label.noteowner": "Note créée par",
+    "collaborativewall.label.noteowner": "Note créée par",
+    "collaborativewall.wall.display.notes": "notes",
+	"collaborativewall.wall.display.note": "note",
 
 	"collaborativewall.wall.delete.confirm": "Voulez-vous vraiment supprimer ce(s) mur(s) ?",
 	"collaborativewall.note.delete.confirm": "Voulez-vous vraiment supprimer cette note ?",
@@ -27,6 +29,7 @@
 	"collaborativewall.read": "Lecteur",
 	"collaborativewall.contrib": "Contributeur",
 	"collaborativewall.manager": "Gestionnaire",
+    "collaborativewall.notfound.or.unauthorized": "Le mur demandé n'existe pas, a été supprimé, ou vous n'avez pas les droits pour y accéder.",
 	
     "group.AdminLocal": "Tous les administrateurs locaux",
     "group.Personnel": "Tous les personnels du groupe {0}.",

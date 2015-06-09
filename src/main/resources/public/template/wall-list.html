@@ -20,7 +20,13 @@
                     <div class="content">
                         <div class="cell" ng-click="openWallFullScreen(w)">
                             <strong class="truncate">[[w.name]]</strong>
-                            <br/><a ng-href="/userbook/annuaire#[[w.owner.userId]]">[[w.owner.displayName]]</a><br/> [[w.notes.length]] note(s) <br/> [[formatDate(w.modified)]]
+                            <br/><a ng-href="/userbook/annuaire#[[w.owner.userId]]">[[w.owner.displayName]]</a>
+                            <br/> 
+                            <span ng-if="w.notes.length>1">[[w.notes.length]] <i18n>collaborativewall.wall.display.notes</i18n> </span> 
+                            <span ng-if="w.notes.length<2">[[w.notes.length]] <i18n>collaborativewall.wall.display.note</i18n> </span> 
+                            <span ng-if="w.notes === undefined">0 <i18n>collaborativewall.wall.display.note</i18n> </span> 
+
+                            <br/> [[formatDate(w.modified)]]
                         </div>
                         <div ng-show="hasManageRight(w)" class="bottom-locked eleven vertical-spacing-twice">
                             <input type="checkbox" data-ng-model="w.selected" class="right-magnet cell" />

@@ -260,7 +260,7 @@ function WallController($scope, template, model, route) {
         } else {
             $scope.wall = undefined;
             $scope.error = true;
-            template.open('error', '404');
+            template.open('error', 'wall-error');
         }
     };
     
