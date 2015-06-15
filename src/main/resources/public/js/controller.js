@@ -122,6 +122,7 @@ function WallController($scope, template, model, route) {
         $scope.wall = new Wall();
         $scope.wall.background = $scope.themes[0];
         template.open('main', 'wall-edit');
+        $scope.wallmodeview = true;
     };
 
     /**
