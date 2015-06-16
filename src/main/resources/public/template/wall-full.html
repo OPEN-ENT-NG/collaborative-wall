@@ -49,7 +49,7 @@
                 <img src="/collaborativewall/public/img/delete.png" ng-if="hasRight(wall, n)" ng-click="confirmRemoveNote($index, $event)">
             </div>
         </div>
-        <div class="row note-content"  style="background:[[ n.color[0] ]];" >
+        <div class="row note-content"  style="background:[[ n.color[0] ]];"  sglclick="viewNote(n)">
             <div class="twelve cell" ng-if="n !== note">
                 <div bind-html="n.content"></div>
             </div>
