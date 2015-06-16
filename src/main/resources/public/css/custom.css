@@ -2,6 +2,10 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    -o-text-overflow: ellipsis; /* pour Opera 9 */
+    width:147px;
+    display:block;
+    padding-bottom:5px;
 }
 
 .board-background-button {
