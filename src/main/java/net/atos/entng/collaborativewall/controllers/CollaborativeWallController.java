@@ -1,11 +1,20 @@
 package net.atos.entng.collaborativewall.controllers;
 
+import java.util.Map;
+
+import net.atos.entng.collaborativewall.CollaborativeWall;
+
+import org.entcore.common.events.EventStore;
+import org.entcore.common.events.EventStoreFactory;
 import org.entcore.common.mongodb.MongoDbControllerHelper;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
 import org.vertx.java.core.Handler;
+import org.vertx.java.core.Vertx;
 import org.vertx.java.core.http.HttpServerRequest;
+import org.vertx.java.core.http.RouteMatcher;
 import org.vertx.java.core.json.JsonObject;
+import org.vertx.java.platform.Container;
 
 import fr.wseduc.rs.ApiDoc;
 import fr.wseduc.rs.Delete;
@@ -21,7 +30,17 @@ import fr.wseduc.webutils.request.RequestUtils;
  * @author Atos
  */
 public class CollaborativeWallController extends MongoDbControllerHelper {
-    
+
+	private EventStore eventStore;
+	private enum CollaborativeWallEvent { ACCESS }
+
+	@Override
+	public void init(Vertx vertx, Container container, RouteMatcher rm,
+			Map<String, fr.wseduc.webutils.security.SecuredAction> securedActions) {
+		super.init(vertx, container, rm, securedActions);
+		eventStore = EventStoreFactory.getFactory().getEventStore(CollaborativeWall.class.getSimpleName());
+	}
+
     /**
      * Default constructor.
      * @param collection MongoDB collection to request.
@@ -35,8 +54,11 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @SecuredAction("collaborativewall.view")
     public void view(HttpServerRequest request) {
         renderView(request);
+
+		// Create event "access to application CollaborativeWall" and store it, for module "statistics"
+		eventStore.createAndStoreEvent(CollaborativeWallEvent.ACCESS.name(), request);
     }
-    
+
     @Get("/print/wall")
     @ApiDoc("Allows to print a wall")
     @SecuredAction("collaborativewall.print")
@@ -94,7 +116,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
             }
         });
     }
-    
+
     @Put("/contribute/:id")
     @ApiDoc("Allows to contribute to the wall associated to the given identifier")
     @SecuredAction(value = "collaborativewall.contrib", type = ActionType.RESOURCE)
@@ -130,7 +152,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                         badRequest(request);
                         return;
                     }
-                    
+
                     JsonObject params = new JsonObject();
                     params.putString("uri", "/userbook/annuaire#" + user.getUserId() + "#" + user.getType())
                     .putString("username", user.getUsername())
