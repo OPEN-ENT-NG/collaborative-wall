@@ -94,3 +94,17 @@
 .cwall-title{
     padding-left: 10px;
 }
+.note-top-button img{
+    width:16px;
+    height:16px;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    -ms-transition: all .2s ease-in-out;
+}
+.note-top-button img:hover{
+    -webkit-transform: scale(2); 
+    -moz-transform: scale(2);
+    -o-transform: scale(2);
+    transform: scale(2);
+}

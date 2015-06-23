@@ -43,10 +43,10 @@
                 <div ng-if="!hasWallRight(wall)" class="twelve cell ">&nbsp;</div>
             </behaviour>
             <div class="cell note-top-button">
-                <img src="/collaborativewall/public/img/color.png" ng-if="hasRight(wall, n)" ng-click="toogleShowColor(n.owner.userId)">
-                <img src="/collaborativewall/public/img/view.png" ng-click="viewNote(n)">
-                <img src="/collaborativewall/public/img/edit.png" ng-if="hasRight(wall, n)" ng-click="editNote(n, $event)">
-                <img src="/collaborativewall/public/img/delete.png" ng-if="hasRight(wall, n)" ng-click="confirmRemoveNote($index, $event)">
+                <img  src="/collaborativewall/public/img/color.png" ng-mouseover="expression" alt="Palette de couleurs" ng-if="hasRight(wall, n)" ng-click="toogleShowColor(n.owner.userId)">
+                <img  src="/collaborativewall/public/img/view.png" alt="Visualiser" ng-click="viewNote(n)">
+                <img  src="/collaborativewall/public/img/edit.png" alt="Editer" ng-if="hasRight(wall, n)" ng-click="editNote(n, $event)">
+                <img  src="/collaborativewall/public/img/delete.png" alt="Supprimer" ng-if="hasRight(wall, n)" ng-click="confirmRemoveNote($index, $event)">
             </div>
         </div>
         <div class="row note-content"  style="background:[[ n.color[0] ]];"  sglclick="viewNote(n)">
