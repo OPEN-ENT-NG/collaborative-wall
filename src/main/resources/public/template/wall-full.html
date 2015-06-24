@@ -26,7 +26,7 @@
             <tbody>
                 <tr>
                 
-                    <td ng-repeat="c in noteColors" bgcolor="[[ c[0] ]]"  ng-click="setColor(c,useridcolor)"></td>
+                    <td ng-repeat="c in noteColors" ng-style="{background:c[0]}"  ng-click="setColor(c,useridcolor)"></td>
                 </tr>
             </tbody>
     </table>
@@ -35,7 +35,7 @@
 
 
     <sticky ng-repeat="n in wall.notes" class="note" ng-dblclick="editNote(n, $event)">
-        <div class="row note-top"style="background:[[ n.color[1] ]];">
+        <div class="row note-top" ng-style="{background:n.color[1]}">
             <behaviour name="contrib" resource="wall">
                 <div class="twelve cell draggable">&nbsp;</div>
             </behaviour>
@@ -49,16 +49,16 @@
                 <img  src="/collaborativewall/public/img/delete.png" alt="Supprimer" ng-if="hasRight(wall, n)" ng-click="confirmRemoveNote($index, $event)">
             </div>
         </div>
-        <div class="row note-content"  style="background:[[ n.color[0] ]];"  sglclick="viewNote(n)">
+        <div class="row note-content"  ng-style="{background:n.color[0]}"  sglclick="viewNote(n)">
             <div class="twelve cell" ng-if="n !== note">
                 <div bind-html="n.content"></div>
             </div>
             
         </div>
-        <div class="cwall-note-pad" style="background:[[ n.color[0] ]];">
+        <div class="cwall-note-pad" ng-style="{background:n.color[0]}">
                 
             </div>
-        <div class="row note-bottom" style="border-top: 1px solid [[ n.color[1] ]];background:[[ n.color[0] ]];">
+        <div class="row note-bottom" ng-style="{background:n.color[0], 'border-top': '1px solid','border-top-color':n.color[1]}" >
             <div class="row"><small><a ng-href="/userbook/annuaire#[[n.owner.userId]]">[[n.owner.username]]</a></small></div>
             <div class="row"><small>[[n.lastEdit | date:"dd/MM/yyyy 'à' H:mm"]]</small></div>
         </div>
