@@ -51,6 +51,13 @@ var collaborativeWallExtension = {
                     element.on('mouseenter', function(event) {
                         manageDisplay(informationZone, "block");
                         manageDisplay(buttonZone, "block");
+
+                        var imgs =element.find('.note-content').find('img');
+                        for(var i= 0; i < imgs.length; i++){
+                            imgs[i].addEventListener('click',function(event){
+                                event.preventDefault();
+                            });
+                        }
                     });
 
                     element.on('mouseleave', function(event) {

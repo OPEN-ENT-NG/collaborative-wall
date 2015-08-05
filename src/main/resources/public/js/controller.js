@@ -634,7 +634,6 @@ function WallController($scope, template, model, route) {
     };
 
     $scope.formatDate = function(dateObject){
-        console.log("hehe");
         return moment(dateObject.$date).lang('fr').calendar();
     };
 
