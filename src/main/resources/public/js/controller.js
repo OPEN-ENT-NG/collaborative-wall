@@ -61,6 +61,11 @@ function WallController($scope, template, model, route) {
     $scope.display = {};
     $scope.error = false;
     $scope.showColor =false;
+    if(navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i)!= null){
+        $scope.notDesktop = true
+    }else{
+        $scope.notDesktop = false;
+    } 
 
     // Action according to the current given route.
     route({
