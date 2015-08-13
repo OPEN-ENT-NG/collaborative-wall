@@ -108,3 +108,4 @@
     -o-transform: scale(1.5);
     transform: scale(1.5);
 }
+@media print{@page { margin: 0;size: landscape}}
