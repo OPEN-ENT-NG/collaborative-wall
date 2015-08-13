@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div ng-repeat="note in wall.notes" class="row">
-                <article class="twelve cell vertical-spacing-twice" ng-style="{background:n.color[0]}">
+                <article class="twelve cell vertical-spacing-twice" ng-style="{background:note.color[0]}">
                     <div class="row">
                         <h2>[[note.owner.username]]</h2>
                         <p> <i18n>collaborativewall.last.modification.by</i18n> [[note.lastEdit | date:"dd/MM/yyyy 'à' H:mm"]]</p>
