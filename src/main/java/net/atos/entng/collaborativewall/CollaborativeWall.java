@@ -1,11 +1,13 @@
 package net.atos.entng.collaborativewall;
 
 import net.atos.entng.collaborativewall.controllers.CollaborativeWallController;
+import net.atos.entng.collaborativewall.events.CollaborativeWallSearchingEvents;
 import net.atos.entng.collaborativewall.service.CollaborativeWallRepositoryEvents;
 
 import org.entcore.common.http.BaseServer;
 import org.entcore.common.http.filter.ShareAndOwner;
 import org.entcore.common.mongodb.MongoDbConf;
+import org.entcore.common.service.impl.MongoDbSearchService;
 
 /**
  * Server to manage collaborative walls. This class is the entry point of the Vert.x module.
@@ -25,6 +27,7 @@ public class CollaborativeWall extends BaseServer {
     public void start() {
         super.start();
         setRepositoryEvents(new CollaborativeWallRepositoryEvents());
+        setSearchingEvents(new CollaborativeWallSearchingEvents(new MongoDbSearchService(COLLABORATIVE_WALL_COLLECTION)));
 
         MongoDbConf conf = MongoDbConf.getInstance();
         conf.setCollection(COLLABORATIVE_WALL_COLLECTION);
