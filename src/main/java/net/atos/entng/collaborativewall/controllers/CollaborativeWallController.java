@@ -154,10 +154,14 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                     }
 
                     JsonObject params = new JsonObject();
-                    params.putString("uri", "/userbook/annuaire#" + user.getUserId() + "#" + user.getType())
+                    params.putString("uri", container.config().getString("host", "http://localhost:8090") +
+                    		"/userbook/annuaire#" + user.getUserId() + "#" + user.getType())
                     .putString("username", user.getUsername())
-                    .putString("cwallUri", "/collaborativewall#/view/" + id);
-                    shareJsonSubmit(request, "notify-cwall-share.html", false, params, "name");
+                    .putString("cwallUri", container.config().getString("host", "http://localhost:8090") +
+                    		"/collaborativewall#/view/" + id)
+                    .putString("resourceUri", params.getString("cwallUri"));
+
+                    shareJsonSubmit(request, "collaborativewall.share", false, params, "name");
                 }
             }
         });
