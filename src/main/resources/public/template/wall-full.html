@@ -8,7 +8,7 @@
         <a class="cell left-magnet" ng-href="/collaborativewall/print/wall#/print/[[wall._id]]" target="_blank" workflow="collaborativewall.print">
             <i18n>collaborativewall.print</i18n>
         </a>
-        <button ng-if="!notDesktop" class="cell right-magnet" ng-if="hasWallRight(wall)" ng-click="addNote()"><i18n>collaborativewall.note.create</i18n></button>
+        <button class="cell right-magnet" ng-if="hasWallRight(wall) && !notDesktop" ng-click="addNote()"><i18n>collaborativewall.note.create</i18n></button>
     </div>
 </div>
 
