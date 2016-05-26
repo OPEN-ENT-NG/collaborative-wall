@@ -59,6 +59,8 @@ Le Mur Collaboratif permet de créer un mur sur lequel les contributeurs peuvent
 Des permissions sur les différentes actions possibles sur les murs collaboratifs, dont la contribution et la gestion, sont configurées dans les murs collaboratifs (via des partages Ent-core).
 Le droit de lecture, correspondant à qui peut consulter le mur collaboratif est également configuré de cette manière.
 
+Le Mur Collaboratif met en œuvre un comportement de recherche sur le nom et la description des murs.
+
 ## Modèle de persistance
 
 Les données du module sont stockées dans une collection Mongo "collaborativewall".
@@ -70,6 +72,11 @@ Le module serveur utilise un contrôleur de déclaration :
 * `CollaborativeWallController` : Point d'entrée à l'application, Routage des vues, sécurité globale et déclaration de l'ensemble des comportements relatifs aux murs collaboratifs (liste, création, modification, destruction, édition et partage)
 
 Le contrôleur étend les classes du framework Ent-core exploitant les CrudServices de base.
+
+Le module serveur met en œuvre deux évènements issus du framework Ent-core :
+
+* `CollaborativeWallRepositoryEvents` : Logique de changement d'année scolaire
+* `CollaborativeWallSearchingEvents` : Logique de recherche
 
 Un jsonschema permet de vérifier les données reçues par le serveur, il se trouve dans le dossier "src/main/resources/jsonschema".
 
