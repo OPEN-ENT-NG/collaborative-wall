@@ -21,17 +21,17 @@
                         <div class="cell" ng-click="openWallFullScreen(w)">
                             <strong class="truncate"><acronym title="[[w.name]]">[[w.name]]</acronym></strong>
                             <a class="truncate" ng-href="/userbook/annuaire#[[w.owner.userId]]" title ="[[w.owner.displayName]]">[[w.owner.displayName]]</a>
-                            <span ng-if="w.notes.length>1">[[w.notes.length]] <i18n>collaborativewall.wall.display.notes</i18n> </span> 
-                            <span ng-if="w.notes.length<2">[[w.notes.length]] <i18n>collaborativewall.wall.display.note</i18n> </span> 
-                            <span ng-if="w.notes === undefined">0 <i18n>collaborativewall.wall.display.note</i18n> </span> 
+                            <span ng-if="w.notes.length>1">[[w.notes.length]] <i18n>collaborativewall.wall.display.notes</i18n> </span>
+                            <span ng-if="w.notes.length<2">[[w.notes.length]] <i18n>collaborativewall.wall.display.note</i18n> </span>
+                            <span ng-if="w.notes === undefined">0 <i18n>collaborativewall.wall.display.note</i18n> </span>
 
                             <br/> [[formatDate(w.modified)]]
                         </div>
-                        <div ng-show="hasManageRight(w)" class="bottom-locked eleven vertical-spacing-twice">
-                            <input type="checkbox" data-ng-model="w.selected" class="right-magnet cell" />
-                        </div>
                     </div>
                 </div>
+                <span ng-show="hasManageRight(w)">
+                    <check-tool ng-model="w.selected" ng-click="$event.stopPropagation()" ></check-tool>
+                </span>
             </section>
         </div>
     </div>
@@ -41,7 +41,7 @@
             <share-panel app-prefix="'collaborativewall'" resources="walls.selection()"/>
         </lightbox>
     </div>
-    
+
     <!-- Lightbox to confirm wiki deletion -->
         <lightbox show="display.confirmDeleteWall" on-close="display.showConfirmDelete = false">
         <article>
@@ -55,7 +55,6 @@
             </div>
         </article>
         </lightbox>
-    
 </div>
 
 <!-- Display actions for selected walls -->
