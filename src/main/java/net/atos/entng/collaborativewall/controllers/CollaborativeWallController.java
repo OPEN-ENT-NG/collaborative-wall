@@ -173,10 +173,10 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                     }
 
                     JsonObject params = new JsonObject();
-                    params.putString("uri", container.config().getString("host", "http://localhost:8090") +
+                    params.putString("uri", getScheme(request) + "://" + getHost(request) +
                     		"/userbook/annuaire#" + user.getUserId() + "#" + user.getType())
                     .putString("username", user.getUsername())
-                    .putString("cwallUri", container.config().getString("host", "http://localhost:8090") +
+                    .putString("cwallUri", getScheme(request) + "://" + getHost(request) +
                     		"/collaborativewall#/view/" + id)
                     .putString("resourceUri", params.getString("cwallUri"));
 
