@@ -65,7 +65,7 @@ function WallController($scope, template, model, route) {
         $scope.notDesktop = true
     }else{
         $scope.notDesktop = false;
-    } 
+    }
 
     // Action according to the current given route.
     route({
@@ -99,7 +99,7 @@ function WallController($scope, template, model, route) {
                         $scope.printNotes(wall);
                     });
                 }
-               
+
             }else{
                 template.open('main', 'wall-list');
                  template.open('side-panel', 'side-panel');
@@ -118,7 +118,7 @@ function WallController($scope, template, model, route) {
         // $scope.wallmodeview = true;
         template.open('main', 'wall-view');
     };
-    
+
     /**
      * Allows to create a new wall and open the "wall-edit.html" template into
      * the "main" div.
@@ -148,7 +148,7 @@ function WallController($scope, template, model, route) {
         event.stopPropagation();
         template.open('main', 'wall-edit');
     };
-    
+
     /**
      * Allows to set "showButtons" to false for all walls except the given one.
      * @param wall the current selected wall.
@@ -160,7 +160,7 @@ function WallController($scope, template, model, route) {
             }
         });
     };
-    
+
     /**
      * Allows to cancel the current wall edition. This method removes the "wall"
      * variable and close the "main" template.
@@ -200,14 +200,14 @@ function WallController($scope, template, model, route) {
         $scope.display.confirmDeleteWall = true;
         event.stopPropagation();
     };
-    
+
     /**
      * Allows to cancel the current delete process.
      */
     $scope.cancelRemoveWall = function() {
         delete $scope.display.confirmDeleteWall;
     };
-    
+
     /**
      * Allows to remove the current wall in the scope.
      */
@@ -220,7 +220,7 @@ function WallController($scope, template, model, route) {
         // template.close('main');
         template.open('main', 'wall-list');
     };
-    
+
     $scope.printWall = function(wall) {
         if (wall) {
             $scope.wall = wall;
@@ -228,7 +228,7 @@ function WallController($scope, template, model, route) {
         }
     };
     /**
-    * Print current note  
+    * Print current note
     * @param wall
     *
     */
@@ -238,7 +238,7 @@ function WallController($scope, template, model, route) {
             setTimeout(function(){window.print();}, 1000);
         }
     };
-    
+
     /**
      * Allows to open the "share" panel by setting the
      * "$scope.display.showPanel" variable to "true".
@@ -250,7 +250,7 @@ function WallController($scope, template, model, route) {
         $scope.display.showPanel = true;
         event.stopPropagation();
     };
-    
+
     /**
      * Allows to open the given wall in full screen.
      * @param wall a wall to open in full screen.
@@ -269,7 +269,7 @@ function WallController($scope, template, model, route) {
             template.open('error', 'wall-error');
         }
     };
-    
+
     /**
      * Allows to return to the list of walls.
      */
@@ -299,10 +299,10 @@ function WallController($scope, template, model, route) {
         newNote.color = $scope.getUserNoteColor();
         $scope.wall.notes.push(newNote);
         $scope.wall.contribute();
-        
+
         $scope.$apply();
     };
-    
+
     /**
      * Allows to put the current note in the scope and set "confirmDeleteNote"
      * variable to "true".
@@ -315,7 +315,7 @@ function WallController($scope, template, model, route) {
         $scope.display.confirmDeleteNote = true;
         event.stopPropagation();
     };
-    
+
     /**
      * Allows to cancel the current delete process.
      */
@@ -324,7 +324,7 @@ function WallController($scope, template, model, route) {
         delete $scope.display.deleteNoteIndex;
         delete $scope.display.noteElement;
     };
-    
+
     /**
      * Allows to remove a note at index $scope.display.deleteNoteIndex
      */
@@ -365,7 +365,7 @@ function WallController($scope, template, model, route) {
             template.open("main","view-note");
         }
     };
-    
+
     /**
      * Allows to save the current editing note.
      */
@@ -377,7 +377,7 @@ function WallController($scope, template, model, route) {
         }
         template.open("main","wall-full");
     };
-    
+
     /**
      * Allows to cancel the current editing note.
      */
@@ -385,7 +385,7 @@ function WallController($scope, template, model, route) {
         template.open("main","wall-full");
         delete $scope.note;
     };
-    
+
     /**
      * Allows to get if the current logged user can edit or remove a note. Only
      * the owner of the wall or the owner of the note can do those actions. The
@@ -418,11 +418,11 @@ function WallController($scope, template, model, route) {
     /**
     * Persist Zindex. When a note is edited, his z-index propertie is updated to the top;
     * @param n: note , contribute: boolean
-    * 
+    *
     */
     $scope.updateZIndex= function(n, contribute){
         var j= 0;
-        
+
         for(var i = 0; i< $scope.wall.notes.length;i++){
             if($scope.wall.notes[i].zindex == n.zindex){
                 j = i;
@@ -440,7 +440,7 @@ function WallController($scope, template, model, route) {
     /**
     * Update html element Zindex, When a note is edited, his z-index propertie is updated to the top;
     * @param el: element  div
-    * 
+    *
     */
     $scope.updateDivZIndex = function(el){
             elts =el.parentElement.children;
@@ -458,8 +458,8 @@ function WallController($scope, template, model, route) {
 
     /**
     * Reorder & Persist zindex. When a note is deleted, all z-index are reordered
-    * @param n: note 
-    * 
+    * @param n: note
+    *
     */
     $scope.deleteZIndex = function (n){
         for(var i = 0; i< $scope.wall.notes.length;i++){
@@ -469,18 +469,18 @@ function WallController($scope, template, model, route) {
         }
         $scope.wall.contribute();
     };
-    
+
     /**
     * Reorder & update html element Zindex, When a note is deleted, all z-index are reordered
-    * @param el: element 
-    * 
+    * @param el: element
+    *
     */
     $scope.deleteDivZIndex=function(el){
         elts =el.parentElement.children;
         for ( var i = 0 ; i < elts.length; i++){
             if(elts[i].style.zIndex > el.style.zIndex){
                     elts[i].style.zIndex--;
-                } 
+                }
         }
     };
 
@@ -505,7 +505,7 @@ function WallController($scope, template, model, route) {
     *
     */
     $scope.getUserNoteColor = function(){
-        
+
         for (var i = 0; i < $scope.wall.notes.length; i++) {
             if($scope.wall.notes[i].owner.userId==$scope.me.userId){
                 return $scope.wall.notes[i].color;
@@ -639,7 +639,7 @@ function WallController($scope, template, model, route) {
     };
 
     $scope.formatDate = function(dateObject){
-        return moment(dateObject.$date).lang('fr').calendar();
+        return moment(dateObject.$date).lang(currentLanguage).calendar();
     };
 
 }
