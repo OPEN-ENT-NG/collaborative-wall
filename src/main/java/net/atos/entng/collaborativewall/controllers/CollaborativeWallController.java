@@ -173,11 +173,9 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                     }
 
                     JsonObject params = new JsonObject();
-                    params.putString("uri", getScheme(request) + "://" + getHost(request) +
-                    		"/userbook/annuaire#" + user.getUserId() + "#" + user.getType())
+                    params.putString("uri", "/userbook/annuaire#" + user.getUserId() + "#" + user.getType())
                     .putString("username", user.getUsername())
-                    .putString("cwallUri", getScheme(request) + "://" + getHost(request) +
-                    		"/collaborativewall#/view/" + id)
+                    .putString("cwallUri", "/collaborativewall#/view/" + id)
                     .putString("resourceUri", params.getString("cwallUri"));
 
                     shareJsonSubmit(request, "collaborativewall.share", false, params, "name");
