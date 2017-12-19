@@ -43,7 +43,7 @@
     </div>
 
     <!-- Lightbox to confirm wiki deletion -->
-        <lightbox show="display.confirmDeleteWall" on-close="display.showConfirmDelete = false">
+    <lightbox show="display.confirmDeleteWall" on-close="display.showConfirmDelete = false">
         <article>
             <div class="row">
                 <i18n>collaborativewall.wall.delete.confirm</i18n>
@@ -54,7 +54,7 @@
                 <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelRemoveWall()" />
             </div>
         </article>
-        </lightbox>
+    </lightbox>
 </div>
 
 <!-- Display actions for selected walls -->
@@ -68,9 +68,7 @@
                 <i18n>collaborativewall.printNotes</i18n>
             </a>
             <resource-right name="contrib" resource="walls.selection()" class="cell">
-                <button ng-if="walls.selection().length === 1"
-                    ng-click="editWall(walls.selection()[0], $event)"
-                >
+                <button ng-if="walls.selection().length === 1" ng-click="editWall(walls.selection()[0], $event)">
                     <i18n>properties</i18n>
                 </button>
             </resource-right>

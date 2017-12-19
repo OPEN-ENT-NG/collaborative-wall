@@ -1,3 +1,6 @@
+import { Behaviours, model, _ } from 'entcore';
+import http from 'axios';
+
 /**
  * Define rights for behaviours.
  */
@@ -97,9 +100,9 @@ Behaviours.register('collaborativewall', {
      * </ul>
      */
     loadResources : function(callback) {
-        http().get('/collaborativewall/list/all').done(function(walls) {
+        http.get('/collaborativewall/list/all').then(function(walls) {
 
-            this.resources = _.map(walls, function(wall) {
+            this.resources = _.map(walls.data, function(wall) {
                 return {
                     title : wall.name,
                     ownerName : wall.owner.displayName,

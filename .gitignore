@@ -23,3 +23,15 @@ mods
 data
 developer.id
 *.mod.json
+
+
+**/ts/entcore
+**/ts/**/*.js
+**/ts/*.js
+**/ts/**/*.js.map
+**/ts/*.js.map
+**/template/entcore
+**/temp
+**/dist
+**/.DS_Store
+**/view/*.html

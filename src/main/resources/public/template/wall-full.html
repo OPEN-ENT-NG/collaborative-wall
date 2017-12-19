@@ -33,16 +33,14 @@
     </table>
 </div>
 <board class="board">
-
-
     <sticky ng-repeat="n in wall.notes" class="note" ng-dblclick="editNote(n, $event)">
         <div class="row note-top" ng-style="{background:n.color[1]}">
-            <behaviour name="contrib" resource="wall">
+            <div authorize="contrib" resource="wall">
                 <div class="twelve cell draggable">&nbsp;</div>
-            </behaviour>
-            <behaviour name="retrieve" resource="wall">
+            </div>
+            <div authorize="retrieve" resource="wall">
                 <div ng-if="!hasWallRight(wall)" class="twelve cell ">&nbsp;</div>
-            </behaviour>
+            </div>
             <div class="cell note-top-button">
                 <img  src="/collaborativewall/public/img/color.png" ng-mouseover="expression" alt="Palette de couleurs" ng-if="hasRight(wall, n)" ng-click="toogleShowColor(n.owner.userId)">
                 <img  src="/collaborativewall/public/img/view.png" alt="Visualiser" ng-click="viewNote(n)">
@@ -61,7 +59,7 @@
             </div>
         <div class="row note-bottom" ng-style="{background:n.color[0], 'border-top': '1px solid','border-top-color':n.color[1]}" >
             <div class="row"><small><a ng-href="/userbook/annuaire#[[n.owner.userId]]">[[n.owner.username]]</a></small></div>
-            <div class="row"><small>[[n.lastEdit | date:"dd/MM/yyyy 'à' H:mm"]]</small></div>
+            <div class="row"><small>[[formatDate(n.lastEdit)]]</small></div>
         </div>
     </sticky>
 </board>

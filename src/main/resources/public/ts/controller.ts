@@ -1,5 +1,7 @@
+import { ng, routes, angular, moment, _, template } from 'entcore';
+import { collaborativewall } from './model';
 
-
+let elts: any;
 
 /**
  * Allows to define routes of collaborative walls application.
@@ -25,7 +27,7 @@ routes.define(function($routeProvider){
  * @param model the wall model.
  * @param route route system.
  */
-function WallController($scope, template, model, route) {
+export const wallController = ng.controller('WallController', ['$scope', 'model', 'route', function($scope, model, route) {
     $scope.template = template;
     $scope.walls = model.walls;
     $scope.me = model.me;
@@ -124,7 +126,7 @@ function WallController($scope, template, model, route) {
      * the "main" div.
      */
     $scope.newWall = function() {
-        $scope.wall = new Wall();
+        $scope.wall = new collaborativewall.Wall();
         $scope.wall.background = $scope.themes[0];
         template.open('main', 'wall-edit');
         $scope.wallmodeview = true;
@@ -288,7 +290,7 @@ function WallController($scope, template, model, route) {
             $scope.wall.notes = [];
         }
 
-        var newNote = new Note();
+        var newNote = new collaborativewall.Note();
         newNote.content = "";
         newNote.owner = {};
         newNote.owner.userId = $scope.me.userId;
@@ -443,7 +445,7 @@ function WallController($scope, template, model, route) {
     *
     */
     $scope.updateDivZIndex = function(el){
-            elts =el.parentElement.children;
+            elts = el.parentElement.children;
             var j = 0;
             for ( var i = 0 ; i < elts.length; i++){
                 if(elts[i].style.zIndex ==el.style.zIndex){
@@ -639,7 +641,12 @@ function WallController($scope, template, model, route) {
     };
 
     $scope.formatDate = function(dateObject){
-        return moment(dateObject.$date).lang(currentLanguage).calendar();
+        if (dateObject != null){
+            if (dateObject.$date == null) // Handle string date (ex : note.lastEdit)
+                return moment(dateObject).local().calendar();
+            else 
+                return moment(dateObject.$date).local().calendar();
+        }
     };
 
-}
+}]);
