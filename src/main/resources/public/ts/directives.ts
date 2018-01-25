@@ -1,7 +1,7 @@
 import { ng, angular } from 'entcore';
 
-declare let mouseX: any;
-declare let mouseY: any;
+let mouseX: any;
+let mouseY: any;
 
 export const stickyDirective = ng.directive('sticky', ['$document', function($document) {
     return {

@@ -75,7 +75,7 @@ collaborativewall.Wall.prototype = {
      * @param callback a function to call after delete.
      */
     delete: function(callback) {
-        http.delete('/collaborativewall/' + this._id.toJSON()).then(function() {
+        http.delete('/collaborativewall/' + this._id, this.toJSON()).then(function() {
             model.walls.remove(this);
             if(typeof callback === 'function'){
                 callback();
@@ -92,7 +92,7 @@ collaborativewall.Wall.prototype = {
             name: this.name,
             description: this.description,
             background: this.background,
-            notes: this.notes.map(note => note.toJSON())
+            notes: this.notes == undefined ? [] : this.notes.map(note => note.toJSON())
         }
     }
 }
