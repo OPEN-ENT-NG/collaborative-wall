@@ -28,12 +28,12 @@ import org.entcore.common.events.EventStoreFactory;
 import org.entcore.common.mongodb.MongoDbControllerHelper;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
-import org.vertx.java.core.Handler;
-import org.vertx.java.core.Vertx;
-import org.vertx.java.core.http.HttpServerRequest;
+import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpServerRequest;
 import org.vertx.java.core.http.RouteMatcher;
-import org.vertx.java.core.json.JsonObject;
-import org.vertx.java.platform.Container;
+import io.vertx.core.json.JsonObject;
+
 
 import fr.wseduc.rs.ApiDoc;
 import fr.wseduc.rs.Delete;
@@ -54,9 +54,9 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
 	private enum CollaborativeWallEvent { ACCESS }
 
 	@Override
-	public void init(Vertx vertx, Container container, RouteMatcher rm,
+	public void init(Vertx vertx, JsonObject config, RouteMatcher rm,
 			Map<String, fr.wseduc.webutils.security.SecuredAction> securedActions) {
-		super.init(vertx, container, rm, securedActions);
+		super.init(vertx, config, rm, securedActions);
 		eventStore = EventStoreFactory.getFactory().getEventStore(CollaborativeWall.class.getSimpleName());
 	}
 
@@ -173,10 +173,10 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                     }
 
                     JsonObject params = new JsonObject();
-                    params.putString("uri", "/userbook/annuaire#" + user.getUserId() + "#" + user.getType())
-                    .putString("username", user.getUsername())
-                    .putString("cwallUri", "/collaborativewall#/view/" + id)
-                    .putString("resourceUri", params.getString("cwallUri"));
+                    params.put("uri", "/userbook/annuaire#" + user.getUserId() + "#" + user.getType())
+                    .put("username", user.getUsername())
+                    .put("cwallUri", "/collaborativewall#/view/" + id)
+                    .put("resourceUri", params.getString("cwallUri"));
 
                     shareJsonSubmit(request, "collaborativewall.share", false, params, "name");
                 }

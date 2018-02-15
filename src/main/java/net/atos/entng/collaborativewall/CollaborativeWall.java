@@ -43,7 +43,7 @@ public class CollaborativeWall extends BaseServer {
      * Entry point of the Vert.x module
      */
     @Override
-    public void start() {
+    public void start() throws Exception {
         super.start();
         setRepositoryEvents(new CollaborativeWallRepositoryEvents());
         if (config.getBoolean("searching-event", true)) {
