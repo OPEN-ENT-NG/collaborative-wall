@@ -20,7 +20,8 @@ db.getCollection('collaborativewall').find({}).forEach(
                 delete note.owner.username;
 
                 //transform zindex to lastEdit field
-                note.lastEdit = new Date(now + note.zindex * 60000).toISOString();
+                note.created = collaborativeWall.created;
+                note.modified = new Date(now + note.zindex * 60000);
                 delete note.zindex;
                 db.getCollection('collaborativewall.notes').insert(notes[i]);
             }

@@ -122,10 +122,12 @@ collaborativewall.Note.prototype = {
  * @returns {number} 0 = same LastEdit, 1 = a after b , -1 a before b
  */
 function compareLastEdit(a, b) {
-    if (a.modified.$date < b.modified.$date)
-        return -1;
-    if (a.modified.$date > b.modified.$date)
-        return 1;
+    if (a && b && a.modified && b.modified) {
+        if (a.modified.$date < b.modified.$date)
+            return -1;
+        if (a.modified.$date > b.modified.$date)
+            return 1;
+    }
     return 0;
 }
 
