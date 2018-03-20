@@ -16,7 +16,7 @@ export const stickyDirective = ng.directive('sticky', ['$document', function($do
 
             var x = scope.n.x;
             var y = scope.n.y;
-            var zindex = scope.n.zindex;
+            var zindex = scope.n.zIndex;
 
             var elt = element[0];
 
@@ -32,8 +32,14 @@ export const stickyDirective = ng.directive('sticky', ['$document', function($do
                 draggableZone.on('mousedown', function(event) {
                     // Prevent default dragging of selected content
                     event.preventDefault();
+
+                    //Moving note is forbidden if colorpicker is on
+                    if(scope.showColor) return;
+
                     startX = event.screenX - x;
                     startY = event.screenY - y;
+                    zindex = scope.updateDivZIndex(element.context);
+                    updateUI();
                     $document.on('mousemove', mousemove);
                     $document.on('mouseup', mouseup);
                 });
@@ -77,11 +83,9 @@ export const stickyDirective = ng.directive('sticky', ['$document', function($do
                 if (y < 0) {
                     y = 0;
                 }
-                scope.updateZIndex(scope.n,true);
-                scope.updateDivZIndex(element.context);
+
                 scope.n.x = x;
                 scope.n.y = y;
-                zindex = scope.n.zindex;
                 updateUI();
             }
 
@@ -92,7 +96,7 @@ export const stickyDirective = ng.directive('sticky', ['$document', function($do
             function mouseup() {
                 $document.off('mousemove', mousemove);
                 $document.off('mouseup', mouseup);
-                scope.wall.contribute();
+                scope.n.save(scope.wall);
             }
 
             /**

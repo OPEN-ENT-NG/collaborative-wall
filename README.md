@@ -1,11 +1,23 @@
 # À propos de l'application Mur collaboratif
 
 * Licence : [AGPL v3](http://www.gnu.org/licenses/agpl.txt) - Copyright Conseil Régional Nord Pas de Calais - Picardie
-* Développeur(s) : ATOS
-* Financeur(s) : Région Nord Pas de Calais-Picardie
+* Développeur(s) : 
+    * ATOS
+    * CGI 
+* Financeur(s) : 
+    * Région Nord Pas de Calais-Picardie
+    * Mairie de Paris
+
+
 * Description : Application d'édition et de  partage de murs collaboratifs. Un mur collaboratif est un espace permettant à plusieurs utilisateurs d'y disposer des notes textuelles ou multimédias sous une forme graphique et ergonomique.
 
 # Documentation technique
+
+## Build
+<pre>
+        gulp build
+        gradle install
+</pre>
 
 ## Construction
 
@@ -24,7 +36,7 @@ Dans le fichier `/collaborative-wall/deployment/collaborativewall/conf.json.temp
 Déclarer l'application dans la liste :
 <pre>
 {
-      "name": "net.atos~collaborativewall~0.2.0",
+      "name": "net.atos~collaborativewall~0.11.0",
       "config": {
         "main" : "net.atos.entng.collaborativewall.CollaborativeWall",
         "port" : 8071,
@@ -42,7 +54,7 @@ Déclarer l'application dans la liste :
 }
 </pre>
 
-Associer une route d'entée à la configuration du module proxy intégré (`"name": "net.atos~collaborativewall~0.2.0"`) :
+Associer une route d'entrée à la configuration du module proxy intégré (`"name": "net.atos~collaborativewall~0.11.0"`) :
 <pre>
 	{
 		"location": "/collaborativewall",
@@ -63,7 +75,7 @@ Le Mur Collaboratif met en œuvre un comportement de recherche sur le nom et la 
 
 ## Modèle de persistance
 
-Les données du module sont stockées dans une collection Mongo "collaborativewall".
+Les données du module sont stockées dans deux collections Mongo "collaborativewall" et "collaborativewall.notes".
 
 ## Modèle serveur
 
@@ -78,7 +90,7 @@ Le module serveur met en œuvre deux évènements issus du framework Ent-core :
 * `CollaborativeWallRepositoryEvents` : Logique de changement d'année scolaire
 * `CollaborativeWallSearchingEvents` : Logique de recherche
 
-Un jsonschema permet de vérifier les données reçues par le serveur, il se trouve dans le dossier "src/main/resources/jsonschema".
+Deux jsonschema permettent de vérifier les données reçues par le serveur, ils se trouvent dans le dossier "src/main/resources/jsonschema".
 
 ## Modèle front-end
 
@@ -88,4 +100,4 @@ Le modèle Front-end manipule un objet model :
 
 Il y a une collection globale :
 
-* `model.walls.all` qui contient l'ensemble des objets `wall` synchronisé depuis le serveur.
+* `model.walls.all` qui contient l'ensemble des objets `wall` synchronisés depuis le serveur.

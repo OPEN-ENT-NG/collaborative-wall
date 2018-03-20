@@ -19,11 +19,10 @@
 
 package net.atos.entng.collaborativewall.service;
 
+import fr.wseduc.mongodb.MongoDb;
 import org.entcore.common.service.impl.MongoDbRepositoryEvents;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonArray;
-
-import fr.wseduc.mongodb.MongoDb;
 
 public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
 

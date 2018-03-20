@@ -21,9 +21,8 @@
                         <div class="cell" ng-click="openWallFullScreen(w)">
                             <strong class="truncate"><acronym title="[[w.name]]">[[w.name]]</acronym></strong>
                             <a class="truncate" ng-href="/userbook/annuaire#[[w.owner.userId]]" title ="[[w.owner.displayName]]">[[w.owner.displayName]]</a>
-                            <span ng-if="w.notes.length>1">[[w.notes.length]] <i18n>collaborativewall.wall.display.notes</i18n> </span>
-                            <span ng-if="w.notes.length<2">[[w.notes.length]] <i18n>collaborativewall.wall.display.note</i18n> </span>
-                            <span ng-if="w.notes === undefined">0 <i18n>collaborativewall.wall.display.note</i18n> </span>
+                            <span ng-if="w.notesCount()>1">[[w.notesCount()]] <i18n>collaborativewall.wall.display.notes</i18n> </span>
+                            <span ng-if="w.notesCount()<2">[[w.notesCount()]] <i18n>collaborativewall.wall.display.note</i18n> </span>
 
                             <br/> [[formatDate(w.modified)]]
                         </div>

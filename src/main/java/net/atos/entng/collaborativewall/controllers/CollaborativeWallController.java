@@ -19,13 +19,19 @@
 
 package net.atos.entng.collaborativewall.controllers;
 
-import java.util.Map;
-
+import fr.wseduc.rs.*;
+import fr.wseduc.security.ActionType;
+import fr.wseduc.security.SecuredAction;
+import fr.wseduc.webutils.Either;
+import fr.wseduc.webutils.http.Renders;
+import fr.wseduc.webutils.request.RequestUtils;
 import net.atos.entng.collaborativewall.CollaborativeWall;
-
+import net.atos.entng.collaborativewall.controllers.helpers.NotesHelper;
+import net.atos.entng.collaborativewall.service.NoteService;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
 import org.entcore.common.mongodb.MongoDbControllerHelper;
+import org.entcore.common.service.VisibilityFilter;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
 import io.vertx.core.Handler;
@@ -33,49 +39,54 @@ import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServerRequest;
 import org.vertx.java.core.http.RouteMatcher;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.json.JsonArray;
 
 
-import fr.wseduc.rs.ApiDoc;
-import fr.wseduc.rs.Delete;
-import fr.wseduc.rs.Get;
-import fr.wseduc.rs.Post;
-import fr.wseduc.rs.Put;
-import fr.wseduc.security.ActionType;
-import fr.wseduc.security.SecuredAction;
-import fr.wseduc.webutils.request.RequestUtils;
+import java.util.Map;
 
 /**
  * Controller to manage URL paths for collaborative walls.
+ *
  * @author Atos
  */
 public class CollaborativeWallController extends MongoDbControllerHelper {
 
-	private EventStore eventStore;
-	private enum CollaborativeWallEvent { ACCESS }
+    private EventStore eventStore;
+    private enum CollaborativeWallEvent {ACCESS}
+
+    private final NotesHelper notesHelper;
 
 	@Override
 	public void init(Vertx vertx, JsonObject config, RouteMatcher rm,
 			Map<String, fr.wseduc.webutils.security.SecuredAction> securedActions) {
-		super.init(vertx, config, rm, securedActions);
+    try {
+      super.init(vertx, config, rm, securedActions);
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+    }
+    this.notesHelper.init(vertx, config, rm, securedActions);
 		eventStore = EventStoreFactory.getFactory().getEventStore(CollaborativeWall.class.getSimpleName());
 	}
 
     /**
      * Default constructor.
+     *
      * @param collection MongoDB collection to request.
      */
-    public CollaborativeWallController(String collection) {
+    public CollaborativeWallController(String collection, NoteService noteService) {
         super(collection);
+        this.notesHelper = new NotesHelper(noteService);
     }
 
     @Get("")
     @ApiDoc("Allows to display the main view")
     @SecuredAction("collaborativewall.view")
+
     public void view(HttpServerRequest request) {
         renderView(request);
 
-		// Create event "access to application CollaborativeWall" and store it, for module "statistics"
-		eventStore.createAndStoreEvent(CollaborativeWallEvent.ACCESS.name(), request);
+        // Create event "access to application CollaborativeWall" and store it, for module "statistics"
+        eventStore.createAndStoreEvent(CollaborativeWallEvent.ACCESS.name(), request);
     }
 
     @Get("/print/wall")
@@ -96,9 +107,40 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @Get("/list/all")
     @ApiDoc("Allows to list all collaborative walls")
     @SecuredAction("collaborativewall.list")
-    public void list(HttpServerRequest request) {
-        super.list(request);
+    public void list(final HttpServerRequest request) {
+        UserUtils.getUserInfos(this.eb, request, new Handler<UserInfos>() {
+            public void handle(UserInfos user) {
+                VisibilityFilter v = VisibilityFilter.ALL;
+                CollaborativeWallController.this.crudService.list(v, user, addNotesCountHandler(request));
+            }
+        });
+
+
     }
+
+    private Handler<Either<String, JsonArray>> addNotesCountHandler(final HttpServerRequest request) {
+        return new Handler<Either<String, JsonArray>>() {
+            @Override
+            public void handle(final Either<String, JsonArray> event) {
+                if (event.isRight()) {
+                    final JsonArray walls = event.right().getValue();
+
+                    notesHelper.countNotes(walls, new Handler<Either<String, JsonArray>>() {
+                                @Override
+                                public void handle(Either<String, JsonArray> countNotesResponse) {
+                                   Renders.renderJson(request, walls);
+                                }
+                            }
+                    );
+
+                } else {
+                    JsonObject error = (new JsonObject()).put("error", event.left().getValue());
+                    Renders.renderJson(request, error, 400);
+                }
+            }
+        };
+    }
+
 
     @Override
     @Post("")
@@ -136,19 +178,24 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         });
     }
 
-    @Put("/contribute/:id")
-    @ApiDoc("Allows to contribute to the wall associated to the given identifier")
-    @SecuredAction(value = "collaborativewall.contrib", type = ActionType.RESOURCE)
-    public void contribute(HttpServerRequest request) {
-        update(request);
-    }
-
     @Override
     @Delete("/:id")
     @ApiDoc("Allows to delete a collaborative wall associated to the given identifier")
     @SecuredAction(value = "collaborativewall.manager", type = ActionType.RESOURCE)
-    public void delete(HttpServerRequest request) {
-        super.delete(request);
+    public void delete(final HttpServerRequest request) {
+        String idWall = NotesHelper.extractParameter(request, "id");
+        notesHelper.removeAllNotes(idWall, new Handler<Either<String, JsonObject>>() {
+            @Override
+            public void handle(Either<String, JsonObject> res) {
+                if (res.isRight()) {
+                    CollaborativeWallController.super.delete(request);
+                } else {
+                    renderError(request);
+                }
+            }
+        });
+
+
     }
 
     @Get("/share/json/:id")
@@ -162,9 +209,9 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @ApiDoc("Allows to update the current sharing of the collaborative wall given by its identifier")
     @SecuredAction(value = "collaborativewall.manager", type = ActionType.RESOURCE)
     public void shareCollaborativeWallSubmit(final HttpServerRequest request) {
-        UserUtils.getUserInfos(eb, request, new Handler<UserInfos>(){
+        UserUtils.getUserInfos(eb, request, new Handler<UserInfos>() {
             @Override
-            public void handle(final UserInfos user){
+            public void handle(final UserInfos user) {
                 if (user != null) {
                     final String id = request.params().get("id");
                     if (id == null || id.trim().isEmpty()) {
@@ -189,6 +236,38 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @SecuredAction(value = "collaborativewall.manager", type = ActionType.RESOURCE)
     public void removeShareCollaborativeWall(HttpServerRequest request) {
         removeShare(request, false);
+    }
+
+
+    // NOTES
+
+    @Get("/:id/notes")
+    @ApiDoc("Allows to get all Notes of a collaborative wall associated to the given identifier")
+    @SecuredAction(value = "collaborativewall.read", type = ActionType.RESOURCE)
+    public void retrieveAllNotes(HttpServerRequest request) {
+        notesHelper.listAllNotes(request);
+    }
+
+    @Post("/:id/note")
+    @ApiDoc("Allows to create a new note on a collaborativewall")
+    @SecuredAction("collaborativewall.createnotes")
+    public void createNote(final HttpServerRequest request) {
+        notesHelper.create(request);
+    }
+
+    @Put("/:id/note/:idnote")
+    @ApiDoc("Allows to update a note on a collaborative wall associated to the given identifier")
+    @SecuredAction(value = "collaborativewall.contrib", type = ActionType.RESOURCE)
+    public void updateNote(final HttpServerRequest request) {
+        notesHelper.update(request);
+
+    }
+
+    @Delete("/:id/note/:idnote")
+    @ApiDoc("Allows to delete a collaborative wall associated to the given identifier")
+    @SecuredAction(value = "collaborativewall.contrib", type = ActionType.RESOURCE)
+    public void deleteNote(final HttpServerRequest request) {
+        notesHelper.delete(request);
     }
 
 }

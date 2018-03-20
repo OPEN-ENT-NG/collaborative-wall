@@ -59,15 +59,11 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     '#F2F2F2','#E6E6E6']
     ];
     $scope.themes=['/collaborativewall/public/img/default.jpg', '/collaborativewall/public/img/wood.jpg', '/collaborativewall/public/img/paper.jpg'];
-    $scope.searchbar = {}
+    $scope.searchbar = {};
     $scope.display = {};
     $scope.error = false;
     $scope.showColor =false;
-    if(navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i)!= null){
-        $scope.notDesktop = true
-    }else{
-        $scope.notDesktop = false;
-    }
+    $scope.notDesktop = navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i) != null;
 
     // Action according to the current given route.
     route({
@@ -81,10 +77,12 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
             });
         },
         printWall: function(params) {
-            $scope.walls.one('sync', function() {
+            $scope.walls.one('sync', async function() {
                 var wall = $scope.walls.find(function(w) {
                     return w._id === params.wallId;
                 });
+                await wall.syncNotes();
+
                 $scope.printWall(wall);
             });
         },
@@ -93,10 +91,12 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
                 var url = window.location.search;
                 if(url != undefined){
                     url = url.substring(url.lastIndexOf('=')+1);
-                    $scope.walls.one('sync', function() {
+                    $scope.walls.one('sync', async function() {
                         var wall = $scope.walls.find(function(w) {
                             return w._id === url;
                         });
+
+                        await wall.syncNotes();
 
                         $scope.printNotes(wall);
                     });
@@ -113,9 +113,11 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
      * Allows to open the given wall into the "main" div using the
      * "wall-view.html" template.
      * @param wall the current wall to open.
+     * UTILE ?
      */
     $scope.openWall = function(wall) {
         $scope.wall = wall;
+        $scope.wall.syncNotes();
         $scope.hideAlmostAllButtons(wall);
         // $scope.wallmodeview = true;
         template.open('main', 'wall-view');
@@ -168,11 +170,10 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
      * variable and close the "main" template.
      */
     $scope.cancelWallEdit = function() {
+        template.open('main', 'wall-list');
         delete $scope.master;
         delete $scope.wall;
         $scope.hideAlmostAllButtons();
-        // template.close('main');
-        template.open('main', 'wall-list');
         $scope.wallmodeview = false;
     };
 
@@ -212,6 +213,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
 
     /**
      * Allows to remove the current wall in the scope.
+     * UTILE ?
      */
     $scope.removeWall = function() {
         if ($scope.wall) {
@@ -226,6 +228,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     $scope.printWall = function(wall) {
         if (wall) {
             $scope.wall = wall;
+            $scope.$apply();
             setTimeout(function() { window.print(); }, 1000);
         }
     };
@@ -237,6 +240,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     $scope.printNotes = function(wall){
         if(wall){
             $scope.wall = wall;
+            $scope.$apply();
             setTimeout(function(){window.print();}, 1000);
         }
     };
@@ -246,6 +250,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
      * "$scope.display.showPanel" variable to "true".
      * @param wall the wall to share.
      * @param event the current event.
+     * UTILE ?
      */
     $scope.shareWall = function(wall, event) {
         $scope.wall = wall;
@@ -257,13 +262,13 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
      * Allows to open the given wall in full screen.
      * @param wall a wall to open in full screen.
      */
-    $scope.openWallFullScreen = function(wall) {
+    $scope.openWallFullScreen = async function(wall) {
         if (wall) {
             $scope.wall = wall;
+            await $scope.wall.syncNotes();
             $scope.error = false;
             $scope.note = undefined;
             $scope.wallmodeview = true;
-            // template.close('main');
             template.open('main', 'wall-full');
         } else {
             $scope.wall = undefined;
@@ -274,6 +279,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
 
     /**
      * Allows to return to the list of walls.
+     * UTILE ?
      */
     $scope.closeWallFullScreen= function() {
         // template.close('main');
@@ -294,15 +300,14 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
         newNote.content = "";
         newNote.owner = {};
         newNote.owner.userId = $scope.me.userId;
-        newNote.owner.username = $scope.me.username;
+        newNote.owner.displayName = $scope.me.username;
         newNote.x = (x) ? x : 10;
         newNote.y = (y) ? y : 10;
-        newNote.zindex = $scope.wall.notes.length;
         newNote.color = $scope.getUserNoteColor();
+        newNote.idwall = $scope.wall._id;
         $scope.wall.notes.push(newNote);
-        $scope.wall.contribute();
+        newNote.save($scope.wall, () => $scope.$apply());
 
-        $scope.$apply();
     };
 
     /**
@@ -335,10 +340,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
             var notes = $scope.wall.notes;
             var index = $scope.display.deleteNoteIndex;
             if (notes && index >= 0 && index < notes.length) {
-                $scope.deleteZIndex(notes[index]);
-                $scope.deleteDivZIndex($scope.display.noteElement);
-                notes.splice(index, 1);
-                $scope.wall.contribute();
+                notes[index].delete($scope.wall,() => $scope.$apply())
             }
         }
         $scope.cancelRemoveNote();
@@ -358,8 +360,6 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     $scope.editNote = function(note, event) {
         event.stopPropagation();
         if ($scope.hasRight($scope.wall, note)) {
-            $scope.updateZIndex(note, true);
-            $scope.updateDivZIndex(event.currentTarget);
             $scope.note = note;
             template.open("main","edit-note");
         }else{
@@ -373,8 +373,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
      */
     $scope.saveNote = function() {
         if ($scope.note) {
-            $scope.note.lastEdit = moment().toDate();
-            $scope.wall.contribute();
+            $scope.note.save($scope.wall,() => $scope.$apply());
             delete $scope.note;
         }
         template.open("main","wall-full");
@@ -417,30 +416,9 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     $scope.hasManageRight = function(wall){
         return wall && wall.myRights.manage ;
     };
-    /**
-    * Persist Zindex. When a note is edited, his z-index propertie is updated to the top;
-    * @param n: note , contribute: boolean
-    *
-    */
-    $scope.updateZIndex= function(n, contribute){
-        var j= 0;
-
-        for(var i = 0; i< $scope.wall.notes.length;i++){
-            if($scope.wall.notes[i].zindex == n.zindex){
-                j = i;
-            }
-            if($scope.wall.notes[i].zindex > n.zindex){
-                    $scope.wall.notes[i].zindex--;
-            }
-        }
-        $scope.wall.notes[j].zindex= $scope.wall.notes.length-1;
-        if(contribute){
-            $scope.wall.contribute();
-        }
-    };
 
     /**
-    * Update html element Zindex, When a note is edited, his z-index propertie is updated to the top;
+    * Update html element Zindex, When a note is edited, his z-index property is updated to the top;
     * @param el: element  div
     *
     */
@@ -456,49 +434,19 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
                 }
             }
             elts[j].style.zIndex = elts.length-1;
-    };
-
-    /**
-    * Reorder & Persist zindex. When a note is deleted, all z-index are reordered
-    * @param n: note
-    *
-    */
-    $scope.deleteZIndex = function (n){
-        for(var i = 0; i< $scope.wall.notes.length;i++){
-            if($scope.wall.notes[i].zindex > n.zindex){
-                $scope.wall.notes[i].zindex--;
-            }
-        }
-        $scope.wall.contribute();
-    };
-
-    /**
-    * Reorder & update html element Zindex, When a note is deleted, all z-index are reordered
-    * @param el: element
-    *
-    */
-    $scope.deleteDivZIndex=function(el){
-        elts =el.parentElement.children;
-        for ( var i = 0 ; i < elts.length; i++){
-            if(elts[i].style.zIndex > el.style.zIndex){
-                    elts[i].style.zIndex--;
-                }
-        }
+            return el.style.zIndex;
     };
 
     /**
     * Set color for each user's Note
     * @param color (head and content) ,user's id
     */
-    $scope.setColor = function(color, userIdColor){
-        angular.forEach($scope.wall.notes, function(note, key){
-            if(note.owner.userId==userIdColor){
-                note.color = color;
-            }
-
-        });
-        $scope.wall.contribute();
+    $scope.setColor = function(color){
+        $scope.note.color = color;
+        $scope.note.save($scope.wall);
+        $scope.note = undefined;
         $scope.colorPickerClicked = true;
+
     };
 
     /**
@@ -512,7 +460,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
             if($scope.wall.notes[i].owner.userId==$scope.me.userId){
                 return $scope.wall.notes[i].color;
             }
-        };
+        }
         return ['#F5F6CE','#F2F5A9'];
     };
 
@@ -520,9 +468,9 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     * Switch on/off color selector
     * @param userIdColor user's id of a note selected
     */
-    $scope.toogleShowColor = function(userIdColor){
+    $scope.toogleShowColor = function(note){
         $scope.showColor = !$scope.showColor;
-        $scope.useridcolor = userIdColor
+        $scope.note = note;
     };
 
     /**
@@ -573,6 +521,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
      * variable to "true".
      * @param poll the poll to delete.
      * @param event an event.
+     * UTILE ?
      */
     $scope.confirmRemoveWalls = function(walls, event) {
        // $scope.poll = poll;
@@ -617,9 +566,9 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     * Open wall from a searchbar
     * @param wall's id
     */
-    $scope.openWallFromSearchbar = function(wallId){
-        $scope.openWallFullScreen($scope.getWallById(wallId));
-
+    $scope.openWallFromSearchbar = async function(wallId){
+        await $scope.openWallFullScreen($scope.getWallById(wallId));
+        $scope.$apply();
     };
 
     /**

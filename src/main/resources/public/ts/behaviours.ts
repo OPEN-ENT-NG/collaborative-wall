@@ -14,7 +14,7 @@ var wallBehaviours = {
             right : 'net-atos-entng-collaborativewall-controllers-CollaborativeWallController|retrieve'
         },
         contrib : {
-            right : 'net-atos-entng-collaborativewall-controllers-CollaborativeWallController|contribute'
+            right : 'net-atos-entng-collaborativewall-controllers-CollaborativeWallController|updateNote'
         },
         manage : {
             right : 'net-atos-entng-collaborativewall-controllers-CollaborativeWallController|delete'

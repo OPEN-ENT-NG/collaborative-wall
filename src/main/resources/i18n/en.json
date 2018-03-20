@@ -12,6 +12,10 @@
 	"collaborativewall.wall.delete.confirm": "Do you really want to delete this wall?",
 	"collaborativewall.note.delete.confirm": "Do you really want to delete this note?",
 	"collaborativewall.note.create": "New note",
+
+	"collaborativewall.access.concurrent.error": "This note was modified by an another user.",
+	"collaborativewall.not.exists.error":"This note does not exist any more.",
+	"collaborativewall.error": "Undetermined error.",
 	
 	"collaborativewall.new": "New wall",
 	"collaborativewall.create": "Create",

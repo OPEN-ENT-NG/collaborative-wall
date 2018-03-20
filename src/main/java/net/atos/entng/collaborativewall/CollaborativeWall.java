@@ -22,7 +22,8 @@ package net.atos.entng.collaborativewall;
 import net.atos.entng.collaborativewall.controllers.CollaborativeWallController;
 import net.atos.entng.collaborativewall.events.CollaborativeWallSearchingEvents;
 import net.atos.entng.collaborativewall.service.CollaborativeWallRepositoryEvents;
-
+import net.atos.entng.collaborativewall.service.NoteService;
+import net.atos.entng.collaborativewall.service.impl.MongoDbNoteService;
 import org.entcore.common.http.BaseServer;
 import org.entcore.common.http.filter.ShareAndOwner;
 import org.entcore.common.mongodb.MongoDbConf;
@@ -38,6 +39,7 @@ public class CollaborativeWall extends BaseServer {
      * Constant to define the MongoDB collection to use with this module.
      */
     public static final String COLLABORATIVE_WALL_COLLECTION = "collaborativewall";
+    public static final String COLLABORATIVE_WALL_NOTES_COLLECTION = "collaborativewall.notes";
 
     /**
      * Entry point of the Vert.x module
@@ -54,8 +56,11 @@ public class CollaborativeWall extends BaseServer {
         conf.setCollection(COLLABORATIVE_WALL_COLLECTION);
         conf.setResourceIdLabel("id");
 
+        final NoteService noteService = new MongoDbNoteService(COLLABORATIVE_WALL_NOTES_COLLECTION);
+
         setDefaultResourceFilter(new ShareAndOwner());
-        addController(new CollaborativeWallController(COLLABORATIVE_WALL_COLLECTION));
+
+        addController(new CollaborativeWallController(COLLABORATIVE_WALL_COLLECTION, noteService));
     }
 
 }

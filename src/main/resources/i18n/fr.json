@@ -14,7 +14,11 @@
 	"collaborativewall.wall.delete.confirm": "Voulez-vous vraiment supprimer ce(s) mur(s) ?",
 	"collaborativewall.note.delete.confirm": "Voulez-vous vraiment supprimer cette note ?",
 	"collaborativewall.note.create": "Nouvelle note",
-	
+
+    "collaborativewall.access.concurrent.error": "Cette note a été modifiée par un autre utilisateur : vos modifications n'ont pas été appliquées.",
+    "collaborativewall.not.exists.error":"Cette note n'existe plus : l'opération est impossible.",
+    "collaborativewall.error": "Erreur innatendue",
+
 	"collaborativewall.new": "Créer un mur",
 	"collaborativewall.create": "Créer",
     "collaborativewall.print": "Imprimer le mur",

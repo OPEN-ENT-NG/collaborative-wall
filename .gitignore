@@ -35,3 +35,4 @@ developer.id
 **/dist
 **/.DS_Store
 **/view/*.html
+node_modules
