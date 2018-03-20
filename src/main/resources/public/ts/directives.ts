@@ -33,8 +33,8 @@ export const stickyDirective = ng.directive('sticky', ['$document', function($do
                     // Prevent default dragging of selected content
                     event.preventDefault();
 
-                    //Moving note is forbidden if colorpicker is on
-                    if(scope.showColor) return;
+                    //Moving note is forbidden if colorpicker is on, or if last save is not complete
+                    if(scope.showColor || scope.n.waitsaveresponse ) return;
 
                     startX = event.screenX - x;
                     startY = event.screenY - y;
@@ -96,7 +96,14 @@ export const stickyDirective = ng.directive('sticky', ['$document', function($do
             function mouseup() {
                 $document.off('mousemove', mousemove);
                 $document.off('mouseup', mouseup);
-                scope.n.save(scope.wall);
+
+                //forbid movement on this note during saving
+                scope.n.waitsaveresponse = true;
+                scope.n.save(scope.wall, function(){
+                    scope.$apply();
+                    //allow to move again this note
+                    delete scope.n.waitsaveresponse;
+                });
             }
 
             /**
