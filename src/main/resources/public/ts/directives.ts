@@ -29,13 +29,23 @@ export const stickyDirective = ng.directive('sticky', ['$document', function($do
                     "cursor" : "move"
                 });
 
+                // Select a sticky note
                 draggableZone.on('mousedown', function(event) {
                     // Prevent default dragging of selected content
                     event.preventDefault();
                     startX = event.screenX - x;
                     startY = event.screenY - y;
-                    $document.on('mousemove', mousemove);
-                    $document.on('mouseup', mouseup);
+                    $document.on('mousemove', moveNote);
+                    $document.on('mouseup', moveEnd);
+                });
+
+                draggableZone.on('touchstart', function(event) {
+                    // Prevent default dragging of selected content
+                    event.preventDefault();
+                    startX = parseInt(event.originalEvent.touches[0].clientX) - x;
+                    startY = parseInt(event.originalEvent.touches[0].clientY) - y;
+                    $document.on('touchmove', moveTouchNote);
+                    $document.on('touchend', moveEnd);
                 });
             }
 
@@ -67,20 +77,36 @@ export const stickyDirective = ng.directive('sticky', ['$document', function($do
              * Allows to change the sticky note position
              * @event the current mouse event.
              */
-            function mousemove(event) {
+            function moveNote(event) {
                 y = event.screenY - startY;
                 x = event.screenX - startX;
                 if (x < 0) {
                     x = 0;
                 }
-
                 if (y < 0) {
                     y = 0;
                 }
-                scope.updateZIndex(scope.n,true);
+                scope.updateZIndex(scope.n,false);
                 scope.updateDivZIndex(element.context);
                 scope.n.x = x;
                 scope.n.y = y;
+                zindex = scope.n.zindex;
+                updateUI();
+            }
+
+            function moveTouchNote(event) {
+                y = event.originalEvent.touches[0].clientY  - startY;
+                x = event.originalEvent.touches[0].clientX - startX;
+                if (x < 0) {
+                    x = 0;
+                }
+                if (y < 0) {
+                    y = 0;
+                }
+                scope.updateZIndex(scope.n,false);
+                scope.updateDivZIndex(element.context);
+                scope.n.x = parseInt(x);
+                scope.n.y = parseInt(y);
                 zindex = scope.n.zindex;
                 updateUI();
             }
@@ -89,9 +115,11 @@ export const stickyDirective = ng.directive('sticky', ['$document', function($do
              * Allows to stop the current drag and save the current
              * position of the sticky note in the wall.
              */
-            function mouseup() {
-                $document.off('mousemove', mousemove);
-                $document.off('mouseup', mouseup);
+            function moveEnd() {
+                $document.off('mousemove', moveNote);
+                $document.off('mouseup', moveEnd);
+                $document.off('touchmove', moveTouchNote);
+                $document.off('touchend', moveEnd);
                 scope.wall.contribute();
             }
 

@@ -1,15 +1,14 @@
 <div class="row">
-    
    <div>
-    	<a class="cell left-magnet" ng-href="/collaborativewall/printnotes/wall?wall=[[wall._id]]" target="_blank" workflow="collaborativewall.printnotes">
-            <i18n>collaborativewall.printNotesWallFull</i18n>
-        </a>
-        <span class="cell">&nbsp;|&nbsp;</span>
-        <a class="cell left-magnet" ng-href="/collaborativewall/print/wall#/print/[[wall._id]]" target="_blank" workflow="collaborativewall.print">
-            <i18n>collaborativewall.print</i18n>
-        </a>
-        <button class="cell right-magnet" ng-if="hasWallRight(wall) && !notDesktop" ng-click="addNote()"><i18n>collaborativewall.note.create</i18n></button>
-    </div>
+       <a class="cell left-magnet" ng-href="/collaborativewall/printnotes/wall?wall=[[wall._id]]" target="_blank" workflow="collaborativewall.printnotes">
+           <i18n>collaborativewall.printNotesWallFull</i18n>
+       </a>
+       <span class="cell">&nbsp;|&nbsp;</span>
+       <a class="cell left-magnet" ng-href="/collaborativewall/print/wall#/print/[[wall._id]]" target="_blank" workflow="collaborativewall.print">
+           <i18n>collaborativewall.print</i18n>
+       </a>
+       <button class="cell right-magnet" ng-if="hasWallRight(wall)" ng-click="addNote()"><i18n>collaborativewall.note.create</i18n></button>
+   </div>
 </div>
 
 <div class="row">
@@ -22,16 +21,17 @@
         <p>[[wall.description]]</p>
     </div>
 </div>
+
 <div>
     <table class="cwall-colorpicker" ng-show="showColor"  ng-mouseover="mouseOverColorPicker()" ng-mouseleave="mouseLeaveColorPicker()">
-            <tbody>
-                <tr>
-                
-                    <td ng-repeat="c in noteColors" ng-style="{background:c[0]}"  ng-click="setColor(c,useridcolor)"></td>
-                </tr>
-            </tbody>
+        <tbody>
+            <tr>
+                <td ng-repeat="c in noteColors" ng-style="{background:c[0]}"  ng-click="setColor(c,useridcolor)"></td>
+            </tr>
+        </tbody>
     </table>
 </div>
+
 <board class="board">
     <sticky ng-repeat="n in wall.notes" class="note" ng-dblclick="editNote(n, $event)">
         <div class="row note-top" ng-style="{background:n.color[1]}">
@@ -48,15 +48,12 @@
                 <img  src="/collaborativewall/public/img/delete.png" alt="Supprimer" ng-if="hasRight(wall, n)" ng-click="confirmRemoveNote($index, $event)">
             </div>
         </div>
-        <div class="row note-content"  ng-style="{background:n.color[0]}"  sglclick="viewNote(n)">
+        <div class="row note-content"  ng-style="{background:n.color[0]}" sglclick="viewNote(n)">
             <div class="twelve cell" ng-if="n !== note">
                 <div bind-html="n.content"></div>
             </div>
-            
         </div>
-        <div class="cwall-note-pad" ng-style="{background:n.color[0]}">
-                
-            </div>
+        <div class="cwall-note-pad" ng-style="{background:n.color[0]}"></div>
         <div class="row note-bottom" ng-style="{background:n.color[0], 'border-top': '1px solid','border-top-color':n.color[1]}" >
             <div class="row"><small><a ng-href="/userbook/annuaire#[[n.owner.userId]]">[[n.owner.username]]</a></small></div>
             <div class="row"><small>[[formatDate(n.lastEdit)]]</small></div>
@@ -82,7 +79,6 @@
 <div ng-if="display.note">
     <lightbox show="display.note" on-close="closeViewNote()">
         <article style="overflow-y: auto; height:100%; max-height:650px;">
-            
             <div class="row">
                 <div bind-html="note.content"></div>
             </div>
