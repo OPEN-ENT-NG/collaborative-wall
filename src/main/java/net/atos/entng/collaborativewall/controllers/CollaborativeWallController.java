@@ -257,6 +257,31 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         removeShare(request, false);
     }
 
+    @Put("/share/resource/:id")
+    @ApiDoc("Allows to update the current sharing of the collaborative wall given by its identifier")
+    @SecuredAction(value = "collaborativewall.manager", type = ActionType.RESOURCE)
+    public void shareResource(final HttpServerRequest request) {
+        UserUtils.getUserInfos(eb, request, new Handler<UserInfos>() {
+            @Override
+            public void handle(final UserInfos user) {
+                if (user != null) {
+                    final String id = request.params().get("id");
+                    if(id == null || id.trim().isEmpty()) {
+                        badRequest(request, "invalid.id");
+                        return;
+                    }
+
+                    JsonObject params = new JsonObject();
+                    params.put("uri", "/userbook/annuaire#" + user.getUserId() + "#" + user.getType())
+                            .put("username", user.getUsername())
+                            .put("cwallUri", "/collaborativewall#/view/" + id)
+                            .put("resourceUri", params.getString("cwallUri"));
+
+                    shareResource(request, "collaborativewall.share", false, params, "name");
+                }
+            }
+        });
+    }
 
     // NOTES
 
