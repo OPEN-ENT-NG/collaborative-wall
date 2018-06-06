@@ -275,6 +275,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
             $scope.error = true;
             template.open('error', 'wall-error');
         }
+        $scope.$apply();
     };
 
     /**
