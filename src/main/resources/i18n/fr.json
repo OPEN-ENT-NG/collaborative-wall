@@ -1,6 +1,6 @@
 {
 	"collaborativewall.title": "Mur collaboratif",
-	
+
 	"collaborativewall.head.create": "Creation d'un nouveau mur",
 	"collaborativewall.head.modify": "Modification du mur",
 	"collaborativewall.label.name": "Nom",
@@ -27,14 +27,14 @@
     "collaborativewall.back": "Retour",
 	"collaborativewall.last.modification.by": "Modifiée le",
 
-	
+
 	"collaborativewall.fullscreen.open": "Ouvrir le mur",
 
 	"collaborativewall.read": "Lecteur",
 	"collaborativewall.contrib": "Contributeur",
 	"collaborativewall.manager": "Gestionnaire",
     "collaborativewall.notfound.or.unauthorized": "Le mur demandé n'existe pas, a été supprimé, ou vous n'avez pas les droits pour y accéder.",
-	
+
     "group.AdminLocal": "Tous les administrateurs locaux du groupe {0}.",
     "group.Personnel": "Tous les personnels du groupe {0}.",
     "group.Relative": "Tous les parents du groupe {0}.",
@@ -53,5 +53,6 @@
     "group.school.Relative": "Tous les parents de l'{0}.",
     "group.school.Student": "Tous les élèves de l'{0}.",
     "group.school.Teacher": "Tous les enseignants de l'{0}.",
-    "group.school.Guest": "Tous les invités de l'{0}."
+    "group.school.Guest": "Tous les invités de l'{0}.",
+    "collaborativewall.push.notif.shared": "{0} vous a partagé le mur collaboratif {1}"
 }

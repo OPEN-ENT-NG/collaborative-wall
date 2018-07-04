@@ -25,6 +25,7 @@ import fr.wseduc.security.SecuredAction;
 import fr.wseduc.webutils.Either;
 import fr.wseduc.webutils.http.Renders;
 import fr.wseduc.webutils.request.RequestUtils;
+import fr.wseduc.webutils.I18n;
 import net.atos.entng.collaborativewall.CollaborativeWall;
 import net.atos.entng.collaborativewall.controllers.helpers.NotesHelper;
 import net.atos.entng.collaborativewall.service.NoteService;
@@ -209,6 +210,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @ApiDoc("Allows to update the current sharing of the collaborative wall given by its identifier")
     @SecuredAction(value = "collaborativewall.manager", type = ActionType.RESOURCE)
     public void shareCollaborativeWallSubmit(final HttpServerRequest request) {
+        request.pause();
         UserUtils.getUserInfos(eb, request, new Handler<UserInfos>() {
             @Override
             public void handle(final UserInfos user) {
@@ -225,7 +227,24 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                     .put("cwallUri", "/collaborativewall#/view/" + id)
                     .put("resourceUri", params.getString("cwallUri"));
 
-                    shareJsonSubmit(request, "collaborativewall.share", false, params, "name");
+                    crudService.retrieve(id, event -> {
+                        request.resume();
+                        if (event.isRight()) {
+                            JsonObject pushNotif = new JsonObject()
+                                    .put("title", "timeline.cwall.push.notif.shared")
+                                    .put("body", I18n.getInstance().translate(
+                                            "collaborativewall.push.notif.shared",
+                                            getHost(request),
+                                            I18n.acceptLanguage(request),
+                                            user.getUsername(),
+                                            event.right().getValue().getString("name")));
+                            params.put("pushNotif", pushNotif);
+
+                            shareJsonSubmit(request, "collaborativewall.share", false, params, "name");
+                        } else {
+                            renderError(request);
+                        }
+                    });
                 }
             }
         });
