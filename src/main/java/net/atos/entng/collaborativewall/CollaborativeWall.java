@@ -47,7 +47,7 @@ public class CollaborativeWall extends BaseServer {
     @Override
     public void start() throws Exception {
         super.start();
-        setRepositoryEvents(new CollaborativeWallRepositoryEvents());
+        setRepositoryEvents(new CollaborativeWallRepositoryEvents(vertx));
         if (config.getBoolean("searching-event", true)) {
             setSearchingEvents(new CollaborativeWallSearchingEvents(new MongoDbSearchService(COLLABORATIVE_WALL_COLLECTION)));
         }
