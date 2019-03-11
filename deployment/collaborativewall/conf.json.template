@@ -11,6 +11,7 @@
         "userbook-host": "${host}",
         "integration-mode" : "HTTP",
         "app-registry.port" : 8012,
+        "app-type" : "END_USER",
         "mode" : "${mode}",
         "entcore.port" : 8009,
         "publicConf": {
