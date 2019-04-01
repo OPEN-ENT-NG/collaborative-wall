@@ -53,5 +53,6 @@
     "group.school.Student": "Élèves de l'{0}.",
     "group.school.Teacher": "Enseignants de l'{0}.",
     "group.school.Guest": "Invités de l'{0}.",
-    "collaborativewall.push.notif.shared": "{0} vous a partagé le mur collaboratif {1}"
+    "collaborativewall.push.notif.shared": "{0} vous a partagé le mur collaboratif {1}",
+    "warning.no.mobile": "L'édition du mur collaboratif n'est pas optimisée sur support mobile. Pour toute modification, nous vous recommandons d'utiliser un ordinateur."
 }
