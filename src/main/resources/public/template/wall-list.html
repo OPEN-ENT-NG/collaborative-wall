@@ -84,11 +84,8 @@
 <section class="toggle-buttons" ng-class="{ hide: walls.selection().length === 0 }">
     <div class="toggle">
         <div class="row">
-            <a class="button cell" workflow="collaborativewall.print" ng-if="walls.selection().length === 1" ng-href="/collaborativewall/print/wall#/print/[[walls.selection()[0]._id]]" target="_blank">
-                <i18n>collaborativewall.print</i18n>
-            </a>
-            <a class="button cell" workflow="collaborativewall.printnotes" ng-if="walls.selection().length === 1" ng-href="/collaborativewall/printnotes/wall?wall=[[walls.selection()[0]._id]]" target="_blank">
-                <i18n>collaborativewall.printNotes</i18n>
+            <a class="button cell" workflow="collaborativewall.print" ng-if="walls.selection().length === 1" ng-href="/collaborativewall/printall/wall#/print/[[walls.selection()[0]._id]]" target="_blank">
+                <i18n>print</i18n>
             </a>
             <resource-right name="contrib" resource="walls.selection()" class="cell">
                 <button ng-if="walls.selection().length === 1" ng-click="editWall(walls.selection()[0], $event)">

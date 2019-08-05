@@ -600,5 +600,4 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
                 return moment(dateObject.$date).local().calendar();
         }
     };
-
 }]);

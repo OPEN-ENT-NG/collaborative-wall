@@ -97,6 +97,12 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         renderView(request, null, "print.html", null);
     }
 
+
+    @Get("/printall/wall")
+    public void printAll(HttpServerRequest request) {
+        renderView(request, null, "printall.html", null);
+    }
+
     @Get("/printnotes/wall")
     @ApiDoc("Allows to print notes")
     @SecuredAction("collaborativewall.printnotes")
