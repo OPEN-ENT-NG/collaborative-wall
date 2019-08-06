@@ -8,19 +8,27 @@
 
     <script src="/collaborativewall/public/dist/entcore/ng-app.js" id="context" type="text/javascript"></script>
     <script src="/collaborativewall/public/dist/application.js" type="text/javascript"></script>
+    <style media="screen">
+      @page {
+        size: A4 portrait;
+      }
+    </style>
 </head>
 <body ng-controller="WallController">
 <portal-styles></portal-styles>
 
 <div class="centered container row">
-    <section class="main">
+    <section class="main print--collaborativewall">
         <div class="row">
-            <div class="one cell">
+          <h1 class="app-title">
+            <i class="collaborative-wall"></i>
+            [[wall.name]]
+          </h1>
+            <div class="two cell horizontal-spacing top-spacing-four print--collaborativewall__desc">
                 <img skin-src="/img/illustrations/collaborative-wall-default.png" ng-if="wall.icon === undefined" />
                 <img ng-src="[[wall.icon]]?thumbnail=120x120" ng-if="wall.icon !== undefined" />
             </div>
-            <div class="eleven cell">
-                <h2>[[wall.name]]</h2>
+            <div class="ten cell">
                 <p>[[wall.description]]</p>
             </div>
         </div>
@@ -32,17 +40,15 @@
                 </div>
             </sticky>
         </board>
-        <div ng-repeat="note in wall.notes" class="row">
-            <article class="twelve cell vertical-spacing-twice" ng-style="{background:note.color[0]}">
-                <div class="row">
-                    <h2>[[note.owner.displayName]]</h2>
-                    <p> <i18n>collaborativewall.last.modification.by</i18n> [[note.modified.$date | date:"dd/MM/yyyy 'à' H:mm"]]</p>
-                </div>
-                <div class="row note-content" >
-                    <div bind-html="note.content"></div>
-                </div>
-            </article>
-        </div>
+          <article class="twelve cell vertical-spacing-twice horizontal-spacing" ng-style="{background:note.color[0]}" ng-repeat="note in wall.notes" class="row">
+              <div class="row">
+                  <div class="row note-content strong-text bottom-spacing-three">
+                      <div bind-html="note.content"></div>
+                  </div>
+                  <strong>[[note.owner.displayName]]</strong>
+                  <small><i18n>collaborativewall.last.modification.by</i18n> [[note.modified.$date | date:"dd/MM/yyyy 'à' H:mm"]]</small>
+              </div>
+          </article>
     </section>
 </div>
 
