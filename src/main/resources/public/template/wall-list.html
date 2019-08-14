@@ -37,14 +37,16 @@
         <div class="item" ng-repeat="w in walls.all">
             <section class="domino cyan">
                 <div class="top" ng-click="openWallFullScreen(w)">
-                    <img ng-if="w.icon === undefined" class="cell" skin-src="/img/illustrations/collaborative-wall-default.png" />
-                    <img ng-if="w.icon !== undefined" class="cell" ng-src="[[w.icon]]?thumbnail=120x120" />
+                    <img ng-if="w.icon === undefined" class="cell"
+                         skin-src="/img/illustrations/collaborative-wall-default.png"/>
+                    <img ng-if="w.icon !== undefined" class="cell" ng-src="[[w.icon]]?thumbnail=120x120"/>
                 </div>
                 <div class="bottom">
                     <div class="content">
                         <div class="cell" ng-click="openWallFullScreen(w)">
                             <strong class="truncate"><acronym title="[[w.name]]">[[w.name]]</acronym></strong>
-                            <a class="truncate" ng-href="/userbook/annuaire#[[w.owner.userId]]" title ="[[w.owner.displayName]]">[[w.owner.displayName]]</a>
+                            <a class="truncate" ng-href="/userbook/annuaire#[[w.owner.userId]]"
+                               title="[[w.owner.displayName]]">[[w.owner.displayName]]</a>
                             <span ng-if="w.notesCount()>1">[[w.notesCount()]] <i18n>collaborativewall.wall.display.notes</i18n> </span>
                             <span ng-if="w.notesCount()<2">[[w.notesCount()]] <i18n>collaborativewall.wall.display.note</i18n> </span>
 
@@ -53,7 +55,7 @@
                     </div>
                 </div>
                 <span ng-show="hasManageRight(w)">
-                    <check-tool ng-model="w.selected" ng-click="$event.stopPropagation()" ></check-tool>
+                    <check-tool ng-model="w.selected" ng-click="$event.stopPropagation()"></check-tool>
                 </span>
             </section>
         </div>
@@ -73,8 +75,10 @@
             </div>
             <p ng-repeat="w in walls.selection()"> [[w.name]]</p>
             <div class="row">
-                <button class="right-magnet" ng-click="removeWalls()"><i18n>remove</i18n></button>
-                <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelRemoveWall()" />
+                <button class="right-magnet" ng-click="removeWalls()">
+                    <i18n>remove</i18n>
+                </button>
+                <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelRemoveWall()"/>
             </div>
         </article>
     </lightbox>
@@ -84,12 +88,18 @@
 <section class="toggle-buttons" ng-class="{ hide: walls.selection().length === 0 }">
     <div class="toggle">
         <div class="row">
-            <a class="button cell" workflow="collaborativewall.print" ng-if="walls.selection().length === 1" ng-href="/collaborativewall/printall/wall#/print/[[walls.selection()[0]._id]]" target="_blank">
+            <a class="button cell" workflow="collaborativewall.print" ng-if="walls.selection().length === 1"
+               ng-href="/collaborativewall/printall/wall#/print/[[walls.selection()[0]._id]]" target="_blank">
                 <i18n>print</i18n>
             </a>
             <resource-right name="contrib" resource="walls.selection()" class="cell">
                 <button ng-if="walls.selection().length === 1" ng-click="editWall(walls.selection()[0], $event)">
                     <i18n>properties</i18n>
+                </button>
+            </resource-right>
+            <resource-right name="manage" resource="walls.selection()" class="cell">
+                <button ng-if="walls.selection().length === 1" library-resource="walls.selection()[0]">
+                    <i18n>bpr.publish</i18n>
                 </button>
             </resource-right>
             <resource-right name="manage" resource="walls.selection()" class="cell">
