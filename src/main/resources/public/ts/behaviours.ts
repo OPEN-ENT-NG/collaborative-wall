@@ -28,6 +28,7 @@ var wallBehaviours = {
     workflow : {
         create : 'net.atos.entng.collaborativewall.controllers.CollaborativeWallController|create',
         print : 'net.atos.entng.collaborativewall.controllers.CollaborativeWallController|print',
+        publish : 'net.atos.entng.collaborativewall.controllers.CollaborativeWallController|publish',
         printnotes : 'net.atos.entng.collaborativewall.controllers.CollaborativeWallController|printnotes'
     }
 };
