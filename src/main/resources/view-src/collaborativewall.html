@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-controller="WallController" ng-class="{print: printMode}">
+<html ng-controller="WallController">
 <head>
     <title>{{#i18n}}collaborativewall.title{{/i18n}}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -11,7 +11,7 @@
 
 </head>
 <body library-root>
-<portal ng-if="!printMode">
+<portal>
     <infotip name="collaborativewall-no-mobile" class="warning zero-desktop">
         <strong>
             <i18n>warning.no.mobile</i18n>
