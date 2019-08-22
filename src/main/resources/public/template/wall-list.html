@@ -88,7 +88,7 @@
 <section class="toggle-buttons" ng-class="{ hide: walls.selection().length === 0 }">
     <div class="toggle">
         <div class="row">
-            <a class="button cell" workflow="collaborativewall.print" ng-if="walls.selection().length === 1"
+            <a class="button cell right-magnet" workflow="collaborativewall.print" ng-if="walls.selection().length === 1"
                ng-href="/collaborativewall/print/wall#/print/[[walls.selection()[0]._id]]" target="_blank">
                 <i18n>print</i18n>
             </a>
