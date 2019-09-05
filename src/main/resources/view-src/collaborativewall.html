@@ -38,38 +38,6 @@
             </div>
             <div ng-if="!error" class="row patchwork">
                 <container template="main"></container>
-                <!-- Création -->
-                <div class="emptyscreen">
-                    <h2 class="emptyscreen-header"><i18n>empty.collaborativewall.creation.title</i18n></h2>
-                    <img class="emptyscreen-image__mini" src="/collaborativewall/public/img/empty-collaborativewall.svg">
-                    <p class="emptyscreen-footer">
-                        <i18n>empty.collaborativewall.creation</i18n>
-                    </p>
-                    <a class="button" ng-if="!wallmodeview" ng-click="newWall()"><i18n>collaborativewall.new</i18n></a>
-                </div>
-                <!-- Consultation -->
-                <div class="emptyscreen">
-                    <h2 class="emptyscreen-header"><i18n>empty.collaborativewall.consultation.title</i18n></h2>
-                    <img class="emptyscreen-image__mini" src="/collaborativewall/public/img/empty-collaborativewall.svg">
-                    <p class="emptyscreen-footer">
-                        <i18n>empty.collaborativewall.consultation</i18n>
-                    </p>
-                </div>
-                <!-- Si les filtres sont tous désactivés -->
-                <div class="emptyscreen">
-                    <h2 class="emptyscreen-header"><i18n>empty.filters.title</i18n></h2>
-                    <img class="emptyscreen-image__mini" src="/assets/themes/entcore-css-lib/images/empty-filters.svg">
-                    <p class="emptyscreen-footer">
-                        <i18n>empty.filters</i18n>
-                    </p>
-                </div>
-                <!-- Si la corbeille est vide -->
-                <div class="emptyscreen" ng-if="isTrashFolder()">
-                    <img class="emptyscreen-image" src="/assets/themes/entcore-css-lib/images/empty-trash.svg">
-                    <p class="emptyscreen-footer">
-                        <i18n>empty.trash4</i18n>
-                    </p>
-                </div>
               <!--   <container template="walls" class="flexible navigation" ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"></container> -->
             </div>
             <div ng-if="error" class="row">

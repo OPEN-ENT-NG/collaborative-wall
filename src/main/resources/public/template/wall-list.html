@@ -1,5 +1,5 @@
 <div class="items">
-    <div class="row rigid-grid">
+    <div class="row rigid-grid" ng-if="walls.all.length">
         <div class="four cell">
             <autocomplete
                     options="searchbar"
@@ -10,6 +10,30 @@
         </div>
     </div>
     <div class="fallen dominos">
+        <!-- Création -->
+        <div class="emptyscreen" ng-if="!walls.all.length" workflow="collaborativewall.create">
+            <h2 class="emptyscreen-header">
+                <i18n>empty.collaborativewall.creation.title</i18n>
+            </h2>
+            <img class="emptyscreen-image__mini" src="/collaborativewall/public/img/empty-collaborativewall.svg">
+            <p class="emptyscreen-footer">
+                <i18n>empty.collaborativewall.creation</i18n>
+            </p>
+            <a class="button" ng-if="!wallmodeview" ng-click="newWall()">
+                <i18n>collaborativewall.new</i18n>
+            </a>
+        </div>
+        <!-- Consultation -->
+        <div class="emptyscreen" ng-if="!walls.all.length" workflow-not="collaborativewall.create">
+            <h2 class="emptyscreen-header">
+                <i18n>empty.collaborativewall.consultation.title</i18n>
+            </h2>
+            <img class="emptyscreen-image__mini" src="/collaborativewall/public/img/empty-collaborativewall.svg">
+            <p class="emptyscreen-footer">
+                <i18n>empty.collaborativewall.consultation</i18n>
+            </p>
+        </div>
+
         <div class="item" ng-repeat="w in walls.all">
             <section class="domino cyan">
                 <div class="top" ng-click="openWallFullScreen(w)">
