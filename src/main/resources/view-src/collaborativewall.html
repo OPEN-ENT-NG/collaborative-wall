@@ -29,7 +29,7 @@
                         </span>
                     </h1>
                 </div>
-                <div class="contextual-buttons four cell" workflow="collaborativewall.create">
+                <div class="contextual-buttons four cell" ng-if="walls.all.length" workflow="collaborativewall.create">
                     <!-- <button ng-if="!wallmodeview" ng-click="newWall()" class="cell right-magnet"> -->
                     <button ng-if="!wallmodeview" ng-click="newWall()"  class="cell right-magnet">
                         <i18n>collaborativewall.new</i18n>
