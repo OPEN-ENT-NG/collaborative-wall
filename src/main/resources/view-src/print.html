@@ -34,17 +34,15 @@
                 </div>
             </sticky>
         </board>
-        <div class="six cell horizontal-spacing" ng-repeat="note in wall.notes">
-          <article class="twelve" ng-style="{background:note.color[0]}" class="row">
-            <div class="row">
-              <div class="row note-content strong-text bottom-spacing-three">
-                <div bind-html="note.content"></div>
-              </div>
-              <strong>[[note.owner.displayName]]</strong>
-              <small><i18n>collaborativewall.last.modification.by</i18n> [[note.modified.$date | date:"dd/MM/yyyy 'à' H:mm"]]</small>
+        <article class="twelve cell horizontal-spacing" ng-style="{background:note.color[0]}" class="row" ng-repeat="note in wall.notes">
+          <div class="row">
+            <div class="row note-content strong-text bottom-spacing-three">
+              <div bind-html="note.content"></div>
             </div>
-          </article>
-        </div>
+            <strong>[[note.owner.displayName]]</strong>
+            <small><i18n>collaborativewall.last.modification.by</i18n> [[note.modified.$date | date:"dd/MM/yyyy 'à' H:mm"]]</small>
+          </div>
+        </article>
     </section>
 </div>
 
