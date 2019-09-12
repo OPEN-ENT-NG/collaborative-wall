@@ -10,7 +10,7 @@
     <script src="/collaborativewall/public/dist/application.js" type="text/javascript"></script>
     <style media="screen">
         @page {
-            size: A4 portrait;
+            size: A4 landscape;
         }
     </style>
 </head>
@@ -23,14 +23,8 @@
             <h1 class="app-title">
                 <i class="collaborative-wall"></i>
                 [[wall.name]]
+                <div class="small-text left-spacing-twice horizontal-spacing">[[wall.description]]</div>
             </h1>
-            <div class="two cell horizontal-spacing top-spacing-four print--collaborativewall__desc">
-                <img skin-src="/img/illustrations/collaborative-wall-default.png" ng-if="wall.icon === undefined" />
-                <img ng-src="[[wall.icon]]?thumbnail=120x120" ng-if="wall.icon !== undefined" />
-            </div>
-            <div class="ten cell">
-                <p>[[wall.description]]</p>
-            </div>
         </div>
 
         <board class="board">
@@ -40,15 +34,17 @@
                 </div>
             </sticky>
         </board>
-        <article class="twelve cell vertical-spacing-twice horizontal-spacing" ng-style="{background:note.color[0]}" ng-repeat="note in wall.notes" class="row">
+        <div class="six cell horizontal-spacing" ng-repeat="note in wall.notes">
+          <article class="twelve" ng-style="{background:note.color[0]}" class="row">
             <div class="row">
-                <div class="row note-content strong-text bottom-spacing-three">
-                    <div bind-html="note.content"></div>
-                </div>
-                <strong>[[note.owner.displayName]]</strong>
-                <small><i18n>collaborativewall.last.modification.by</i18n> [[note.modified.$date | date:"dd/MM/yyyy 'à' H:mm"]]</small>
+              <div class="row note-content strong-text bottom-spacing-three">
+                <div bind-html="note.content"></div>
+              </div>
+              <strong>[[note.owner.displayName]]</strong>
+              <small><i18n>collaborativewall.last.modification.by</i18n> [[note.modified.$date | date:"dd/MM/yyyy 'à' H:mm"]]</small>
             </div>
-        </article>
+          </article>
+        </div>
     </section>
 </div>
 
