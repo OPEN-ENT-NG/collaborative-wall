@@ -15,9 +15,6 @@ interface CollaborativeWall {
 }
 
 ng.configs.push(ng.config(['libraryServiceProvider', function (libraryServiceProvider: LibraryServiceProvider<CollaborativeWall>) {
-    libraryServiceProvider.setPublishUrlGetterFromId(function (id: string) {
-        return `/collaborativewall/${id}/library`;
-    });
     libraryServiceProvider.setInvokableResourceInformationGetterFromResource(function () {
         return function (resource: CollaborativeWall): IdAndLibraryResourceInformation {
             return {id: resource._id, resourceInformation: {title: resource.name, cover: resource.icon}};
