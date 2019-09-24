@@ -29,7 +29,6 @@ import fr.wseduc.webutils.I18n;
 import net.atos.entng.collaborativewall.CollaborativeWall;
 import net.atos.entng.collaborativewall.controllers.helpers.NotesHelper;
 import net.atos.entng.collaborativewall.service.NoteService;
-import org.entcore.common.appregistry.LibraryUtils;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
 import org.entcore.common.mongodb.MongoDbControllerHelper;
@@ -195,12 +194,6 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                 }
             }
         });
-    }
-
-    @Post("/:id/library")
-    @SecuredAction(value = "collaborativewall.manager", type = ActionType.RESOURCE)
-    public void publishToLibrary(final HttpServerRequest request) {
-        LibraryUtils.publish("CollaborativeWall", eb, request);
     }
 
     @Get("/publish")
