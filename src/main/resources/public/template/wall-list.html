@@ -88,30 +88,30 @@
 <section class="toggle-buttons" ng-class="{ hide: walls.selection().length === 0 }">
     <div class="toggle">
         <div class="row">
-            <a class="button cell right-magnet" workflow="collaborativewall.print" ng-if="walls.selection().length === 1"
-               ng-href="/collaborativewall/print/wall#/print/[[walls.selection()[0]._id]]" target="_blank">
-                <i18n>print</i18n>
-            </a>
-            <resource-right name="contrib" resource="walls.selection()" class="cell">
-                <button ng-if="walls.selection().length === 1" ng-click="editWall(walls.selection()[0], $event)">
-                    <i18n>properties</i18n>
-                </button>
-            </resource-right>
-            <resource-right name="manage" resource="walls.selection()" class="cell">
-                <button ng-if="walls.selection().length === 1" library-resource="walls.selection()[0]">
-                    <i18n>bpr.publish</i18n>
-                </button>
-            </resource-right>
-            <resource-right name="manage" resource="walls.selection()" class="cell">
-                <button ng-click="display.showPanel = true">
-                    <i18n>share</i18n>
-                </button>
-            </resource-right>
-            <resource-right name="manage" resource="walls.selection()" class="cell">
-                <button ng-click="confirmRemoveWall(walls.selection()[0], $event)">
-                    <i18n>remove</i18n>
-                </button>
-            </resource-right>
+          <resource-right name="contrib" resource="walls.selection()" class="cell">
+              <button ng-if="walls.selection().length === 1" ng-click="editWall(walls.selection()[0], $event)">
+                  <i18n>properties</i18n>
+              </button>
+          </resource-right>
+          <resource-right name="manage" resource="walls.selection()" class="cell">
+            <button ng-click="display.showPanel = true">
+              <i18n>share</i18n>
+            </button>
+          </resource-right>
+          <resource-right name="manage" resource="walls.selection()" class="cell">
+              <button ng-if="walls.selection().length === 1" library-resource="walls.selection()[0]">
+                  <i18n>bpr.publish</i18n>
+              </button>
+          </resource-right>
+          <a class="button cell" workflow="collaborativewall.print" ng-if="walls.selection().length === 1"
+             ng-href="/collaborativewall/print/wall#/print/[[walls.selection()[0]._id]]" target="_blank">
+              <i18n>print</i18n>
+          </a>
+          <resource-right name="manage" resource="walls.selection()" class="cell">
+              <button ng-click="confirmRemoveWall(walls.selection()[0], $event)">
+                  <i18n>remove</i18n>
+              </button>
+          </resource-right>
         </div>
     </div>
 </section>
