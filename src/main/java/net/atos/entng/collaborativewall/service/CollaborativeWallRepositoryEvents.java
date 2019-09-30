@@ -43,7 +43,7 @@ public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
     }
 
     @Override
-    public void exportResources(String exportId, String userId, JsonArray groups, String exportPath,
+    public void exportResources(JsonArray resourcesIds, String exportId, String userId, JsonArray groups, String exportPath,
                                 String locale, String host, Handler<Boolean> handler)
     {
         QueryBuilder findByAuthor = QueryBuilder.start("owner.userId").is(userId);
@@ -52,7 +52,18 @@ public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
             QueryBuilder.start("shared.groupId").in(groups).get()
         );
         QueryBuilder findByAuthorOrShared = QueryBuilder.start().or(findByAuthor.get(),findByShared.get());
-        JsonObject query = MongoQueryBuilder.build(findByAuthorOrShared);
+
+        JsonObject query;
+
+        if(resourcesIds == null)
+            query = MongoQueryBuilder.build(findByAuthorOrShared);
+        else
+        {
+            QueryBuilder limitToResources = findByAuthorOrShared.and(
+                QueryBuilder.start("_id").in(resourcesIds).get()
+            );
+            query = MongoQueryBuilder.build(limitToResources);
+        }
 
         final AtomicBoolean exported = new AtomicBoolean(false);
 
