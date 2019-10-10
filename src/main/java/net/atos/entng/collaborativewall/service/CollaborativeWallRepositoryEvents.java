@@ -40,6 +40,9 @@ public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
 
     public CollaborativeWallRepositoryEvents(Vertx vertx) {
         super(vertx,"net-atos-entng-collaborativewall-controllers-CollaborativeWallController|delete",null,null);
+
+        this.collectionNameToImportPrefixMap.put(CollaborativeWall.COLLABORATIVE_WALL_COLLECTION, "wall_");
+        this.collectionNameToImportPrefixMap.put(CollaborativeWall.COLLABORATIVE_WALL_NOTES_COLLECTION, "note_");
     }
 
     @Override
@@ -67,6 +70,8 @@ public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
 
         final AtomicBoolean exported = new AtomicBoolean(false);
 
+        Map<String, String> prefixMap = this.collectionNameToImportPrefixMap;
+
         mongo.find(CollaborativeWall.COLLABORATIVE_WALL_COLLECTION, query, new Handler<Message<JsonObject>>()
         {
             @Override
@@ -78,7 +83,7 @@ public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
                     results.forEach(elem ->
                     {
                         JsonObject wall = ((JsonObject) elem);
-                        wall.put("name","wall_" + wall.getString("name"));
+                        wall.put("name", prefixMap.get(CollaborativeWall.COLLABORATIVE_WALL_COLLECTION) + wall.getString("name"));
                     });
 
                     final Set<String> ids = results.stream().map(res -> ((JsonObject)res).getString("_id")).collect(Collectors.toSet());
@@ -95,7 +100,7 @@ public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
                                 results2.forEach(elem ->
                                 {
                                     JsonObject note = ((JsonObject) elem);
-                                    note.put("name","note_" + note.getString("_id"));
+                                    note.put("name", prefixMap.get(CollaborativeWall.COLLABORATIVE_WALL_NOTES_COLLECTION) + note.getString("_id"));
                                 });
 
                                 createExportDirectory(exportPath, locale, new Handler<String>()
