@@ -535,9 +535,11 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     */
     $scope.removeWalls = function(){
 
-
         _.map($scope.walls.selection(), function(wallToRemove){
             wallToRemove.delete( function(){
+                if ($scope.wall && ($scope.wall._id === wallToRemove._id)) {
+                    delete $scope.wall;
+                }
                 // Update search bar, without any server call
                 $scope.searchbar = _.filter($scope.searchbar, function(wall){
                     return wall._id !== wallToRemove._id;
