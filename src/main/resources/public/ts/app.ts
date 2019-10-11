@@ -4,7 +4,8 @@ import http from 'axios';
 import { collaborativewall } from './model';
 import { boardDirective, sglclickDirective, stickyDirective } from './directives';
 import { wallController } from './controller';
-import { IdAndLibraryResourceInformation, LibraryServiceProvider } from "entcore/types/src/ts/library/library.service";
+import { LibraryServiceProvider } from "entcore/types/src/ts/library/library.service";
+import { IdAndLibraryResourceInformation } from 'entcore/types/src/ts/library/library.types';
 
 declare let module: any;
 
@@ -17,7 +18,15 @@ interface CollaborativeWall {
 ng.configs.push(ng.config(['libraryServiceProvider', function (libraryServiceProvider: LibraryServiceProvider<CollaborativeWall>) {
     libraryServiceProvider.setInvokableResourceInformationGetterFromResource(function () {
         return function (resource: CollaborativeWall): IdAndLibraryResourceInformation {
-            return {id: resource._id, resourceInformation: {title: resource.name, cover: resource.icon}};
+            return {
+                id: resource._id, 
+                resourceInformation: {
+                    title: resource.name, 
+                    cover: resource.icon,
+                    application: "CollaborativeWall",
+                    pdfUri: `/collaborativewall/print/wall#/${resource._id}`
+                }
+            };
         };
     });
 }]));
