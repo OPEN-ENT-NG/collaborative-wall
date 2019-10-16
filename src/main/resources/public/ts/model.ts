@@ -185,6 +185,25 @@ collaborativewall.Wall.prototype = {
             notify.error("collaborativewall.error");
         });
     },
+
+    /**
+      * Creates a copy of the wall. This method calls the REST web service to persist data.
+      * @param callback a function to call after duplicate
+      */
+    duplicate: function (callback)
+    {
+        http.post("/archive/duplicate", { application: "collaborativewall", resourceId: this._id }).then(function()
+        {
+          notify.info("duplicate.done");
+            if (typeof callback === 'function')
+                callback();
+        })
+        .catch(() =>
+        {
+            notify.error("duplicate.error");
+        });
+    },
+
     /**
      * Allows to delete the wall. This method calls the REST web service to delete
      * data.

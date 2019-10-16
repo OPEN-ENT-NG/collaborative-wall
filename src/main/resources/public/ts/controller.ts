@@ -1,4 +1,4 @@
-import { ng, routes, angular, moment, _, template } from 'entcore';
+import { ng, routes, angular, moment, _, template, notify } from 'entcore';
 import { collaborativewall } from './model';
 
 let elts: any;
@@ -152,6 +152,18 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
         event.stopPropagation();
         template.open('main', 'wall-edit');
     };
+
+    $scope.duplicateWall = function(wall, event)
+    {
+        notify.info("duplicate.start");
+        wall.duplicate(function()
+        {
+            $scope.walls.sync(function() {
+                updateSearchBar();
+            });
+        });
+        event.stopPropagation();
+    }
 
     /**
      * Allows to set "showButtons" to false for all walls except the given one.

@@ -93,6 +93,11 @@
                   <i18n>properties</i18n>
               </button>
           </resource-right>
+          <resource-right name="retrieve" workflow="collaborativewall.create" resource="walls.selection()" class="cell">
+              <button ng-if="walls.selection().length === 1" ng-click="duplicateWall(walls.selection()[0], $event)">
+                  <i18n>duplicate</i18n>
+              </button>
+          </resource-right>
           <resource-right name="manage" resource="walls.selection()" class="cell">
             <button ng-click="display.showPanel = true">
               <i18n>share</i18n>
