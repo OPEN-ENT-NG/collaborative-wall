@@ -24,7 +24,7 @@ ng.configs.push(ng.config(['libraryServiceProvider', function (libraryServicePro
                     title: resource.name, 
                     cover: resource.icon,
                     application: "CollaborativeWall",
-                    pdfUri: `/collaborativewall/print/wall#/${resource._id}`
+                    pdfUri: `/collaborativewall/print/wall#/print/${resource._id}`
                 }
             };
         };
