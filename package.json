@@ -4,7 +4,7 @@
     "description": "Collaborative editor for ENT Core.",
     "main": "gulpfile.js",
     "dependencies": {
-      "entcore": "~3.7.3-dev",
+      "entcore": "~3.7.1-dev",
       "@types/core-js": "0.9.42",
       "awesome-typescript-loader": "3.2.1",
       "axios": "0.16.2",
