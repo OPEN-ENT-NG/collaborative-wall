@@ -104,7 +104,10 @@
             </button>
           </resource-right>
           <resource-right name="manage" resource="walls.selection()" class="cell">
-              <button ng-if="walls.selection().length === 1" library-resource="walls.selection()[0]">
+              <button 
+                ng-if="walls.selection().length === 1" 
+                library-resource="walls.selection()[0]"
+                workflow="collaborativewall.publish">
                   <i18n>bpr.publish</i18n>
               </button>
           </resource-right>
