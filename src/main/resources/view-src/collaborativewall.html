@@ -26,31 +26,31 @@
                     </side-panel>
                 </i>
                 <a>
-                    <i18n ng-click="cancelWallEdit()">collaborativewall.title</i18n>
+                    <i18n navigation-trigger="cancelWallEdit()">collaborativewall.title</i18n>
                 </a>
                 <span ng-if="wall.name && wall.name.trim().length > 0">
-                            : <a ng-click="openWallFullScreen(wall)">[[wall.name]]</a>
+                            : <a navigation-trigger="openWallFullScreen(wall)">[[wall.name]]</a>
                         </span>
-                    </h1>
-                </div>
-                <div class="contextual-buttons four cell" ng-if="walls.all.length" workflow="collaborativewall.create">
-                    <!-- <button ng-if="!wallmodeview" ng-click="newWall()" class="cell right-magnet"> -->
-                    <button ng-if="!wallmodeview" ng-click="newWall()"  class="cell right-magnet">
-                        <i18n>collaborativewall.new</i18n>
-                    </button>
-                </div>
-            </div>
-            <div ng-if="!error" class="row patchwork">
-                <container template="main"></container>
-              <!--   <container template="walls" class="flexible navigation" ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"></container> -->
-            </div>
-            <div ng-if="error" class="row">
-                <container template="error"></container>
-            </div>
-    </portal>
-        <div ng-if="printMode">
-            <container template="main"></container>
+            </h1>
         </div>
-        <library-publish></library-publish>
-    </body>
+        <div class="contextual-buttons four cell" ng-if="walls.all.length" workflow="collaborativewall.create">
+            <!-- <button ng-if="!wallmodeview" ng-click="newWall()" class="cell right-magnet"> -->
+            <button ng-if="!wallmodeview" ng-click="newWall()"  class="cell right-magnet">
+                <i18n>collaborativewall.new</i18n>
+            </button>
+        </div>
+    </div>
+    <div ng-if="!error" class="row patchwork">
+        <container template="main"></container>
+        <!--   <container template="walls" class="flexible navigation" ng-class="{ 'empty-neighbour': template.isEmpty('main'), 'filled-neighbour': !template.isEmpty('main') }"></container> -->
+    </div>
+    <div ng-if="error" class="row">
+        <container template="error"></container>
+    </div>
+</portal>
+<div ng-if="printMode">
+    <container template="main"></container>
+</div>
+<library-publish></library-publish>
+</body>
 </html>

@@ -6,12 +6,12 @@
     <h2 ng-if="wall._id">
         <i18n>collaborativewall.head.modify</i18n>
     </h2>
-    
+
     <article class="twelve cell">
-        <form name="form">
+        <form name="form" guard-root>
             <!-- Title -->
-            <label class="twelve cell"><i18n>collaborativewall.label.name</i18n></label> 
-            <input class="twelve cell" type="text" ng-model="wall.name" required />
+            <label class="twelve cell"><i18n>collaborativewall.label.name</i18n></label>
+            <input class="twelve cell" type="text" ng-model="wall.name" required input-guard/>
 
             <!-- Images -->
             <div class="twelve cell">
@@ -22,11 +22,11 @@
             </div>
 
             <!-- Description -->
-            <label class="twelve cell"><i18n>collaborativewall.label.description</i18n></label> 
-            <textarea class="twelve cell" ng-model="wall.description"></textarea>
-            
+            <label class="twelve cell"><i18n>collaborativewall.label.description</i18n></label>
+            <textarea class="twelve cell" ng-model="wall.description" input-guard></textarea>
+
             <!-- Background -->
-            <label class="twelve cell"><i18n>collaborativewall.label.background</i18n></label> 
+            <label class="twelve cell"><i18n>collaborativewall.label.background</i18n></label>
             <div class="row">
                 <div ng-repeat="t in themes" class="board-background-button two cell" ng-click="wall.background = t" ng-class="{ selected : t === wall.background }">
                     <img src="[[t]]">
@@ -39,10 +39,10 @@
 
             <!-- Controls -->
             <div class="vertical-spacing-twice twelve cell">
-                <button class="right-magnet" ng-click="saveWall()" ng-disabled="form.$invalid">
+                <button class="right-magnet" reset-guard="saveWall()" ng-disabled="form.$invalid">
                     <i18n>save</i18n>
                 </button>
-                <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelWallEdit()" />
+                <input type="button" class="cancel right-magnet" i18n-value="cancel" navigation-trigger="cancelWallEdit()" />
             </div>
         </form>
     </article>

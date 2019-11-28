@@ -8,15 +8,15 @@ let elts: any;
  */
 routes.define(function($routeProvider){
     $routeProvider
-      .when('/view/:wallId', {
-        action: 'displayFullScreen'
-      })
-      .when('/print/:wallId', {
-        action: 'printWall'
-      })
-      .otherwise({
-        action: 'mainPage'
-      });
+        .when('/view/:wallId', {
+            action: 'displayFullScreen'
+        })
+        .when('/print/:wallId', {
+            action: 'printWall'
+        })
+        .otherwise({
+            action: 'mainPage'
+        });
 });
 
 /**
@@ -32,31 +32,31 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     $scope.walls = model.walls;
     $scope.me = model.me;
     $scope.noteColors =[[
-    '#F6CECE','#F5A9A9'],[
-    '#F6D8CE','#F5BCA9'],[
-    '#F6E3CE','#F5D0A9'],[
-    '#F5ECCE','#F3E2A9'],[
-    '#F5F6CE','#F2F5A9'],[
-    '#ECF6CE','#E1F5A9'],[
-    '#E3F6CE','#D0F5A9'],[
-    '#D8F6CE','#BCF5A9'],[
-    '#CEF6CE','#A9F5A9'],[
-    '#CEF6D8','#A9F5BC'],[
-    '#CEF6E3','#A9F5D0'],[
-    '#CEF6EC','#A9F5E1'],[
-    '#CEF6F5','#A9F5F2'],[
-    '#CEECF5','#A9E2F3'],[
-    '#CEE3F6','#A9D0F5'],[
-    '#CED8F6','#A9BCF5'],[
-    '#CECEF6','#A9A9F5'],[
-    '#D8CEF6','#BCA9F5'],[
-    '#E3CEF6','#D0A9F5'],[
-    '#ECCEF5','#E2A9F3'],[
-    '#F6CEF5','#F5A9F2'],[
-    '#F6CEEC','#F5A9E1'],[
-    '#F6CEE3','#F5A9D0'],[
-    '#F6CED8','#F5A9BC'],[
-    '#F2F2F2','#E6E6E6']
+        '#F6CECE','#F5A9A9'],[
+        '#F6D8CE','#F5BCA9'],[
+        '#F6E3CE','#F5D0A9'],[
+        '#F5ECCE','#F3E2A9'],[
+        '#F5F6CE','#F2F5A9'],[
+        '#ECF6CE','#E1F5A9'],[
+        '#E3F6CE','#D0F5A9'],[
+        '#D8F6CE','#BCF5A9'],[
+        '#CEF6CE','#A9F5A9'],[
+        '#CEF6D8','#A9F5BC'],[
+        '#CEF6E3','#A9F5D0'],[
+        '#CEF6EC','#A9F5E1'],[
+        '#CEF6F5','#A9F5F2'],[
+        '#CEECF5','#A9E2F3'],[
+        '#CEE3F6','#A9D0F5'],[
+        '#CED8F6','#A9BCF5'],[
+        '#CECEF6','#A9A9F5'],[
+        '#D8CEF6','#BCA9F5'],[
+        '#E3CEF6','#D0A9F5'],[
+        '#ECCEF5','#E2A9F3'],[
+        '#F6CEF5','#F5A9F2'],[
+        '#F6CEEC','#F5A9E1'],[
+        '#F6CEE3','#F5A9D0'],[
+        '#F6CED8','#F5A9BC'],[
+        '#F2F2F2','#E6E6E6']
     ];
     $scope.themes=['/collaborativewall/public/img/default.jpg', '/collaborativewall/public/img/wood.jpg', '/collaborativewall/public/img/paper.jpg'];
     $scope.searchbar = {};
@@ -64,6 +64,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     $scope.error = false;
     $scope.showColor =false;
     $scope.notDesktop = navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i) != null;
+    $scope.forceToClose=false;
 
     // Action according to the current given route.
     route({
@@ -73,7 +74,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
                     return w._id === params.wallId;
                 });
                 $scope.openWallFullScreen(wall);
-                 template.open('side-panel', 'side-panel');
+                template.open('side-panel', 'side-panel');
             });
         },
         printWall: function(params) {
@@ -104,7 +105,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
 
             }else{
                 template.open('main', 'wall-list');
-                 template.open('side-panel', 'side-panel');
+                template.open('side-panel', 'side-panel');
             }
         }
     });
@@ -182,11 +183,11 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
      * variable and close the "main" template.
      */
     $scope.cancelWallEdit = function() {
-        template.open('main', 'wall-list');
         delete $scope.master;
         delete $scope.wall;
         $scope.hideAlmostAllButtons();
         $scope.wallmodeview = false;
+        template.open('main', 'wall-list');
     };
 
     /**
@@ -245,10 +246,10 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
         }
     };
     /**
-    * Print current note
-    * @param wall
-    *
-    */
+     * Print current note
+     * @param wall
+     *
+     */
     $scope.printNotes = function(wall){
         if(wall){
             $scope.wall = wall;
@@ -277,11 +278,11 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     $scope.openWallFullScreen = async function(wall) {
         if (wall) {
             $scope.wall = wall;
+            template.open('main', 'wall-full');
             await $scope.wall.syncNotes();
             $scope.error = false;
             $scope.note = undefined;
             $scope.wallmodeview = true;
-            template.open('main', 'wall-full');
         } else {
             $scope.wall = undefined;
             $scope.error = true;
@@ -384,12 +385,18 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     /**
      * Allows to save the current editing note.
      */
-    $scope.saveNote = function() {
+    $scope.saveNote = function(){
+        $scope.forceToClose=true;
+        $scope.$apply();
         if ($scope.note) {
-            $scope.note.save($scope.wall,() => $scope.$apply());
+            $scope.note.save($scope.wall, () => $scope.$apply());
+            $scope.openWallFullScreen($scope.wall);
             delete $scope.note;
+        }else{
+            $scope.openWallFullScreen($scope.wall);
         }
-        template.open("main","wall-full");
+        $scope.forceToClose=false;
+        $scope.$apply();
     };
 
     /**
@@ -398,6 +405,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     $scope.cancelNote = function() {
         template.open("main","wall-full");
         delete $scope.note;
+        $scope.$apply();
     };
 
     /**
@@ -411,49 +419,49 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     };
 
     /**
-    * Allows user if he can edit on wall
-    * @param wall to edit
-    * @return true if user can edit wall.
-    *
-    */
+     * Allows user if he can edit on wall
+     * @param wall to edit
+     * @return true if user can edit wall.
+     *
+     */
     $scope.hasWallRight = function(wall){
         return wall && wall.myRights.contrib ;
     };
 
-     /**
-    * Allows user if he can edit on wall
-    * @param wall to edit
-    * @return true if user can edit wall.
-    *
-    */
+    /**
+     * Allows user if he can edit on wall
+     * @param wall to edit
+     * @return true if user can edit wall.
+     *
+     */
     $scope.hasManageRight = function(wall){
         return wall && wall.myRights.manage ;
     };
 
     /**
-    * Update html element Zindex, When a note is edited, his z-index property is updated to the top;
-    * @param el: element  div
-    *
-    */
+     * Update html element Zindex, When a note is edited, his z-index property is updated to the top;
+     * @param el: element  div
+     *
+     */
     $scope.updateDivZIndex = function(el){
-            elts = el.parentElement.children;
-            var j = 0;
-            for ( var i = 0 ; i < elts.length; i++){
-                if(elts[i].style.zIndex ==el.style.zIndex){
-                    j= i;
-                }
-                if(elts[i].style.zIndex>el.style.zIndex){
-                    elts[i].style.zIndex--;
-                }
+        elts = el.parentElement.children;
+        var j = 0;
+        for ( var i = 0 ; i < elts.length; i++){
+            if(elts[i].style.zIndex ==el.style.zIndex){
+                j= i;
             }
-            elts[j].style.zIndex = elts.length-1;
-            return el.style.zIndex;
+            if(elts[i].style.zIndex>el.style.zIndex){
+                elts[i].style.zIndex--;
+            }
+        }
+        elts[j].style.zIndex = elts.length-1;
+        return el.style.zIndex;
     };
 
     /**
-    * Set color for each user's Note
-    * @param color (head and content) ,user's id
-    */
+     * Set color for each user's Note
+     * @param color (head and content) ,user's id
+     */
     $scope.setColor = function(color){
         $scope.note.color = color;
         $scope.note.save($scope.wall);
@@ -463,10 +471,10 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     };
 
     /**
-    * Get a color who are already used for an user
-    * @return color ( head and content)
-    *
-    */
+     * Get a color who are already used for an user
+     * @return color ( head and content)
+     *
+     */
     $scope.getUserNoteColor = function(){
 
         for (var i = 0; i < $scope.wall.notes.length; i++) {
@@ -478,18 +486,18 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     };
 
     /**
-    * Switch on/off color selector
-    * @param userIdColor user's id of a note selected
-    */
+     * Switch on/off color selector
+     * @param userIdColor user's id of a note selected
+     */
     $scope.toogleShowColor = function(note){
         $scope.showColor = !$scope.showColor;
         $scope.note = note;
     };
 
     /**
-    * Keep colorpicker Open
-    *
-    */
+     * Keep colorpicker Open
+     *
+     */
     $scope.mouseOverColorPicker = function(){
         if($scope.showColor){
             $scope.mouseIsOverColorPicker = true;
@@ -498,9 +506,9 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     };
 
     /**
-    * Close color picker when mouse leaves color aera.
-    *
-    */
+     * Close color picker when mouse leaves color aera.
+     *
+     */
     $scope.mouseLeaveColorPicker = function(){
         if($scope.showColor && $scope.mouseIsOverColorPicker && $scope.colorPickerClicked){
             $scope.showColor = false;
@@ -511,19 +519,19 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
 
 
     /**
-    * Display note in a lightbox
-    * @param note to display
-    *
-    */
+     * Display note in a lightbox
+     * @param note to display
+     *
+     */
     $scope.viewNote = function(note){
         $scope.note = note;
         $scope.display.note = true;
     };
 
     /**
-    * Close note's lightbox
-    *
-    */
+     * Close note's lightbox
+     *
+     */
     $scope.closeViewNote = function(){
         $scope.display.note= false;
         delete $scope.note;
@@ -537,14 +545,14 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
      * UTILE ?
      */
     $scope.confirmRemoveWalls = function(walls, event) {
-       // $scope.poll = poll;
+        // $scope.poll = poll;
         $scope.display.confirmDeletePoll = true;
         event.stopPropagation();
     };
 
     /**
-    * Allows to remove several walls
-    */
+     * Allows to remove several walls
+     */
     $scope.removeWalls = function(){
 
         _.map($scope.walls.selection(), function(wallToRemove){
@@ -572,32 +580,32 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
                     }
                 };
 
-           });
+            });
         });
     };
     updateSearchBar();
 
     /**
-    * Open wall from a searchbar
-    * @param wall's id
-    */
+     * Open wall from a searchbar
+     * @param wall's id
+     */
     $scope.openWallFromSearchbar = async function(wallId){
         await $scope.openWallFullScreen($scope.getWallById(wallId));
         $scope.$apply();
     };
 
     /**
-    * Check if an user ar editing a wall.
-    */
+     * Check if an user ar editing a wall.
+     */
     $scope.isCreatingOrEditing = function(){
-            return (template.contains('main', 'wall-full'));
+        return (template.contains('main', 'wall-full'));
     };
 
     /**
-    * Get a wall with an id
-    * @param Wall._id
-    * @return wall
-    */
+     * Get a wall with an id
+     * @param Wall._id
+     * @return wall
+     */
     $scope.getWallById = function(wallId){
         return _.find(model.walls.all, function(wall){
             return wall._id === wallId;
@@ -608,7 +616,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
         if (dateObject != null){
             if (dateObject.$date == null) // Handle string date (ex : note.lastEdit)
                 return moment(dateObject).local().calendar();
-            else 
+            else
                 return moment(dateObject.$date).local().calendar();
         }
     };
