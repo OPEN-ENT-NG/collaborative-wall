@@ -29,7 +29,7 @@
                     <i18n navigation-trigger="cancelWallEdit()">collaborativewall.title</i18n>
                 </a>
                 <span ng-if="wall.name && wall.name.trim().length > 0">
-                            : <a ng-click="openWallFullScreen(wall)">[[wall.name]]</a>
+                            : <a navigation-trigger="openWallFullScreen(wall)">[[wall.name]]</a>
                         </span>
                     </h1>
                 </div>

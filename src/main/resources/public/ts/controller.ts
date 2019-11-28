@@ -398,6 +398,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     $scope.cancelNote = function() {
         template.open("main","wall-full");
         delete $scope.note;
+        $scope.$apply();
     };
 
     /**
