@@ -64,6 +64,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     $scope.error = false;
     $scope.showColor =false;
     $scope.notDesktop = navigator.userAgent.match(/Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i) != null;
+    $scope.forceToClose=false;
 
     // Action according to the current given route.
     route({
@@ -182,11 +183,11 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
      * variable and close the "main" template.
      */
     $scope.cancelWallEdit = function() {
-        template.open('main', 'wall-list');
         delete $scope.master;
         delete $scope.wall;
         $scope.hideAlmostAllButtons();
         $scope.wallmodeview = false;
+        template.open('main', 'wall-list');
     };
 
     /**
@@ -277,11 +278,11 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     $scope.openWallFullScreen = async function(wall) {
         if (wall) {
             $scope.wall = wall;
+            template.open('main', 'wall-full');
             await $scope.wall.syncNotes();
             $scope.error = false;
             $scope.note = undefined;
             $scope.wallmodeview = true;
-            template.open('main', 'wall-full');
         } else {
             $scope.wall = undefined;
             $scope.error = true;
@@ -384,12 +385,18 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     /**
      * Allows to save the current editing note.
      */
-    $scope.saveNote = function() {
+    $scope.saveNote = function(){
+        $scope.forceToClose=true;
+        $scope.$apply();
         if ($scope.note) {
-            $scope.note.save($scope.wall,() => $scope.$apply());
+            $scope.note.save($scope.wall, () => $scope.$apply());
+            $scope.openWallFullScreen($scope.wall);
             delete $scope.note;
+        }else{
+            $scope.openWallFullScreen($scope.wall);
         }
-        template.open("main","wall-full");
+        $scope.forceToClose=false;
+        $scope.$apply();
     };
 
     /**
