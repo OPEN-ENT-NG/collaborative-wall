@@ -385,18 +385,24 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     /**
      * Allows to save the current editing note.
      */
-    $scope.saveNote = function(){
-        $scope.forceToClose=true;
-        $scope.$apply();
-        if ($scope.note) {
-            $scope.note.save($scope.wall, () => $scope.$apply());
-            $scope.openWallFullScreen($scope.wall);
-            delete $scope.note;
-        }else{
-            $scope.openWallFullScreen($scope.wall);
-        }
-        $scope.forceToClose=false;
-        $scope.$apply();
+    $scope.saveNote = function(): Promise<void> {
+        return new Promise<void>(function(resolve, reject) {
+            $scope.forceToClose = true;
+            $scope.$apply();
+            if ($scope.note) {
+                resolve();
+                $scope.note.save($scope.wall, () => $scope.$apply());
+                setTimeout(function () {
+                    $scope.openWallFullScreen($scope.wall);
+                }, 500);
+                delete $scope.note;
+            } else {
+                reject();
+                setTimeout(function () {
+                    $scope.openWallFullScreen($scope.wall);
+                }, 500);            }
+            $scope.forceToClose = false;
+        });
     };
 
     /**
