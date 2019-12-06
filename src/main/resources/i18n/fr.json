@@ -23,7 +23,8 @@
     "collaborativewall.printNotes": "Imprimer les post-it",
     "collaborativewall.back": "Retour",
 	"collaborativewall.last.modification.by": "Modifiée le",
-
+    "collaborativewall.note.saving": "Note enregistrée",
+    "collaborativewall.note.problem.saving": "Problème d'enregistrement de la note, veuillez réssayer",
 
 	"collaborativewall.fullscreen.open": "Ouvrir le mur",
 

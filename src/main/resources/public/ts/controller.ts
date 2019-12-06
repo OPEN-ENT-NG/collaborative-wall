@@ -390,17 +390,19 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
             $scope.forceToClose = true;
             $scope.$apply();
             if ($scope.note) {
+                notify.info("collaborativewall.note.saving");
                 resolve();
                 $scope.note.save($scope.wall, () => $scope.$apply());
                 setTimeout(function () {
                     $scope.openWallFullScreen($scope.wall);
-                }, 500);
+                }, 1000);
                 delete $scope.note;
             } else {
+                notify.info("collaborativewall.note.problem.saving");
                 reject();
                 setTimeout(function () {
                     $scope.openWallFullScreen($scope.wall);
-                }, 500);            }
+                }, 1000);            }
             $scope.forceToClose = false;
         });
     };
