@@ -88,8 +88,8 @@
 <section class="toggle-buttons" ng-class="{ hide: walls.selection().length === 0 }">
     <div class="toggle">
         <div class="row">
-            <resource-right name="manage" resource="walls.selection()" class="cell" guard-root>
-                <button ng-if="walls.selection().length === 1" reset-guard="editWall(walls.selection()[0], $event)">
+            <resource-right name="manage" resource="walls.selection()" class="cell">
+                <button ng-if="walls.selection().length === 1" ng-click="editWall(walls.selection()[0], $event)">
                     <i18n>properties</i18n>
                 </button>
             </resource-right>

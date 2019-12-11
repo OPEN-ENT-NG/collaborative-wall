@@ -146,12 +146,19 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
      * @param event the current event.
      */
     $scope.editWall = function(wall, event) {
+        $scope.forceToClose=true;
         wall.showButtons = false;
         $scope.master = wall;
         $scope.wallmodeview = true;
         $scope.wall = angular.copy(wall);
-        event.stopPropagation();
+        if(event)
+            event.stopPropagation();
         template.open('main', 'wall-edit');
+        $scope.$apply();
+        setTimeout(function() {
+            $scope.forceToClose=false;
+            $scope.$apply();
+            }, 50);
     };
 
     $scope.duplicateWall = function(wall, event)
