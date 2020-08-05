@@ -108,7 +108,7 @@ Behaviours.register('collaborativewall', {
                     title : wall.name,
                     ownerName : wall.owner.displayName,
                     owner : wall.owner.userId,
-                    icon : wall.icon ? wall.icon : '/img/illustrations/collaborative-wall-default.png',
+                    icon : wall.icon ? wall.icon : '/img/illustrations/collaborative-wall.svg',
                     path : '/collaborativewall#/view/' + wall._id,
                     id : wall._id
                 };
