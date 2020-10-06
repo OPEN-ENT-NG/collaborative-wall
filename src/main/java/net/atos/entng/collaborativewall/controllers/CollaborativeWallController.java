@@ -29,6 +29,7 @@ import fr.wseduc.webutils.I18n;
 import net.atos.entng.collaborativewall.CollaborativeWall;
 import net.atos.entng.collaborativewall.controllers.helpers.NotesHelper;
 import net.atos.entng.collaborativewall.service.NoteService;
+import org.entcore.common.events.EventHelper;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
 import org.entcore.common.mongodb.MongoDbControllerHelper;
@@ -51,22 +52,20 @@ import java.util.Map;
  * @author Atos
  */
 public class CollaborativeWallController extends MongoDbControllerHelper {
-
-    private EventStore eventStore;
-    private enum CollaborativeWallEvent {ACCESS}
+    static final String RESOURCE_NAME = "wall";
+    private final EventHelper eventHelper;
 
     private final NotesHelper notesHelper;
 
 	@Override
 	public void init(Vertx vertx, JsonObject config, RouteMatcher rm,
 			Map<String, fr.wseduc.webutils.security.SecuredAction> securedActions) {
-    try {
-      super.init(vertx, config, rm, securedActions);
-    } catch (Exception e) {
-      log.error(e.getMessage(), e);
-    }
-    this.notesHelper.init(vertx, config, rm, securedActions);
-		eventStore = EventStoreFactory.getFactory().getEventStore(CollaborativeWall.class.getSimpleName());
+        try {
+          super.init(vertx, config, rm, securedActions);
+        } catch (Exception e) {
+          log.error(e.getMessage(), e);
+        }
+        this.notesHelper.init(vertx, config, rm, securedActions);
 	}
 
     /**
@@ -77,6 +76,8 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     public CollaborativeWallController(String collection, NoteService noteService) {
         super(collection);
         this.notesHelper = new NotesHelper(noteService);
+        final EventStore eventStore = EventStoreFactory.getFactory().getEventStore(CollaborativeWall.class.getSimpleName());
+        this.eventHelper = new EventHelper(eventStore);
     }
 
     @Get("")
@@ -87,7 +88,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         renderView(request);
 
         // Create event "access to application CollaborativeWall" and store it, for module "statistics"
-        eventStore.createAndStoreEvent(CollaborativeWallEvent.ACCESS.name(), request);
+        eventHelper.onAccess(request);
     }
 
     @Get("/print/wall")
@@ -151,7 +152,11 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
 
             @Override
             public void handle(JsonObject event) {
-                CollaborativeWallController.super.create(request);
+                CollaborativeWallController.super.create(request, r -> {
+                    if(r.succeeded()){
+                        eventHelper.onCreateResource(request, RESOURCE_NAME);
+                    }
+                });
             }
         });
     }
