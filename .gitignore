@@ -36,3 +36,4 @@ developer.id
 **/.DS_Store
 **/view
 node_modules
+gradle*
