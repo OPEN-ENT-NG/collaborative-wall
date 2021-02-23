@@ -237,6 +237,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
      */
     $scope.removeWall = function() {
         if ($scope.wall) {
+            $scope.walls.remove($scope.wall);
             $scope.wall.delete();
             delete $scope.display.confirmDeleteWall;
             delete $scope.wall;
@@ -571,6 +572,7 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
     $scope.removeWalls = function(){
 
         _.map($scope.walls.selection(), function(wallToRemove){
+            $scope.walls.remove(wallToRemove);
             wallToRemove.delete( function(){
                 if ($scope.wall && ($scope.wall._id === wallToRemove._id)) {
                     delete $scope.wall;

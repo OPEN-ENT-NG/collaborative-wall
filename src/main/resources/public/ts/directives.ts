@@ -38,7 +38,7 @@ export const stickyDirective = ng.directive('sticky', ['$document', function($do
 
                     startX = event.screenX - x;
                     startY = event.screenY - y;
-                    zindex = scope.updateDivZIndex(element.context);
+                    zindex = scope.updateDivZIndex(elt);
                     updateUI();
                     $document.on('mousemove', mousemove);
                     $document.on('mouseup', mouseup);

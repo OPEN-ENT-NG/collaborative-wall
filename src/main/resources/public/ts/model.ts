@@ -211,7 +211,6 @@ collaborativewall.Wall.prototype = {
      */
     delete: function (callback) {
         http.delete('/collaborativewall/' + this._id, this.toJSON()).then(function () {
-            model.walls.remove(this);
             if (typeof callback === 'function') {
                 callback();
             }
