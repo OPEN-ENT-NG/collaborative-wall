@@ -1,5 +1,5 @@
   	{
-      "name": "net.atos~collaborativewall~1.12.2",
+      "name": "net.atos~collaborativewall~1.12-SNAPSHOT",
       "config": {
         "main" : "net.atos.entng.collaborativewall.CollaborativeWall",
         "port" : 8071,
