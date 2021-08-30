@@ -102,6 +102,7 @@ public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
                                     JsonObject note = ((JsonObject) elem);
                                     note.put("name", prefixMap.get(CollaborativeWall.COLLABORATIVE_WALL_NOTES_COLLECTION) + note.getString("_id"));
                                 });
+                                results.addAll(results2);
 
                                 createExportDirectory(exportPath, locale, new Handler<String>()
                                 {
@@ -120,7 +121,7 @@ public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
                                             };
 
                                             if(exportDocuments == true)
-                                                exportDocumentsDependancies(results.addAll(results2), path, finish);
+                                                exportDocumentsDependancies(results, path, finish);
                                             else
                                                 finish.handle(Boolean.TRUE);
 
