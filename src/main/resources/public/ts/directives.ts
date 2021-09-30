@@ -166,26 +166,27 @@ export const boardDirective = ng.directive('board', function() {
             });
 
             scope.$watch("wall", function() {
-                if(scope.wall.background.indexOf("/collaborativewall/public/img")> -1 ){
-                    element.css({
-                        "position" : "relative",
-                        "display" : "block",
-                        "width":"1833px",
-                        "height":"600px",
-                        "background-repeat" : "repeat",
-                        "background-position" : "center fixed",
-                        "background-image" : "url(" + scope.wall.background + ")"
-                    });
-                }else{
-                    element.css({
-                        "position" : "relative",
-                        "display" : "block",
-                        "background-repeat" : "no-repeat",
-                        "background-position" : "center fixed",
-                        "background-size" : "cover",
-                        "background-image" : "url(" + scope.wall.background + ")"
-                    });
-                }
+                if(scope.wall)
+                    if(scope.wall.background.indexOf("/collaborativewall/public/img")> -1 ){
+                        element.css({
+                            "position" : "relative",
+                            "display" : "block",
+                            "width":"1833px",
+                            "height":"600px",
+                            "background-repeat" : "repeat",
+                            "background-position" : "center fixed",
+                            "background-image" : "url(" + scope.wall.background + ")"
+                        });
+                    }else{
+                        element.css({
+                            "position" : "relative",
+                            "display" : "block",
+                            "background-repeat" : "no-repeat",
+                            "background-position" : "center fixed",
+                            "background-size" : "cover",
+                            "background-image" : "url(" + scope.wall.background + ")"
+                        });
+                    }
             });
         }
     }

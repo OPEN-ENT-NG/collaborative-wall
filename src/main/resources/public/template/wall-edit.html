@@ -8,7 +8,7 @@
     </h2>
 
     <article class="twelve cell">
-        <form name="form" guard-root>
+        <form name="form">
             <!-- Title -->
             <label class="twelve cell"><i18n>collaborativewall.label.name</i18n></label>
             <input class="twelve cell" type="text" ng-model="wall.name" required input-guard/>
@@ -42,7 +42,7 @@
                 <button class="right-magnet" reset-guard="saveWall()" ng-disabled="form.$invalid">
                     <i18n>save</i18n>
                 </button>
-                <input type="button" class="cancel right-magnet" i18n-value="cancel" navigation-trigger="cancelWallEdit()" />
+                <input type="button" class="cancel right-magnet" i18n-value="cancel" ng-click="cancelWallEdit()" />
             </div>
         </form>
     </article>

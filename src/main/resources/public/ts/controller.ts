@@ -154,7 +154,6 @@ export const wallController = ng.controller('WallController', ['$scope', 'model'
         if(event)
             event.stopPropagation();
         template.open('main', 'wall-edit');
-        $scope.$apply();
         setTimeout(function() {
             $scope.forceToClose=false;
             $scope.$apply();

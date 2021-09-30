@@ -11,7 +11,7 @@
 
 </head>
 <body library-root>
-<portal>
+<portal guard-root>
     <infotip name="collaborativewall-no-mobile" class="warning zero-desktop">
         <strong>
             <i18n>warning.no.mobile</i18n>
@@ -28,9 +28,7 @@
                 <a>
                     <i18n navigation-trigger="cancelWallEdit()">collaborativewall.title</i18n>
                 </a>
-                <span ng-if="wall.name && wall.name.trim().length > 0">
-                            : <a navigation-trigger="openWallFullScreen(wall)">[[wall.name]]</a>
-                        </span>
+                <span ng-if="wall.name && wall.name.trim().length > 0">: [[wall.name]]</a></span>
             </h1>
         </div>
         <div class="contextual-buttons four cell" ng-if="walls.all.length" workflow="collaborativewall.create">
