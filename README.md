@@ -1,11 +1,12 @@
 # À propos de l'application Mur collaboratif
 
-* Licence : [AGPL v3](http://www.gnu.org/licenses/agpl.txt) - Copyright Conseil Régional Nord Pas de Calais - Picardie
+* Licence : [AGPL v3](http://www.gnu.org/licenses/agpl.txt) - Copyright Région Hauts-de-France (ex Picardie)
 * Développeur(s) : 
     * ATOS
     * CGI 
+	* Open Digital Education
 * Financeur(s) : 
-    * Région Nord Pas de Calais-Picardie
+    * Région Hauts-de-France (ex Picardie)
     * Mairie de Paris
 
 
