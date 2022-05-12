@@ -21,6 +21,7 @@ package net.atos.entng.collaborativewall.service.impl;
 import com.mongodb.QueryBuilder;
 import fr.wseduc.mongodb.MongoDb;
 import fr.wseduc.mongodb.MongoQueryBuilder;
+import fr.wseduc.mongodb.MongoUpdateBuilder;
 import fr.wseduc.rs.ApiDoc;
 import fr.wseduc.webutils.Either;
 import io.vertx.core.Handler;
@@ -31,6 +32,8 @@ import org.entcore.common.mongodb.MongoDbResult;
 import org.entcore.common.service.CrudService;
 import org.entcore.common.service.impl.MongoDbCrudService;
 import org.entcore.common.user.UserInfos;
+
+import java.util.Iterator;
 
 public class MongoDbNoteService implements NoteService {
 
@@ -119,18 +122,37 @@ public class MongoDbNoteService implements NoteService {
                             });
                         } else {
                             //=> update is allowed
-                            crudService.update(id, note, user, new Handler<Either<String, JsonObject>>() {
+                            update(id, note, new Handler<Either<String, JsonObject>>() {
                                 @Override
-                                public void handle(Either<String, JsonObject> updateResponse) {
-                                    handler.handle(updateResponse);
+                                public void handle(Either<String, JsonObject> now) {
+                                    handler.handle(now);
                                 }
                             });
-
                         }
                     }
                 } else {
                     handler.handle(retrieveResponse);
                 }
+            }
+        });
+    }
+
+    private void update(String id, JsonObject data, Handler<Either<String, JsonObject>> handler) {
+        QueryBuilder query = QueryBuilder.start("_id").is(id);
+        MongoUpdateBuilder modifier = new MongoUpdateBuilder();
+        Iterator var7 = data.fieldNames().iterator();
+
+        while(var7.hasNext()) {
+            String attr = (String)var7.next();
+            modifier.set(attr, data.getValue(attr));
+        }
+        final JsonObject now = MongoDb.now();
+        modifier.set("modified", now);
+        mongo.update(COLLABORATIVEWALL_NOTES, MongoQueryBuilder.build(query), modifier.build(), res -> {
+            if ("ok".equals(res.body().getString("status"))){
+                handler.handle(new Either.Right(now));
+            } else {
+                handler.handle(new Either.Left(res.body().getString("message", "")));
             }
         });
     }

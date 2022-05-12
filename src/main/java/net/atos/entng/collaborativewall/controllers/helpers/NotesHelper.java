@@ -1,5 +1,6 @@
 package net.atos.entng.collaborativewall.controllers.helpers;
 
+import fr.wseduc.mongodb.MongoDb;
 import fr.wseduc.rs.ApiDoc;
 import fr.wseduc.webutils.Either;
 import fr.wseduc.webutils.http.Renders;
@@ -13,6 +14,8 @@ import org.entcore.common.controller.ControllerHelper;
 import org.entcore.common.http.response.DefaultResponseHandler;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
+
+import java.util.Iterator;
 
 public class NotesHelper extends ControllerHelper {
 
@@ -62,11 +65,39 @@ public class NotesHelper extends ControllerHelper {
                 UserUtils.getUserInfos(eb, request, new Handler<UserInfos>() {
                     @Override
                     public void handle(UserInfos user) {
-                        noteService.create(body, user, listAllNotesHandler(idWall, request));
+                        noteService.create(body, user, createHandler(idWall, body, request));
                     }
                 });
             }
         });
+    }
+
+    private Handler<Either<String, JsonObject>> createHandler(final String idWall, final JsonObject body, final HttpServerRequest request) {
+        return accessConcurrentResponse -> {
+            noteService.listAllNotes(idWall, allNotesResponse -> {
+                if (accessConcurrentResponse.isRight()) {
+                    //send back wall to front + status ok
+                    if (allNotesResponse.isRight()) {
+                        final String noteId = accessConcurrentResponse.right().getValue().getString("_id");
+                        final JsonArray allNotes = allNotesResponse.right().getValue();
+                        // Add the note manually in case the change is not replicated yet on mongo slave
+                        for(Iterator<Object> iterator = allNotes.iterator(); iterator.hasNext();) {
+                            final Object next = iterator.next();
+                            if (noteId.equals(((JsonObject)(next)).getString("_id"))) {
+                                iterator.remove();
+                                break;
+                            }
+                        }
+                        body.put("_id", noteId);
+                        allNotes.add(body);
+                    }
+                    renderJson(request, addStatus("ok", allNotesResponse));
+                } else {
+                    //send back wall and message to front
+                    renderJson(request, addStatus(accessConcurrentResponse.left().getValue(), allNotesResponse));
+                }
+            });
+        };
     }
 
     public void update(final HttpServerRequest request) {
@@ -86,14 +117,41 @@ public class NotesHelper extends ControllerHelper {
                     @Override
                     public void handle(UserInfos user) {
 
-                        Long lastEdit = body.getJsonObject(NOTE_MODIFIED_ATTR).getLong(NOTE_MODIFIED_DATE_FIELD);
-
-                        noteService.update(id, body, user, listAllNotesHandler(idWall, request));
+                        noteService.update(id, body, user, updateHandler(idWall, id, body, request));
 
                     }
                 });
             }
         });
+    }
+
+    private Handler<Either<String, JsonObject>> updateHandler(final String idWall, final String noteId,
+                                                              final JsonObject body, final HttpServerRequest request) {
+        return accessConcurrentResponse -> {
+            noteService.listAllNotes(idWall, allNotesResponse -> {
+                if (accessConcurrentResponse.isRight()) {
+                    //send back wall to front + status ok
+                    if (allNotesResponse.isRight()) {
+                        final JsonArray allNotes = allNotesResponse.right().getValue();
+                        for (int i = 0; i < allNotes.size(); i++) {
+                            final JsonObject note = allNotes.getJsonObject(i);
+                            // Update the note manually in case the change is not replicated yet on mongo slave
+                            if (noteId.equals(note.getString("_id"))) {
+                                for (String field : body.fieldNames()) {
+                                    note.put(field, body.getValue(field));
+                                    note.put("modified", accessConcurrentResponse.right().getValue());
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    renderJson(request, addStatus("ok", allNotesResponse));
+                } else {
+                    //send back wall and message to front
+                    renderJson(request, addStatus(accessConcurrentResponse.left().getValue(), allNotesResponse));
+                }
+            });
+        };
     }
 
     @ApiDoc("Allows to create a new note on a collaborativewall")
@@ -111,9 +169,36 @@ public class NotesHelper extends ControllerHelper {
         UserUtils.getUserInfos(eb, request, new Handler<UserInfos>() {
             @Override
             public void handle(UserInfos user) {
-                noteService.delete(id, lastEdit, user, listAllNotesHandler(idWall, request));
+                noteService.delete(id, lastEdit, user, deleteHandler(idWall, id, request));
             }
         });
+    }
+
+
+    private Handler<Either<String, JsonObject>> deleteHandler(final String idWall, final String noteId,
+                                                              final HttpServerRequest request) {
+        return accessConcurrentResponse -> {
+            noteService.listAllNotes(idWall, allNotesResponse -> {
+                if (accessConcurrentResponse.isRight()) {
+                    //send back wall to front + status ok
+                    if (allNotesResponse.isRight()) {
+                        final JsonArray allNotes = allNotesResponse.right().getValue();
+                        for(Iterator<Object> iterator = allNotes.iterator(); iterator.hasNext();) {
+                            final Object next = iterator.next();
+                            // Delete the note manually in case the change is not replicated yet on mongo slave
+                            if (noteId.equals(((JsonObject)(next)).getString("_id"))) {
+                                iterator.remove();
+                                break;
+                            }
+                        }
+                    }
+                    renderJson(request, addStatus("ok", allNotesResponse));
+                } else {
+                    //send back wall and message to front
+                    renderJson(request, addStatus(accessConcurrentResponse.left().getValue(), allNotesResponse));
+                }
+            });
+        };
     }
 
     @ApiDoc("Allows to create a new note on a collaborativewall")
