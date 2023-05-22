@@ -303,7 +303,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
 
     @Post("/:id/note")
     @ApiDoc("Allows to create a new note on a collaborativewall")
-    @SecuredAction("collaborativewall.createnotes")
+    @SecuredAction(value = "collaborativewall.contrib", type = ActionType.RESOURCE)
     public void createNote(final HttpServerRequest request) {
         notesHelper.create(request);
     }
