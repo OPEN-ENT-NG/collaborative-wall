@@ -1,0 +1,12 @@
+maven:
+  image: maven:3.5-jdk-8-slim
+  volumes:
+    - ./:/usr/src
+    - ~/.m2:/var/maven/.m2
+node:
+  image: opendigitaleducation/node:16-alpine-pnpm
+  working_dir: /home/node/app
+  net: host
+  volumes:
+    - ./:/home/node/app
+    - ~/.pnpm:/.pnpm

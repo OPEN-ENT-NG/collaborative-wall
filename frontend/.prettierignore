@@ -1,0 +1,6 @@
+# Ignore everything:
+/*
+src/vite-env.d.ts
+
+# Except web-app:
+!/src
