@@ -5,9 +5,11 @@ import { useTranslation } from "react-i18next";
 export default function DescriptionModal({
   isOpen,
   setIsOpen,
+  description,
 }: {
   isOpen: boolean;
   setIsOpen: (bool: boolean) => void;
+  description: string;
 }): JSX.Element | null {
   const { t } = useTranslation();
 
@@ -24,20 +26,7 @@ export default function DescriptionModal({
             {t("description")}
           </Modal.Header>
           <Modal.Body>
-            <p>
-              Lorem ipsum dolor sit amet. Sed inventore dolore quo accusantium
-              assumenda non quos nihil. Ut dolores error ut dolores asperiores
-              sit debitis odit cum unde quia vel ipsa atque et exercitationem
-              harum est natus Quis. Rem eligendi quisquam ab necessitatibus
-              pariatur eos itaque fuga qui rerum dolores rem nesciunt nostrum.
-              Est itaque voluptatem id unde doloremque sit quos nemo. Lorem
-              ipsum dolor sit amet. Sed inventore dolore quo accusantium
-              assumenda non quos nihil. Ut dolores error ut dolores asperiores
-              sit debitis odit cum unde quia vel ipsa atque et exercitationem
-              harum est natus Quis. Rem eligendi quisquam ab necessitatibus
-              pariatur eos itaque fuga qui rerum dolores rem nesciunt nostrum.
-              Est itaque voluptatem id unde doloremque sit quos nemo.
-            </p>
+            <p>{description}</p>
           </Modal.Body>
           <Modal.Footer>
             <Button
