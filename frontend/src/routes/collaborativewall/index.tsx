@@ -1,3 +1,5 @@
+import { lazy, useState } from "react";
+
 import {
   DndContext,
   closestCenter,
@@ -9,6 +11,7 @@ import {
   Active,
 } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
+import { Print } from "@edifice-ui/icons";
 import { useOdeClient, Breadcrumb, Button, AppHeader } from "@edifice-ui/react";
 // @ts-ignore
 import { IWebApp } from "edifice-ts-client";
@@ -16,10 +19,15 @@ import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 
 import { useWhiteboard } from "../../hooks/useWhiteBoard";
+import { DescriptionWall } from "~/components/description-wall";
 import { Note } from "~/components/note";
 import { Toolbar } from "~/components/toolbar";
 import { Whiteboard } from "~/components/whiteboard";
 import { DEFAULT_MAP } from "~/config/default-map";
+
+const DescriptionModal = lazy(
+  async () => await import("~/components/description-modal"),
+);
 
 const activationConstraint = {
   delay: 250,
@@ -49,8 +57,10 @@ export async function mapLoader({ params }: LoaderFunctionArgs) {
 export const CollaborativeWall = () => {
   const data = useLoaderData() as any;
 
-  const { appCode, currentApp } = useOdeClient();
+  const { currentApp } = useOdeClient();
   const { t } = useTranslation();
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint,
@@ -78,22 +88,22 @@ export const CollaborativeWall = () => {
     updateNotePosition({ activeId, x: delta.x, y: delta.y });
   };
 
-  console.log(data);
-
   return data?.map ? (
     <>
       <AppHeader
         isFullscreen
         render={() => (
           <>
-            <Button variant="outline">
-              {t("collaborativewall.share", { ns: appCode })}
+            <Button variant="outline" leftIcon={<Print />}>
+              {t("print")}
             </Button>
+            <Button variant="filled">{t("share")}</Button>
           </>
         )}
       >
         <Breadcrumb app={currentApp as IWebApp} name={data.name} />
       </AppHeader>
+      <DescriptionWall setIsOpen={setIsOpen} />
       <div className="collaborative-wall-container">
         <Whiteboard>
           <DndContext
@@ -124,9 +134,10 @@ export const CollaborativeWall = () => {
           </DndContext>
         </Whiteboard>
         <Toolbar />
+        <DescriptionModal isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
     </>
   ) : (
-    <p>No mindmap found</p>
+    <p>No collaborative wall found</p>
   );
 };
