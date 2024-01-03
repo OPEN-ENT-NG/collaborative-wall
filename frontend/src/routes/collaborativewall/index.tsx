@@ -1,4 +1,4 @@
-import { lazy, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 
 import {
   DndContext,
@@ -24,7 +24,7 @@ import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { DescriptionWall } from "~/components/description-wall";
 import { Note } from "~/components/note";
 import { DEFAULT_MAP } from "~/config/default-map";
-import { NoteProps, getNotes } from "~/services/api";
+import { CollaborativeWallType, getCollaborativeWall } from "~/services/api";
 
 const DescriptionModal = lazy(
   async () => await import("~/components/description-modal"),
@@ -69,9 +69,9 @@ export async function wallLoader({ params }: LoaderFunctionArgs) {
 }
 
 export const CollaborativeWall = () => {
+  const { currentApp } = useOdeClient();
   const data = useLoaderData() as any;
 
-  const { currentApp } = useOdeClient();
   const { t } = useTranslation();
   const data = useLoaderData() as CollaborativeWallProps;
 
@@ -86,6 +86,15 @@ export const CollaborativeWall = () => {
   }, []);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [infoWall, setInfoWall] = useState<CollaborativeWallType>();
+
+  useEffect(() => {
+    (async () => {
+      const response = await getCollaborativeWall(data[0].idwall);
+      setInfoWall(response);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint,
@@ -144,7 +153,12 @@ export const CollaborativeWall = () => {
       >
         <Breadcrumb app={currentApp as IWebApp} name={data.name} />
       </AppHeader>
-      <DescriptionWall setIsOpen={setIsOpen} />
+      {infoWall?.description && (
+        <DescriptionWall
+          setIsOpen={setIsOpen}
+          description={infoWall?.description}
+        />
+      )}
       <div className="collaborative-wall-container">
         <Whiteboard>
           <DndContext
@@ -173,7 +187,13 @@ export const CollaborativeWall = () => {
           </DndContext>
         </Whiteboard>
         <Toolbar />
-        <DescriptionModal isOpen={isOpen} setIsOpen={setIsOpen} />
+        {infoWall?.description && (
+          <DescriptionModal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            description={infoWall?.description}
+          />
+        )}
       </div>
     </>
   ) : (

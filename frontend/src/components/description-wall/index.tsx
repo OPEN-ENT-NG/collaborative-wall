@@ -3,8 +3,10 @@ import { useTranslation } from "react-i18next";
 
 export function DescriptionWall({
   setIsOpen,
+  description,
 }: {
   setIsOpen: (bool: boolean) => void;
+  description: string;
 }) {
   const { t } = useTranslation();
 
@@ -30,11 +32,10 @@ export function DescriptionWall({
           whiteSpace: "nowrap",
         }}
       >
-        Lorem ipsum dolor sit amet. Sed inventore dolore quo accusantium
-        assumenda non quos nihil
+        {description}
       </p>
       <Button variant="ghost" color="tertiary" onClick={() => setIsOpen(true)}>
-        {t("explorer.see.more")}
+        <p style={{ whiteSpace: "nowrap" }}>{t("explorer.see.more")}</p>
       </Button>
     </div>
   );
