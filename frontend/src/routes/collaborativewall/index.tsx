@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import {
   DndContext,
   closestCenter,
@@ -20,15 +22,18 @@ import { Note } from "~/components/note";
 import { Toolbar } from "~/components/toolbar";
 import { Whiteboard } from "~/components/whiteboard";
 import { DEFAULT_MAP } from "~/config/default-map";
+import { NoteProps, getNotes } from "~/services/api";
+
+const defaultBackgroundImage = "/collaborativewall/public/img/default.jpg";
 
 const activationConstraint = {
   delay: 250,
   tolerance: 5,
 };
 
-export async function mapLoader({ params }: LoaderFunctionArgs) {
+export async function wallLoader({ params }: LoaderFunctionArgs) {
   const { id } = params;
-  const response = await fetch(`/collaborativewall/${id}/notes`);
+  const response = await fetch(`/collaborativewall/${id}`);
   const collaborativeWall = await response.json();
 
   if (!response) {
@@ -51,6 +56,16 @@ export const CollaborativeWall = () => {
 
   const { appCode, currentApp } = useOdeClient();
   const { t } = useTranslation();
+
+  const [notes, setNotes] = useState<NoteProps[]>();
+
+  useEffect(() => {
+    (async () => {
+      const response = await getNotes(data._id);
+      setNotes(response);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint,
@@ -94,7 +109,12 @@ export const CollaborativeWall = () => {
       >
         <Breadcrumb app={currentApp as IWebApp} name={data.name} />
       </AppHeader>
-      <div className="collaborative-wall-container">
+      <div
+        className="collaborative-wall-container"
+        style={{
+          backgroundImage: `url(${data?.background ?? defaultBackgroundImage})`,
+        }}
+      >
         <Whiteboard>
           <DndContext
             sensors={sensors}
@@ -104,23 +124,22 @@ export const CollaborativeWall = () => {
             modifiers={[snapCenterToCursor]}
             //</Whiteboard>modifiers={[restrictToWindowEdges]}
           >
-            {data.map((note: any, i: number) => {
-              return (
-                <Note
-                  key={note._id}
-                  note={{
-                    id: note._id,
-                    title: `title ${i}`,
-                    text: note.content,
-                    offset: {
+            {notes &&
+              notes.map((note: NoteProps) => {
+                return (
+                  <Note
+                    key={note.id}
+                    note={{
+                      id: note.id,
+                      //title: `title ${i}`,
+                      content: note.content,
                       x: note.x,
                       y: note.y,
-                    },
-                    zIndex: 1,
-                  }}
-                />
-              );
-            })}
+                      //zIndex: 1,
+                    }}
+                  />
+                );
+              })}
           </DndContext>
         </Whiteboard>
         <Toolbar />
