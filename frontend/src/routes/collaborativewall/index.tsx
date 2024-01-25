@@ -17,14 +17,26 @@ import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 
 import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { Note } from "~/components/note";
-import { Toolbar } from "~/components/toolbar";
-import { Whiteboard } from "~/components/whiteboard";
+import { WhiteboardWrapper } from "~/components/whiteboardWrapper";
 import { DEFAULT_MAP } from "~/config/default-map";
 
 const activationConstraint = {
   delay: 250,
   tolerance: 5,
 };
+
+export interface CollaborativeWallProps {
+  _id: string;
+  name: string;
+  background: string;
+  created: { $date: number };
+  modified: { $date: number };
+  owner: {
+    userId: string;
+    displayName: string;
+  };
+  map: string;
+}
 
 export async function mapLoader({ params }: LoaderFunctionArgs) {
   const { id } = params;
@@ -95,7 +107,7 @@ export const CollaborativeWall = () => {
         <Breadcrumb app={currentApp as IWebApp} name={data.name} />
       </AppHeader>
       <div className="collaborative-wall-container">
-        <Whiteboard>
+        <WhiteboardWrapper data={data}>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -122,8 +134,7 @@ export const CollaborativeWall = () => {
               );
             })}
           </DndContext>
-        </Whiteboard>
-        <Toolbar />
+        </WhiteboardWrapper>
       </div>
     </>
   ) : (
