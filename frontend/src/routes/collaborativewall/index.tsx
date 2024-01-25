@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 
 import {
   DndContext,
@@ -11,6 +11,7 @@ import {
   Active,
 } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
+import { Print } from "@edifice-ui/icons";
 // @ts-ignore
 import { AppHeader, Breadcrumb, Button, useOdeClient } from "@edifice-ui/react";
 import { IWebApp } from "edifice-ts-client";
@@ -19,9 +20,14 @@ import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 
 import { Whiteboard } from "../../components/whiteboard";
 import { useWhiteboard } from "../../hooks/useWhiteBoard";
+import { DescriptionWall } from "~/components/description-wall";
 import { Note } from "~/components/note";
 import { DEFAULT_MAP } from "~/config/default-map";
 import { NoteProps, getNotes } from "~/services/api";
+
+const DescriptionModal = lazy(
+  async () => await import("~/components/description-modal"),
+);
 
 const activationConstraint = {
   delay: 250,
@@ -39,6 +45,7 @@ export interface CollaborativeWallProps {
     displayName: string;
   };
   map: string;
+  description?: string;
 }
 
 export async function wallLoader({ params }: LoaderFunctionArgs) {
@@ -62,7 +69,8 @@ export async function wallLoader({ params }: LoaderFunctionArgs) {
 }
 
 export const CollaborativeWall = () => {
-  const { appCode, currentApp } = useOdeClient();
+  const { currentApp } = useOdeClient();
+
   const { t } = useTranslation();
   const data = useLoaderData() as CollaborativeWallProps;
 
@@ -75,6 +83,8 @@ export const CollaborativeWall = () => {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint,
@@ -124,24 +134,32 @@ export const CollaborativeWall = () => {
         isFullscreen
         render={() => (
           <>
-            <Button variant="outline">
-              {t("collaborativewall.share", { ns: appCode })}
+            <Button variant="outline" leftIcon={<Print />}>
+              {t("print")}
             </Button>
+            <Button variant="filled">{t("share")}</Button>
           </>
         )}
       >
         <Breadcrumb app={currentApp as IWebApp} name={data.name} />
       </AppHeader>
-      <Whiteboard data={data}>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragStart={handleDragStart}
-          onDragEnd={handleOnDragEnd}
-          modifiers={[snapCenterToCursor]}
-        >
-          {notes &&
-            notes.map((note: NoteProps) => {
+      {data?.description && (
+        <DescriptionWall
+          setIsOpen={setIsOpen}
+          description={data?.description}
+        />
+      )}
+      <div className="collaborative-wall-container">
+        <Whiteboard>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragEnd={handleOnDragEnd}
+            modifiers={[snapCenterToCursor]}
+            //</Whiteboard>modifiers={[restrictToWindowEdges]}
+          >
+            {notes?.map((note: any) => {
               return (
                 <Note
                   key={note.id}
@@ -156,10 +174,18 @@ export const CollaborativeWall = () => {
                 />
               );
             })}
-        </DndContext>
-      </Whiteboard>
+          </DndContext>
+        </Whiteboard>
+        {data?.description && (
+          <DescriptionModal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            description={data?.description}
+          />
+        )}
+      </div>
     </>
   ) : (
-    <p>No mindmap found</p>
+    <p>No collaborative wall found</p>
   );
 };
