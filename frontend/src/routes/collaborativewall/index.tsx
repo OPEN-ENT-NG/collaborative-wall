@@ -11,24 +11,35 @@ import {
   Active,
 } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
-import { useOdeClient, Breadcrumb, Button, AppHeader } from "@edifice-ui/react";
 // @ts-ignore
+import { AppHeader, Breadcrumb, Button, useOdeClient } from "@edifice-ui/react";
 import { IWebApp } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 
+import { Whiteboard } from "../../components/whiteboard";
 import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { Note } from "~/components/note";
-import { WhiteboardWrapper } from "~/components/whiteboardWrapper";
 import { DEFAULT_MAP } from "~/config/default-map";
 import { NoteProps, getNotes } from "~/services/api";
-
-const defaultBackgroundImage = "/collaborativewall/public/img/default.jpg";
 
 const activationConstraint = {
   delay: 250,
   tolerance: 5,
 };
+
+export interface CollaborativeWallProps {
+  _id: string;
+  name: string;
+  background: string;
+  created: { $date: number };
+  modified: { $date: number };
+  owner: {
+    userId: string;
+    displayName: string;
+  };
+  map: string;
+}
 
 export async function wallLoader({ params }: LoaderFunctionArgs) {
   const { id } = params;
@@ -51,10 +62,9 @@ export async function wallLoader({ params }: LoaderFunctionArgs) {
 }
 
 export const CollaborativeWall = () => {
-  const data = useLoaderData() as any;
-
   const { appCode, currentApp } = useOdeClient();
   const { t } = useTranslation();
+  const data = useLoaderData() as CollaborativeWallProps;
 
   const [notes, setNotes] = useState<NoteProps[]>();
 
@@ -77,9 +87,25 @@ export const CollaborativeWall = () => {
 
   const updateNotePosition = useWhiteboard((state) => state.updateNotePosition);
 
-  /* const handleDragStart = (event) => {
-    const { active } = event;
-  }; */
+  const handleDragStart = (event: any) => {
+    const { active, over } = event;
+
+    if (active.id !== over.id) {
+      setNotes((prevNotes) => {
+        // Trouver et mettre à jour la position de la note déplacée
+        return prevNotes?.map((note) => {
+          if (note.id === active.id) {
+            return {
+              ...note,
+              // Mettre à jour x et y ici en fonction de la nouvelle position
+              // Vous devrez peut-être ajuster la logique en fonction de la manière dont votre application gère les coordonnées
+            };
+          }
+          return note;
+        });
+      });
+    }
+  };
 
   const handleOnDragEnd = ({
     active,
@@ -91,8 +117,6 @@ export const CollaborativeWall = () => {
     const activeId = active.id;
     updateNotePosition({ activeId, x: delta.x, y: delta.y });
   };
-
-  console.log(data);
 
   return data?.map ? (
     <>
@@ -108,40 +132,32 @@ export const CollaborativeWall = () => {
       >
         <Breadcrumb app={currentApp as IWebApp} name={data.name} />
       </AppHeader>
-      <div
-        className="collaborative-wall-container"
-        style={{
-          backgroundImage: `url(${data?.background ?? defaultBackgroundImage})`,
-        }}
-      >
-        <Whiteboard>
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            //onDragStart={handleDragStart}
-            onDragEnd={handleOnDragEnd}
-            modifiers={[snapCenterToCursor]}
-            //</Whiteboard>modifiers={[restrictToWindowEdges]}
-          >
-            {notes &&
-              notes.map((note: NoteProps) => {
-                return (
-                  <Note
-                    key={note.id}
-                    note={{
-                      id: note.id,
-                      //title: `title ${i}`,
-                      content: note.content,
-                      x: note.x,
-                      y: note.y,
-                      //zIndex: 1,
-                    }}
-                  />
-                );
-              })}
-          </DndContext>
-        </WhiteboardWrapper>
-      </div>
+      <Whiteboard data={data}>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
+          onDragEnd={handleOnDragEnd}
+          modifiers={[snapCenterToCursor]}
+        >
+          {notes &&
+            notes.map((note: NoteProps) => {
+              return (
+                <Note
+                  key={note.id}
+                  note={{
+                    id: note.id,
+                    //title: `title ${i}`,
+                    content: note.content,
+                    x: note.x,
+                    y: note.y,
+                    //zIndex: 1,
+                  }}
+                />
+              );
+            })}
+        </DndContext>
+      </Whiteboard>
     </>
   ) : (
     <p>No mindmap found</p>
