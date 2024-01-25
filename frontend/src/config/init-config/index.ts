@@ -1,14 +1,14 @@
 /* ZOOM CONFIG */
 const MAX_ZOOM = 2;
 const DEFAULT_ZOOM = 1;
-const MIN_ZOOM = 0.25;
-const FACTOR_ZOOM = 0.01;
+const MIN_ZOOM = 0.75;
+const SCALE_ZOOM = 0.25;
 
 export const zoomConfig = {
   MAX_ZOOM,
   DEFAULT_ZOOM,
   MIN_ZOOM,
-  FACTOR_ZOOM,
+  SCALE_ZOOM,
 } as const;
 
 /* OFFSET CONFIG SHARED BETWEEN NOTE AND WHITEBOARD */

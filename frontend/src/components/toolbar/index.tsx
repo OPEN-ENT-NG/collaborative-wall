@@ -1,45 +1,57 @@
-import { Plus } from "@edifice-ui/icons";
+import {
+  Plus,
+  PointerDefault,
+  PointerHand,
+  Undo,
+  ZoomIn,
+  ZoomOut,
+} from "@edifice-ui/icons";
 import { useShallow } from "zustand/react/shallow";
 
 import { useWhiteboard } from "../../hooks/useWhiteBoard";
+import { zoomConfig } from "~/config/init-config";
 
-export const Toolbar = () => {
+export const Toolbar = ({
+  zoomIn,
+  zoomOut,
+  resetTransform,
+  newZoom,
+}: {
+  zoomIn: any;
+  zoomOut: any;
+  resetTransform: any;
+  newZoom: any;
+}) => {
   const {
     canMoveBoard,
     canMoveNote,
     createNote,
-    resetOffset,
     resetZoom,
     setCanMoveBoard,
     setCanMoveNote,
     toggleCanMoveBoard,
     toggleCanMoveNote,
-    zoom,
-    zoomIn,
-    zoomOut,
   } = useWhiteboard(
     useShallow((state: any) => ({
       canMoveBoard: state.canMoveBoard,
       canMoveNote: state.canMoveNote,
       createNote: state.createNote,
-      resetOffset: state.resetOffset,
       resetZoom: state.resetZoom,
       setCanMoveBoard: state.setCanMoveBoard,
       setCanMoveNote: state.setCanMoveNote,
       toggleCanMoveBoard: state.toggleCanMoveBoard,
       toggleCanMoveNote: state.toggleCanMoveNote,
       toggleCanZoom: state.toggleCanZoom,
-      zoom: state.zoom,
-      zoomIn: state.zoomIn,
-      zoomOut: state.zoomOut,
     })),
   );
 
   return (
     <div className="toolbar">
-      <button onClick={resetOffset}>Centrer</button>
+      <button onClick={() => resetTransform(zoomConfig.DEFAULT_ZOOM)}>
+        Centrer
+      </button>
       <button>
-        <Plus />
+        <Undo />
       </button>
       <button
         style={{ backgroundColor: canMoveNote && "#E5F5FF" }}
@@ -48,7 +60,7 @@ export const Toolbar = () => {
           setCanMoveBoard(false);
         }}
       >
-        <Plus />
+        <PointerDefault />
       </button>
       <button
         style={{ backgroundColor: canMoveBoard && "#E5F5FF" }}
@@ -57,14 +69,14 @@ export const Toolbar = () => {
           setCanMoveNote(false);
         }}
       >
-        <Plus />
+        <PointerHand />
       </button>
-      <button onClick={zoomOut}>
-        <Plus />
+      <button onClick={() => zoomOut(zoomConfig.SCALE_ZOOM)}>
+        <ZoomOut />
       </button>
-      <button onClick={resetZoom}>{(zoom * 100).toFixed(0) + "%"}</button>
-      <button onClick={zoomIn}>
-        <Plus />
+      <button onClick={resetZoom}>{(newZoom * 100).toFixed(0) + "%"}</button>
+      <button onClick={() => zoomIn(zoomConfig.SCALE_ZOOM)}>
+        <ZoomIn />
       </button>
       <button onClick={createNote}>
         <Plus />
