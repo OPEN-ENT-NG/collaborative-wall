@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
-import { NoteProps } from "~/components/note";
 import { initialState, zoomConfig } from "~/config/init-config";
+import { NoteProps } from "~/services/api";
 
 //Trouver une solution pour bien typer State
 export type State = any;
@@ -158,7 +158,7 @@ export const useWhiteboard = create<State & Action>()(
       y,
       x,
     }: {
-      activeId: number;
+      activeId: string;
       x: number;
       y: number;
     }) => {
@@ -167,7 +167,7 @@ export const useWhiteboard = create<State & Action>()(
           if (note.id === activeId) {
             return {
               ...note,
-              offset: { x: note.offset.x + x, y: note.offset.y + y },
+              offset: { x: note.x + x, y: note.y + y },
               zIndex: 2,
             };
           }
