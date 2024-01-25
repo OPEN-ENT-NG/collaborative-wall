@@ -1,3 +1,5 @@
+import { lazy, useEffect, useState } from "react";
+
 import {
   DndContext,
   closestCenter,
@@ -9,16 +11,23 @@ import {
   Active,
 } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
-import { useOdeClient, Breadcrumb, Button, AppHeader } from "@edifice-ui/react";
+import { Print } from "@edifice-ui/icons";
 // @ts-ignore
+import { AppHeader, Breadcrumb, Button, useOdeClient } from "@edifice-ui/react";
 import { IWebApp } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 
 import { useWhiteboard } from "../../hooks/useWhiteBoard";
+import { DescriptionWall } from "~/components/description-wall";
 import { Note } from "~/components/note";
 import { WhiteboardWrapper } from "~/components/whiteboardWrapper";
 import { DEFAULT_MAP } from "~/config/default-map";
+import { NoteProps, getNotes } from "~/services/api";
+
+const DescriptionModal = lazy(
+  async () => await import("~/components/description-modal"),
+);
 
 const activationConstraint = {
   delay: 250,
@@ -36,11 +45,12 @@ export interface CollaborativeWallProps {
     displayName: string;
   };
   map: string;
+  description?: string;
 }
 
-export async function mapLoader({ params }: LoaderFunctionArgs) {
+export async function wallLoader({ params }: LoaderFunctionArgs) {
   const { id } = params;
-  const response = await fetch(`/collaborativewall/${id}/notes`);
+  const response = await fetch(`/collaborativewall/${id}`);
   const collaborativeWall = await response.json();
 
   if (!response) {
@@ -59,10 +69,22 @@ export async function mapLoader({ params }: LoaderFunctionArgs) {
 }
 
 export const CollaborativeWall = () => {
-  const data = useLoaderData() as any;
+  const { currentApp } = useOdeClient();
 
-  const { appCode, currentApp } = useOdeClient();
   const { t } = useTranslation();
+  const data = useLoaderData() as CollaborativeWallProps;
+
+  const [notes, setNotes] = useState<NoteProps[]>();
+
+  useEffect(() => {
+    (async () => {
+      const response = await getNotes(data._id);
+      setNotes(response);
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint,
@@ -75,9 +97,25 @@ export const CollaborativeWall = () => {
 
   const updateNotePosition = useWhiteboard((state) => state.updateNotePosition);
 
-  /* const handleDragStart = (event) => {
-    const { active } = event;
-  }; */
+  const handleDragStart = (event: any) => {
+    const { active, over } = event;
+
+    if (active.id !== over.id) {
+      setNotes((prevNotes) => {
+        // Trouver et mettre à jour la position de la note déplacée
+        return prevNotes?.map((note) => {
+          if (note.id === active.id) {
+            return {
+              ...note,
+              // Mettre à jour x et y ici en fonction de la nouvelle position
+              // Vous devrez peut-être ajuster la logique en fonction de la manière dont votre application gère les coordonnées
+            };
+          }
+          return note;
+        });
+      });
+    }
+  };
 
   const handleOnDragEnd = ({
     active,
@@ -90,54 +128,64 @@ export const CollaborativeWall = () => {
     updateNotePosition({ activeId, x: delta.x, y: delta.y });
   };
 
-  console.log(data);
-
   return data?.map ? (
     <>
       <AppHeader
         isFullscreen
         render={() => (
           <>
-            <Button variant="outline">
-              {t("collaborativewall.share", { ns: appCode })}
+            <Button variant="outline" leftIcon={<Print />}>
+              {t("print")}
             </Button>
+            <Button variant="filled">{t("share")}</Button>
           </>
         )}
       >
         <Breadcrumb app={currentApp as IWebApp} name={data.name} />
       </AppHeader>
+      {data?.description && (
+        <DescriptionWall
+          setIsOpen={setIsOpen}
+          description={data?.description}
+        />
+      )}
       <div className="collaborative-wall-container">
         <WhiteboardWrapper data={data}>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
-            //onDragStart={handleDragStart}
+            onDragStart={handleDragStart}
             onDragEnd={handleOnDragEnd}
             modifiers={[snapCenterToCursor]}
             //</Whiteboard>modifiers={[restrictToWindowEdges]}
           >
-            {data.map((note: any, i: number) => {
+            {notes?.map((note: any) => {
               return (
                 <Note
-                  key={note._id}
+                  key={note.id}
                   note={{
-                    id: note._id,
-                    title: `title ${i}`,
-                    text: note.content,
-                    offset: {
-                      x: note.x,
-                      y: note.y,
-                    },
-                    zIndex: 1,
+                    id: note.id,
+                    //title: `title ${i}`,
+                    content: note.content,
+                    x: note.x,
+                    y: note.y,
+                    //zIndex: 1,
                   }}
                 />
               );
             })}
           </DndContext>
         </WhiteboardWrapper>
+        {data?.description && (
+          <DescriptionModal
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+            description={data?.description}
+          />
+        )}
       </div>
     </>
   ) : (
-    <p>No mindmap found</p>
+    <p>No collaborative wall found</p>
   );
 };

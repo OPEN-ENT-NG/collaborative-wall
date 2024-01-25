@@ -2,14 +2,7 @@ import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 
 import { useWhiteboard } from "../../hooks/useWhiteBoard";
-
-export type NoteProps = {
-  id: number;
-  title: string;
-  text: string;
-  offset: { x: number; y: number };
-  zIndex: number;
-};
+import { NoteProps } from "~/services/api";
 
 export const Note = ({ note }: { note: NoteProps }) => {
   const canMoveNote = useWhiteboard((state: any) => state.canMoveNote);
@@ -24,7 +17,7 @@ export const Note = ({ note }: { note: NoteProps }) => {
 
   const style = {
     position: "absolute",
-    zIndex: isDragging ? 200 : note.zIndex,
+    //zIndex: isDragging ? 200 : note.zIndex,
     userSelect: (isDragging || isBoardDragging) && "none",
     top: transform?.y ?? 0,
     left: transform?.x ?? 0,
@@ -43,15 +36,15 @@ export const Note = ({ note }: { note: NoteProps }) => {
       style={
         {
           ...style,
-          top: note.offset.y,
-          left: note.offset.x,
-          zIndex: note.zIndex,
+          top: note.y,
+          left: note.x,
+          //zIndex: note.zIndex,
           transform: CSS.Translate.toString(transform),
         } as React.CSSProperties
       }
     >
-      <h4>{note.title}</h4>
-      <p>{note.text}</p>
+      <h4>Title</h4>
+      <p>{note.content}</p>
       <button onClick={() => deleteNote(note.id)}>delete</button>
     </div>
   );
