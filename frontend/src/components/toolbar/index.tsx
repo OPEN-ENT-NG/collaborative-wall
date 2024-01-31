@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 
 import {
+  Center,
   Plus,
   PointerDefault,
   PointerHand,
@@ -125,6 +126,20 @@ export const ToolbarWrapper = ({
       },
       {
         type: "icon",
+        name: "center",
+        props: {
+          icon: <Center />,
+          "aria-label": t("center"),
+          color: "tertiary",
+          onClick: () => resetTransform(zoomConfig.DEFAULT_ZOOM),
+        },
+        tooltip: {
+          message: t("center"),
+          position: "top",
+        },
+      },
+      {
+        type: "icon",
         name: "zoomOut",
         props: {
           icon: <ZoomOut />,
@@ -139,16 +154,12 @@ export const ToolbarWrapper = ({
       },
       {
         type: "button",
-        name: "center",
+        name: "zoom",
         props: {
-          "aria-label": t("center"),
+          "aria-label": t("zoom"),
           color: "tertiary",
           children: (newZoom * 100).toFixed(0) + "%",
           onClick: () => resetTransform(zoomConfig.DEFAULT_ZOOM),
-        },
-        tooltip: {
-          message: t("center"),
-          position: "top",
         },
       },
       {
