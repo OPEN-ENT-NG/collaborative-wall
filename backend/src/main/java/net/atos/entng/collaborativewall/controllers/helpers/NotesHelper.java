@@ -42,6 +42,19 @@ public class NotesHelper extends ControllerHelper {
 
     }
 
+    /**
+     * Get a note.
+     */
+    public void get(final HttpServerRequest request) {
+        final String id = extractParameter(request, NOTE_ID_PARAMETER);
+        final String idWall = extractParameter(request, WALL_ID_PARAMETER);
+
+        if (idWall == null || id == null) {
+            return;
+        }
+
+        noteService.get(id, DefaultResponseHandler.arrayResponseHandler(request));
+    }
 
     /**
      * Create a note on a wall.
@@ -99,6 +112,8 @@ public class NotesHelper extends ControllerHelper {
             });
         };
     }
+
+
 
     public void update(final HttpServerRequest request) {
 
