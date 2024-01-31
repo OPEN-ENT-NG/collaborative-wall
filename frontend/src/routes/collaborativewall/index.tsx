@@ -11,8 +11,6 @@ import {
   Active,
 } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
-import { Print } from "@edifice-ui/icons";
-import { useOdeClient, Breadcrumb, Button, AppHeader } from "@edifice-ui/react";
 // @ts-ignore
 import { AppHeader, Breadcrumb, Button, useOdeClient } from "@edifice-ui/react";
 import { IWebApp } from "edifice-ts-client";
@@ -31,7 +29,7 @@ const DescriptionModal = lazy(
 );
 
 const activationConstraint = {
-  delay: 250,
+  delay: 0,
   tolerance: 5,
 };
 
@@ -75,7 +73,11 @@ export const CollaborativeWall = () => {
   const { t } = useTranslation();
   const data = useLoaderData() as CollaborativeWallProps;
 
-  const [notes, setNotes] = useState<NoteProps[]>();
+  const { setNotes, notes, zoom } = useWhiteboard((state) => ({
+    notes: state.notes,
+    setNotes: state.setNotes,
+    zoom: state.zoom,
+  }));
 
   useEffect(() => {
     (async () => {
@@ -107,26 +109,6 @@ export const CollaborativeWall = () => {
 
   const updateNotePosition = useWhiteboard((state) => state.updateNotePosition);
 
-  const handleDragStart = (event: any) => {
-    const { active, over } = event;
-
-    if (active.id !== over.id) {
-      setNotes((prevNotes) => {
-        // Trouver et mettre à jour la position de la note déplacée
-        return prevNotes?.map((note) => {
-          if (note.id === active.id) {
-            return {
-              ...note,
-              // Mettre à jour x et y ici en fonction de la nouvelle position
-              // Vous devrez peut-être ajuster la logique en fonction de la manière dont votre application gère les coordonnées
-            };
-          }
-          return note;
-        });
-      });
-    }
-  };
-
   const handleOnDragEnd = ({
     active,
     delta,
@@ -135,7 +117,7 @@ export const CollaborativeWall = () => {
     delta: { x: number; y: number };
   }) => {
     const activeId = active.id;
-    updateNotePosition({ activeId, x: delta.x, y: delta.y });
+    updateNotePosition({ activeId, x: delta.x / zoom, y: delta.y / zoom });
   };
 
   return data?.map ? (
@@ -144,9 +126,6 @@ export const CollaborativeWall = () => {
         isFullscreen
         render={() => (
           <>
-            <Button variant="outline" leftIcon={<Print />}>
-              {t("print")}
-            </Button>
             <Button variant="filled">{t("share")}</Button>
           </>
         )}
@@ -164,22 +143,17 @@ export const CollaborativeWall = () => {
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
-            //onDragStart={handleDragStart}
             onDragEnd={handleOnDragEnd}
             modifiers={[snapCenterToCursor]}
-            //</Whiteboard>modifiers={[restrictToWindowEdges]}
           >
-            {data.map((note: any, i: number) => {
+            {notes?.map((note: NoteProps, i: number) => {
               return (
                 <Note
-                  key={note.id}
+                  key={note._id}
                   note={{
-                    id: note.id,
-                    //title: `title ${i}`,
-                    content: note.content,
-                    x: note.x,
-                    y: note.y,
-                    //zIndex: 1,
+                    ...note,
+                    title: `title ${i}`,
+                    zIndex: note.zIndex ?? 1,
                   }}
                 />
               );

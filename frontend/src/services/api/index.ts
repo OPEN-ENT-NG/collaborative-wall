@@ -12,7 +12,8 @@ export interface CollaborativeWallType {
 }
 
 export interface NoteProps {
-  id: string;
+  _id: string;
+  title?: string;
   content: string;
   x: number;
   y: number;
@@ -24,6 +25,7 @@ export interface NoteProps {
     userId: string;
     displayName: string;
   };
+  zIndex?: number;
 }
 
 export const getNotes = async (id: string) => {

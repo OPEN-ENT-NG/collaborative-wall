@@ -1,28 +1,30 @@
 import { useDraggable } from "@dnd-kit/core";
-import { CSS } from "@dnd-kit/utilities";
-import { Card, Image } from "@edifice-ui/react";
 
 import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { NoteProps } from "~/services/api";
 
 export const Note = ({ note }: { note: NoteProps }) => {
-  const canMoveNote = useWhiteboard((state: any) => state.canMoveNote);
-  const isBoardDragging = useWhiteboard((state: any) => state.isDragging);
-  //const deleteNote = useWhiteboard((state: any) => state.deleteNote);
+  const { zoom, canMoveNote, isBoardDragging, deleteNote } = useWhiteboard(
+    (state) => ({
+      zoom: state.zoom,
+      canMoveNote: state.canMoveNote,
+      isBoardDragging: state.isDragging,
+      deleteNote: state.deleteNote,
+    }),
+  );
 
   const { attributes, isDragging, listeners, setNodeRef, transform } =
     useDraggable({
-      id: note.id,
+      id: note._id,
       disabled: !canMoveNote,
     });
 
   const style = {
     position: "absolute",
-    borderRadius: "0.8rem",
-    //zIndex: isDragging ? 200 : note.zIndex,
+    zIndex: isDragging ? 200 : note.zIndex,
     userSelect: (isDragging || isBoardDragging) && "none",
-    top: transform?.y ?? 0,
-    left: transform?.x ?? 0,
+    top: (transform?.y ?? 0) / zoom,
+    left: (transform?.x ?? 0) / zoom,
     cursor: canMoveNote ? (isDragging ? "grabbing" : "grab") : "default",
     boxShadow: isDragging
       ? "-1px 0 15px 0 rgba(34, 33, 81, 0.01), 0px 15px 15px 0 rgba(34, 33, 81, 0.25)"
@@ -41,27 +43,15 @@ export const Note = ({ note }: { note: NoteProps }) => {
           ...style,
           top: note.y,
           left: note.x,
-          backgroundColor: note.color?.[0],
-          //zIndex: note.zIndex,
-          transform: CSS.Translate.toString(transform),
+          transform: `translate3d(${(transform?.x ?? 0) / zoom}px, ${
+            (transform?.y ?? 0) / zoom
+          }px, 0)`,
         } as React.CSSProperties
       }
     >
-      <Card className="note" isSelectable={false}>
-        <Card.Body>
-          {defaultImage && (
-            <Image alt="test" ratio="16" src={defaultImage} height="120" />
-          )}
-          <Card.Text
-            className={`text-truncate pt-16 ${defaultImage ? "text-truncate-8" : "text-truncate-12"}`}
-          >
-            {note.content}
-          </Card.Text>
-        </Card.Body>
-        <Card.Footer>
-          <Card.Text>{note.owner?.displayName}</Card.Text>
-        </Card.Footer>
-      </Card>
+      <h4>{note?.title}</h4>
+      <p>{note.content}</p>
+      <button onClick={() => deleteNote(note._id)}>delete</button>
     </div>
   );
 };

@@ -1,7 +1,19 @@
 import { create } from "zustand";
 
-import { initialState, zoomConfig } from "~/config/init-config";
+import { zoomConfig } from "~/config/init-config";
 import { NoteProps } from "~/services/api";
+
+const OFFSET = { x: 0, y: 0 };
+
+const initialState = {
+  canMoveBoard: false,
+  canMoveNote: false,
+  canZoom: true,
+  isDragging: false,
+  startPosition: OFFSET,
+  offset: OFFSET,
+  zoom: zoomConfig.DEFAULT_ZOOM,
+};
 
 //Trouver une solution pour bien typer State
 export type State = any;
@@ -23,6 +35,8 @@ export type Action = {
   zoomOut: () => void;
   resetOffset: () => void;
   resetZoom: () => void;
+  setNotes: (value: NoteProps) => void;
+  setZoom: (value: number) => void;
   updateNotePosition: ({
     activeId,
     x,
@@ -118,6 +132,8 @@ export const useWhiteboard = create<State & Action>()(
       if (!get().canZoom) return;
       set(() => ({ zoom: zoomConfig.DEFAULT_ZOOM }));
     },
+    setNotes: (value: NoteProps) => set({ notes: value }),
+    setZoom: (value: number) => set({ zoom: value }),
     updateNotePosition: ({
       activeId,
       y,
@@ -129,10 +145,11 @@ export const useWhiteboard = create<State & Action>()(
     }) => {
       set((state: { notes: NoteProps[] }) => ({
         notes: state.notes.map((note) => {
-          if (note.id === activeId) {
+          if (note._id === activeId) {
             return {
               ...note,
-              offset: { x: note.x + x, y: note.y + y },
+              x: note.x + x,
+              y: note.y + y,
               zIndex: 2,
             };
           }
@@ -169,7 +186,7 @@ export const useWhiteboard = create<State & Action>()(
     },
     deleteNote: (id: string | number) => {
       set((state: { notes: NoteProps[] }) => ({
-        notes: state.notes.filter((note) => note.id !== id),
+        notes: state.notes.filter((note) => note._id !== id),
       }));
     },
   }),
