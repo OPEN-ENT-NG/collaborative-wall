@@ -15,12 +15,10 @@ export const Toolbar = ({
   zoomIn,
   zoomOut,
   resetTransform,
-  newZoom,
 }: {
   zoomIn: any;
   zoomOut: any;
   resetTransform: any;
-  newZoom: any;
 }) => {
   const {
     canMoveBoard,
@@ -31,6 +29,7 @@ export const Toolbar = ({
     setCanMoveNote,
     toggleCanMoveBoard,
     toggleCanMoveNote,
+    zoom,
   } = useWhiteboard(
     useShallow((state: any) => ({
       canMoveBoard: state.canMoveBoard,
@@ -42,6 +41,7 @@ export const Toolbar = ({
       toggleCanMoveBoard: state.toggleCanMoveBoard,
       toggleCanMoveNote: state.toggleCanMoveNote,
       toggleCanZoom: state.toggleCanZoom,
+      zoom: state.zoom,
     })),
   );
 
@@ -74,7 +74,7 @@ export const Toolbar = ({
       <button onClick={() => zoomOut(zoomConfig.SCALE_ZOOM)}>
         <ZoomOut />
       </button>
-      <button onClick={resetZoom}>{(newZoom * 100).toFixed(0) + "%"}</button>
+      <button onClick={resetZoom}>{(zoom * 100).toFixed(0) + "%"}</button>
       <button onClick={() => zoomIn(zoomConfig.SCALE_ZOOM)}>
         <ZoomIn />
       </button>

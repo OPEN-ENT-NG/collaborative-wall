@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useRef } from "react";
 
 import { TransformWrapper } from "react-zoom-pan-pinch";
 import { useShallow } from "zustand/react/shallow";
@@ -16,19 +16,17 @@ export const WhiteboardWrapper = ({
   children: ReactNode;
   data: CollaborativeWallProps;
 }) => {
-  const { canMoveBoard, zoom } = useWhiteboard(
+  const { canMoveBoard, setZoom } = useWhiteboard(
     useShallow((state: State) => ({
       canMoveBoard: state.canMoveBoard,
-      zoom: state.zoom,
+      setZoom: state.setZoom,
     })),
   );
-
-  const [newZoom, setNewZoom] = useState<number>(zoom);
 
   const ref = useRef<any>(null);
 
   const handleScaleChange = (event: any) => {
-    setNewZoom(event.instance.transformState.scale);
+    setZoom(event.instance.transformState.scale);
   };
 
   return (
@@ -53,7 +51,6 @@ export const WhiteboardWrapper = ({
               zoomIn={zoomIn}
               zoomOut={zoomOut}
               resetTransform={resetTransform}
-              newZoom={newZoom}
             />
           </>
         )}
