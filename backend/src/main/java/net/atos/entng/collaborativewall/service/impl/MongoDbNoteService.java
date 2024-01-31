@@ -75,9 +75,9 @@ public class MongoDbNoteService implements NoteService {
 
     @Override
     @ApiDoc("Retrieve note by id")
-    public void get(String id, Handler<Either<String, JsonArray>> callback) {
+    public void get(String id, Handler<Either<String, JsonObject>> callback) {
         QueryBuilder query = QueryBuilder.start(NOTES_FIELD_ID).is(id);
-        mongo.find(COLLABORATIVEWALL_NOTES, MongoQueryBuilder.build(query), MongoDbResult.validResultsHandler(callback));
+        mongo.findOne(COLLABORATIVEWALL_NOTES, MongoQueryBuilder.build(query), MongoDbResult.validResultHandler(callback));
     }
 
     public void create(JsonObject note, UserInfos user, Handler<Either<String, JsonObject>> handler) {
