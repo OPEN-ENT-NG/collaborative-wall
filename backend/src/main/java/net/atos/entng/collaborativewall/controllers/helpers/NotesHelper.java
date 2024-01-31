@@ -53,7 +53,7 @@ public class NotesHelper extends ControllerHelper {
             return;
         }
 
-        noteService.get(id, DefaultResponseHandler.arrayResponseHandler(request));
+        noteService.get(id, DefaultResponseHandler.defaultResponseHandler(request));
     }
 
     /**
