@@ -308,7 +308,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         notesHelper.create(request);
     }
 
-    @Get("/:id/notes/:idnote")
+    @Get("/:id/note/:idnote")
     @ApiDoc("Retrieve note of the given :idnote identifier")
     @SecuredAction(value = "collaborativewall.read", type = ActionType.RESOURCE)
     public void getNote(final HttpServerRequest request) {
