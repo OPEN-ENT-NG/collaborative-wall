@@ -48,7 +48,7 @@ export default ({ mode }: { mode: string }) => {
     "/collaborativewall": proxyObj,
   };
 
-  const base = mode === "production" ? "/collaborative-wall" : "";
+  const base = mode === "production" ? "/collaborativewall" : "";
 
   const build = {
     assetsDir: "public",
