@@ -100,26 +100,6 @@ export const useWhiteboard = create<State & Action>()(
         isDragging: false,
       }));
     },
-    handleWheel: (event: React.WheelEvent<HTMLDivElement>) => {
-      if (get().canZoom && (event.ctrlKey || event.metaKey)) {
-        const zoom = Math.max(
-          zoomConfig.MIN_ZOOM,
-          Math.min(
-            get().zoom + event.deltaY * zoomConfig.FACTOR_ZOOM,
-            zoomConfig.MAX_ZOOM,
-          ),
-        );
-
-        set(() => ({ zoom: parseFloat(zoom.toFixed(2)) }));
-      } else {
-        const offsetX = event.deltaX * -1.5;
-        const offsetY = event.deltaY * -1.5;
-
-        set((state: { offset: { x: number; y: number } }) => ({
-          offset: { x: state.offset.x + offsetX, y: state.offset.y + offsetY },
-        }));
-      }
-    },
     handleMouseMove: (event: React.MouseEvent) => {
       if (!get().isDragging) return;
 
@@ -130,21 +110,6 @@ export const useWhiteboard = create<State & Action>()(
         offset: { x: state.offset.x + offsetX, y: state.offset.y + offsetY },
         startPosition: { x: event.clientX, y: event.clientY },
       }));
-    },
-    zoomOut: () => {
-      if (!get().canZoom || get().zoom === zoomConfig.MIN_ZOOM) return;
-
-      const zoom =
-        get().zoom === zoomConfig.MIN_ZOOM
-          ? 0
-          : Math.max(zoomConfig.FACTOR_ZOOM, get().zoom - zoomConfig.MIN_ZOOM);
-      set(() => ({ zoom: parseFloat(zoom.toFixed(2)) }));
-    },
-    zoomIn: () => {
-      if (!get().canZoom || get().zoom === zoomConfig.MAX_ZOOM) return;
-
-      const zoom = get().zoom + zoomConfig.MIN_ZOOM;
-      set(() => ({ zoom: parseFloat(zoom.toFixed(2)) }));
     },
     resetOffset: () => {
       set(() => ({ offset: { x: 0, y: 0 }, zoom: zoomConfig.DEFAULT_ZOOM }));

@@ -18,10 +18,10 @@ import { IWebApp } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 
-import { Whiteboard } from "../../components/whiteboard";
 import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { DescriptionWall } from "~/components/description-wall";
 import { Note } from "~/components/note";
+import { WhiteboardWrapper } from "~/components/whiteboardWrapper";
 import { DEFAULT_MAP } from "~/config/default-map";
 import { NoteProps, getNotes } from "~/services/api";
 
@@ -150,7 +150,7 @@ export const CollaborativeWall = () => {
         />
       )}
       <div className="collaborative-wall-container">
-        <Whiteboard>
+        <WhiteboardWrapper data={data}>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
@@ -175,7 +175,7 @@ export const CollaborativeWall = () => {
               );
             })}
           </DndContext>
-        </Whiteboard>
+        </WhiteboardWrapper>
         {data?.description && (
           <DescriptionModal
             isOpen={isOpen}
