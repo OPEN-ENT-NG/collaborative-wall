@@ -1,5 +1,4 @@
 import { useDraggable } from "@dnd-kit/core";
-import { CSS } from "@dnd-kit/utilities";
 import { Card, Image } from "@edifice-ui/react";
 import { useShallow } from "zustand/react/shallow";
 
@@ -47,7 +46,9 @@ export const Note = ({ note }: { note: NoteProps }) => {
           top: note.y,
           left: note.x,
           backgroundColor: note.color?.[0],
-          transform: CSS.Translate.toString(transform),
+          transform: `translate3d(${(transform?.x ?? 0) / zoom}px, ${
+            (transform?.y ?? 0) / zoom
+          }px, 0)`,
         } as React.CSSProperties
       }
     >
