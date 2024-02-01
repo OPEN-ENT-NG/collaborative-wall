@@ -73,6 +73,7 @@
     "concurrently": "8.2.2",
     "csstype": "3.1.3",
     "edifice-ts-client": "develop-pedago",
+    "edifice-bootstrap": "develop-pedago",
     "eslint": "8.56.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-import": "2.29.1",
