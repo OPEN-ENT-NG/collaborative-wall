@@ -54,12 +54,12 @@ export const ToolbarWrapper = ({
         name: "undo",
         props: {
           icon: <Undo />,
-          "aria-label": t("undo"),
+          "aria-label": t("collaborativewall.toolbar.undo"),
           color: "tertiary",
           onClick: () => console.log("undo"),
         },
         tooltip: {
-          message: t("undo"),
+          message: t("collaborativewall.toolbar.undo"),
           position: "top",
         },
       },
@@ -68,12 +68,12 @@ export const ToolbarWrapper = ({
         name: "redo",
         props: {
           icon: <Redo />,
-          "aria-label": t("undo"),
+          "aria-label": t("collaborativewall.toolbar.redo"),
           color: "tertiary",
           onClick: () => console.log("redo"),
         },
         tooltip: {
-          message: t("redo"),
+          message: t("collaborativewall.toolbar.redo"),
           position: "top",
         },
       },
@@ -86,7 +86,7 @@ export const ToolbarWrapper = ({
         name: "pointerDefault",
         props: {
           icon: <PointerDefault />,
-          "aria-label": t("move note"),
+          "aria-label": t("collaborativewall.toolbar.movenote"),
           color: "tertiary",
           className: canMoveNote ? "is-selected" : "",
           onClick: () => {
@@ -95,7 +95,7 @@ export const ToolbarWrapper = ({
           },
         },
         tooltip: {
-          message: t("move note"),
+          message: t("collaborativewall.toolbar.movenote"),
           position: "top",
         },
       },
@@ -104,7 +104,7 @@ export const ToolbarWrapper = ({
         name: "pointerHand",
         props: {
           icon: <PointerHand />,
-          "aria-label": t("move whiteboard"),
+          "aria-label": t("collaborativewall.toolbar.movewhiteboard"),
           color: "tertiary",
           className: canMoveBoard ? "is-selected" : "",
           onClick: () => {
@@ -113,7 +113,7 @@ export const ToolbarWrapper = ({
           },
         },
         tooltip: {
-          message: t("move whiteboard"),
+          message: t("collaborativewall.toolbar.movewhiteboard"),
           position: "top",
         },
       },
@@ -126,12 +126,12 @@ export const ToolbarWrapper = ({
         name: "center",
         props: {
           icon: <Center />,
-          "aria-label": t("center"),
+          "aria-label": t("collaborativewall.toolbar.center"),
           color: "tertiary",
           onClick: () => resetTransform(zoomConfig.DEFAULT_ZOOM),
         },
         tooltip: {
-          message: t("center"),
+          message: t("collaborativewall.toolbar.center"),
           position: "top",
         },
       },
@@ -140,12 +140,12 @@ export const ToolbarWrapper = ({
         name: "zoomOut",
         props: {
           icon: <ZoomOut />,
-          "aria-label": t("zoom out"),
+          "aria-label": t("collaborativewall.toolbar.zoomout"),
           color: "tertiary",
           onClick: () => zoomOut(zoomConfig.SCALE_ZOOM),
         },
         tooltip: {
-          message: t("zoom out"),
+          message: t("collaborativewall.toolbar.zoomout"),
           position: "top",
         },
       },
@@ -153,7 +153,7 @@ export const ToolbarWrapper = ({
         type: "button",
         name: "zoom",
         props: {
-          "aria-label": t("zoom"),
+          "aria-label": t("collaborativewall.toolbar.zoom"),
           color: "tertiary",
           children: (zoom * 100).toFixed(0) + "%",
           onClick: () => resetTransform(zoomConfig.DEFAULT_ZOOM),
@@ -164,12 +164,12 @@ export const ToolbarWrapper = ({
         name: "zoomIn",
         props: {
           icon: <ZoomIn />,
-          "aria-label": t("zoom in"),
+          "aria-label": t("collaborativewall.toolbar.zoomin"),
           color: "tertiary",
           onClick: () => zoomIn(zoomConfig.SCALE_ZOOM),
         },
         tooltip: {
-          message: t("zoom in"),
+          message: t("collaborativewall.toolbar.zoomin"),
           position: "top",
         },
       },
@@ -181,14 +181,14 @@ export const ToolbarWrapper = ({
         type: "icon",
         name: "create",
         props: {
-          "aria-label": t("create"),
+          "aria-label": t("collaborativewall.toolbar.create"),
           leftIcon: <Plus />,
           variant: "filled",
           color: "secondary",
           onClick: createNote,
         },
         tooltip: {
-          message: t("create"),
+          message: t("collaborativewall.toolbar.create"),
           position: "top",
         },
       }, */
