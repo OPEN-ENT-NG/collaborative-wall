@@ -1,14 +1,17 @@
 import { useDraggable } from "@dnd-kit/core";
+import { useShallow } from "zustand/react/shallow";
 
-import { useWhiteboard } from "../../hooks/useWhiteBoard";
+import { Action, State, useWhiteboard } from "../../hooks/useWhiteBoard";
 import { NoteProps } from "~/services/api";
 
 export const Note = ({ note }: { note: NoteProps }) => {
-  const { zoom, canMoveNote, isBoardDragging } = useWhiteboard((state) => ({
-    zoom: state.zoom,
-    canMoveNote: state.canMoveNote,
-    isBoardDragging: state.isDragging,
-  }));
+  const { zoom, canMoveNote, isBoardDragging } = useWhiteboard(
+    useShallow((state: State & Action) => ({
+      zoom: state.zoom,
+      canMoveNote: state.canMoveNote,
+      isBoardDragging: state.isDragging,
+    })),
+  );
 
   const { attributes, isDragging, listeners, setNodeRef, transform } =
     useDraggable({

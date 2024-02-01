@@ -154,7 +154,6 @@ export const useWhiteboard = create<State & Action>((set, get) => ({
     y: number;
   }) => {
     set((state: State): Partial<State> => {
-      // Assurez-vous que 'notes' n'est pas 'undefined'
       const updatedNotes = state.notes?.map((note) => {
         if (note._id === activeId) {
           return {

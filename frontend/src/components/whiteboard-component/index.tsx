@@ -3,7 +3,7 @@ import { ReactNode, useEffect } from "react";
 import { TransformComponent } from "react-zoom-pan-pinch";
 import { useShallow } from "zustand/react/shallow";
 
-import { State, useWhiteboard } from "../../hooks/useWhiteBoard";
+import { Action, State, useWhiteboard } from "../../hooks/useWhiteBoard";
 import { zoomConfig } from "~/config/init-config";
 import { CollaborativeWallProps } from "~/routes/collaborative-wall";
 
@@ -18,14 +18,15 @@ export const WhiteboardComponent = ({
   zoomIn: any;
   zoomOut: any;
 }) => {
-  const { canMoveBoard, isDragging } = useWhiteboard(
-    useShallow((state: State) => ({
-      canMoveBoard: state.canMoveBoard,
-      isDragging: state.isDragging,
-    })),
-  );
-
-  const { setCanMoveBoard, setCanMoveNote } = useWhiteboard();
+  const { canMoveBoard, isDragging, setCanMoveBoard, setCanMoveNote } =
+    useWhiteboard(
+      useShallow((state: State & Action) => ({
+        canMoveBoard: state.canMoveBoard,
+        isDragging: state.isDragging,
+        setCanMoveBoard: state.setCanMoveBoard,
+        setCanMoveNote: state.setCanMoveNote,
+      })),
+    );
 
   const handleKeyDown = (event: KeyboardEvent) => {
     /* This is just a test but create a note with cmd + k */

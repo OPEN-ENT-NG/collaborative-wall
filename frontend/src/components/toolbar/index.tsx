@@ -12,7 +12,7 @@ import { Toolbar, ToolbarItem } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
-import { State, useWhiteboard } from "../../hooks/useWhiteBoard";
+import { Action, State, useWhiteboard } from "../../hooks/useWhiteBoard";
 import { zoomConfig } from "~/config/init-config";
 
 export const ToolbarWrapper = ({
@@ -24,21 +24,28 @@ export const ToolbarWrapper = ({
   zoomOut: any;
   resetTransform: any;
 }) => {
-  const { canMoveBoard, canMoveNote, zoom } = useWhiteboard(
-    useShallow((state: State) => ({
-      canMoveBoard: state.canMoveBoard,
-      canMoveNote: state.canMoveNote,
-      zoom: state.zoom,
-    })),
-  );
-
   const {
+    canMoveBoard,
+    canMoveNote,
+    zoom,
     resetZoom,
     setCanMoveBoard,
     setCanMoveNote,
     toggleCanMoveBoard,
     toggleCanMoveNote,
-  } = useWhiteboard();
+  } = useWhiteboard(
+    useShallow((state: State & Action) => ({
+      canMoveBoard: state.canMoveBoard,
+      canMoveNote: state.canMoveNote,
+      zoom: state.zoom,
+      resetZoom: state.resetZoom,
+      setCanMoveBoard: state.setCanMoveBoard,
+      setCanMoveNote: state.setCanMoveNote,
+      toggleCanMoveBoard: state.toggleCanMoveBoard,
+      toggleCanMoveNote: state.toggleCanMoveNote,
+      toggleCanZoom: state.toggleCanZoom,
+    })),
+  );
 
   return (
     <div className="toolbar">
