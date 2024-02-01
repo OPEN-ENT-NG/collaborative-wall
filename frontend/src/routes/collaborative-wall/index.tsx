@@ -20,7 +20,7 @@ import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { DescriptionWall } from "~/components/description-wall";
 import { Note } from "~/components/note";
-import { WhiteboardWrapper } from "~/components/whiteboardWrapper";
+import { WhiteboardWrapper } from "~/components/whiteboard-wrapper";
 import { DEFAULT_MAP } from "~/config/default-map";
 import { NoteProps, getNotes } from "~/services/api";
 
@@ -107,7 +107,7 @@ export const CollaborativeWall = () => {
     active: Active;
     delta: { x: number; y: number };
   }) => {
-    const activeId = active.id;
+    const activeId = active.id as string;
     updateNotePosition({ activeId, x: delta.x / zoom, y: delta.y / zoom });
   };
 

@@ -1,5 +1,4 @@
 import {
-  Plus,
   PointerDefault,
   PointerHand,
   Undo,
@@ -8,7 +7,7 @@ import {
 } from "@edifice-ui/icons";
 import { useShallow } from "zustand/react/shallow";
 
-import { useWhiteboard } from "../../hooks/useWhiteBoard";
+import { State, useWhiteboard } from "../../hooks/useWhiteBoard";
 import { zoomConfig } from "~/config/init-config";
 
 export const Toolbar = ({
@@ -20,30 +19,21 @@ export const Toolbar = ({
   zoomOut: any;
   resetTransform: any;
 }) => {
+  const { canMoveBoard, canMoveNote, zoom } = useWhiteboard(
+    useShallow((state: State) => ({
+      canMoveBoard: state.canMoveBoard,
+      canMoveNote: state.canMoveNote,
+      zoom: state.zoom,
+    })),
+  );
+
   const {
-    canMoveBoard,
-    canMoveNote,
-    createNote,
     resetZoom,
     setCanMoveBoard,
     setCanMoveNote,
     toggleCanMoveBoard,
     toggleCanMoveNote,
-    zoom,
-  } = useWhiteboard(
-    useShallow((state: any) => ({
-      canMoveBoard: state.canMoveBoard,
-      canMoveNote: state.canMoveNote,
-      createNote: state.createNote,
-      resetZoom: state.resetZoom,
-      setCanMoveBoard: state.setCanMoveBoard,
-      setCanMoveNote: state.setCanMoveNote,
-      toggleCanMoveBoard: state.toggleCanMoveBoard,
-      toggleCanMoveNote: state.toggleCanMoveNote,
-      toggleCanZoom: state.toggleCanZoom,
-      zoom: state.zoom,
-    })),
-  );
+  } = useWhiteboard();
 
   return (
     <div className="toolbar">
@@ -54,7 +44,7 @@ export const Toolbar = ({
         <Undo />
       </button>
       <button
-        style={{ backgroundColor: canMoveNote && "#E5F5FF" }}
+        style={{ backgroundColor: canMoveNote ? "#E5F5FF" : "" }}
         onClick={() => {
           toggleCanMoveNote();
           setCanMoveBoard(false);
@@ -63,7 +53,7 @@ export const Toolbar = ({
         <PointerDefault />
       </button>
       <button
-        style={{ backgroundColor: canMoveBoard && "#E5F5FF" }}
+        style={{ backgroundColor: canMoveBoard ? "#E5F5FF" : "" }}
         onClick={() => {
           toggleCanMoveBoard();
           setCanMoveNote(false);
@@ -78,9 +68,9 @@ export const Toolbar = ({
       <button onClick={() => zoomIn(zoomConfig.SCALE_ZOOM)}>
         <ZoomIn />
       </button>
-      <button onClick={createNote}>
+      {/* <button onClick={createNote}>
         <Plus />
-      </button>
+      </button> */}
     </div>
   );
 };

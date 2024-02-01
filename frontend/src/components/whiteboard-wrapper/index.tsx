@@ -1,13 +1,12 @@
 import { ReactNode, useRef } from "react";
 
 import { TransformWrapper } from "react-zoom-pan-pinch";
-import { useShallow } from "zustand/react/shallow";
 
-import { State, useWhiteboard } from "../../hooks/useWhiteBoard";
+import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { Toolbar } from "../toolbar";
-import { WhiteboardComponent } from "../whiteboardcomponent";
+import { WhiteboardComponent } from "../whiteboard-component";
 import { zoomConfig } from "~/config/init-config";
-import { CollaborativeWallProps } from "~/routes/collaborativewall";
+import { CollaborativeWallProps } from "~/routes/collaborative-wall";
 
 export const WhiteboardWrapper = ({
   children,
@@ -16,12 +15,7 @@ export const WhiteboardWrapper = ({
   children: ReactNode;
   data: CollaborativeWallProps;
 }) => {
-  const { canMoveBoard, setZoom } = useWhiteboard(
-    useShallow((state: State) => ({
-      canMoveBoard: state.canMoveBoard,
-      setZoom: state.setZoom,
-    })),
-  );
+  const { canMoveBoard, setZoom } = useWhiteboard();
 
   const ref = useRef<any>(null);
 
