@@ -34,7 +34,7 @@ export const Note = ({ note }: { note: NoteProps }) => {
       : "0 2px 6px 0px rgba(0, 0, 0, 0.15)",
   };
 
-  const defaultImage = "/collaborativewall/public/img/wood.jpg";
+  const defaultImage = "/collaborativewall/public/img/paper.jpg";
 
   return (
     <div
@@ -51,8 +51,12 @@ export const Note = ({ note }: { note: NoteProps }) => {
         } as React.CSSProperties
       }
     >
-      <Card className="note" isSelectable={false}>
+      <Card
+        className={`note ${isDragging && "is-dragging"} ${canMoveNote && !isDragging && "is-grab"}`}
+        isSelectable={false}
+      >
         <Card.Body>
+          {/* Modifier l'image lorsqu'on récupéreré une image */}
           {defaultImage && (
             <Image alt="test" ratio="16" src={defaultImage} height="120" />
           )}
