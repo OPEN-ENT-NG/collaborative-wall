@@ -1,13 +1,12 @@
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useRef } from "react";
 
 import { TransformWrapper } from "react-zoom-pan-pinch";
-import { useShallow } from "zustand/react/shallow";
 
-import { State, useWhiteboard } from "../../hooks/useWhiteBoard";
-import { Toolbar } from "../toolbar";
-import { WhiteboardComponent } from "../whiteboardcomponent";
+import { useWhiteboard } from "../../hooks/useWhiteBoard";
+import { ToolbarWrapper } from "../toolbar";
+import { WhiteboardComponent } from "../whiteboard-component";
 import { zoomConfig } from "~/config/init-config";
-import { CollaborativeWallProps } from "~/routes/collaborativewall";
+import { CollaborativeWallProps } from "~/routes/collaborative-wall";
 
 export const WhiteboardWrapper = ({
   children,
@@ -16,19 +15,12 @@ export const WhiteboardWrapper = ({
   children: ReactNode;
   data: CollaborativeWallProps;
 }) => {
-  const { canMoveBoard, zoom } = useWhiteboard(
-    useShallow((state: State) => ({
-      canMoveBoard: state.canMoveBoard,
-      zoom: state.zoom,
-    })),
-  );
-
-  const [newZoom, setNewZoom] = useState<number>(zoom);
+  const { canMoveBoard, setZoom } = useWhiteboard();
 
   const ref = useRef<any>(null);
 
   const handleScaleChange = (event: any) => {
-    setNewZoom(event.instance.transformState.scale);
+    setZoom(event.instance.transformState.scale);
   };
 
   return (
@@ -42,20 +34,23 @@ export const WhiteboardWrapper = ({
         onTransformed={(e) => handleScaleChange(e)}
       >
         {({ zoomIn, zoomOut, resetTransform }) => (
-          <>
+          <div
+            style={{
+              background: "linear-gradient(#46AFE6, #E5F5FF)",
+            }}
+          >
             <WhiteboardComponent
               children={children}
               data={data}
               zoomIn={zoomIn}
               zoomOut={zoomOut}
             />
-            <Toolbar
+            <ToolbarWrapper
               zoomIn={zoomIn}
               zoomOut={zoomOut}
               resetTransform={resetTransform}
-              newZoom={newZoom}
             />
-          </>
+          </div>
         )}
       </TransformWrapper>
     </>
