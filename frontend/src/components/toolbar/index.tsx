@@ -47,42 +47,155 @@ export const ToolbarWrapper = ({
     })),
   );
 
-  return (
-    <div className="toolbar">
-      <button onClick={() => resetTransform(zoomConfig.DEFAULT_ZOOM)}>
-        Centrer
-      </button>
-      <button>
-        <Undo />
-      </button>
-      <button
-        style={{ backgroundColor: canMoveNote ? "#E5F5FF" : "" }}
-        onClick={() => {
-          toggleCanMoveNote();
-          setCanMoveBoard(false);
-        }}
-      >
-        <PointerDefault />
-      </button>
-      <button
-        style={{ backgroundColor: canMoveBoard ? "#E5F5FF" : "" }}
-        onClick={() => {
-          toggleCanMoveBoard();
-          setCanMoveNote(false);
-        }}
-      >
-        <PointerHand />
-      </button>
-      <button onClick={() => zoomOut(zoomConfig.SCALE_ZOOM)}>
-        <ZoomOut />
-      </button>
-      <button onClick={resetZoom}>{(zoom * 100).toFixed(0) + "%"}</button>
-      <button onClick={() => zoomIn(zoomConfig.SCALE_ZOOM)}>
-        <ZoomIn />
-      </button>
-      {/* <button onClick={createNote}>
-        <Plus />
-      </button> */}
-    </div>
-  );
+  const { t } = useTranslation();
+
+  const WhiteboardItems: ToolbarItem[] = useMemo(() => {
+    return [
+      {
+        type: "icon",
+        name: "undo",
+        props: {
+          icon: <Undo />,
+          "aria-label": t("collaborativewall.toolbar.undo"),
+          color: "tertiary",
+          onClick: () => console.log("undo"),
+        },
+        tooltip: {
+          message: t("collaborativewall.toolbar.undo"),
+          position: "top",
+        },
+      },
+      {
+        type: "icon",
+        name: "redo",
+        props: {
+          icon: <Redo />,
+          "aria-label": t("collaborativewall.toolbar.redo"),
+          color: "tertiary",
+          onClick: () => console.log("redo"),
+        },
+        tooltip: {
+          message: t("collaborativewall.toolbar.redo"),
+          position: "top",
+        },
+      },
+      {
+        type: "divider",
+        name: "div-1",
+      },
+      {
+        type: "icon",
+        name: "pointerDefault",
+        props: {
+          icon: <PointerDefault />,
+          "aria-label": t("collaborativewall.toolbar.movenote"),
+          color: "tertiary",
+          className: canMoveNote ? "is-selected" : "",
+          onClick: () => {
+            toggleCanMoveNote();
+            setCanMoveBoard(false);
+          },
+        },
+        tooltip: {
+          message: t("collaborativewall.toolbar.movenote"),
+          position: "top",
+        },
+      },
+      {
+        type: "icon",
+        name: "pointerHand",
+        props: {
+          icon: <PointerHand />,
+          "aria-label": t("collaborativewall.toolbar.movewhiteboard"),
+          color: "tertiary",
+          className: canMoveBoard ? "is-selected" : "",
+          onClick: () => {
+            toggleCanMoveBoard();
+            setCanMoveNote(false);
+          },
+        },
+        tooltip: {
+          message: t("collaborativewall.toolbar.movewhiteboard"),
+          position: "top",
+        },
+      },
+      {
+        type: "divider",
+        name: "div-2",
+      },
+      {
+        type: "icon",
+        name: "center",
+        props: {
+          icon: <Center />,
+          "aria-label": t("collaborativewall.toolbar.center"),
+          color: "tertiary",
+          onClick: () => resetTransform(zoomConfig.DEFAULT_ZOOM),
+        },
+        tooltip: {
+          message: t("collaborativewall.toolbar.center"),
+          position: "top",
+        },
+      },
+      {
+        type: "icon",
+        name: "zoomOut",
+        props: {
+          icon: <ZoomOut />,
+          "aria-label": t("collaborativewall.toolbar.zoomout"),
+          color: "tertiary",
+          onClick: () => zoomOut(zoomConfig.SCALE_ZOOM),
+        },
+        tooltip: {
+          message: t("collaborativewall.toolbar.zoomout"),
+          position: "top",
+        },
+      },
+      {
+        type: "button",
+        name: "zoom",
+        props: {
+          "aria-label": t("collaborativewall.toolbar.zoom"),
+          color: "tertiary",
+          children: (zoom * 100).toFixed(0) + "%",
+          onClick: () => resetTransform(zoomConfig.DEFAULT_ZOOM),
+        },
+      },
+      {
+        type: "icon",
+        name: "zoomIn",
+        props: {
+          icon: <ZoomIn />,
+          "aria-label": t("collaborativewall.toolbar.zoomin"),
+          color: "tertiary",
+          onClick: () => zoomIn(zoomConfig.SCALE_ZOOM),
+        },
+        tooltip: {
+          message: t("collaborativewall.toolbar.zoomin"),
+          position: "top",
+        },
+      },
+      {
+        type: "divider",
+        name: "div-3",
+      },
+      /* {
+        type: "icon",
+        name: "create",
+        props: {
+          "aria-label": t("collaborativewall.toolbar.create"),
+          leftIcon: <Plus />,
+          variant: "filled",
+          color: "secondary",
+          onClick: createNote,
+        },
+        tooltip: {
+          message: t("collaborativewall.toolbar.create"),
+          position: "top",
+        },
+      }, */
+    ];
+  }, [t, canMoveBoard, canMoveNote, zoom]);
+
+  return <Toolbar className="p-8" items={WhiteboardItems} />;
 };
