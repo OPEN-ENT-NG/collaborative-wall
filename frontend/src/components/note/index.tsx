@@ -4,14 +4,11 @@ import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { NoteProps } from "~/services/api";
 
 export const Note = ({ note }: { note: NoteProps }) => {
-  const { zoom, canMoveNote, isBoardDragging, deleteNote } = useWhiteboard(
-    (state) => ({
-      zoom: state.zoom,
-      canMoveNote: state.canMoveNote,
-      isBoardDragging: state.isDragging,
-      deleteNote: state.deleteNote,
-    }),
-  );
+  const { zoom, canMoveNote, isBoardDragging } = useWhiteboard((state) => ({
+    zoom: state.zoom,
+    canMoveNote: state.canMoveNote,
+    isBoardDragging: state.isDragging,
+  }));
 
   const { attributes, isDragging, listeners, setNodeRef, transform } =
     useDraggable({
@@ -51,7 +48,7 @@ export const Note = ({ note }: { note: NoteProps }) => {
     >
       <h4>{note?.title}</h4>
       <p>{note.content}</p>
-      <button onClick={() => deleteNote(note._id)}>delete</button>
+      {/* <button onClick={() => deleteNote(note._id)}>delete</button> */}
     </div>
   );
 };

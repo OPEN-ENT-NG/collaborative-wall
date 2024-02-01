@@ -9,7 +9,7 @@ const routes = [
     path: "id/:id",
     async lazy() {
       const { wallLoader, CollaborativeWall } = await import(
-        "./collaborativewall"
+        "./collaborative-wall"
       );
       return {
         loader: wallLoader,
