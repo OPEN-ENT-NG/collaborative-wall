@@ -130,7 +130,7 @@ export const ToolbarWrapper = ({
           icon: <Center />,
           "aria-label": t("collaborativewall.toolbar.center"),
           color: "tertiary",
-          onClick: () => resetTransform(zoomConfig.DEFAULT_ZOOM),
+          onClick: () => resetTransform(),
         },
         tooltip: {
           message: t("collaborativewall.toolbar.center"),
@@ -158,7 +158,7 @@ export const ToolbarWrapper = ({
           "aria-label": t("collaborativewall.toolbar.zoom"),
           color: "tertiary",
           children: (zoom * 100).toFixed(0) + "%",
-          onClick: () => resetTransform(zoomConfig.DEFAULT_ZOOM),
+          onClick: () => resetTransform(),
         },
       },
       {

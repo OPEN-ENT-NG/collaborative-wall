@@ -32,7 +32,7 @@ export const Note = ({ note }: { note: NoteProps }) => {
       : "0 2px 6px 0px rgba(0, 0, 0, 0.15)",
   };
 
-  const defaultImage = "/collaborativewall/public/img/paper.jpg";
+  const defaultImage = "/public/img/cloud.png";
 
   return (
     <div

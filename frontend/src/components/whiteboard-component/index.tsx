@@ -7,6 +7,8 @@ import { Action, State, useWhiteboard } from "../../hooks/useWhiteBoard";
 import { zoomConfig } from "~/config/init-config";
 import { CollaborativeWallProps } from "~/routes/collaborative-wall";
 
+const defaultBackground = "/public/img/cloud.png";
+
 export const WhiteboardComponent = ({
   children,
   data,
@@ -91,9 +93,10 @@ export const WhiteboardComponent = ({
       >
         <div
           style={{
-            backgroundImage: `url(${data.background})`,
-            height: "1656px",
-            width: "2880px",
+            backgroundImage: `url(${data.background ?? defaultBackground})`,
+            backgroundRepeat: "repeat",
+            height: "3600px",
+            width: "5760px",
           }}
         >
           {children}
