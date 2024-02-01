@@ -1,4 +1,5 @@
 import { useDraggable } from "@dnd-kit/core";
+import { Card, Image } from "@edifice-ui/react";
 import { useShallow } from "zustand/react/shallow";
 
 import { Action, State, useWhiteboard } from "../../hooks/useWhiteBoard";
@@ -43,6 +44,7 @@ export const Note = ({ note }: { note: NoteProps }) => {
           ...style,
           top: note.y,
           left: note.x,
+          backgroundColor: note.color?.[0],
           transform: `translate3d(${(transform?.x ?? 0) / zoom}px, ${
             (transform?.y ?? 0) / zoom
           }px, 0)`,
