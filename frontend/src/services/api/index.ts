@@ -21,7 +21,7 @@ export interface NoteProps {
   color?: string[];
   created?: { $date: number };
   modified?: { $date: number };
-  author?: {
+  owner?: {
     userId: string;
     displayName: string;
   };

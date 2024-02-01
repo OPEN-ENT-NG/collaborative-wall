@@ -14,7 +14,6 @@ export function DescriptionWall({
     <div
       style={{
         position: "fixed",
-        top: "73px",
         zIndex: "11",
         backgroundColor: "rgb(255 255 255 / 80%)",
         width: "100%",
