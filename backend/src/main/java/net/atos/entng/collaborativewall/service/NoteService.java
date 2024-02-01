@@ -12,6 +12,8 @@ public interface NoteService {
 
     void listAllNotes(String idWall, Handler<Either<String, JsonArray>> callback);
 
+    void get(String id, Handler<Either<String, JsonObject>> callback);
+
     void create(JsonObject note, UserInfos user, Handler<Either<String, JsonObject>> callback);
 
     void delete(String id, Long lastEdit, UserInfos user, Handler<Either<String, JsonObject>> callback);

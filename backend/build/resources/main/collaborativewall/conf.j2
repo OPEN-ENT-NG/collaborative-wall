@@ -1,0 +1,29 @@
+{
+    "name": "{{ collaborativewallVersion }}",
+    "config": {
+        "main": "net.atos.entng.collaborativewall.CollaborativeWall",
+        "port": 8071,
+        {% if csrfToken %}"csrf-token": true,{% endif %}
+        "app-name": "CollaborativeWall",
+        "app-address": "/collaborativewall",
+        "app-icon": "collaborative-wall-large",
+        "app-type" : "END_USER",
+        "host": "https://{{ host }}",
+        "ssl": true,
+        "userbook-host": "https://{{ host }}",
+        "integration-mode": "HTTP",
+        "app-registry.port": 8012,
+        "mode": "prod",
+        "entcore.port": 8009,
+        "publicConf": {
+            "xiti": {
+                "ID_SERVICE": {
+                    "default": 2
+                },
+                "LIBELLE_SERVICE": {
+                    "default": "PRODUCTION_COLLABORATIVE"
+                }
+            }
+        }
+    }
+}

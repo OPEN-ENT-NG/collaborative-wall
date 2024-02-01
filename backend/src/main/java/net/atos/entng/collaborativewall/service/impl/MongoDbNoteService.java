@@ -42,6 +42,7 @@ public class MongoDbNoteService implements NoteService {
 
     //Mongo Collection Fields names
 
+    public static final String NOTES_FIELD_ID = "_id";
     public static final String NOTES_FIELD_IDWALL = "idwall";
     public static final String NOTES_FIELD_LAST_EDIT = "lastEdit";
     public static final String NOTES_FIELD_MODIFIED = "modified";
@@ -70,6 +71,13 @@ public class MongoDbNoteService implements NoteService {
 
         mongo.find(COLLABORATIVEWALL_NOTES, MongoQueryBuilder.build(query), sort, null, MongoDbResult.validResultsHandler(callback));
 
+    }
+
+    @Override
+    @ApiDoc("Retrieve note by id")
+    public void get(String id, Handler<Either<String, JsonObject>> callback) {
+        QueryBuilder query = QueryBuilder.start(NOTES_FIELD_ID).is(id);
+        mongo.findOne(COLLABORATIVEWALL_NOTES, MongoQueryBuilder.build(query), MongoDbResult.validResultHandler(callback));
     }
 
     public void create(JsonObject note, UserInfos user, Handler<Either<String, JsonObject>> handler) {

@@ -85,7 +85,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @SecuredAction("collaborativewall.view")
 
     public void view(HttpServerRequest request) {
-        renderView(request);
+        renderView(request, new JsonObject(), "index.html", null);
 
         // Create event "access to application CollaborativeWall" and store it, for module "statistics"
         eventHelper.onAccess(request);
@@ -306,6 +306,13 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @SecuredAction(value = "collaborativewall.contrib", type = ActionType.RESOURCE)
     public void createNote(final HttpServerRequest request) {
         notesHelper.create(request);
+    }
+
+    @Get("/:id/note/:idnote")
+    @ApiDoc("Retrieve note of the given :idnote identifier")
+    @SecuredAction(value = "collaborativewall.read", type = ActionType.RESOURCE)
+    public void getNote(final HttpServerRequest request) {
+        notesHelper.get(request);
     }
 
     @Put("/:id/note/:idnote")

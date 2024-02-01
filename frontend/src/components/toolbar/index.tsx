@@ -2,7 +2,6 @@ import { useMemo } from "react";
 
 import {
   Center,
-  Plus,
   PointerDefault,
   PointerHand,
   Redo,
@@ -14,33 +13,31 @@ import { Toolbar, ToolbarItem } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
-import { useWhiteboard } from "../../hooks/useWhiteBoard";
+import { Action, State, useWhiteboard } from "../../hooks/useWhiteBoard";
 import { zoomConfig } from "~/config/init-config";
 
 export const ToolbarWrapper = ({
   zoomIn,
   zoomOut,
   resetTransform,
-  newZoom,
 }: {
   zoomIn: any;
   zoomOut: any;
   resetTransform: any;
-  newZoom: any;
 }) => {
   const {
     canMoveBoard,
     canMoveNote,
-    createNote,
+    zoom,
     setCanMoveBoard,
     setCanMoveNote,
     toggleCanMoveBoard,
     toggleCanMoveNote,
   } = useWhiteboard(
-    useShallow((state: any) => ({
+    useShallow((state: State & Action) => ({
       canMoveBoard: state.canMoveBoard,
       canMoveNote: state.canMoveNote,
-      createNote: state.createNote,
+      zoom: state.zoom,
       setCanMoveBoard: state.setCanMoveBoard,
       setCanMoveNote: state.setCanMoveNote,
       toggleCanMoveBoard: state.toggleCanMoveBoard,
@@ -158,7 +155,7 @@ export const ToolbarWrapper = ({
         props: {
           "aria-label": t("zoom"),
           color: "tertiary",
-          children: (newZoom * 100).toFixed(0) + "%",
+          children: (zoom * 100).toFixed(0) + "%",
           onClick: () => resetTransform(zoomConfig.DEFAULT_ZOOM),
         },
       },
@@ -180,7 +177,7 @@ export const ToolbarWrapper = ({
         type: "divider",
         name: "div-3",
       },
-      {
+      /* {
         type: "icon",
         name: "create",
         props: {
@@ -194,9 +191,9 @@ export const ToolbarWrapper = ({
           message: t("create"),
           position: "top",
         },
-      },
+      }, */
     ];
-  }, [t, canMoveBoard, canMoveNote, newZoom]);
+  }, [t, canMoveBoard, canMoveNote, zoom]);
 
   return <Toolbar className="p-8" items={WhiteboardItems} />;
 };
