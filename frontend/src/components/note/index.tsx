@@ -31,7 +31,7 @@ export const Note = ({ note }: { note: NoteProps }) => {
       : "0 2px 6px 0px rgba(0, 0, 0, 0.15)",
   };
 
-  const defaultImage = "/collaborativewall/public/img/wood.jpg";
+  const defaultImage = "/collaborativewall/public/img/paper.jpg";
 
   return (
     <div
@@ -49,9 +49,25 @@ export const Note = ({ note }: { note: NoteProps }) => {
         } as React.CSSProperties
       }
     >
-      <h4>{note?.title}</h4>
-      <p>{note.content}</p>
-      {/* <button onClick={() => deleteNote(note._id)}>delete</button> */}
+      <Card
+        className={`note ${isDragging && "is-dragging"} ${canMoveNote && !isDragging && "is-grab"}`}
+        isSelectable={false}
+      >
+        <Card.Body>
+          {/* Modifier l'image lorsqu'on récupéreré une image */}
+          {defaultImage && (
+            <Image alt="test" ratio="16" src={defaultImage} height="120" />
+          )}
+          <Card.Text
+            className={`text-truncate pt-16 ${defaultImage ? "text-truncate-8" : "text-truncate-12"}`}
+          >
+            {note.content}
+          </Card.Text>
+        </Card.Body>
+        <Card.Footer>
+          <Card.Text>{note.owner?.displayName}</Card.Text>
+        </Card.Footer>
+      </Card>
     </div>
   );
 };
