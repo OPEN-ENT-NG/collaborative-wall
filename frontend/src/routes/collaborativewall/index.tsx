@@ -29,7 +29,7 @@ const DescriptionModal = lazy(
 );
 
 const activationConstraint = {
-  delay: 0,
+  delay: 250,
   tolerance: 5,
 };
 
