@@ -3,7 +3,7 @@ import { ReactNode, useRef } from "react";
 import { TransformWrapper } from "react-zoom-pan-pinch";
 
 import { useWhiteboard } from "../../hooks/useWhiteBoard";
-import { Toolbar } from "../toolbar";
+import { ToolbarWrapper } from "../toolbar";
 import { WhiteboardComponent } from "../whiteboard-component";
 import { zoomConfig } from "~/config/init-config";
 import { CollaborativeWallProps } from "~/routes/collaborative-wall";
@@ -34,19 +34,23 @@ export const WhiteboardWrapper = ({
         onTransformed={(e) => handleScaleChange(e)}
       >
         {({ zoomIn, zoomOut, resetTransform }) => (
-          <>
+          <div
+            style={{
+              background: "linear-gradient(#46AFE6, #E5F5FF)",
+            }}
+          >
             <WhiteboardComponent
               children={children}
               data={data}
               zoomIn={zoomIn}
               zoomOut={zoomOut}
             />
-            <Toolbar
+            <ToolbarWrapper
               zoomIn={zoomIn}
               zoomOut={zoomOut}
               resetTransform={resetTransform}
             />
-          </>
+          </div>
         )}
       </TransformWrapper>
     </>
