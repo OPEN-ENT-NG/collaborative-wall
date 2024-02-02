@@ -7,13 +7,15 @@ import { NoteProps } from "~/services/api";
 export interface NoteModalProps {
   isOpen: boolean;
   setIsOpen: (bool: boolean) => void;
-  noteData: NoteProps | undefined;
+
+  /** Note data. */
+  data: NoteProps | undefined;
 }
 
 export default function NoteModal({
   isOpen,
   setIsOpen,
-  noteData,
+  data,
 }: NoteModalProps): JSX.Element | null {
   const { t } = useTranslation();
 
@@ -29,9 +31,9 @@ export default function NoteModal({
           <Modal.Header onModalClose={() => setIsOpen(false)}>
             {t("Note")}
           </Modal.Header>
-          <Modal.Subtitle>{noteData?.owner?.displayName}</Modal.Subtitle>
+          <Modal.Subtitle>{data?.owner?.displayName}</Modal.Subtitle>
           <Modal.Body>
-            <p>{noteData?.content}</p>
+            <p>{data?.content}</p>
           </Modal.Body>
           <Modal.Footer>
             <Button

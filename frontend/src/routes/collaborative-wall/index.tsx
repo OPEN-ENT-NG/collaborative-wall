@@ -88,7 +88,7 @@ export const CollaborativeWall = () => {
   // const [openShare, setOpenShare] = useState(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [showNoteModal, setShowNoteModal] = useState<boolean>(false);
-  const [clickedNote, setClickedNote] = useState<NoteProps>();
+  const [clickedNoteData, setClickedNoteData] = useState<NoteProps>();
 
   // const handleCloseModal = () => setOpenShare(false);
 
@@ -124,7 +124,7 @@ export const CollaborativeWall = () => {
   };
 
   const handleNoteClick = (note: NoteProps) => {
-    setClickedNote(note);
+    setClickedNoteData(note);
     setShowNoteModal(true);
   };
 
@@ -186,7 +186,7 @@ export const CollaborativeWall = () => {
             <NoteModal
               isOpen={showNoteModal}
               setIsOpen={setShowNoteModal}
-              noteData={clickedNote}
+              data={clickedNoteData}
             />
           </Suspense>
         )}
