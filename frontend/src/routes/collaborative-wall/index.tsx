@@ -1,4 +1,4 @@
-import { lazy, useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 
 import {
   DndContext,
@@ -12,8 +12,15 @@ import {
 } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import { Print } from "@edifice-ui/icons";
-import { AppHeader, Breadcrumb, Button, useOdeClient } from "@edifice-ui/react";
+import {
+  AppHeader,
+  Breadcrumb,
+  Button,
+  LoadingScreen,
+  useOdeClient,
+} from "@edifice-ui/react";
 import { IWebApp, odeServices } from "edifice-ts-client";
+// @ts-ignore
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
@@ -27,6 +34,8 @@ import { NoteProps, getNotes } from "~/services/api";
 const DescriptionModal = lazy(
   async () => await import("~/components/description-modal"),
 );
+
+const NoteModal = lazy(async () => await import("~/components/note-modal"));
 
 const activationConstraint = {
   delay: 250,
@@ -78,12 +87,15 @@ export const CollaborativeWall = () => {
   );
   // const [openShare, setOpenShare] = useState(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [showNoteModal, setShowNoteModal] = useState<boolean>(false);
+  const [clickedNote, setClickedNote] = useState<NoteProps>();
 
   // const handleCloseModal = () => setOpenShare(false);
 
   useEffect(() => {
     (async () => {
       const response = await getNotes(data._id);
+
       setNotes(response);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -109,6 +121,11 @@ export const CollaborativeWall = () => {
   }) => {
     const activeId = active.id as string;
     updateNotePosition({ activeId, x: delta.x / zoom, y: delta.y / zoom });
+  };
+
+  const handleNoteClick = (note: NoteProps) => {
+    setClickedNote(note);
+    setShowNoteModal(true);
   };
 
   return data ? (
@@ -151,6 +168,7 @@ export const CollaborativeWall = () => {
                     title: `title ${i}`,
                     zIndex: note.zIndex ?? 1,
                   }}
+                  onNoteClick={handleNoteClick}
                 />
               );
             })}
@@ -162,6 +180,15 @@ export const CollaborativeWall = () => {
             setIsOpen={setIsOpen}
             description={data?.description}
           />
+        )}
+        {showNoteModal && (
+          <Suspense fallback={<LoadingScreen />}>
+            <NoteModal
+              isOpen={showNoteModal}
+              setIsOpen={setShowNoteModal}
+              noteData={clickedNote}
+            />
+          </Suspense>
         )}
       </div>
       {/* <Suspense fallback={<LoadingScreen />}>

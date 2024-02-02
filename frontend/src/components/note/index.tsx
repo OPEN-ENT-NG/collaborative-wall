@@ -5,7 +5,13 @@ import { useShallow } from "zustand/react/shallow";
 import { Action, State, useWhiteboard } from "../../hooks/useWhiteBoard";
 import { NoteProps } from "~/services/api";
 
-export const Note = ({ note }: { note: NoteProps }) => {
+export const Note = ({
+  note,
+  onNoteClick,
+}: {
+  note: NoteProps;
+  onNoteClick: (note: NoteProps) => void;
+}) => {
   const { zoom, canMoveNote, isBoardDragging } = useWhiteboard(
     useShallow((state: State & Action) => ({
       zoom: state.zoom,
@@ -55,6 +61,7 @@ export const Note = ({ note }: { note: NoteProps }) => {
       <Card
         className={`note ${isDragging && "is-dragging"} ${canMoveNote && !isDragging && "is-grab"}`}
         isSelectable={false}
+        onClick={() => onNoteClick(note)}
       >
         <Card.Body>
           {/* Modifier l'image lorsqu'on récupéreré une image */}
