@@ -37,9 +37,10 @@ export interface NoteProps {
 }
 
 export const getNotes = async (id: string) => {
-  const response = await fetch(`/collaborativewall/${id}/notes`);
-  const collaborativeWall: NoteProps[] = await response.json();
-  return collaborativeWall;
+  const notes = odeServices
+    .http()
+    .get<NoteProps[]>(`/collaborativewall/${id}/notes`);
+  return notes;
 };
 
 export const searchContext = async (searchParams: GetContextParameters) => {
