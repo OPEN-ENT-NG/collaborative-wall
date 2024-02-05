@@ -11,17 +11,17 @@ import {
   Active,
 } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
-// @ts-ignore
+import { Print } from "@edifice-ui/icons";
 import { AppHeader, Breadcrumb, Button, useOdeClient } from "@edifice-ui/react";
 import { IWebApp } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { useShallow } from "zustand/react/shallow";
 
 import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { DescriptionWall } from "~/components/description-wall";
 import { Note } from "~/components/note";
 import { WhiteboardWrapper } from "~/components/whiteboard-wrapper";
-import { DEFAULT_MAP } from "~/config/default-map";
 import { NoteProps, getNotes } from "~/services/api";
 
 const DescriptionModal = lazy(
@@ -50,7 +50,9 @@ export interface CollaborativeWallProps {
 export async function wallLoader({ params }: LoaderFunctionArgs) {
   const { id } = params;
   const response = await fetch(`/collaborativewall/${id}`);
-  const collaborativeWall = await response.json();
+  const collaborativeWall: CollaborativeWallProps = await response.json();
+
+  console.log({ collaborativeWall });
 
   if (!response) {
     throw new Response("", {
@@ -59,12 +61,7 @@ export async function wallLoader({ params }: LoaderFunctionArgs) {
     });
   }
 
-  return collaborativeWall.map
-    ? collaborativeWall
-    : {
-        ...collaborativeWall,
-        map: DEFAULT_MAP(collaborativeWall?.name),
-      };
+  return collaborativeWall;
 }
 
 export const CollaborativeWall = () => {
@@ -73,11 +70,17 @@ export const CollaborativeWall = () => {
   const { t } = useTranslation();
   const data = useLoaderData() as CollaborativeWallProps;
 
-  const { setNotes, notes, zoom } = useWhiteboard((state) => ({
-    notes: state.notes,
-    setNotes: state.setNotes,
-    zoom: state.zoom,
-  }));
+  const { setNotes, notes, zoom } = useWhiteboard(
+    useShallow((state) => ({
+      notes: state.notes,
+      setNotes: state.setNotes,
+      zoom: state.zoom,
+    })),
+  );
+  // const [openShare, setOpenShare] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  // const handleCloseModal = () => setOpenShare(false);
 
   useEffect(() => {
     (async () => {
@@ -86,8 +89,6 @@ export const CollaborativeWall = () => {
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint,
@@ -111,25 +112,30 @@ export const CollaborativeWall = () => {
     updateNotePosition({ activeId, x: delta.x / zoom, y: delta.y / zoom });
   };
 
-  return data?.map ? (
+  return data ? (
     <>
       <AppHeader
         isFullscreen
         render={() => (
           <>
-            <Button variant="filled">{t("share")}</Button>
+            <Button variant="outline" leftIcon={<Print />}>
+              {t("print")}
+            </Button>
+            <Button variant="filled" /* onClick={() => setOpenShare(true)} */>
+              {t("share")}
+            </Button>
           </>
         )}
       >
         <Breadcrumb app={currentApp as IWebApp} name={data.name} />
       </AppHeader>
-      {data?.description && (
-        <DescriptionWall
-          setIsOpen={setIsOpen}
-          description={data?.description}
-        />
-      )}
-      <div className="collaborative-wall-container">
+      <div className="collaborativewall-container">
+        {data?.description && (
+          <DescriptionWall
+            setIsOpen={setIsOpen}
+            description={data?.description}
+          />
+        )}
         <WhiteboardWrapper data={data}>
           <DndContext
             sensors={sensors}
@@ -159,6 +165,16 @@ export const CollaborativeWall = () => {
           />
         )}
       </div>
+      {/* <Suspense fallback={<LoadingScreen />}>
+        {openShare && data && (
+          <ShareModal
+            isOpen={openShare}
+            resourceId={data._id}
+            onCancel={handleCloseModal}
+            onSuccess={handleCloseModal}
+          />
+        )}
+      </Suspense> */}
     </>
   ) : (
     <p>No collaborative wall found</p>

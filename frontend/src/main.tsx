@@ -45,7 +45,7 @@ root.render(
   <QueryClientProvider client={queryClient}>
     <OdeClientProvider
       params={{
-        app: "collaborativewall",
+        app: "blog",
       }}
     >
       <ThemeProvider>
