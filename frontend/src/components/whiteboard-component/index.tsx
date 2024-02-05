@@ -3,7 +3,7 @@ import { ReactNode, useEffect } from "react";
 import { TransformComponent } from "react-zoom-pan-pinch";
 import { useShallow } from "zustand/react/shallow";
 
-import { Action, State, useWhiteboard } from "../../hooks/useWhiteBoard";
+import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { zoomConfig } from "~/config/init-config";
 import { CollaborativeWallProps } from "~/routes/collaborative-wall";
 
@@ -22,7 +22,7 @@ export const WhiteboardComponent = ({
 }) => {
   const { canMoveBoard, isDragging, setCanMoveBoard, setCanMoveNote } =
     useWhiteboard(
-      useShallow((state: State & Action) => ({
+      useShallow((state) => ({
         canMoveBoard: state.canMoveBoard,
         isDragging: state.isDragging,
         setCanMoveBoard: state.setCanMoveBoard,
