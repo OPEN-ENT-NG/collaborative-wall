@@ -13,7 +13,7 @@ import {
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import { Print } from "@edifice-ui/icons";
 import { AppHeader, Breadcrumb, Button, useOdeClient } from "@edifice-ui/react";
-import { IWebApp } from "edifice-ts-client";
+import { IWebApp, odeServices } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
@@ -49,12 +49,11 @@ export interface CollaborativeWallProps {
 
 export async function wallLoader({ params }: LoaderFunctionArgs) {
   const { id } = params;
-  const response = await fetch(`/collaborativewall/${id}`);
-  const collaborativeWall: CollaborativeWallProps = await response.json();
+  const collaborativeWall = odeServices
+    .http()
+    .get<CollaborativeWallProps>(`/collaborativewall/${id}`);
 
-  console.log({ collaborativeWall });
-
-  if (!response) {
+  if (!collaborativeWall) {
     throw new Response("", {
       status: 404,
       statusText: "Not Found",

@@ -7,7 +7,7 @@ import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { zoomConfig } from "~/config/init-config";
 import { CollaborativeWallProps } from "~/routes/collaborative-wall";
 
-const defaultBackground = "/public/img/cloud.png";
+const defaultBackground = "/img/cloud.png";
 
 export const WhiteboardComponent = ({
   children,
