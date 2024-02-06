@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { zoomConfig } from "~/config/init-config";
+import { initialState } from "~/config/init-config";
 import { NoteProps } from "~/services/api";
 
 type Offset = {
@@ -8,19 +8,7 @@ type Offset = {
   y: number;
 };
 
-const OFFSET: Offset = { x: 0, y: 0 };
-
-const initialState = {
-  canMoveBoard: false,
-  canMoveNote: false,
-  canZoom: true,
-  isDragging: false,
-  startPosition: OFFSET,
-  offset: OFFSET,
-  zoom: zoomConfig.DEFAULT_ZOOM,
-};
-
-export type State = {
+type State = {
   canMoveBoard: boolean;
   canMoveNote: boolean;
   canZoom: boolean;
@@ -31,21 +19,11 @@ export type State = {
   notes?: NoteProps[];
 };
 
-export type Action = {
+type Action = {
   toggleCanMoveBoard: () => void;
   toggleCanMoveNote: () => void;
-  toggleCanZoom: () => void;
-  handleTouchStart: (event: React.TouchEvent) => void;
-  handleTouchMove: (event: React.TouchEvent) => void;
-  handleTouchEnd: () => void;
   setCanMoveBoard: (value: boolean) => void;
   setCanMoveNote: (value: boolean) => void;
-  setCanZoom: (value: boolean) => void;
-  handleMouseDown: (event: React.MouseEvent) => void;
-  handleMouseUp: () => void;
-  handleMouseMove: (event: React.MouseEvent) => void;
-  resetOffset: () => void;
-  resetZoom: () => void;
   setNotes: (value: NoteProps[]) => void;
   setZoom: (value: number) => void;
   updateNotePosition: ({
@@ -61,7 +39,7 @@ export type Action = {
   deleteNote: (id: string | number) => void; */
 };
 
-export const useWhiteboard = create<State & Action>((set, get) => ({
+export const useWhiteboard = create<State & Action>((set) => ({
   ...initialState,
   toggleCanMoveBoard: () =>
     set((state: { canMoveBoard: boolean }) => ({
@@ -71,77 +49,8 @@ export const useWhiteboard = create<State & Action>((set, get) => ({
     set((state: { canMoveNote: boolean }) => ({
       canMoveNote: !state.canMoveNote,
     })),
-  toggleCanZoom: () =>
-    set((state: { canZoom: boolean }) => ({ canZoom: !state.canZoom })),
   setCanMoveBoard: (value: boolean) => set({ canMoveBoard: value }),
   setCanMoveNote: (value: boolean) => set({ canMoveNote: value }),
-  setCanZoom: (value: boolean) => set({ canZoom: value }),
-  handleTouchStart: (event: React.TouchEvent) => {
-    if (!get().canMoveBoard) return;
-
-    set(() => ({
-      isDragging: true,
-      startPosition: {
-        x: event.touches[0].clientX,
-        y: event.touches[0].clientY,
-      },
-    }));
-  },
-  handleTouchMove: (event: React.TouchEvent) => {
-    if (!get().isDragging) return;
-
-    const offsetX = event.touches[0].clientX - get().startPosition.x;
-    const offsetY = event.touches[0].clientY - get().startPosition.y;
-
-    set((state: { offset: { x: number; y: number } }) => ({
-      offset: { x: state.offset.x + offsetX, y: state.offset.y + offsetY },
-      startPosition: {
-        x: event.touches[0].clientX,
-        y: event.touches[0].clientY,
-      },
-    }));
-  },
-
-  handleTouchEnd: () => {
-    if (!get().isDragging) return;
-
-    set(() => ({
-      isDragging: false,
-    }));
-  },
-  handleMouseDown: (event: React.MouseEvent) => {
-    if (!get().canMoveBoard) return;
-
-    set(() => ({
-      isDragging: true,
-      startPosition: { x: event.clientX, y: event.clientY },
-    }));
-  },
-  handleMouseUp: () => {
-    if (!get().canMoveBoard) return;
-
-    set(() => ({
-      isDragging: false,
-    }));
-  },
-  handleMouseMove: (event: React.MouseEvent) => {
-    if (!get().isDragging) return;
-
-    const offsetX = event.clientX - get().startPosition.x;
-    const offsetY = event.clientY - get().startPosition.y;
-
-    set((state: { offset: { x: number; y: number } }) => ({
-      offset: { x: state.offset.x + offsetX, y: state.offset.y + offsetY },
-      startPosition: { x: event.clientX, y: event.clientY },
-    }));
-  },
-  resetOffset: () => {
-    set(() => ({ offset: { x: 0, y: 0 }, zoom: zoomConfig.DEFAULT_ZOOM }));
-  },
-  resetZoom: () => {
-    if (!get().canZoom) return;
-    set(() => ({ zoom: zoomConfig.DEFAULT_ZOOM }));
-  },
   setNotes: (value: NoteProps[]) => set({ notes: value }),
   setZoom: (value: number) => set({ zoom: value }),
   updateNotePosition: ({

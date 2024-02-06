@@ -94,9 +94,8 @@ export const WhiteboardComponent = ({
         <div
           style={{
             backgroundImage: `url(${data.background ?? defaultBackground})`,
-            backgroundRepeat: "repeat",
-            height: "3600px",
-            width: "5760px",
+            height: "1800px",
+            width: "2880px",
           }}
         >
           {children}

@@ -2,7 +2,7 @@ import { useDraggable } from "@dnd-kit/core";
 import { Card, Image } from "@edifice-ui/react";
 import { useShallow } from "zustand/react/shallow";
 
-import { Action, State, useWhiteboard } from "../../hooks/useWhiteBoard";
+import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { NoteProps } from "~/services/api";
 
 export const Note = ({
@@ -13,7 +13,7 @@ export const Note = ({
   onNoteClick: (note: NoteProps) => void;
 }) => {
   const { zoom, canMoveNote, isBoardDragging } = useWhiteboard(
-    useShallow((state: State & Action) => ({
+    useShallow((state) => ({
       zoom: state.zoom,
       canMoveNote: state.canMoveNote,
       isBoardDragging: state.isDragging,
@@ -38,7 +38,7 @@ export const Note = ({
       : "0 2px 6px 0px rgba(0, 0, 0, 0.15)",
   };
 
-  const defaultImage = "/public/img/cloud.png";
+  const defaultImage = "/img/cloud.png";
 
   return (
     <div
