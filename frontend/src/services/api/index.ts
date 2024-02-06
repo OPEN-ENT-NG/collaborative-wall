@@ -43,6 +43,10 @@ export const getNotes = async (id: string) => {
   return notes;
 };
 
+export const sessionHasWorkflowRights = async (actionRights: string[]) => {
+  return await odeServices.rights().sessionHasWorkflowRights(actionRights);
+};
+
 export const searchContext = async (searchParams: GetContextParameters) => {
   const search = await odeServices
     .resource(searchParams.application)

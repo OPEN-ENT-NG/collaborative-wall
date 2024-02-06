@@ -20,10 +20,12 @@ export const ToolbarWrapper = ({
   zoomIn,
   zoomOut,
   resetTransform,
+  canUpdate,
 }: {
-  zoomIn: any;
-  zoomOut: any;
-  resetTransform: any;
+  zoomIn: (value: number) => void;
+  zoomOut: (value: number) => void;
+  resetTransform: () => void;
+  canUpdate: boolean | undefined;
 }) => {
   const {
     canMoveBoard,
@@ -89,6 +91,7 @@ export const ToolbarWrapper = ({
           "aria-label": t("collaborativewall.toolbar.movenote"),
           color: "tertiary",
           className: canMoveNote ? "is-selected" : "",
+          disabled: !canUpdate,
           onClick: () => {
             toggleCanMoveNote();
             setCanMoveBoard(false);
@@ -193,6 +196,7 @@ export const ToolbarWrapper = ({
         },
       }, */
     ];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [t, canMoveBoard, canMoveNote, zoom]);
 
   return <Toolbar className="p-8" items={WhiteboardItems} />;

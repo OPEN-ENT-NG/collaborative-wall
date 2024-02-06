@@ -6,6 +6,7 @@ import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { ToolbarWrapper } from "../toolbar";
 import { WhiteboardComponent } from "../whiteboard-component";
 import { zoomConfig } from "~/config/init-config";
+import { useUserRights } from "~/hooks/useUserRights";
 import { CollaborativeWallProps } from "~/routes/collaborative-wall";
 
 export const WhiteboardWrapper = ({
@@ -22,6 +23,8 @@ export const WhiteboardWrapper = ({
   const handleScaleChange = (event: any) => {
     setZoom(event.instance.transformState.scale);
   };
+
+  const { canUpdate } = useUserRights({ data });
 
   return (
     <>
@@ -44,11 +47,13 @@ export const WhiteboardWrapper = ({
               data={data}
               zoomIn={zoomIn}
               zoomOut={zoomOut}
+              canUpdate={canUpdate}
             />
             <ToolbarWrapper
               zoomIn={zoomIn}
               zoomOut={zoomOut}
               resetTransform={resetTransform}
+              canUpdate={canUpdate}
             />
           </div>
         )}
