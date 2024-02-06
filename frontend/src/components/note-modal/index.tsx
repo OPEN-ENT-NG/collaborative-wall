@@ -1,3 +1,6 @@
+import { useRef, useState } from "react";
+
+import { Editor, EditorRef } from "@edifice-ui/editor";
 import { Button, Modal } from "@edifice-ui/react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
@@ -33,9 +36,11 @@ export async function noteLoader({ params }: LoaderFunctionArgs) {
 }
 
 export const NoteModal = () => {
-  const { t } = useTranslation();
+  const [editorMode] = useState<"read" | "edit">("read");
+  const editorRef = useRef<EditorRef>(null);
   const data = useLoaderData() as NoteProps;
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return data ? (
     createPortal(
@@ -45,13 +50,18 @@ export const NoteModal = () => {
         size="md"
         isOpen={true}
         focusId=""
+        scrollable={true}
       >
         <Modal.Header onModalClose={() => navigate("..")}>
           {t("Note")}
         </Modal.Header>
         <Modal.Subtitle>{data.owner?.displayName}</Modal.Subtitle>
         <Modal.Body>
-          <p>{data.content}</p>
+          <Editor
+            ref={editorRef}
+            content={data?.content || ""}
+            mode={editorMode}
+          ></Editor>
         </Modal.Body>
         <Modal.Footer>
           <Button
