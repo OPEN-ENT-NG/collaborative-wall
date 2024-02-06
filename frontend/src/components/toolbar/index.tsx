@@ -16,13 +16,11 @@ import { useWhiteboard } from "~/store";
 export const ToolbarWrapper = ({
   zoomIn,
   zoomOut,
-  resetTransform,
-  canUpdate,
+  setTransform,
 }: {
   zoomIn: (value: number) => void;
   zoomOut: (value: number) => void;
-  resetTransform: () => void;
-  canUpdate: boolean | undefined;
+  setTransform: any;
 }) => {
   const {
     canMoveBoard,
@@ -151,9 +149,19 @@ export const ToolbarWrapper = ({
         color: "tertiary",
         onClick: () => zoomOut(zoomConfig.SCALE_ZOOM),
       },
-      tooltip: {
-        message: t("collaborativewall.toolbar.zoomout"),
-        position: "top",
+      {
+        type: "icon",
+        name: "center",
+        props: {
+          icon: <Center />,
+          "aria-label": t("collaborativewall.toolbar.center"),
+          color: "tertiary",
+          onClick: () => setTransform(0, 0, zoomConfig.DEFAULT_ZOOM),
+        },
+        tooltip: {
+          message: t("collaborativewall.toolbar.center"),
+          position: "top",
+        },
       },
     },
     {
@@ -165,15 +173,15 @@ export const ToolbarWrapper = ({
         children: (zoom * 100).toFixed(0) + "%",
         onClick: () => resetTransform(),
       },
-    },
-    {
-      type: "icon",
-      name: "zoomIn",
-      props: {
-        icon: <ZoomIn />,
-        "aria-label": t("collaborativewall.toolbar.zoomin"),
-        color: "tertiary",
-        onClick: () => zoomIn(zoomConfig.SCALE_ZOOM),
+      {
+        type: "button",
+        name: "zoom",
+        props: {
+          "aria-label": t("collaborativewall.toolbar.zoom"),
+          color: "tertiary",
+          children: (zoom * 100).toFixed(0) + "%",
+          onClick: () => setTransform(0, 0, zoomConfig.DEFAULT_ZOOM),
+        },
       },
       tooltip: {
         message: t("collaborativewall.toolbar.zoomin"),
