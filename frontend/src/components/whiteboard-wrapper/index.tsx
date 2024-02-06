@@ -27,11 +27,12 @@ export const WhiteboardWrapper = ({
     <>
       <TransformWrapper
         ref={ref}
-        disabled={!canMoveBoard}
         initialScale={zoomConfig.DEFAULT_ZOOM}
         minScale={zoomConfig.MIN_ZOOM}
         maxScale={zoomConfig.MAX_ZOOM}
         onTransformed={(e) => handleScaleChange(e)}
+        wheel={{ wheelDisabled: canMoveBoard }}
+        panning={{ wheelPanning: canMoveBoard, disabled: !canMoveBoard }}
       >
         {({ zoomIn, zoomOut, resetTransform }) => (
           <div
