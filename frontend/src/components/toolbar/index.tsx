@@ -17,10 +17,12 @@ export const ToolbarWrapper = ({
   zoomIn,
   zoomOut,
   resetTransform,
+  canUpdate,
 }: {
-  zoomIn: any;
-  zoomOut: any;
-  resetTransform: any;
+  zoomIn: (value: number) => void;
+  zoomOut: (value: number) => void;
+  resetTransform: () => void;
+  canUpdate: boolean | undefined;
 }) => {
   const {
     canMoveBoard,
@@ -116,19 +118,24 @@ export const ToolbarWrapper = ({
         message: t("collaborativewall.toolbar.movewhiteboard"),
         position: "top",
       },
-    },
-    {
-      type: "divider",
-      name: "div-2",
-    },
-    {
-      type: "icon",
-      name: "center",
-      props: {
-        icon: <Center />,
-        "aria-label": t("collaborativewall.toolbar.center"),
-        color: "tertiary",
-        onClick: () => resetTransform(),
+      {
+        type: "icon",
+        name: "pointerDefault",
+        props: {
+          icon: <PointerDefault />,
+          "aria-label": t("collaborativewall.toolbar.movenote"),
+          color: "tertiary",
+          className: canMoveNote ? "is-selected" : "",
+          disabled: !canUpdate,
+          onClick: () => {
+            toggleCanMoveNote();
+            setCanMoveBoard(false);
+          },
+        },
+        tooltip: {
+          message: t("collaborativewall.toolbar.movenote"),
+          position: "top",
+        },
       },
       tooltip: {
         message: t("collaborativewall.toolbar.center"),
@@ -192,9 +199,9 @@ export const ToolbarWrapper = ({
           position: "top",
         },
       }, */
-  ];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [t, canMoveBoard, canMoveNote, zoom]);
+    ];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t, canMoveBoard, canMoveNote, zoom]);
 
   return <Toolbar className="p-8" items={WhiteboardItems} />;
 };

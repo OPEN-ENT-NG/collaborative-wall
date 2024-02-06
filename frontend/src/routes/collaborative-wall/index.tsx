@@ -40,18 +40,26 @@ const activationConstraint = {
   tolerance: 5,
 };
 
-interface DataProps {
-  wall: CollaborativeWallProps;
-  notes: NoteProps[];
+export interface CollaborativeWallProps {
+  _id: string;
+  name: string;
+  background: string;
+  created: { $date: number };
+  modified: { $date: number };
+  owner: {
+    userId: string;
+    displayName: string;
+  };
+  nbnotes: string;
+  shared?: any[];
+  description?: string;
 }
 
 export async function wallLoader({ params }: LoaderFunctionArgs) {
   const { id } = params;
 
-  const wall = await getWall(id as string);
-  const notes = await getNotes(id as string);
-
-  if (!wall) {
+  console.log(collaborativeWall);
+  if (!collaborativeWall) {
     throw new Response("", {
       status: 404,
       statusText: "Not Found",

@@ -42,3 +42,52 @@ export const getNotes = async (id: string) => {
     .get<NoteProps[]>(`/collaborativewall/${id}/notes`);
   return notes;
 };
+
+export const sessionHasWorkflowRights = async (actionRights: string[]) => {
+  return await odeServices.rights().sessionHasWorkflowRights(actionRights);
+};
+
+export const searchContext = async (searchParams: GetContextParameters) => {
+  const search = await odeServices
+    .resource(searchParams.application)
+    .searchContext(searchParams);
+
+  console.log({ search });
+
+  return search;
+};
+
+/**
+ * shareResource API
+ * @param searchParams, entId, shares
+ * @returns shared resource
+ */
+export const shareResource = async (
+  application: string,
+  {
+    resourceId,
+    rights,
+  }: {
+    resourceId: ID;
+    rights: ShareRight[];
+  },
+) => {
+  return await odeServices.share().saveRights(application, resourceId, rights);
+};
+
+/**
+ * updateResource API
+ * @param searchParams, params
+ * @returns updated resource
+ */
+export const updateResource = async (
+  application: string,
+  {
+    params,
+  }: {
+    params: UpdateParameters;
+  },
+) => {
+  console.log(application, { params });
+  return await odeServices.resource(application).update(params);
+};

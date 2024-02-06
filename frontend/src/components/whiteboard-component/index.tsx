@@ -14,11 +14,13 @@ export const WhiteboardComponent = ({
   data,
   zoomIn,
   zoomOut,
+  canUpdate,
 }: {
   children: ReactNode;
   data: CollaborativeWallProps;
-  zoomIn: any;
-  zoomOut: any;
+  zoomIn: (value: number) => void;
+  zoomOut: (value: number) => void;
+  canUpdate: boolean | undefined;
 }) => {
   const { canMoveBoard, isDragging, setCanMoveBoard, setCanMoveNote } =
     useWhiteboard(
@@ -49,7 +51,7 @@ export const WhiteboardComponent = ({
       setCanMoveBoard(false);
       setCanMoveNote(false);
     }
-    if (event.key === "v") {
+    if (canUpdate && event.key === "v") {
       setCanMoveNote(true);
       setCanMoveBoard(false);
     }
