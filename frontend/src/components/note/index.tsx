@@ -7,10 +7,10 @@ import { useWhiteboard } from "~/store";
 
 export const Note = ({
   note,
-  onNoteClick,
+  onClick,
 }: {
   note: NoteProps;
-  onNoteClick: (note: NoteProps) => void;
+  onClick: (id: string) => void;
 }) => {
   const { zoom, canMoveNote, isBoardDragging } = useWhiteboard(
     useShallow((state) => ({
@@ -61,7 +61,7 @@ export const Note = ({
       <Card
         className={`note ${isDragging && "is-dragging"} ${canMoveNote && !isDragging && "is-grab"}`}
         isSelectable={false}
-        onClick={() => onNoteClick(note)}
+        onClick={() => onClick(note._id)}
       >
         <Card.Body>
           {/* Modifier l'image lorsqu'on récupéreré une image */}
