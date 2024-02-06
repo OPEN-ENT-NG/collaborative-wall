@@ -11,7 +11,6 @@ import {
   Active,
 } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
-import { Print } from "@edifice-ui/icons";
 import {
   AppHeader,
   Breadcrumb,
@@ -134,9 +133,6 @@ export const CollaborativeWall = () => {
         isFullscreen
         render={() => (
           <>
-            <Button variant="outline" leftIcon={<Print />}>
-              {t("print")}
-            </Button>
             <Button variant="filled" /* onClick={() => setOpenShare(true)} */>
               {t("share")}
             </Button>
