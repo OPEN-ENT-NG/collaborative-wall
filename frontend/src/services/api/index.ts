@@ -31,11 +31,25 @@ export interface NoteProps {
 }
 
 /**
+ * getNote API
+ * @param idWall wall id
+ * @param idNote note id
+ * @returns note
+ */
+export const getNote = async (
+  idWall: string,
+  idNote: string,
+): Promise<NoteProps> => {
+  return await odeServices
+    .http()
+    .get<NoteProps>(`/collaborativewall/${idWall}/note/${idNote}`);
+};
+
+/**
  * getNotes API
  * @param id, resource ID
  * @returns notes
  */
-
 export const getNotes = async (id: string) => {
   const notes = await odeServices
     .http()

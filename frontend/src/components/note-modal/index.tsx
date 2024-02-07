@@ -1,5 +1,4 @@
 import { Button, Modal } from "@edifice-ui/react";
-import { odeServices } from "edifice-ts-client";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -8,14 +7,19 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-import { NoteProps } from "~/services/api";
+import { NoteProps, getNote } from "~/services/api";
 
 export async function noteLoader({ params }: LoaderFunctionArgs) {
   const { id, idnote } = params;
 
-  const note = await odeServices
-    .http()
-    .get<NoteProps>(`/collaborativewall/${id}/note/${idnote}`);
+  if (!id || !idnote) {
+    throw new Response("", {
+      status: 404,
+      statusText: "Wall id or Note id is null",
+    });
+  }
+
+  const note = await getNote(id, idnote);
 
   if (!note) {
     throw new Response("", {
