@@ -41,6 +41,10 @@ export const Note = ({
 
   const defaultImage = "/img/cloud.png";
 
+  const handleClick = (noteId: string): void => {
+    onClick(noteId);
+  };
+
   return (
     <div
       ref={setNodeRef}
@@ -61,7 +65,7 @@ export const Note = ({
       <Card
         className={`note ${isDragging && "is-dragging"} ${canMoveNote && !isDragging && "is-grab"}`}
         isSelectable={false}
-        onClick={() => onClick(note._id)}
+        onClick={() => handleClick(note._id)}
       >
         <Card.Body>
           {/* Modifier l'image lorsqu'on récupéreré une image */}
