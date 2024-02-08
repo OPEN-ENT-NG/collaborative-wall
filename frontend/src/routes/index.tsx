@@ -1,10 +1,10 @@
-import { createBrowserRouter } from "react-router-dom";
+import { RouteObject, createBrowserRouter } from "react-router-dom";
 
 import ErrorPage from "~/components/page-error";
 
 import "~/styles/index.css";
 
-const routes = [
+const routes: RouteObject[] = [
   {
     path: "id/:id",
     async lazy() {
@@ -16,6 +16,17 @@ const routes = [
         Component: CollaborativeWall,
       };
     },
+    children: [
+      {
+        path: "note/:idnote",
+        async lazy() {
+          const { noteLoader, NoteModal } = await import(
+            "../components/note-modal"
+          );
+          return { loader: noteLoader, Component: NoteModal };
+        },
+      },
+    ],
     errorElement: <ErrorPage />,
   },
 ];
