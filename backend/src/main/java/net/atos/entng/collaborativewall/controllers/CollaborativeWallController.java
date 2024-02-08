@@ -22,16 +22,21 @@ package net.atos.entng.collaborativewall.controllers;
 import fr.wseduc.rs.*;
 import fr.wseduc.security.ActionType;
 import fr.wseduc.security.SecuredAction;
+import fr.wseduc.webutils.DefaultAsyncResult;
 import fr.wseduc.webutils.Either;
 import fr.wseduc.webutils.http.Renders;
 import fr.wseduc.webutils.request.RequestUtils;
 import fr.wseduc.webutils.I18n;
 import net.atos.entng.collaborativewall.CollaborativeWall;
 import net.atos.entng.collaborativewall.controllers.helpers.NotesHelper;
+import net.atos.entng.collaborativewall.explorer.WallExplorerPlugin;
 import net.atos.entng.collaborativewall.service.NoteService;
+import org.entcore.common.controller.ControllerHelper;
 import org.entcore.common.events.EventHelper;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
+import org.entcore.common.explorer.IdAndVersion;
+import org.entcore.common.http.response.DefaultResponseHandler;
 import org.entcore.common.mongodb.MongoDbControllerHelper;
 import org.entcore.common.service.VisibilityFilter;
 import org.entcore.common.user.UserInfos;
@@ -44,7 +49,11 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.JsonArray;
 
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static org.entcore.common.http.response.DefaultResponseHandler.defaultResponseHandler;
 
 /**
  * Controller to manage URL paths for collaborative walls.
@@ -56,6 +65,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     private final EventHelper eventHelper;
 
     private final NotesHelper notesHelper;
+    private final WallExplorerPlugin plugin;
 
 	@Override
 	public void init(Vertx vertx, JsonObject config, RouteMatcher rm,
@@ -66,6 +76,8 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
           log.error(e.getMessage(), e);
         }
         this.notesHelper.init(vertx, config, rm, securedActions);
+        final Map<String, List<String>> groupedActions = new HashMap<>();
+        this.shareService = plugin.createShareService(groupedActions);
 	}
 
     /**
@@ -73,8 +85,9 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
      *
      * @param collection MongoDB collection to request.
      */
-    public CollaborativeWallController(String collection, NoteService noteService) {
+    public CollaborativeWallController(String collection, NoteService noteService, WallExplorerPlugin plugin) {
         super(collection);
+        this.plugin = plugin;
         this.notesHelper = new NotesHelper(noteService);
         final EventStore eventStore = EventStoreFactory.getFactory().getEventStore(CollaborativeWall.class.getSimpleName());
         this.eventHelper = new EventHelper(eventStore);
@@ -83,7 +96,6 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @Get("")
     @ApiDoc("Allows to display the main view")
     @SecuredAction("collaborativewall.view")
-
     public void view(HttpServerRequest request) {
         renderView(request, new JsonObject(), "index.html", null);
 
@@ -148,16 +160,34 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @ApiDoc("Allows to create a new collaborative wall")
     @SecuredAction("collaborativewall.create")
     public void create(final HttpServerRequest request) {
-        RequestUtils.bodyToJson(request, pathPrefix + "collaborativewall", new Handler<JsonObject>() {
-
-            @Override
-            public void handle(JsonObject event) {
-                CollaborativeWallController.super.create(request, r -> {
-                    if(r.succeeded()){
-                        eventHelper.onCreateResource(request, RESOURCE_NAME);
-                    }
-                });
-            }
+        // valiate payload
+        RequestUtils.bodyToJson(request, pathPrefix + "collaborativewall", wall -> {
+            // get user
+            UserUtils.getUserInfos(eb, request, user ->{
+                if (user != null) {
+                    final Handler<Either<String, JsonObject>> handler = DefaultResponseHandler.notEmptyResponseHandler(request);
+                    // create wall
+                    crudService.create(wall, user, (r) -> {
+                        if (r.isLeft()) {
+                            // if fail return error
+                            handler.handle(new Either.Left<>(r.left().getValue()));
+                        } else {
+                            // notify creation event
+                            eventHelper.onCreateResource(request, RESOURCE_NAME);
+                            // notify EUR
+                            plugin.notifyUpsert(user, r.right().getValue()).onSuccess(e -> {
+                                // on success return 200
+                                handler.handle(r);
+                            }).onFailure(e -> {
+                                // on error return message
+                                handler.handle(new Either.Left<>(e.getMessage()));
+                            });
+                        }
+                    });
+                } else {
+                    unauthorized(request);
+                }
+            });
         });
     }
 
@@ -174,12 +204,33 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @ApiDoc("Allows to update a collaborative wall associated to the given identifier")
     @SecuredAction(value = "collaborativewall.manager", type = ActionType.RESOURCE)
     public void update(final HttpServerRequest request) {
-        RequestUtils.bodyToJson(request, pathPrefix + "collaborativewall", new Handler<JsonObject>() {
-
-            @Override
-            public void handle(JsonObject event) {
-                CollaborativeWallController.super.update(request);
-            }
+        final String id = request.params().get("id");
+        // validate payload
+        RequestUtils.bodyToJson(request, pathPrefix + "collaborativewall", wall -> {
+            // get user
+            UserUtils.getUserInfos(eb, request, user ->{
+                if (user != null) {
+                    final Handler<Either<String, JsonObject>> handler = DefaultResponseHandler.notEmptyResponseHandler(request);
+                    // update wall
+                    crudService.update(id, wall, user, (r) -> {
+                        if (r.isLeft()) {
+                            // if fail return error
+                            handler.handle(new Either.Left<>(r.left().getValue()));
+                        } else {
+                            // notify EUR
+                            plugin.notifyUpsert(user, r.right().getValue()).onSuccess(e -> {
+                                // on success return 200
+                                handler.handle(r);
+                            }).onFailure(e -> {
+                                // on error return message
+                                handler.handle(new Either.Left<>(e.getMessage()));
+                            });
+                        }
+                    });
+                } else {
+                    unauthorized(request);
+                }
+            });
         });
     }
 
@@ -188,15 +239,35 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @ApiDoc("Allows to delete a collaborative wall associated to the given identifier")
     @SecuredAction(value = "collaborativewall.manager", type = ActionType.RESOURCE)
     public void delete(final HttpServerRequest request) {
-        String idWall = NotesHelper.extractParameter(request, "id");
-        notesHelper.removeAllNotes(idWall, new Handler<Either<String, JsonObject>>() {
-            @Override
-            public void handle(Either<String, JsonObject> res) {
-                if (res.isRight()) {
-                    CollaborativeWallController.super.delete(request);
-                } else {
-                    renderError(request);
-                }
+        final String idWall = NotesHelper.extractParameter(request, "id");
+        notesHelper.removeAllNotes(idWall, res -> {
+            if (res.isRight()) {
+                // get user
+                UserUtils.getUserInfos(eb, request, user ->{
+                    if (user != null) {
+                        final Handler<Either<String, JsonObject>> handler = DefaultResponseHandler.notEmptyResponseHandler(request);
+                        // delete wall
+                        crudService.delete(idWall, user, (r) -> {
+                            if (r.isLeft()) {
+                                // if fail return error
+                                handler.handle(new Either.Left<>(r.left().getValue()));
+                            } else {
+                                // notify EUR
+                                plugin.notifyDeleteById(user, new IdAndVersion(idWall, System.currentTimeMillis())).onSuccess(e -> {
+                                    // on success return 200
+                                    handler.handle(r);
+                                }).onFailure(e -> {
+                                    // on error return message
+                                    handler.handle(new Either.Left<>(e.getMessage()));
+                                });
+                            }
+                        });
+                    } else {
+                        unauthorized(request);
+                    }
+                });
+            } else {
+                renderError(request);
             }
         });
     }
