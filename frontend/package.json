@@ -1,6 +1,6 @@
 {
   "name": "collaborative-wall",
-  "version": "1.0.0-develop-pedago.202401311120",
+  "version": "1.0.0-develop-pedago.20240281514",
   "description": "Collaborative editor for ENT Core.",
   "homepage": "https://github.com/OPEN-ENT-NG/collaborative-wall#readme",
   "bugs": {
@@ -58,7 +58,8 @@
     "react-i18next": "14.0.1",
     "react-router-dom": "6.21.3",
     "react-zoom-pan-pinch": "3.3.0",
-    "zustand": "4.5.0"
+    "zustand": "4.5.0",
+    "ode-explorer": "develop-pedago"
   },
   "devDependencies": {
     "@axe-core/react": "4.8.4",

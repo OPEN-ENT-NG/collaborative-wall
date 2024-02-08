@@ -24,12 +24,11 @@ import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
-import { Whiteboard } from "../../components/whiteboard";
-import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { DescriptionWall } from "~/components/description-wall";
 import { Note } from "~/components/note";
 import { WhiteboardWrapper } from "~/components/whiteboard-wrapper";
 import { NoteProps, getNotes } from "~/services/api";
+import { useWhiteboard } from "~/store";
 
 const DescriptionModal = lazy(
   async () => await import("~/components/description-modal"),

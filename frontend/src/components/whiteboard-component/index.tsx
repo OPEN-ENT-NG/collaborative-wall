@@ -3,9 +3,9 @@ import { ReactNode, useEffect } from "react";
 import { TransformComponent } from "react-zoom-pan-pinch";
 import { useShallow } from "zustand/react/shallow";
 
-import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { zoomConfig } from "~/config/init-config";
 import { CollaborativeWallProps } from "~/routes/collaborative-wall";
+import { useWhiteboard } from "~/store";
 
 const defaultBackground = "/img/cloud.png";
 
@@ -72,6 +72,7 @@ export const WhiteboardComponent = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -80,6 +81,7 @@ export const WhiteboardComponent = ({
     return () => {
       window.removeEventListener("keyup", handleKeyUp);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

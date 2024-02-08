@@ -2,8 +2,8 @@ import { useDraggable } from "@dnd-kit/core";
 import { Card, Image } from "@edifice-ui/react";
 import { useShallow } from "zustand/react/shallow";
 
-import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { NoteProps } from "~/services/api";
+import { useWhiteboard } from "~/store";
 
 export const Note = ({
   note,
