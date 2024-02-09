@@ -3,9 +3,9 @@ import { ReactNode, useEffect } from "react";
 import { TransformComponent } from "react-zoom-pan-pinch";
 import { useShallow } from "zustand/react/shallow";
 
-import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { zoomConfig } from "~/config/init-config";
 import { CollaborativeWallProps } from "~/routes/collaborative-wall";
+import { useWhiteboard } from "~/store";
 
 const defaultBackground = "/img/cloud.png";
 
@@ -14,11 +14,13 @@ export const WhiteboardComponent = ({
   data,
   zoomIn,
   zoomOut,
+  canUpdate,
 }: {
   children: ReactNode;
   data: CollaborativeWallProps;
-  zoomIn: any;
-  zoomOut: any;
+  zoomIn: (value: number) => void;
+  zoomOut: (value: number) => void;
+  canUpdate: boolean | undefined;
 }) => {
   const { canMoveBoard, isDragging, setCanMoveBoard, setCanMoveNote } =
     useWhiteboard(
@@ -49,7 +51,7 @@ export const WhiteboardComponent = ({
       setCanMoveBoard(false);
       setCanMoveNote(false);
     }
-    if (event.key === "v") {
+    if (canUpdate && event.key === "v") {
       setCanMoveNote(true);
       setCanMoveBoard(false);
     }
@@ -72,6 +74,7 @@ export const WhiteboardComponent = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -80,6 +83,7 @@ export const WhiteboardComponent = ({
     return () => {
       window.removeEventListener("keyup", handleKeyUp);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -94,9 +98,8 @@ export const WhiteboardComponent = ({
         <div
           style={{
             backgroundImage: `url(${data.background ?? defaultBackground})`,
-            backgroundRepeat: "repeat",
-            height: "3600px",
-            width: "5760px",
+            height: "1800px",
+            width: "2880px",
           }}
         >
           {children}

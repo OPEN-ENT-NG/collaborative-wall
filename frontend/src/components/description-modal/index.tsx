@@ -13,17 +13,19 @@ export default function DescriptionModal({
 }): JSX.Element | null {
   const { t } = useTranslation();
 
+  const handleClose = () => setIsOpen(false);
+
   return isOpen
     ? createPortal(
         <Modal
           id="TrashModal"
-          onModalClose={() => setIsOpen(false)}
+          onModalClose={handleClose}
           size="md"
           isOpen={isOpen}
           focusId="nextButtonId"
         >
-          <Modal.Header onModalClose={() => setIsOpen(false)}>
-            {t("description")}
+          <Modal.Header onModalClose={handleClose}>
+            {t("collaborativewall.modal.description")}
           </Modal.Header>
           <Modal.Body>
             <p>{description}</p>
@@ -33,9 +35,9 @@ export default function DescriptionModal({
               type="button"
               color="primary"
               variant="filled"
-              onClick={() => setIsOpen(false)}
+              onClick={handleClose}
             >
-              {t("explorer.modal.onboarding.trash.close")}
+              {t("collaborativewall.modal.close")}
             </Button>
           </Modal.Footer>
         </Modal>,

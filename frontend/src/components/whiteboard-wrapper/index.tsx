@@ -2,11 +2,12 @@ import { ReactNode, useRef } from "react";
 
 import { TransformWrapper } from "react-zoom-pan-pinch";
 
-import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { ToolbarWrapper } from "../toolbar";
 import { WhiteboardComponent } from "../whiteboard-component";
 import { zoomConfig } from "~/config/init-config";
+import { useUserRights } from "~/hooks/useUserRights";
 import { CollaborativeWallProps } from "~/routes/collaborative-wall";
+import { useWhiteboard } from "~/store";
 
 export const WhiteboardWrapper = ({
   children,
@@ -23,15 +24,18 @@ export const WhiteboardWrapper = ({
     setZoom(event.instance.transformState.scale);
   };
 
+  const { canUpdate } = useUserRights({ data });
+
   return (
     <>
       <TransformWrapper
         ref={ref}
-        disabled={!canMoveBoard}
         initialScale={zoomConfig.DEFAULT_ZOOM}
         minScale={zoomConfig.MIN_ZOOM}
         maxScale={zoomConfig.MAX_ZOOM}
         onTransformed={(e) => handleScaleChange(e)}
+        wheel={{ wheelDisabled: canMoveBoard }}
+        panning={{ wheelPanning: canMoveBoard, disabled: !canMoveBoard }}
       >
         {({ zoomIn, zoomOut, setTransform }) => (
           <div
@@ -44,11 +48,13 @@ export const WhiteboardWrapper = ({
               data={data}
               zoomIn={zoomIn}
               zoomOut={zoomOut}
+              canUpdate={canUpdate}
             />
             <ToolbarWrapper
               zoomIn={zoomIn}
               zoomOut={zoomOut}
               setTransform={setTransform}
+              canUpdate={canUpdate}
             />
           </div>
         )}
