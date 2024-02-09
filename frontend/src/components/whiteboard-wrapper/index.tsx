@@ -37,7 +37,7 @@ export const WhiteboardWrapper = ({
         wheel={{ wheelDisabled: canMoveBoard }}
         panning={{ wheelPanning: canMoveBoard, disabled: !canMoveBoard }}
       >
-        {({ zoomIn, zoomOut, resetTransform }) => (
+        {({ zoomIn, zoomOut, setTransform }) => (
           <div
             style={{
               background: "linear-gradient(#46AFE6, #E5F5FF)",
@@ -53,7 +53,7 @@ export const WhiteboardWrapper = ({
             <ToolbarWrapper
               zoomIn={zoomIn}
               zoomOut={zoomOut}
-              resetTransform={resetTransform}
+              setTransform={setTransform}
               canUpdate={canUpdate}
             />
           </div>
