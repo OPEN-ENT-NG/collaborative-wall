@@ -46,8 +46,7 @@
 }
 
 .card-body {
-  align-items: unset;
-  text-align: initial;
+  align-items: unset !important;
   max-height: 334px;
   flex-wrap: wrap;
 }
@@ -63,4 +62,17 @@
 
 .note.is-grab .card-header button {
   cursor: grab !important;
+}
+
+@media (max-width: 440px) {
+  .toolbar {
+    bottom: 0px;
+    width: 100%;
+    padding: 8 0 !important;
+    gap: 0px !important;
+  }
+  .zoom-out,
+  .zoom-in {
+    display: none !important;
+  }
 }

@@ -2,7 +2,6 @@ import { lazy, useState } from "react";
 
 import {
   DndContext,
-  closestCenter,
   MouseSensor,
   TouchSensor,
   useSensor,
@@ -10,7 +9,6 @@ import {
   KeyboardSensor,
   Active,
 } from "@dnd-kit/core";
-import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import { AppHeader, Breadcrumb, Button, useOdeClient } from "@edifice-ui/react";
 import { QueryClient, useQuery } from "@tanstack/react-query";
 import { IWebApp } from "edifice-ts-client";
@@ -162,12 +160,7 @@ export const CollaborativeWall = () => {
           />
         )}
         <WhiteboardWrapper data={wall}>
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleOnDragEnd}
-            modifiers={[snapCenterToCursor]}
-          >
+          <DndContext sensors={sensors} onDragEnd={handleOnDragEnd}>
             {notes.map((note: NoteProps, i: number) => {
               return (
                 <Note

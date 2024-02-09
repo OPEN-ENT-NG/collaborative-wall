@@ -13,7 +13,7 @@ import { ID } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
-import { zoomConfig } from "~/config/init-config";
+import { wallConfig, zoomConfig } from "~/config/init-config";
 import { useCreateNote } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 
@@ -55,6 +55,9 @@ export const ToolbarWrapper = ({
   const createNote = useCreateNote(wallId);
 
   const result = Math.random().toString(36).substring(2, 7);
+
+  const offsetX = (window.innerWidth - wallConfig.WIDTH_WALL) / 2;
+  const offsetY = (window.innerHeight - wallConfig.HEIGHT_WALL) / 2;
 
   const WhiteboardItems: ToolbarItem[] = [
     {
@@ -138,7 +141,7 @@ export const ToolbarWrapper = ({
         icon: <Center />,
         "aria-label": t("collaborativewall.toolbar.center"),
         color: "tertiary",
-        onClick: () => setTransform(0, 0, zoomConfig.DEFAULT_ZOOM),
+        onClick: () => setTransform(offsetX, offsetY, zoomConfig.DEFAULT_ZOOM),
       },
       tooltip: {
         message: t("collaborativewall.toolbar.center"),
@@ -150,6 +153,7 @@ export const ToolbarWrapper = ({
       name: "zoomOut",
       props: {
         icon: <ZoomOut />,
+        className: "zoom-out",
         "aria-label": t("collaborativewall.toolbar.zoomout"),
         color: "tertiary",
         onClick: () => zoomOut(zoomConfig.SCALE_ZOOM),
@@ -166,7 +170,7 @@ export const ToolbarWrapper = ({
         "aria-label": t("collaborativewall.toolbar.zoom"),
         color: "tertiary",
         children: (zoom * 100).toFixed(0) + "%",
-        onClick: () => setTransform(0, 0, zoomConfig.DEFAULT_ZOOM),
+        onClick: () => setTransform(offsetX, offsetY, zoomConfig.DEFAULT_ZOOM),
       },
     },
     {
@@ -174,6 +178,7 @@ export const ToolbarWrapper = ({
       name: "zoomIn",
       props: {
         icon: <ZoomIn />,
+        className: "zoom-in",
         "aria-label": t("collaborativewall.toolbar.zoomin"),
         color: "tertiary",
         onClick: () => zoomIn(zoomConfig.SCALE_ZOOM),
@@ -211,5 +216,5 @@ export const ToolbarWrapper = ({
     },
   ];
 
-  return <Toolbar className="p-8" items={WhiteboardItems} />;
+  return <Toolbar items={WhiteboardItems} />;
 };
