@@ -8,32 +8,21 @@ import {
   useLoaderData,
 } from "react-router-dom";
 
-import { CollaborativeWallProps } from "./collaborative-wall";
 import ErrorPage from "~/components/page-error";
+import { Wall } from "~/models/wall";
 
 import "~/styles/index.css";
 
-/* export async function action() {
-  const contact = await createContact();
-  return { contact };
-} */
-
 /* TEMPORARY */
 function Root() {
-  const data = useLoaderData() as CollaborativeWallProps[];
-
-  console.log("es");
-
-  /* function handleOnSubmit(event) {
-    event.preventDefault();
-  } */
+  const data = useLoaderData() as Wall[];
 
   return (
     <>
       <ul>
         {data.map((wall) => {
           return (
-            <li>
+            <li key={wall._id}>
               <Link to={`id/${wall._id}`}>{wall._id}</Link>
             </li>
           );
@@ -54,7 +43,7 @@ const routes: RouteObject[] = [
     loader: async () => {
       const walls = await odeServices
         .http()
-        .get<CollaborativeWallProps>(`/collaborativewall/list/all`);
+        .get<Wall>(`/collaborativewall/list/all`);
 
       console.log(walls);
       return walls;

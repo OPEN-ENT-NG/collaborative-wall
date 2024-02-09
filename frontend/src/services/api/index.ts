@@ -1,5 +1,8 @@
 import { odeServices } from "edifice-ts-client";
 
+import { Note } from "~/models/notes";
+import { Wall } from "~/models/wall";
+
 export interface CollaborativeWallType {
   _id: string;
   name: string;
@@ -13,22 +16,18 @@ export interface CollaborativeWallType {
   };
 }
 
-export interface NoteProps {
-  _id: string;
-  title?: string;
-  content: string;
-  x: number;
-  y: number;
-  idwall?: string;
-  color?: string[];
-  created?: { $date: number };
-  modified?: { $date: number };
-  owner?: {
-    userId: string;
-    displayName: string;
-  };
-  zIndex?: number;
-}
+/**
+ * getWall API
+ * @param idWall wall id
+ * @returns walls
+ */
+export const getWall = async (id: string): Promise<Wall> => {
+  const wall = await odeServices.http().get<Wall>(`/collaborativewall/${id}`);
+
+  console.log({ wall });
+
+  return wall;
+};
 
 /**
  * getNote API
@@ -39,10 +38,10 @@ export interface NoteProps {
 export const getNote = async (
   idWall: string,
   idNote: string,
-): Promise<NoteProps> => {
+): Promise<Note> => {
   return await odeServices
     .http()
-    .get<NoteProps>(`/collaborativewall/${idWall}/note/${idNote}`);
+    .get<Note>(`/collaborativewall/${idWall}/note/${idNote}`);
 };
 
 /**
@@ -53,6 +52,6 @@ export const getNote = async (
 export const getNotes = async (id: string) => {
   const notes = await odeServices
     .http()
-    .get<NoteProps[]>(`/collaborativewall/${id}/notes`);
+    .get<Note[]>(`/collaborativewall/${id}/notes`);
   return notes;
 };

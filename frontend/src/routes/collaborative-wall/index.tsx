@@ -1,4 +1,4 @@
-import { lazy, useEffect, useState } from "react";
+import { lazy, useState } from "react";
 
 import {
   DndContext,
@@ -12,7 +12,7 @@ import {
 } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import { AppHeader, Breadcrumb, Button, useOdeClient } from "@edifice-ui/react";
-import { IWebApp, odeServices } from "edifice-ts-client";
+import { IWebApp } from "edifice-ts-client";
 // @ts-ignore
 import { useTranslation } from "react-i18next";
 import {
@@ -26,7 +26,9 @@ import { useShallow } from "zustand/react/shallow";
 import { DescriptionWall } from "~/components/description-wall";
 import { Note } from "~/components/note";
 import { WhiteboardWrapper } from "~/components/whiteboard-wrapper";
-import { NoteProps, getNotes } from "~/services/api";
+import { Note as NoteProps } from "~/models/notes";
+import { Wall } from "~/models/wall";
+import { getNotes, getWall } from "~/services/api";
 import { useWhiteboard } from "~/store";
 
 const DescriptionModal = lazy(
@@ -38,33 +40,25 @@ const activationConstraint = {
   tolerance: 5,
 };
 
-export interface CollaborativeWallProps {
-  _id: string;
-  name: string;
-  background: string;
-  created: { $date: number };
-  modified: { $date: number };
-  owner: {
-    userId: string;
-    displayName: string;
-  };
-  map: string;
+interface DataProps {
+  wall: Wall;
+  notes: NoteProps[];
 }
 
 export async function wallLoader({ params }: LoaderFunctionArgs) {
   const { id } = params;
-  const collaborativeWall = odeServices
-    .http()
-    .get<CollaborativeWallProps>(`/collaborativewall/${id}`);
 
-  if (!collaborativeWall) {
+  const wall = await getWall(id as string);
+  const notes = await getNotes(id as string);
+
+  if (!wall) {
     throw new Response("", {
       status: 404,
       statusText: "Not Found",
     });
   }
 
-  return collaborativeWall;
+  return { wall, notes };
 }
 
 export const CollaborativeWall = () => {
@@ -72,13 +66,11 @@ export const CollaborativeWall = () => {
   const data = useLoaderData() as any;
 
   const { t } = useTranslation();
-  const data = useLoaderData() as CollaborativeWallProps;
+  const data = useLoaderData() as DataProps;
   const navigate = useNavigate();
 
-  const { setNotes, notes, zoom } = useWhiteboard(
+  const { zoom } = useWhiteboard(
     useShallow((state) => ({
-      notes: state.notes,
-      setNotes: state.setNotes,
       zoom: state.zoom,
     })),
   );
@@ -86,15 +78,6 @@ export const CollaborativeWall = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   // const handleCloseModal = () => setOpenShare(false);
-
-  useEffect(() => {
-    (async () => {
-      const response = await getNotes(data._id);
-
-      setNotes(response);
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint,
@@ -118,6 +101,8 @@ export const CollaborativeWall = () => {
     updateNotePosition({ activeId, x: delta.x / zoom, y: delta.y / zoom });
   };
 
+  console.log({ data });
+
   return data ? (
     <>
       <AppHeader
@@ -130,13 +115,13 @@ export const CollaborativeWall = () => {
           </>
         )}
       >
-        <Breadcrumb app={currentApp as IWebApp} name={data.name} />
+        <Breadcrumb app={currentApp as IWebApp} name={data.wall.name} />
       </AppHeader>
       <div className="collaborativewall-container">
-        {data?.description && (
+        {data.wall.description && (
           <DescriptionWall
             setIsOpen={setIsOpen}
-            description={data?.description}
+            description={data.wall.description}
           />
         )}
         <WhiteboardWrapper data={data}>
@@ -146,7 +131,7 @@ export const CollaborativeWall = () => {
             onDragEnd={handleOnDragEnd}
             modifiers={[snapCenterToCursor]}
           >
-            {notes?.map((note: NoteProps, i: number) => {
+            {data.notes?.map((note: NoteProps, i: number) => {
               return (
                 <Note
                   key={note._id}
@@ -164,11 +149,11 @@ export const CollaborativeWall = () => {
 
         <Outlet />
 
-        {data?.description && (
+        {data.wall.description && (
           <DescriptionModal
             isOpen={isOpen}
             setIsOpen={setIsOpen}
-            description={infoWall?.description}
+            description={data.wall.description}
           />
         )}
       </div>
