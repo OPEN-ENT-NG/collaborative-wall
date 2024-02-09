@@ -1,38 +1,33 @@
-import { useToast } from "@edifice-ui/react";
-import { useMutation } from "@tanstack/react-query";
-import { ShareRight, UpdateParameters } from "edifice-ts-client";
-import { t } from "i18next";
+import { useQuery } from "@tanstack/react-query";
+import { IAction } from "edifice-ts-client";
 
-import { shareResource, updateResource } from "../api";
+import { sessionHasWorkflowRights } from "../api";
+import { workflows } from "~/config";
 
-export const useShareResource = () => {
-  const toast = useToast();
+export const useActions = () => {
+  const { view, list } = workflows;
 
-  return useMutation({
-    mutationFn: async ({
-      resourceId,
-      rights,
-    }: {
-      resourceId: string;
-      rights: ShareRight[];
-    }) => await shareResource("blog", { resourceId, rights }),
-    onError(error) {
-      if (typeof error === "string")
-        toast.error(t("explorer.shared.status.error"));
+  return useQuery<Record<string, boolean>, Error, IAction[]>({
+    queryKey: ["actions"],
+    queryFn: async () => {
+      const availableRights = await sessionHasWorkflowRights([view, list]);
+      return availableRights;
     },
-  });
-};
-
-export const useUpdateResource = () => {
-  const toast = useToast();
-
-  return useMutation({
-    mutationFn: async (params: UpdateParameters) => {
-      console.log({ params });
-      return await updateResource("blog", { params });
-    },
-    onError(error) {
-      if (typeof error === "string") toast.error(t(error));
+    select: (data) => {
+      const actions: any[] = [
+        {
+          id: "view",
+          workflow: view,
+        },
+        {
+          id: "list",
+          workflow: list,
+        },
+      ];
+      return actions.map((action) => ({
+        ...action,
+        available: data[action.workflow],
+      }));
     },
   });
 };

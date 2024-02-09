@@ -1,12 +1,12 @@
 export const workflows = {
-  view: "net.atos.entng.mindmap.controllers.MindmapController|view",
-  list: "net.atos.entng.mindmap.controllers.MindmapController|list",
-  create: "net.atos.entng.mindmap.controllers.MindmapController|create",
-  publish: "net.atos.entng.mindmap.controllers.MindmapController|publish",
-  exportpng:
-    "net.atos.entng.mindmap.controllers.MindmapController|exportPngMindmap",
-  exportsvg:
-    "net.atos.entng.mindmap.controllers.MindmapController|exportSvgMindmap",
+  view: "net.atos.entng.collaborativewall.controllers.CollaborativeWallController|view",
+  list: "net.atos.entng.collaborativewall.controllers.CollaborativeWallController|list",
+  create:
+    "net.atos.entng.collaborativewall.controllers.CollaborativeWallController|create",
+  publish:
+    "net.atos.entng.collaborativewall.controllers.CollaborativeWallController|publish",
+  print:
+    "net.atos.entng.collaborativewall.controllers.CollaborativeWallController|print",
 };
 
 export const rights = {
