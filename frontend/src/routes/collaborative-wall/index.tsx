@@ -48,7 +48,8 @@ export interface CollaborativeWallProps {
     userId: string;
     displayName: string;
   };
-  map: string;
+  nbnotes: string;
+  shared?: any[];
   description?: string;
 }
 
@@ -58,6 +59,7 @@ export async function wallLoader({ params }: LoaderFunctionArgs) {
     .http()
     .get<CollaborativeWallProps>(`/collaborativewall/${id}`);
 
+  console.log(collaborativeWall);
   if (!collaborativeWall) {
     throw new Response("", {
       status: 404,

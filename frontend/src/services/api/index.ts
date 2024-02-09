@@ -56,3 +56,7 @@ export const getNotes = async (id: string) => {
     .get<NoteProps[]>(`/collaborativewall/${id}/notes`);
   return notes;
 };
+
+export const sessionHasWorkflowRights = async (actionRights: string[]) => {
+  return await odeServices.rights().sessionHasWorkflowRights(actionRights);
+};
