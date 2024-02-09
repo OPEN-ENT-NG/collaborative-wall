@@ -13,20 +13,9 @@ import ErrorPage from "~/components/page-error";
 
 import "~/styles/index.css";
 
-/* export async function action() {
-  const contact = await createContact();
-  return { contact };
-} */
-
 /* TEMPORARY */
 function Root() {
   const data = useLoaderData() as CollaborativeWallProps[];
-
-  console.log("es");
-
-  /* function handleOnSubmit(event) {
-    event.preventDefault();
-  } */
 
   return (
     <>
@@ -54,9 +43,9 @@ const routes: RouteObject[] = [
     loader: async () => {
       const walls = await odeServices
         .http()
-        .get<CollaborativeWallProps>(`/collaborativewall/list/all`);
+        .get<CollaborativeWallProps[]>(`/collaborativewall/list/all`);
 
-      console.log(walls);
+      console.log({ walls });
       return walls;
     },
     action: async ({ request }: ActionFunctionArgs) => {
