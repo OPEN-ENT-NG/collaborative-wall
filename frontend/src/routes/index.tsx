@@ -43,9 +43,9 @@ const routes: RouteObject[] = [
     loader: async () => {
       const walls = await odeServices
         .http()
-        .get<CollaborativeWallProps>(`/collaborativewall/list/all`);
+        .get<CollaborativeWallProps[]>(`/collaborativewall/list/all`);
 
-      console.log(walls);
+      console.log({ walls });
       return walls;
     },
     action: async ({ request }: ActionFunctionArgs) => {
