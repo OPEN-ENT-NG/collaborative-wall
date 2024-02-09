@@ -166,7 +166,6 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @ApiDoc("Allows to get a collaborative wall associated to the given identifier")
     @SecuredAction(value = "collaborativewall.read", type = ActionType.RESOURCE)
     public void retrieve(HttpServerRequest request) {
-        renderView(request, new JsonObject(), "index.html", null);
         super.retrieve(request);
     }
 

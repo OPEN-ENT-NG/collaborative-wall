@@ -1,7 +1,7 @@
 /* ZOOM CONFIG */
 const MAX_ZOOM = 2;
 const DEFAULT_ZOOM = 1;
-const MIN_ZOOM = 0.75;
+const MIN_ZOOM = 0.5;
 const SCALE_ZOOM = 0.25;
 
 export const zoomConfig = {
