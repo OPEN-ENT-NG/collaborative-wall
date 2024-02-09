@@ -17,12 +17,12 @@ import { useWhiteboard } from "~/store";
 export const ToolbarWrapper = ({
   zoomIn,
   zoomOut,
-  resetTransform,
+  setTransform,
   canUpdate,
 }: {
   zoomIn: (value: number) => void;
   zoomOut: (value: number) => void;
-  resetTransform: () => void;
+  setTransform: any;
   canUpdate: boolean | undefined;
 }) => {
   const {
@@ -130,7 +130,7 @@ export const ToolbarWrapper = ({
         icon: <Center />,
         "aria-label": t("collaborativewall.toolbar.center"),
         color: "tertiary",
-        onClick: () => resetTransform(),
+        onClick: () => setTransform(0, 0, zoomConfig.DEFAULT_ZOOM),
       },
       tooltip: {
         message: t("collaborativewall.toolbar.center"),
@@ -158,7 +158,7 @@ export const ToolbarWrapper = ({
         "aria-label": t("collaborativewall.toolbar.zoom"),
         color: "tertiary",
         children: (zoom * 100).toFixed(0) + "%",
-        onClick: () => resetTransform(),
+        onClick: () => setTransform(0, 0, zoomConfig.DEFAULT_ZOOM),
       },
     },
     {
