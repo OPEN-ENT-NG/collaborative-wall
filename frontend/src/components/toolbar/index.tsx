@@ -1,4 +1,6 @@
 import {
+  Center,
+  Plus,
   PointerDefault,
   PointerHand,
   Redo,
@@ -7,17 +9,21 @@ import {
   ZoomOut,
 } from "@edifice-ui/icons";
 import { Toolbar, ToolbarItem } from "@edifice-ui/react";
+import { ID } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
 import { zoomConfig } from "~/config/init-config";
+import { useCreateNote } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 
 export const ToolbarWrapper = ({
+  wallId,
   zoomIn,
   zoomOut,
   setTransform,
 }: {
+  wallId: ID;
   zoomIn: (value: number) => void;
   zoomOut: (value: number) => void;
   setTransform: any;
@@ -47,7 +53,10 @@ export const ToolbarWrapper = ({
 
   const { t } = useTranslation();
 
-  // const WhiteboardItems: ToolbarItem[] = useMemo(() => {
+  const createNote = useCreateNote(wallId);
+
+  const result = Math.random().toString(36).substring(2, 7);
+
   const WhiteboardItems: ToolbarItem[] = [
     {
       type: "icon",
@@ -192,24 +201,29 @@ export const ToolbarWrapper = ({
       type: "divider",
       name: "div-3",
     },
-    /* {
-        type: "icon",
-        name: "create",
-        props: {
-          "aria-label": t("collaborativewall.toolbar.create"),
-          leftIcon: <Plus />,
-          variant: "filled",
-          color: "secondary",
-          onClick: createNote,
-        },
-        tooltip: {
-          message: t("collaborativewall.toolbar.create"),
-          position: "top",
-        },
-      }, */
-    ];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [t, canMoveBoard, canMoveNote, zoom]);
+    {
+      type: "icon",
+      name: "create",
+      props: {
+        "aria-label": t("collaborativewall.toolbar.create"),
+        icon: <Plus />,
+        variant: "filled",
+        color: "secondary",
+        onClick: () =>
+          createNote.mutate({
+            color: ["#F5F6CE", "#F2F5A9"],
+            content: result,
+            idwall: wallId,
+            x: 10,
+            y: 10,
+          } as any),
+      },
+      tooltip: {
+        message: t("collaborativewall.toolbar.create"),
+        position: "top",
+      },
+    },
+  ];
 
   return <Toolbar className="p-8" items={WhiteboardItems} />;
 };

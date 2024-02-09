@@ -1,3 +1,4 @@
+import { QueryClient } from "@tanstack/react-query";
 import { odeServices } from "edifice-ts-client";
 import {
   ActionFunctionArgs,
@@ -36,7 +37,7 @@ function Root() {
     </>
   );
 }
-const routes: RouteObject[] = [
+const routes = (queryClient: QueryClient): RouteObject[] => [
   /* TEMPORARY */
   {
     path: "/",
@@ -45,7 +46,6 @@ const routes: RouteObject[] = [
         .http()
         .get<CollaborativeWallProps[]>(`/collaborativewall/list/all`);
 
-      console.log({ walls });
       return walls;
     },
     action: async ({ request }: ActionFunctionArgs) => {
@@ -69,7 +69,7 @@ const routes: RouteObject[] = [
         "./collaborative-wall"
       );
       return {
-        loader: wallLoader,
+        loader: wallLoader(queryClient),
         Component: CollaborativeWall,
       };
     },
@@ -88,6 +88,7 @@ const routes: RouteObject[] = [
   },
 ];
 
-export const router = createBrowserRouter(routes, {
-  basename: import.meta.env.PROD ? "/collaborativewall" : "/",
-});
+export const router = (queryClient: QueryClient) =>
+  createBrowserRouter(routes(queryClient), {
+    basename: import.meta.env.PROD ? "/collaborativewall" : "/",
+  });

@@ -23,7 +23,7 @@ type Action = {
   setCanMoveBoard: (value: boolean) => void;
   setCanMoveNote: (value: boolean) => void;
   setZoom: (value: number) => void;
-  updateNotePosition: ({
+  /* updateNotePosition: ({
     activeId,
     x,
     y,
@@ -31,7 +31,7 @@ type Action = {
     activeId: string;
     x: number;
     y: number;
-  }) => void;
+  }) => void; */
   /* createNote: () => void;
   deleteNote: (id: string | number) => void; */
 };

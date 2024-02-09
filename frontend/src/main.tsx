@@ -49,7 +49,7 @@ root.render(
       }}
     >
       <ThemeProvider>
-        <RouterProvider router={router} />
+        <RouterProvider router={router(queryClient)} />
       </ThemeProvider>
     </OdeClientProvider>
     <ReactQueryDevtools initialIsOpen={false} />

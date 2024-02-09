@@ -9,9 +9,9 @@ import { CollaborativeWallProps } from "~/models/wall";
  * @returns walls
  */
 export const getWall = async (id: string): Promise<CollaborativeWallProps> => {
-  const wall = await odeServices.http().get<CollaborativeWallProps>(`/collaborativewall/${id}`);
-
-  console.log({ wall });
+  const wall = await odeServices
+    .http()
+    .get<CollaborativeWallProps>(`/collaborativewall/${id}`);
 
   return wall;
 };

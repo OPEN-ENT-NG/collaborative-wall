@@ -6,7 +6,7 @@ import { ToolbarWrapper } from "../toolbar";
 import { WhiteboardComponent } from "../whiteboard-component";
 import { zoomConfig } from "~/config/init-config";
 import { useUserRights } from "~/hooks/useUserRights";
-import { CollaborativeWallProps } from "~/routes/collaborative-wall";
+import { CollaborativeWallProps } from "~/models/wall";
 import { useWhiteboard } from "~/store";
 
 export const WhiteboardWrapper = ({
@@ -51,6 +51,7 @@ export const WhiteboardWrapper = ({
               canUpdate={canUpdate}
             />
             <ToolbarWrapper
+              wallId={data._id}
               zoomIn={zoomIn}
               zoomOut={zoomOut}
               setTransform={setTransform}

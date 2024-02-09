@@ -6,8 +6,8 @@ import {
   useLoaderData,
   useNavigate,
 } from "react-router-dom";
-import { Note as NoteProps } from "~/models/notes";
 
+import { NoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
 
 export async function noteLoader({ params }: LoaderFunctionArgs) {
