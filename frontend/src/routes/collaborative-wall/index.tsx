@@ -11,18 +11,23 @@ import {
   Active,
 } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
-import { Print } from "@edifice-ui/icons";
 import { AppHeader, Breadcrumb, Button, useOdeClient } from "@edifice-ui/react";
 import { IWebApp, odeServices } from "edifice-ts-client";
+// @ts-ignore
 import { useTranslation } from "react-i18next";
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import {
+  LoaderFunctionArgs,
+  Outlet,
+  useLoaderData,
+  useNavigate,
+} from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
-import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { DescriptionWall } from "~/components/description-wall";
 import { Note } from "~/components/note";
 import { WhiteboardWrapper } from "~/components/whiteboard-wrapper";
 import { NoteProps, getNotes } from "~/services/api";
+import { useWhiteboard } from "~/store";
 
 const DescriptionModal = lazy(
   async () => await import("~/components/description-modal"),
@@ -70,6 +75,7 @@ export const CollaborativeWall = () => {
 
   const { t } = useTranslation();
   const data = useLoaderData() as CollaborativeWallProps;
+  const navigate = useNavigate();
 
   const { setNotes, notes, zoom } = useWhiteboard(
     useShallow((state) => ({
@@ -86,6 +92,7 @@ export const CollaborativeWall = () => {
   useEffect(() => {
     (async () => {
       const response = await getNotes(data._id);
+
       setNotes(response);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -119,9 +126,6 @@ export const CollaborativeWall = () => {
         isFullscreen
         render={() => (
           <>
-            <Button variant="outline" leftIcon={<Print />}>
-              {t("print")}
-            </Button>
             <Button variant="filled" /* onClick={() => setOpenShare(true)} */>
               {t("share")}
             </Button>
@@ -153,11 +157,15 @@ export const CollaborativeWall = () => {
                     title: `title ${i}`,
                     zIndex: note.zIndex ?? 1,
                   }}
+                  onClick={(id) => navigate(`note/${id}`)}
                 />
               );
             })}
           </DndContext>
         </WhiteboardWrapper>
+
+        <Outlet />
+
         {data?.description && (
           <DescriptionModal
             isOpen={isOpen}

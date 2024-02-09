@@ -25,3 +25,42 @@
 .btn:focus {
   box-shadow: unset;
 }
+
+.description-wall {
+  position: fixed;
+  z-index: 11;
+  background-color: rgb(255 255 255 / 80%);
+  width: 100%;
+  display: flex;
+  padding: 8px 76px;
+  align-items: center;
+  gap: 8px;
+}
+
+.note {
+  min-height: 224px;
+  max-height: 372px;
+  width: 224px;
+  background-color: transparent !important;
+  padding: 0;
+}
+
+.card-body {
+  align-items: unset;
+  text-align: initial;
+  max-height: 334px;
+  flex-wrap: wrap;
+}
+
+.card-footer {
+  background-color: transparent !important;
+  color: #909090 !important;
+}
+
+.note.is-dragging .card-header button {
+  cursor: grabbing !important;
+}
+
+.note.is-grab .card-header button {
+  cursor: grab !important;
+}

@@ -1,7 +1,7 @@
 /* ZOOM CONFIG */
 const MAX_ZOOM = 2;
 const DEFAULT_ZOOM = 1;
-const MIN_ZOOM = 0.75;
+const MIN_ZOOM = 0.5;
 const SCALE_ZOOM = 0.25;
 
 export const zoomConfig = {
@@ -11,7 +11,7 @@ export const zoomConfig = {
   SCALE_ZOOM,
 } as const;
 
-/* OFFSET CONFIG SHARED BETWEEN NOTE AND WHITEBOARD */
+/* INITIALSTATE CONFIG */
 const OFFSET = { x: 0, y: 0 };
 
 export const initialState = {
@@ -22,13 +22,4 @@ export const initialState = {
   startPosition: OFFSET,
   offset: OFFSET,
   zoom: zoomConfig.DEFAULT_ZOOM,
-  notes: [
-    {
-      id: 1,
-      title: "note 1",
-      text: "lorem ipsum",
-      offset: OFFSET,
-      zIndex: 1,
-    },
-  ],
 };

@@ -31,4 +31,4 @@ gradle/
 gradlew*
 # Ignore the entire "resources" folder except jsonchema
 src/main/resources/public
-src/main/resources/view
+# src/main/resources/view

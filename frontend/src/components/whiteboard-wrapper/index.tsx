@@ -2,12 +2,12 @@ import { ReactNode, useRef } from "react";
 
 import { TransformWrapper } from "react-zoom-pan-pinch";
 
-import { useWhiteboard } from "../../hooks/useWhiteBoard";
 import { ToolbarWrapper } from "../toolbar";
 import { WhiteboardComponent } from "../whiteboard-component";
 import { zoomConfig } from "~/config/init-config";
 import { useUserRights } from "~/hooks/useUserRights";
 import { CollaborativeWallProps } from "~/routes/collaborative-wall";
+import { useWhiteboard } from "~/store";
 
 export const WhiteboardWrapper = ({
   children,
