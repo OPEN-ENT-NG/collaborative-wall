@@ -1,7 +1,7 @@
 import { useUser } from "@edifice-ui/react";
 
 import { rights } from "~/config";
-import { CollaborativeWallProps } from "~/routes/collaborative-wall";
+import { CollaborativeWallProps } from "~/models/wall";
 
 export const useUserRights = ({
   data,
@@ -25,13 +25,16 @@ export const useUserRights = ({
 
   if (!isOwner && rights) {
     canUpdate = shared?.some((right) => {
+      //@ts-ignore
       const groupId = right["groupId"];
+      //@ts-ignore
       const userRight = right[rights.contrib.right];
 
       if (groupId !== undefined && groupsIds?.includes(groupId)) {
         return userRight;
       }
 
+      //@ts-ignore
       const userRightUserId = right["userId"];
       return userRightUserId !== undefined && userId === userRightUserId
         ? userRight

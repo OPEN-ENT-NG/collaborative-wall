@@ -4,7 +4,7 @@ import { TransformComponent } from "react-zoom-pan-pinch";
 import { useShallow } from "zustand/react/shallow";
 
 import { zoomConfig } from "~/config/init-config";
-import { CollaborativeWallProps } from "~/routes/collaborative-wall";
+import { CollaborativeWallProps } from "~/models/wall";
 import { useWhiteboard } from "~/store";
 
 const defaultBackground = "/img/cloud.png";

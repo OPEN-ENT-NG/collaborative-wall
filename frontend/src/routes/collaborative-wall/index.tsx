@@ -12,14 +12,15 @@ import {
 } from "@dnd-kit/core";
 import { snapCenterToCursor } from "@dnd-kit/modifiers";
 import { AppHeader, Breadcrumb, Button, useOdeClient } from "@edifice-ui/react";
+import { QueryClient, useQuery } from "@tanstack/react-query";
 import { IWebApp } from "edifice-ts-client";
 // @ts-ignore
 import { useTranslation } from "react-i18next";
 import {
   LoaderFunctionArgs,
   Outlet,
-  useLoaderData,
   useNavigate,
+  useParams,
 } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
@@ -27,8 +28,7 @@ import { DescriptionWall } from "~/components/description-wall";
 import { Note } from "~/components/note";
 import { WhiteboardWrapper } from "~/components/whiteboard-wrapper";
 import { NoteProps } from "~/models/notes";
-import { CollaborativeWallProps } from "~/models/wall";
-import { getNotes, getWall } from "~/services/api";
+import { notesQuery, useUpdatePosition, wallQuery } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 
 const DescriptionModal = lazy(
@@ -40,43 +40,49 @@ const activationConstraint = {
   tolerance: 5,
 };
 
-interface DataProps {
-  wall: CollaborativeWallProps;
-  notes: NoteProps[];
-}
+export const wallLoader =
+  (queryClient: QueryClient) =>
+  async ({ params }: LoaderFunctionArgs) => {
+    const { id } = params;
 
-export async function wallLoader({ params }: LoaderFunctionArgs) {
-  const { id } = params;
+    const queryWall = wallQuery(id as string);
+    const queryNotes = notesQuery(id as string);
 
-  const wall = await getWall(id as string);
-  const notes = await getNotes(id as string);
+    const wall =
+      queryClient.getQueryData(queryWall.queryKey) ??
+      (await queryClient.fetchQuery(queryWall));
+    const notes =
+      queryClient.getQueryData(queryNotes.queryKey) ??
+      (await queryClient.fetchQuery(queryNotes));
 
-  if (!wall) {
-    throw new Response("", {
-      status: 404,
-      statusText: "Not Found",
-    });
-  }
+    console.log("test", queryClient.getQueryData(queryNotes.queryKey));
 
-  return { wall, notes };
-}
+    if (!wall) {
+      throw new Response("", {
+        status: 404,
+        statusText: "Not Found",
+      });
+    }
+
+    return { wall, notes };
+  };
 
 export const CollaborativeWall = () => {
+  const params = useParams();
+  const navigate = useNavigate();
+
   const { currentApp } = useOdeClient();
 
   const { t } = useTranslation();
-  const data = useLoaderData() as DataProps;
-  const navigate = useNavigate();
 
   const { zoom } = useWhiteboard(
     useShallow((state) => ({
       zoom: state.zoom,
     })),
   );
-  // const [openShare, setOpenShare] = useState(false);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  console.log({ zoom });
 
-  // const handleCloseModal = () => setOpenShare(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint,
@@ -87,7 +93,7 @@ export const CollaborativeWall = () => {
   const keyboardSensor = useSensor(KeyboardSensor);
   const sensors = useSensors(mouseSensor, touchSensor, keyboardSensor);
 
-  const updateNotePosition = useWhiteboard((state) => state.updateNotePosition);
+  const updatePosition = useUpdatePosition();
 
   const handleOnDragEnd = ({
     active,
@@ -97,12 +103,44 @@ export const CollaborativeWall = () => {
     delta: { x: number; y: number };
   }) => {
     const activeId = active.id as string;
-    updateNotePosition({ activeId, x: delta.x / zoom, y: delta.y / zoom });
+
+    const findNote = notes?.find((note) => note._id === activeId);
+
+    if (!findNote) return;
+
+    const now = new Date();
+
+    console.log({ now });
+
+    const note: {
+      content: string;
+      x: number;
+      y: number;
+      idwall: string;
+      color: string[];
+      modified?: { $date: number };
+    } = {
+      content: findNote.content,
+      color: findNote.color as string[],
+      idwall: findNote.idwall as string,
+      modified: findNote.modified,
+      x: Math.round(findNote.x + delta.x / zoom),
+      y: Math.round(findNote.y + delta.y / zoom),
+    };
+
+    updatePosition.mutateAsync({ id: findNote._id, note });
   };
 
-  console.log({ data });
+  const { data: wall } = useQuery(wallQuery(params.id as string));
+  const { data: notes } = useQuery(notesQuery(params.id as string));
 
-  return data ? (
+  // if (updatePosition.isPending) return <LoadingScreen />;
+
+  console.log(updatePosition.variables);
+
+  console.log({ notes });
+
+  return wall && notes ? (
     <>
       <AppHeader
         isFullscreen
@@ -114,23 +152,23 @@ export const CollaborativeWall = () => {
           </>
         )}
       >
-        <Breadcrumb app={currentApp as IWebApp} name={data.wall.name} />
+        <Breadcrumb app={currentApp as IWebApp} name={wall.name} />
       </AppHeader>
       <div className="collaborativewall-container">
-        {data.wall.description && (
+        {wall.description && (
           <DescriptionWall
             setIsOpen={setIsOpen}
-            description={data.wall.description}
+            description={wall.description}
           />
         )}
-        <WhiteboardWrapper data={data}>
+        <WhiteboardWrapper data={wall}>
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
             onDragEnd={handleOnDragEnd}
             modifiers={[snapCenterToCursor]}
           >
-            {data.notes?.map((note: NoteProps, i: number) => {
+            {notes.map((note: NoteProps, i: number) => {
               return (
                 <Note
                   key={note._id}
@@ -148,11 +186,11 @@ export const CollaborativeWall = () => {
 
         <Outlet />
 
-        {data.wall.description && (
+        {wall.description && (
           <DescriptionModal
             isOpen={isOpen}
             setIsOpen={setIsOpen}
-            description={data.wall.description}
+            description={wall.description}
           />
         )}
       </div>
