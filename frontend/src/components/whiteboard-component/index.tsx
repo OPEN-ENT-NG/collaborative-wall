@@ -3,7 +3,7 @@ import { ReactNode, useEffect } from "react";
 import { TransformComponent } from "react-zoom-pan-pinch";
 import { useShallow } from "zustand/react/shallow";
 
-import { zoomConfig } from "~/config/init-config";
+import { wallConfig, zoomConfig } from "~/config/init-config";
 import { CollaborativeWallProps } from "~/models/wall";
 import { useWhiteboard } from "~/store";
 
@@ -98,8 +98,8 @@ export const WhiteboardComponent = ({
         <div
           style={{
             backgroundImage: `url(${data.background ?? defaultBackground})`,
-            height: "1800px",
-            width: "2880px",
+            height: wallConfig.HEIGHT_WALL,
+            width: wallConfig.WIDTH_WALL,
           }}
         >
           {children}

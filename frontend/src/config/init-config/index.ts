@@ -14,6 +14,14 @@ export const zoomConfig = {
 /* INITIALSTATE CONFIG */
 const OFFSET = { x: 0, y: 0 };
 
+const HEIGHT_WALL = 1800;
+const WIDTH_WALL = 2880;
+
+export const wallConfig = {
+  HEIGHT_WALL,
+  WIDTH_WALL,
+} as const;
+
 export const initialState = {
   canMoveBoard: false,
   canMoveNote: false,

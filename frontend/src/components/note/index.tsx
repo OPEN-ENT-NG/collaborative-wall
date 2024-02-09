@@ -72,7 +72,7 @@ export const Note = ({
             <Image alt="test" ratio="16" src={defaultImage} height="120" />
           )}
           <Card.Text
-            className={`text-truncate pt-16 ${defaultImage ? "text-truncate-8" : "text-truncate-12"}`}
+            className={`text-truncate ${defaultImage ? "text-truncate-8" : "text-truncate-12"}`}
           >
             {note.content}
           </Card.Text>
