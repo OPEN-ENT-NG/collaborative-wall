@@ -9,13 +9,13 @@ import {
 } from "react-router-dom";
 
 import ErrorPage from "~/components/page-error";
-import { Wall } from "~/models/wall";
+import { CollaborativeWallProps } from "~/models/wall";
 
 import "~/styles/index.css";
 
 /* TEMPORARY */
 function Root() {
-  const data = useLoaderData() as Wall[];
+  const data = useLoaderData() as CollaborativeWallProps[];
 
   return (
     <>
@@ -43,7 +43,7 @@ const routes: RouteObject[] = [
     loader: async () => {
       const walls = await odeServices
         .http()
-        .get<Wall>(`/collaborativewall/list/all`);
+        .get<CollaborativeWallProps>(`/collaborativewall/list/all`);
 
       console.log(walls);
       return walls;

@@ -1,7 +1,6 @@
 import { create } from "zustand";
 
 import { initialState } from "~/config/init-config";
-import { NoteProps } from "~/services/api";
 
 type Offset = {
   x: number;
@@ -16,7 +15,6 @@ type State = {
   startPosition: Offset;
   offset: Offset;
   zoom: number;
-  notes?: NoteProps[];
 };
 
 type Action = {
@@ -24,7 +22,6 @@ type Action = {
   toggleCanMoveNote: () => void;
   setCanMoveBoard: (value: boolean) => void;
   setCanMoveNote: (value: boolean) => void;
-  setNotes: (value: NoteProps[]) => void;
   setZoom: (value: number) => void;
   updateNotePosition: ({
     activeId,
@@ -51,9 +48,8 @@ export const useWhiteboard = create<State & Action>((set) => ({
     })),
   setCanMoveBoard: (value: boolean) => set({ canMoveBoard: value }),
   setCanMoveNote: (value: boolean) => set({ canMoveNote: value }),
-  setNotes: (value: NoteProps[]) => set({ notes: value }),
   setZoom: (value: number) => set({ zoom: value }),
-  updateNotePosition: ({
+  /* updateNotePosition: ({
     activeId,
     y,
     x,
@@ -83,7 +79,7 @@ export const useWhiteboard = create<State & Action>((set) => ({
         notes: updatedNotes,
       };
     });
-  },
+  }, */
   /* createNote: () => {
       const notes = get().notes;
       const notesSize = notes.length ?? ;

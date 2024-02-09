@@ -1,4 +1,4 @@
-export interface Note {
+export interface NoteProps {
   _id: string;
   title?: string;
   content: string;

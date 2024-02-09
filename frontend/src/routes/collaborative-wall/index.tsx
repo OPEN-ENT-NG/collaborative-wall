@@ -26,8 +26,8 @@ import { useShallow } from "zustand/react/shallow";
 import { DescriptionWall } from "~/components/description-wall";
 import { Note } from "~/components/note";
 import { WhiteboardWrapper } from "~/components/whiteboard-wrapper";
-import { Note as NoteProps } from "~/models/notes";
-import { Wall } from "~/models/wall";
+import { NoteProps } from "~/models/notes";
+import { CollaborativeWallProps } from "~/models/wall";
 import { getNotes, getWall } from "~/services/api";
 import { useWhiteboard } from "~/store";
 
@@ -41,7 +41,7 @@ const activationConstraint = {
 };
 
 interface DataProps {
-  wall: Wall;
+  wall: CollaborativeWallProps;
   notes: NoteProps[];
 }
 
