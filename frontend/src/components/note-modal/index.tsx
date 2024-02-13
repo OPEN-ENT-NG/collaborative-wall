@@ -11,16 +11,16 @@ import { NoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
 
 export async function noteLoader({ params }: LoaderFunctionArgs) {
-  const { id, idnote } = params;
+  const { wallId, noteId } = params;
 
-  if (!id || !idnote) {
+  if (!wallId || !noteId) {
     throw new Response("", {
       status: 404,
       statusText: "Wall id or Note id is null",
     });
   }
 
-  const note = await getNote(id, idnote);
+  const note = await getNote(wallId, noteId);
 
   if (!note) {
     throw new Response("", {
