@@ -5,41 +5,43 @@ import { CollaborativeWallProps } from "~/models/wall";
 
 /**
  * getWall API
- * @param idWall wall id
+ * @param wallId wall id
  * @returns walls
  */
-export const getWall = async (id: string): Promise<CollaborativeWallProps> => {
+export const getWall = async (
+  wallId: string,
+): Promise<CollaborativeWallProps> => {
   const wall = await odeServices
     .http()
-    .get<CollaborativeWallProps>(`/collaborativewall/${id}`);
+    .get<CollaborativeWallProps>(`/collaborativewall/${wallId}`);
 
   return wall;
 };
 
 /**
  * getNote API
- * @param idWall wall id
- * @param idNote note id
+ * @param wallId wall id
+ * @param noteId note id
  * @returns note
  */
 export const getNote = async (
-  idWall: string,
-  idNote: string,
+  wallId: string,
+  noteId: string,
 ): Promise<NoteProps> => {
   return await odeServices
     .http()
-    .get<NoteProps>(`/collaborativewall/${idWall}/note/${idNote}`);
+    .get<NoteProps>(`/collaborativewall/${wallId}/note/${noteId}`);
 };
 
 /**
  * getNotes API
- * @param id, resource ID
+ * @param wallId, resource ID
  * @returns notes
  */
-export const getNotes = async (id: string) => {
+export const getNotes = async (wallId: string) => {
   const notes = await odeServices
     .http()
-    .get<NoteProps[]>(`/collaborativewall/${id}/notes`);
+    .get<NoteProps[]>(`/collaborativewall/${wallId}/notes`);
   return notes;
 };
 
