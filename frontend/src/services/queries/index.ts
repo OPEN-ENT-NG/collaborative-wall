@@ -1,7 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { IAction, ID, odeServices } from "edifice-ts-client";
 
-import { getNotes, getWall, sessionHasWorkflowRights } from "../api";
+import {
+  getNotes,
+  getWall,
+  sessionHasWorkflowRights,
+  updateNote,
+} from "../api";
 import { workflows } from "~/config";
 
 export const useActions = () => {
@@ -59,6 +64,33 @@ export const useCreateNote = (id: string) => {
   });
 };
 
+export const useUpdateNote = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      id,
+      note,
+    }: {
+      id: ID;
+      note: {
+        content: string;
+        x: number;
+        y: number;
+        idwall: string;
+        color: string[];
+        modified?: { $date: number };
+      };
+    }) => await updateNote(id, note),
+    onSettled(data, error, variables, context) {
+      console.log({ data, error, variables, context });
+      queryClient.invalidateQueries({
+        queryKey: ["notes", variables.note.idwall],
+      });
+    },
+  });
+};
+
 export const useUpdatePosition = () => {
   const queryClient = useQueryClient();
 
@@ -77,9 +109,7 @@ export const useUpdatePosition = () => {
         modified?: { $date: number };
       };
     }) => {
-      const res = await odeServices
-        .http()
-        .put(`/collaborativewall/${note.idwall}/note/${id}`, note);
+      const res = await updateNote(id, note);
 
       return res;
     },

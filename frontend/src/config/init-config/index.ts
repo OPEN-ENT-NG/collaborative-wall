@@ -31,3 +31,18 @@ export const initialState = {
   offset: OFFSET,
   zoom: zoomConfig.DEFAULT_ZOOM,
 };
+
+interface Colors {
+  [key: string]: string[];
+}
+
+/* COLORS CONFIG */
+export const colorsNotes: Colors = {
+  white: ["#C7C7C7", "#FFFFFF"],
+  yellow: ["#ECBE30", "#FCF7DE"],
+  orange: ["#FF8D2E", "#FFEFE3"],
+  red: ["#E13A3A", "#FFECEE"],
+  purple: ["#823AA1", "#F6ECF9"],
+  blue: ["#2A9CC8", "#E5F5FF"],
+  green: ["#46BFAF", "#E6F9F8"],
+};
