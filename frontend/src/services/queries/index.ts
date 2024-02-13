@@ -81,7 +81,6 @@ export const useUpdatePosition = () => {
         .http()
         .put(`/collaborativewall/${note.idwall}/note/${id}`, note);
 
-      console.log({ res });
       return res;
     },
     /* onMutate: async (variables) => {

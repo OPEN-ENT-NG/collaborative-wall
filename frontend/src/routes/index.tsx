@@ -1,3 +1,4 @@
+import { LoadingScreen } from "@edifice-ui/react";
 import { QueryClient } from "@tanstack/react-query";
 import { odeServices } from "edifice-ts-client";
 import {
@@ -10,6 +11,7 @@ import {
 } from "react-router-dom";
 
 import ErrorPage from "~/components/page-error";
+import { useCollaborativeWallRedirect } from "~/hooks/useCollaborativeWallRedirect";
 import { CollaborativeWallProps } from "~/models/wall";
 
 import "~/styles/index.css";
@@ -17,6 +19,10 @@ import "~/styles/index.css";
 /* TEMPORARY */
 function Root() {
   const data = useLoaderData() as CollaborativeWallProps[];
+
+  const isLoading = useCollaborativeWallRedirect();
+
+  if (isLoading) return <LoadingScreen />;
 
   return (
     <>
@@ -61,9 +67,15 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
       return { wall };
     },
     element: <Root />,
+    /* children: [
+      {
+        index: true,
+        element: <Explorer config={explorerConfig} />,
+      },
+    ], */
   },
   {
-    path: "id/:id",
+    path: "id/:wallId",
     async lazy() {
       const { wallLoader, CollaborativeWall } = await import(
         "./collaborative-wall"
@@ -75,7 +87,7 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
     },
     children: [
       {
-        path: "note/:idnote",
+        path: "note/:noteId",
         async lazy() {
           const { noteLoader, NoteModal } = await import(
             "../components/note-modal"

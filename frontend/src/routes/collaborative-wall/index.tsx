@@ -41,10 +41,10 @@ const activationConstraint = {
 export const wallLoader =
   (queryClient: QueryClient) =>
   async ({ params }: LoaderFunctionArgs) => {
-    const { id } = params;
+    const { wallId } = params;
 
-    const queryWall = wallQuery(id as string);
-    const queryNotes = notesQuery(id as string);
+    const queryWall = wallQuery(wallId as string);
+    const queryNotes = notesQuery(wallId as string);
 
     const wall =
       queryClient.getQueryData(queryWall.queryKey) ??
@@ -52,8 +52,6 @@ export const wallLoader =
     const notes =
       queryClient.getQueryData(queryNotes.queryKey) ??
       (await queryClient.fetchQuery(queryNotes));
-
-    console.log("test", queryClient.getQueryData(queryNotes.queryKey));
 
     if (!wall) {
       throw new Response("", {
@@ -78,7 +76,6 @@ export const CollaborativeWall = () => {
       zoom: state.zoom,
     })),
   );
-  console.log({ zoom });
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -106,10 +103,6 @@ export const CollaborativeWall = () => {
 
     if (!findNote) return;
 
-    const now = new Date();
-
-    console.log({ now });
-
     const note: {
       content: string;
       x: number;
@@ -129,14 +122,8 @@ export const CollaborativeWall = () => {
     updatePosition.mutateAsync({ id: findNote._id, note });
   };
 
-  const { data: wall } = useQuery(wallQuery(params.id as string));
-  const { data: notes } = useQuery(notesQuery(params.id as string));
-
-  // if (updatePosition.isPending) return <LoadingScreen />;
-
-  console.log(updatePosition.variables);
-
-  console.log({ notes });
+  const { data: wall } = useQuery(wallQuery(params.wallId as string));
+  const { data: notes } = useQuery(notesQuery(params.wallId as string));
 
   return wall && notes ? (
     <>
