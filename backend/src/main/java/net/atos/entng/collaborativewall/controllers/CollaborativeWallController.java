@@ -175,7 +175,9 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                             // notify creation event
                             eventHelper.onCreateResource(request, RESOURCE_NAME);
                             // notify EUR
-                            plugin.notifyUpsert(user, r.right().getValue()).onSuccess(e -> {
+                            final JsonObject json = r.right().getValue();
+                            json.put("version", System.currentTimeMillis());
+                            plugin.notifyUpsert(user, json).onSuccess(e -> {
                                 // on success return 200
                                 handler.handle(r);
                             }).onFailure(e -> {
@@ -218,7 +220,9 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                             handler.handle(new Either.Left<>(r.left().getValue()));
                         } else {
                             // notify EUR
-                            plugin.notifyUpsert(user, r.right().getValue()).onSuccess(e -> {
+                            final JsonObject json = r.right().getValue();
+                            json.put("version", System.currentTimeMillis());
+                            plugin.notifyUpsert(user, json).onSuccess(e -> {
                                 // on success return 200
                                 handler.handle(r);
                             }).onFailure(e -> {
