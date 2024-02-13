@@ -103,6 +103,22 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         eventHelper.onAccess(request);
     }
 
+    /**
+     * Display react front view /id/:id
+     * @param request
+     */
+    @Get("/id/:id")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    public void viewById(HttpServerRequest request) {
+        final boolean useNewUi = this.config.getBoolean("use-explorer-ui", true);
+        if(useNewUi){
+            renderView(request, new JsonObject(), "index.html", null);
+        }else{
+            // redirect to old ui
+            redirect(request, "/collaborativewall#/view/"+request.params().get("id"));
+        }
+    }
+
     @Get("/print/wall")
     @ApiDoc("Allows to print a wall")
     @SecuredAction("collaborativewall.print")
