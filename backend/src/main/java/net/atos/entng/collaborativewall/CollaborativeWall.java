@@ -42,7 +42,7 @@ import java.util.Map;
 public class CollaborativeWall extends BaseServer {
 
     public static final String APPLICATION = "collaborativewall";
-    public static final String TYPE = "wall";
+    public static final String TYPE = "collaborativewall";
     public static final String NOTE_TYPE = "note";
     /**
      * Constant to define the MongoDB collection to use with this module.
