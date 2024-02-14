@@ -38,11 +38,11 @@ interface Colors {
 
 /* COLORS CONFIG */
 export const colorsNotes: Colors = {
-  white: ["#C7C7C7", "#FFFFFF"],
-  yellow: ["#ECBE30", "#FCF7DE"],
-  orange: ["#FF8D2E", "#FFEFE3"],
-  red: ["#E13A3A", "#FFECEE"],
-  purple: ["#823AA1", "#F6ECF9"],
-  blue: ["#2A9CC8", "#E5F5FF"],
-  green: ["#46BFAF", "#E6F9F8"],
+  "#FFFFFF": ["#FFFFFF", "#C7C7C7"],
+  "#FCF7DE": ["#FCF7DE", "#ECBE30"],
+  "#FFEFE3": ["#FFEFE3", "#FF8D2E"],
+  "#FFECEE": ["#FFECEE", "#E13A3A"],
+  "#F6ECF9": ["#F6ECF9", "#823AA1"],
+  "#E5F5FF": ["#E5F5FF", "#2A9CC8"],
+  "#E6F9F8": ["#E6F9F8", "#46BFAF"],
 };

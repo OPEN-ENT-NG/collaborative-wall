@@ -6,8 +6,8 @@ export const Square = ({ colors }: { colors: string[] }) => {
         height: "22px",
         border: "1px solid",
         borderRadius: "22px",
-        color: colors[0] ?? "",
-        backgroundColor: colors[1] ?? "",
+        color: colors[1] ?? "",
+        backgroundColor: colors[0] ?? "",
       }}
     />
   );

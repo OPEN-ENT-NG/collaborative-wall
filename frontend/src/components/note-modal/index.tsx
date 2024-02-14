@@ -42,48 +42,49 @@ export const NoteModal = () => {
   const [editorMode] = useState<"read" | "edit">("read");
   const editorRef = useRef<EditorRef>(null);
   const data = useLoaderData() as NoteProps;
+  const updateNote = useUpdateNote();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const [colorValue, setColorValue] = useState<string[]>(colorsNotes.white);
+  const [colorValue, setColorValue] = useState<string[]>(
+    colorsNotes["#FFFFFF"],
+  );
 
-  const updateNote = useUpdateNote();
-
-  const menuColors = [
+  const colorsList = [
     {
       label: t("collaborativewall.color.white"),
-      value: "white",
-      icon: <Square colors={colorsNotes.white} />,
+      value: "#FFFFFF",
+      icon: <Square colors={colorsNotes["#FFFFFF"]} />,
     },
     {
       label: t("collaborativewall.color.yellow"),
-      value: "yellow",
-      icon: <Square colors={colorsNotes.yellow} />,
+      value: "#FCF7DE",
+      icon: <Square colors={colorsNotes["#FCF7DE"]} />,
     },
     {
       label: t("collaborativewall.color.orange"),
-      value: "orange",
-      icon: <Square colors={colorsNotes.orange} />,
+      value: "#FFEFE3",
+      icon: <Square colors={colorsNotes["#FFEFE3"]} />,
     },
     {
       label: t("collaborativewall.color.red"),
-      value: "red",
-      icon: <Square colors={colorsNotes.red} />,
+      value: "#FFECEE",
+      icon: <Square colors={colorsNotes["#FFECEE"]} />,
     },
     {
       label: t("collaborativewall.color.purple"),
-      value: "purple",
-      icon: <Square colors={colorsNotes.purple} />,
+      value: "#F6ECF9",
+      icon: <Square colors={colorsNotes["#F6ECF9"]} />,
     },
     {
       label: t("collaborativewall.color.blue"),
-      value: "blue",
-      icon: <Square colors={colorsNotes.blue} />,
+      value: "#E5F5FF",
+      icon: <Square colors={colorsNotes["#E5F5FF"]} />,
     },
     {
       label: t("collaborativewall.color.green"),
-      value: "green",
-      icon: <Square colors={colorsNotes.green} />,
+      value: "#E6F9F8",
+      icon: <Square colors={colorsNotes["#E6F9F8"]} />,
     },
   ];
 
@@ -106,6 +107,14 @@ export const NoteModal = () => {
     updateNote.mutateAsync({ id: data._id, note });
   };
 
+  const placeholderValue = () => {
+    const color = colorsList.find((value) => value.value === data.color?.[0]);
+    if (color) {
+      return color;
+    }
+    return undefined;
+  };
+
   return data ? (
     createPortal(
       <Modal
@@ -122,9 +131,19 @@ export const NoteModal = () => {
         <Modal.Subtitle>{data.owner?.displayName}</Modal.Subtitle>
         <Modal.Body>
           <Select
-            icon={<Square colors={colorsNotes.white} />}
-            options={menuColors}
-            placeholderOption={t("collaborativewall.color.white")}
+            icon={
+              <Square
+                colors={
+                  data.color && placeholderValue()
+                    ? data.color
+                    : colorsNotes["#FFFFFF"]
+                }
+              />
+            }
+            options={colorsList}
+            placeholderOption={
+              placeholderValue()?.label ?? t("collaborativewall.color.white")
+            }
             onValueChange={(value) =>
               setColorValue(colorsNotes[value as string])
             }
