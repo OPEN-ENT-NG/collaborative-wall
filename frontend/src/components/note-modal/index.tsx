@@ -10,7 +10,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-import { colorsNotes } from "~/config/init-config";
+import { noteColors } from "~/config/init-config";
 import { NoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
 import { useUpdateNote } from "~/services/queries";
@@ -46,45 +46,69 @@ export const NoteModal = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const [colorValue, setColorValue] = useState<string[]>(
-    colorsNotes["#FFFFFF"],
-  );
+  const [colorValue, setColorValue] = useState<string[]>([
+    noteColors.white.background,
+  ]);
 
   const colorsList = [
     {
       label: t("collaborativewall.color.white"),
-      value: "#FFFFFF",
-      icon: <Square colors={colorsNotes["#FFFFFF"]} />,
+      value: noteColors.white.background,
+      icon: <Square borderColor={noteColors.white.border} />,
     },
     {
       label: t("collaborativewall.color.yellow"),
-      value: "#FCF7DE",
-      icon: <Square colors={colorsNotes["#FCF7DE"]} />,
+      value: noteColors.yellow.background,
+      icon: (
+        <Square
+          className="bg-yellow-200"
+          borderColor={noteColors.yellow.border}
+        />
+      ),
     },
     {
       label: t("collaborativewall.color.orange"),
-      value: "#FFEFE3",
-      icon: <Square colors={colorsNotes["#FFEFE3"]} />,
+      value: noteColors.orange.background,
+      icon: (
+        <Square
+          className="bg-orange-200"
+          borderColor={noteColors.orange.border}
+        />
+      ),
     },
     {
       label: t("collaborativewall.color.red"),
-      value: "#FFECEE",
-      icon: <Square colors={colorsNotes["#FFECEE"]} />,
+      value: noteColors.red.background,
+      icon: (
+        <Square className="bg-red-200" borderColor={noteColors.red.border} />
+      ),
     },
     {
       label: t("collaborativewall.color.purple"),
-      value: "#F6ECF9",
-      icon: <Square colors={colorsNotes["#F6ECF9"]} />,
+      value: noteColors.purple.background,
+      icon: (
+        <Square
+          className="bg-purple-200"
+          borderColor={noteColors.purple.border}
+        />
+      ),
     },
     {
       label: t("collaborativewall.color.blue"),
-      value: "#E5F5FF",
-      icon: <Square colors={colorsNotes["#E5F5FF"]} />,
+      value: noteColors.blue.background,
+      icon: (
+        <Square className="bg-blue-200" borderColor={noteColors.blue.border} />
+      ),
     },
     {
       label: t("collaborativewall.color.green"),
-      value: "#E6F9F8",
-      icon: <Square colors={colorsNotes["#E6F9F8"]} />,
+      value: noteColors.green.background,
+      icon: (
+        <Square
+          className="bg-green-200"
+          borderColor={noteColors.green.border}
+        />
+      ),
     },
   ];
 
@@ -132,21 +156,15 @@ export const NoteModal = () => {
         <Modal.Body>
           <Select
             icon={
-              <Square
-                colors={
-                  data.color && placeholderValue()
-                    ? data.color
-                    : colorsNotes["#FFFFFF"]
-                }
-              />
+              placeholderValue()?.icon ?? (
+                <Square borderColor={noteColors.white.border} />
+              )
             }
             options={colorsList}
             placeholderOption={
               placeholderValue()?.label ?? t("collaborativewall.color.white")
             }
-            onValueChange={(value) =>
-              setColorValue(colorsNotes[value as string])
-            }
+            onValueChange={(value) => setColorValue([value as string])}
           />
           <Editor
             ref={editorRef}
