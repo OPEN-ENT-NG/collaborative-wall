@@ -236,9 +236,9 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                             handler.handle(new Either.Left<>(r.left().getValue()));
                         } else {
                             // notify EUR
-                            final JsonObject json = r.right().getValue();
-                            json.put("version", System.currentTimeMillis());
-                            plugin.notifyUpsert(user, json).onSuccess(e -> {
+                            wall.put("_id", id);
+                            wall.put("version", System.currentTimeMillis());
+                            plugin.notifyUpsert(user, wall).onSuccess(e -> {
                                 // on success return 200
                                 handler.handle(r);
                             }).onFailure(e -> {
