@@ -27,10 +27,10 @@ function Root() {
   return (
     <>
       <ul>
-        {data.map((wall) => {
+        {data.map(({ _id }) => {
           return (
-            <li key={wall._id}>
-              <Link to={`id/${wall._id}`}>{wall._id}</Link>
+            <li key={_id}>
+              <Link to={`id/${_id}`}>{_id}</Link>
             </li>
           );
         })}

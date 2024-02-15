@@ -63,6 +63,7 @@ export const Note = ({
           top: note.y,
           left: note.x,
           backgroundColor: note.color?.[0],
+          // transition: isDragging ? "" : "all 200ms",
           transform: `translate3d(${(transform?.x ?? 0) / zoom}px, ${
             (transform?.y ?? 0) / zoom
           }px, 0)`,
