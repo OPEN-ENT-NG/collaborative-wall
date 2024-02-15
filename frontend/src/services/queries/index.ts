@@ -1,8 +1,32 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  queryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { IAction, ID, odeServices } from "edifice-ts-client";
 
-import { getNotes, getWall, sessionHasWorkflowRights } from "../api";
+import { getNote, getNotes, getWall, sessionHasWorkflowRights } from "../api";
 import { workflows } from "~/config";
+import { NoteProps } from "~/models/notes";
+
+export const wallQueryOptions = (wallId: string) =>
+  queryOptions({
+    queryKey: ["wall", wallId],
+    queryFn: async () => await getWall(wallId),
+  });
+
+export const notesQueryOptions = (wallId: string) =>
+  queryOptions({
+    queryKey: ["notes", wallId],
+    queryFn: async () => await getNotes(wallId),
+  });
+
+export const noteQueryOptions = (wallId: string, noteId: string) =>
+  queryOptions({
+    queryKey: ["note", wallId, noteId],
+    queryFn: async () => await getNote(wallId, noteId),
+  });
 
 export const useActions = () => {
   const { view, list } = workflows;
@@ -32,19 +56,12 @@ export const useActions = () => {
   });
 };
 
-/** Query metadata of a blog */
-export const wallQuery = (wallId: string) => {
-  return {
-    queryKey: ["wall", wallId],
-    queryFn: async () => await getWall(wallId),
-  };
+export const useGetWall = (wallId: string) => {
+  return useQuery(wallQueryOptions(wallId));
 };
 
-export const notesQuery = (wallId: string) => {
-  return {
-    queryKey: ["notes", wallId],
-    queryFn: async () => await getNotes(wallId),
-  };
+export const useGetNotes = (wallId: string) => {
+  return useQuery(notesQueryOptions(wallId));
 };
 
 export const useCreateNote = (id: string) => {
@@ -59,7 +76,7 @@ export const useCreateNote = (id: string) => {
   });
 };
 
-export const useUpdatePosition = () => {
+export const useUpdateNote = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -77,41 +94,26 @@ export const useUpdatePosition = () => {
         modified?: { $date: number };
       };
     }) => {
-      const res = await odeServices
+      return await odeServices
         .http()
         .put(`/collaborativewall/${note.idwall}/note/${id}`, note);
-
-      return res;
     },
-    /* onMutate: async (variables) => {
-      console.log({ variables });
-      // Cancel any outgoing refetches
-      // (so they don't overwrite our optimistic update)
-      await queryClient.cancelQueries({
-        queryKey: ["notes", variables.note.idwall],
-      });
+    onSuccess: async (_, { id, note }) => {
+      const previousNotes = queryClient.getQueryData(["notes", note.idwall]);
 
-      // Snapshot the previous value
-      const previousNotes = queryClient.getQueryData([
-        "notes",
-        variables.note.idwall,
-      ]);
-      const newNote = variables.note;
-
-      // Optimistically update to the new value
-      queryClient.setQueryData(
-        ["notes", variables.note.idwall],
-        variables.note,
-      );
-
-      // Return a context with the previous and new note
-      return { previousNotes, newNote };
-    }, */
-    onSettled(data, error, variables, context) {
-      console.log({ data, error, variables, context });
-      queryClient.invalidateQueries({
-        queryKey: ["notes", variables.note.idwall],
-      });
+      if (previousNotes) {
+        queryClient.setQueryData(
+          notesQueryOptions(note.idwall).queryKey,
+          (oldNotes: NoteProps[] | undefined) => {
+            return oldNotes?.map((oldNote) => {
+              if (oldNote._id === id) {
+                return { ...oldNote, ...note, zIndex: 2 };
+              }
+              return { ...oldNote, zIndex: 1 };
+            });
+          },
+        );
+      }
     },
   });
 };
