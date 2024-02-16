@@ -94,14 +94,20 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     }
 
     @Get("")
-    @ApiDoc("Allows to display the main view")
-    @SecuredAction("collaborativewall.view")
-    public void view(HttpServerRequest request) {
-        renderView(request, new JsonObject(), "index.html", null);
-
-        // Create event "access to application CollaborativeWall" and store it, for module "statistics"
-        eventHelper.onAccess(request);
-    }
+	@SecuredAction("collaborativewall.view")
+	public void collaborativewall(HttpServerRequest request) {
+		final String view = request.params().get("collaborativewall");
+		if("home".equals(view)){
+			renderView(request, new JsonObject(), "index.html", null);
+		} else if("resource".equals(view)){
+			// force new ui
+			renderView(request, new JsonObject(), "index.html", null);
+		} else {
+			// use old ui by default for routing
+			renderView(request);
+		}
+		eventHelper.onAccess(request);
+	}
 
     /**
      * Display react front view /id/:id
