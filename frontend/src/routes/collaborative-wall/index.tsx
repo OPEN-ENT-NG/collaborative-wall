@@ -31,6 +31,8 @@ import { updateNote } from "~/services/api";
 import { notesQueryOptions, wallQueryOptions } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 
+import "~/styles/index.css";
+
 const DescriptionModal = lazy(
   async () => await import("~/components/description-modal"),
 );
