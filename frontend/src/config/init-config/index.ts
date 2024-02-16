@@ -23,6 +23,7 @@ export const wallConfig = {
 } as const;
 
 export const initialState = {
+  notes: [],
   canMoveBoard: false,
   canMoveNote: false,
   canZoom: true,
