@@ -96,7 +96,8 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @Get("")
 	@SecuredAction("collaborativewall.view")
 	public void collaborativewall(HttpServerRequest request) {
-		final String view = request.params().get("collaborativewall");
+        renderView(request, new JsonObject(), "index.html", null);
+		/* final String view = request.params().get("collaborativewall");
 		if("home".equals(view)){
 			renderView(request, new JsonObject(), "index.html", null);
 		} else if("resource".equals(view)){
@@ -105,7 +106,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
 		} else {
 			// use old ui by default for routing
 			renderView(request);
-		}
+		} */
 		eventHelper.onAccess(request);
 	}
 
@@ -116,13 +117,14 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @Get("/id/:id")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void viewById(HttpServerRequest request) {
-        final boolean useNewUi = this.config.getBoolean("use-explorer-ui", true);
+        renderView(request, new JsonObject(), "index.html", null);
+        /* final boolean useNewUi = this.config.getBoolean("use-explorer-ui", true);
         if(useNewUi){
             renderView(request, new JsonObject(), "index.html", null);
         }else{
             // redirect to old ui
             redirect(request, "/collaborativewall#/view/"+request.params().get("id"));
-        }
+        } */
     }
 
     @Get("/print/wall")
