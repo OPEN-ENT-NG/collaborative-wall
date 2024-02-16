@@ -5,7 +5,6 @@ import { RouteObject, createBrowserRouter } from "react-router-dom";
 import Root from "./root";
 import ErrorPage from "~/components/page-error";
 import { explorerConfig } from "~/config/config";
-import "~/styles/index.css";
 
 const routes = (queryClient: QueryClient): RouteObject[] => [
   {
