@@ -3,8 +3,8 @@ import { Explorer } from "ode-explorer/lib";
 import { RouteObject, createBrowserRouter } from "react-router-dom";
 
 import Root from "./root";
-import ErrorPage from "~/components/page-error";
 import { explorerConfig } from "~/config/config";
+import { PageError } from "~/routes/page-error";
 
 const routes = (queryClient: QueryClient): RouteObject[] => [
   {
@@ -40,7 +40,7 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
         },
       },
     ],
-    errorElement: <ErrorPage />,
+    errorElement: <PageError />,
   },
 ];
 

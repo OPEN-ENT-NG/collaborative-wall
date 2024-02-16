@@ -12,7 +12,7 @@ export const zoomConfig = {
 } as const;
 
 /* INITIALSTATE CONFIG */
-const OFFSET = { x: 0, y: 0 };
+export const OFFSET = { x: 0, y: 0 };
 
 const HEIGHT_WALL = 1800;
 const WIDTH_WALL = 2880;
@@ -21,17 +21,6 @@ export const wallConfig = {
   HEIGHT_WALL,
   WIDTH_WALL,
 } as const;
-
-export const initialState = {
-  notes: [],
-  canMoveBoard: false,
-  canMoveNote: false,
-  canZoom: true,
-  isDragging: false,
-  startPosition: OFFSET,
-  offset: OFFSET,
-  zoom: zoomConfig.DEFAULT_ZOOM,
-};
 
 interface Colors {
   [key: string]: {

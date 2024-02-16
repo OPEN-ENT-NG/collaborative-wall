@@ -2,7 +2,7 @@ import { Button, Heading, Layout } from "@edifice-ui/react";
 import { t } from "i18next";
 import { useRouteError } from "react-router-dom";
 
-export default function PageError() {
+export const PageError = () => {
   const error = useRouteError();
   console.error(error);
 
@@ -13,7 +13,6 @@ export default function PageError() {
           {t("oops")}
         </Heading>
         <div className="text">
-          {" "}
           {t("collaborativewall.or.page.notfound.or.unauthorized", {
             ns: "collaborativewall",
           })}
@@ -29,4 +28,4 @@ export default function PageError() {
       </div>
     </Layout>
   );
-}
+};
