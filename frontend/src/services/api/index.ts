@@ -45,6 +45,27 @@ export const getNotes = async (wallId: string) => {
   return notes;
 };
 
+/**
+ * updateNotes API
+ * @param id note id
+ * @returns note
+ */
+export const updateNote = async (
+  id: string,
+  note: {
+    content: string;
+    x: number;
+    y: number;
+    idwall: string;
+    color: string[];
+    modified?: { $date: number };
+  },
+) => {
+  return await odeServices
+    .http()
+    .put(`/collaborativewall/${note.idwall}/note/${id}`, note);
+};
+
 export const sessionHasWorkflowRights = async (actionRights: string[]) => {
   return await odeServices.rights().sessionHasWorkflowRights(actionRights);
 };
