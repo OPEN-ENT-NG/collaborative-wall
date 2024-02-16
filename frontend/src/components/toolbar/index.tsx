@@ -23,7 +23,7 @@ export const ToolbarWrapper = ({
   zoomOut,
   setTransform,
 }: {
-  wallId: ID;
+  wallId: ID | undefined;
   zoomIn: (value: number) => void;
   zoomOut: (value: number) => void;
   setTransform: any;
@@ -53,7 +53,7 @@ export const ToolbarWrapper = ({
 
   const { t } = useTranslation();
 
-  const createNote = useCreateNote(wallId);
+  const createNote = useCreateNote(wallId as string);
 
   const result = Math.random().toString(36).substring(2, 7);
 

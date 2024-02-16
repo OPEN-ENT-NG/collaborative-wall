@@ -6,12 +6,12 @@ import { CollaborativeWallProps } from "~/models/wall";
 export const useUserRights = ({
   data,
 }: {
-  data: CollaborativeWallProps;
+  data: CollaborativeWallProps | undefined;
 }): {
   canUpdate: boolean | undefined;
 } => {
   const { user } = useUser();
-  const { shared } = data;
+  const { shared } = data || {};
 
   const userId = user?.userId;
   const groupsIds = user?.groupsIds;

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { initialState } from "~/config/init-config";
+import { OFFSET, zoomConfig } from "~/config/init-config";
 import { NoteProps } from "~/models/notes";
 
 type Offset = {
@@ -10,6 +10,7 @@ type Offset = {
 
 type State = {
   notes: NoteProps[];
+  isMobile: boolean;
   canMoveBoard: boolean;
   canMoveNote: boolean;
   canZoom: boolean;
@@ -26,6 +27,7 @@ type Action = {
   setCanMoveNote: (value: boolean) => void;
   setZoom: (value: number) => void;
   setNotes: (notes: NoteProps[]) => void;
+  setIsMobile: (query: string | null) => void;
   updateNotePosition: ({
     activeId,
     x,
@@ -35,12 +37,23 @@ type Action = {
     x: number;
     y: number;
   }) => void;
-  /* createNote: () => void;
-  deleteNote: (id: string | number) => void; */
+};
+
+const initialState = {
+  notes: [],
+  isMobile: false,
+  canMoveBoard: false,
+  canMoveNote: false,
+  canZoom: true,
+  isDragging: false,
+  startPosition: OFFSET,
+  offset: OFFSET,
+  zoom: zoomConfig.DEFAULT_ZOOM,
 };
 
 export const useWhiteboard = create<State & Action>((set) => ({
   ...initialState,
+  setIsMobile: (query) => set({ isMobile: query === "mobile" }),
   toggleCanMoveBoard: () =>
     set((state: { canMoveBoard: boolean }) => ({
       canMoveBoard: !state.canMoveBoard,

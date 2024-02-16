@@ -1,7 +1,7 @@
 import { usePaths, EmptyScreen } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
 
-export default function EmptyScreenError(): JSX.Element {
+export const EmptyScreenError = () => {
   const [imagePath] = usePaths();
   const { t } = useTranslation();
 
@@ -12,4 +12,4 @@ export default function EmptyScreenError(): JSX.Element {
       text={"explorer.emptyScreen.error.text"}
     />
   );
-}
+};

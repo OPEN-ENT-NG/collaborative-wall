@@ -1,27 +1,34 @@
 import { ReactNode, useEffect } from "react";
 
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 import { TransformComponent } from "react-zoom-pan-pinch";
 import { useShallow } from "zustand/react/shallow";
 
 import { wallConfig, zoomConfig } from "~/config/init-config";
-import { CollaborativeWallProps } from "~/models/wall";
+import { wallQueryOptions } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 
 const defaultBackground = "/img/cloud.png";
 
 export const WhiteboardComponent = ({
   children,
-  data,
   zoomIn,
   zoomOut,
   canUpdate,
 }: {
   children: ReactNode;
-  data: CollaborativeWallProps;
   zoomIn: (value: number) => void;
   zoomOut: (value: number) => void;
   canUpdate: boolean | undefined;
 }) => {
+  const params = useParams();
+
+  const { data } = useQuery({
+    queryKey: wallQueryOptions(params.wallId as string).queryKey,
+    queryFn: wallQueryOptions(params.wallId as string).queryFn,
+  });
+
   const { canMoveBoard, isDragging, setCanMoveBoard, setCanMoveNote } =
     useWhiteboard(
       useShallow((state) => ({
@@ -97,7 +104,7 @@ export const WhiteboardComponent = ({
       >
         <div
           style={{
-            backgroundImage: `url(${data.background ?? defaultBackground})`,
+            backgroundImage: `url(${data?.background ?? defaultBackground})`,
             height: wallConfig.HEIGHT_WALL,
             width: wallConfig.WIDTH_WALL,
           }}

@@ -12,7 +12,7 @@ export const Note = ({
   onClick,
 }: {
   note: NoteProps;
-  onClick: (id: string) => void;
+  onClick?: (id: string) => void;
 }) => {
   const { zoom, canMoveNote, isBoardDragging } = useWhiteboard(
     useShallow((state) => ({
@@ -49,7 +49,7 @@ export const Note = ({
   const defaultImage = "/img/cloud.png";
 
   const handleClick = (noteId: string): void => {
-    onClick(noteId);
+    onClick?.(noteId);
   };
 
   return (
@@ -63,7 +63,6 @@ export const Note = ({
           top: note.y,
           left: note.x,
           backgroundColor: note.color?.[0],
-          // transition: isDragging ? "" : "all 200ms",
           transform: `translate3d(${(transform?.x ?? 0) / zoom}px, ${
             (transform?.y ?? 0) / zoom
           }px, 0)`,
