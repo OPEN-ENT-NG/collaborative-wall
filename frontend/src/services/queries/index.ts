@@ -6,9 +6,15 @@ import {
 } from "@tanstack/react-query";
 import { IAction, ID, odeServices } from "edifice-ts-client";
 
-import { getNote, getNotes, getWall, sessionHasWorkflowRights } from "../api";
+import {
+  getNote,
+  getNotes,
+  getWall,
+  sessionHasWorkflowRights,
+  updateNote,
+} from "../api";
 import { workflows } from "~/config";
-import { NoteProps } from "~/models/notes";
+import { NoteProps, PickedNoteProps } from "~/models/notes";
 
 export const wallQueryOptions = (wallId: string) =>
   queryOptions({
@@ -19,7 +25,7 @@ export const wallQueryOptions = (wallId: string) =>
 export const notesQueryOptions = (wallId: string) =>
   queryOptions({
     queryKey: ["notes", wallId],
-    queryFn: async () => await getNotes(wallId),
+    queryFn: async () => await getNotes(wallId as string),
   });
 
 export const noteQueryOptions = (wallId: string, noteId: string) =>
@@ -80,30 +86,14 @@ export const useUpdateNote = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      id,
-      note,
-    }: {
-      id: ID;
-      note: {
-        content: string;
-        x: number;
-        y: number;
-        idwall: string;
-        color: string[];
-        modified?: { $date: number };
-      };
-    }) => {
-      return await odeServices
-        .http()
-        .put(`/collaborativewall/${note.idwall}/note/${id}`, note);
-    },
+    mutationFn: async ({ id, note }: { id: ID; note: PickedNoteProps }) =>
+      await updateNote(note.idwall as string, id, note),
     onSuccess: async (_, { id, note }) => {
       const previousNotes = queryClient.getQueryData(["notes", note.idwall]);
 
       if (previousNotes) {
         queryClient.setQueryData(
-          notesQueryOptions(note.idwall).queryKey,
+          notesQueryOptions(note.idwall as string).queryKey,
           (oldNotes: NoteProps[] | undefined) => {
             return oldNotes?.map((oldNote) => {
               if (oldNote._id === id) {

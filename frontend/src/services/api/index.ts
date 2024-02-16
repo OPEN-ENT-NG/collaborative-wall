@@ -1,6 +1,6 @@
 import { odeServices } from "edifice-ts-client";
 
-import { NoteProps } from "~/models/notes";
+import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { CollaborativeWallProps } from "~/models/wall";
 
 /**
@@ -35,7 +35,7 @@ export const getNote = async (
 
 /**
  * getNotes API
- * @param wallId, resource ID
+ * @param wallId, wallId
  * @returns notes
  */
 export const getNotes = async (wallId: string) => {
@@ -46,24 +46,19 @@ export const getNotes = async (wallId: string) => {
 };
 
 /**
- * updateNotes API
- * @param id note id
- * @returns note
+ * updateNote API
+ * @param wallId, string
+ * @param noteId, string
+ * @returns status and updated notes
  */
 export const updateNote = async (
-  id: string,
-  note: {
-    content: string;
-    x: number;
-    y: number;
-    idwall: string;
-    color: string[];
-    modified?: { $date: number };
-  },
+  wallId: string,
+  noteId: string,
+  note: PickedNoteProps,
 ) => {
   return await odeServices
     .http()
-    .put(`/collaborativewall/${note.idwall}/note/${id}`, note);
+    .put(`/collaborativewall/${wallId}/note/${noteId}`, note);
 };
 
 export const sessionHasWorkflowRights = async (actionRights: string[]) => {

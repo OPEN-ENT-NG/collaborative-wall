@@ -1,4 +1,4 @@
-import { lazy, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 
 import { DndContext, Active } from "@dnd-kit/core";
 import {
@@ -19,6 +19,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
+import { useShallow } from "zustand/react/shallow";
 
 import { DescriptionWall } from "~/components/description-wall";
 import EmptyScreenError from "~/components/error";
@@ -26,11 +27,8 @@ import { Note } from "~/components/note";
 import { WhiteboardWrapper } from "~/components/whiteboard-wrapper";
 import { useDndKit } from "~/hooks/useDndKit";
 import { NoteProps } from "~/models/notes";
-import {
-  notesQueryOptions,
-  useUpdateNote,
-  wallQueryOptions,
-} from "~/services/queries";
+import { updateNote } from "~/services/api";
+import { notesQueryOptions, wallQueryOptions } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 
 const DescriptionModal = lazy(
@@ -68,8 +66,18 @@ export const CollaborativeWall = () => {
 
   const sensors = useDndKit();
 
-  const zoom = useWhiteboard((state) => state.zoom);
-  const updatePositionMutation = useUpdateNote();
+  /* const zoom = useWhiteboard((state) => state.zoom); */
+
+  const { zoom, notes, setNotes, updateNotePosition } = useWhiteboard(
+    useShallow((state) => ({
+      zoom: state.zoom,
+      notes: state.notes,
+      setNotes: state.setNotes,
+      updateNotePosition: state.updateNotePosition,
+    })),
+  );
+
+  // const updatePositionMutation = useUpdateNote();
 
   useTrashedResource(params?.wallId);
 
@@ -80,7 +88,7 @@ export const CollaborativeWall = () => {
 
   const [
     { data: wall, isPending: isWallLoading, isError: isWallError },
-    { data: notes, isPending: isNotesLoading, isError: isNotesError },
+    { data: dataNotes, isPending: isNotesLoading, isError: isNotesError },
   ] = useQueries({
     queries: [
       {
@@ -94,7 +102,12 @@ export const CollaborativeWall = () => {
     ],
   });
 
-  const handleOnDragEnd = ({
+  useEffect(() => {
+    if (dataNotes) setNotes(dataNotes);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataNotes]);
+
+  const handleOnDragEnd = async ({
     active,
     delta,
   }: {
@@ -123,7 +136,9 @@ export const CollaborativeWall = () => {
       y: Math.round(findNote.y + delta.y / zoom),
     };
 
-    updatePositionMutation.mutate({ id: findNote._id, note });
+    updateNotePosition({ activeId, x: delta.x / zoom, y: delta.y / zoom });
+
+    await updateNote(note.idwall, findNote._id, note);
   };
 
   if (isWallLoading && isNotesLoading) return <LoadingScreen />;
@@ -156,7 +171,7 @@ export const CollaborativeWall = () => {
           <WhiteboardWrapper data={wall}>
             <DndContext sensors={sensors} onDragEnd={handleOnDragEnd}>
               {notes.map((note: NoteProps, i: number) => {
-                if (
+                /* if (
                   updatePositionMutation.isPending &&
                   note._id === updatePositionMutation.variables?.id
                 ) {
@@ -165,19 +180,12 @@ export const CollaborativeWall = () => {
                       key={note._id}
                       note={{
                         ...note,
-                        x: updatePositionMutation.isPending
-                          ? updatePositionMutation.variables?.note.x
-                          : note.x,
-                        y: updatePositionMutation.isPending
-                          ? updatePositionMutation.variables?.note.y
-                          : note.y,
-                        title: `title ${i}`,
-                        zIndex: 2 ?? 1,
+                        ...updatePositionMutation.variables.note,
                       }}
                       onClick={(id) => navigate(`note/${id}`)}
                     />
                   );
-                }
+                } */
 
                 return (
                   <Note

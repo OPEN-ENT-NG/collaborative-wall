@@ -14,3 +14,8 @@ export interface NoteProps {
   };
   zIndex?: number;
 }
+
+export type PickedNoteProps = Pick<
+  NoteProps,
+  "content" | "x" | "x" | "idwall" | "color" | "modified"
+>;
