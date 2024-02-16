@@ -1,16 +1,15 @@
 import { lazy, useState } from "react";
 
+import { DndContext, Active } from "@dnd-kit/core";
 import {
-  DndContext,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-  KeyboardSensor,
-  Active,
-} from "@dnd-kit/core";
-import { AppHeader, Breadcrumb, Button, useOdeClient } from "@edifice-ui/react";
-import { QueryClient, useQuery } from "@tanstack/react-query";
+  AppHeader,
+  Breadcrumb,
+  Button,
+  LoadingScreen,
+  useOdeClient,
+  useTrashedResource,
+} from "@edifice-ui/react";
+import { QueryClient, useQueries } from "@tanstack/react-query";
 import { IWebApp } from "edifice-ts-client";
 // @ts-ignore
 import { useTranslation } from "react-i18next";
@@ -20,31 +19,31 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
-import { useShallow } from "zustand/react/shallow";
 
 import { DescriptionWall } from "~/components/description-wall";
+import EmptyScreenError from "~/components/error";
 import { Note } from "~/components/note";
 import { WhiteboardWrapper } from "~/components/whiteboard-wrapper";
+import { useDndKit } from "~/hooks/useDndKit";
 import { NoteProps } from "~/models/notes";
-import { notesQuery, useUpdatePosition, wallQuery } from "~/services/queries";
+import {
+  notesQueryOptions,
+  useUpdateNote,
+  wallQueryOptions,
+} from "~/services/queries";
 import { useWhiteboard } from "~/store";
 
 const DescriptionModal = lazy(
   async () => await import("~/components/description-modal"),
 );
 
-const activationConstraint = {
-  delay: 250,
-  tolerance: 5,
-};
-
 export const wallLoader =
   (queryClient: QueryClient) =>
   async ({ params }: LoaderFunctionArgs) => {
     const { wallId } = params;
 
-    const queryWall = wallQuery(wallId as string);
-    const queryNotes = notesQuery(wallId as string);
+    const queryWall = wallQueryOptions(wallId as string);
+    const queryNotes = notesQueryOptions(wallId as string);
 
     const wall =
       queryClient.getQueryData(queryWall.queryKey) ??
@@ -67,28 +66,33 @@ export const CollaborativeWall = () => {
   const params = useParams();
   const navigate = useNavigate();
 
-  const { currentApp } = useOdeClient();
+  const sensors = useDndKit();
 
-  const { t } = useTranslation();
+  const zoom = useWhiteboard((state) => state.zoom);
+  const updatePositionMutation = useUpdateNote();
 
-  const { zoom } = useWhiteboard(
-    useShallow((state) => ({
-      zoom: state.zoom,
-    })),
-  );
+  useTrashedResource(params?.wallId);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const mouseSensor = useSensor(MouseSensor, {
-    activationConstraint,
-  });
-  const touchSensor = useSensor(TouchSensor, {
-    activationConstraint,
-  });
-  const keyboardSensor = useSensor(KeyboardSensor);
-  const sensors = useSensors(mouseSensor, touchSensor, keyboardSensor);
+  const { currentApp } = useOdeClient();
+  const { t } = useTranslation();
 
-  const updatePosition = useUpdatePosition();
+  const [
+    { data: wall, isPending: isWallLoading, isError: isWallError },
+    { data: notes, isPending: isNotesLoading, isError: isNotesError },
+  ] = useQueries({
+    queries: [
+      {
+        queryKey: wallQueryOptions(params.wallId as string).queryKey,
+        queryFn: wallQueryOptions(params.wallId as string).queryFn,
+      },
+      {
+        queryKey: notesQueryOptions(params.wallId as string).queryKey,
+        queryFn: notesQueryOptions(params.wallId as string).queryFn,
+      },
+    ],
+  });
 
   const handleOnDragEnd = ({
     active,
@@ -119,62 +123,88 @@ export const CollaborativeWall = () => {
       y: Math.round(findNote.y + delta.y / zoom),
     };
 
-    updatePosition.mutateAsync({ id: findNote._id, note });
+    updatePositionMutation.mutate({ id: findNote._id, note });
   };
 
-  const { data: wall } = useQuery(wallQuery(params.wallId as string));
-  const { data: notes } = useQuery(notesQuery(params.wallId as string));
+  if (isWallLoading && isNotesLoading) return <LoadingScreen />;
 
-  return wall && notes ? (
-    <>
-      <AppHeader
-        isFullscreen
-        render={() => (
-          <>
-            <Button variant="filled" /* onClick={() => setOpenShare(true)} */>
-              {t("share")}
-            </Button>
-          </>
-        )}
-      >
-        <Breadcrumb app={currentApp as IWebApp} name={wall.name} />
-      </AppHeader>
-      <div className="collaborativewall-container">
-        {wall.description && (
-          <DescriptionWall
-            setIsOpen={setIsOpen}
-            description={wall.description}
-          />
-        )}
-        <WhiteboardWrapper data={wall}>
-          <DndContext sensors={sensors} onDragEnd={handleOnDragEnd}>
-            {notes.map((note: NoteProps, i: number) => {
-              return (
-                <Note
-                  key={note._id}
-                  note={{
-                    ...note,
-                    title: `title ${i}`,
-                    zIndex: note.zIndex ?? 1,
-                  }}
-                  onClick={(id) => navigate(`note/${id}`)}
-                />
-              );
-            })}
-          </DndContext>
-        </WhiteboardWrapper>
+  if (isWallError || isNotesError) return <EmptyScreenError />;
 
-        <Outlet />
+  return (
+    wall &&
+    notes && (
+      <>
+        <AppHeader
+          isFullscreen
+          render={() => (
+            <>
+              <Button variant="filled" /* onClick={() => setOpenShare(true)} */>
+                {t("share")}
+              </Button>
+            </>
+          )}
+        >
+          <Breadcrumb app={currentApp as IWebApp} name={wall.name} />
+        </AppHeader>
+        <div className="collaborativewall-container">
+          {wall.description && (
+            <DescriptionWall
+              setIsOpen={setIsOpen}
+              description={wall.description}
+            />
+          )}
+          <WhiteboardWrapper data={wall}>
+            <DndContext sensors={sensors} onDragEnd={handleOnDragEnd}>
+              {notes.map((note: NoteProps, i: number) => {
+                if (
+                  updatePositionMutation.isPending &&
+                  note._id === updatePositionMutation.variables?.id
+                ) {
+                  return (
+                    <Note
+                      key={note._id}
+                      note={{
+                        ...note,
+                        x: updatePositionMutation.isPending
+                          ? updatePositionMutation.variables?.note.x
+                          : note.x,
+                        y: updatePositionMutation.isPending
+                          ? updatePositionMutation.variables?.note.y
+                          : note.y,
+                        title: `title ${i}`,
+                        zIndex: 2 ?? 1,
+                      }}
+                      onClick={(id) => navigate(`note/${id}`)}
+                    />
+                  );
+                }
 
-        {wall.description && (
-          <DescriptionModal
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            description={wall.description}
-          />
-        )}
-      </div>
-      {/* <Suspense fallback={<LoadingScreen />}>
+                return (
+                  <Note
+                    key={note._id}
+                    note={{
+                      ...note,
+                      title: `title ${i}`,
+                      zIndex: note.zIndex ?? 1,
+                    }}
+                    onClick={(id) => navigate(`note/${id}`)}
+                  />
+                );
+              })}
+            </DndContext>
+          </WhiteboardWrapper>
+
+          <Outlet />
+
+          {wall.description && (
+            <DescriptionModal
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              description={wall.description}
+            />
+          )}
+        </div>
+        {/* <Suspense fallback={<LoadingScreen />}>
         {openShare && data && (
           <ShareModal
             isOpen={openShare}
@@ -184,8 +214,7 @@ export const CollaborativeWall = () => {
           />
         )}
       </Suspense> */}
-    </>
-  ) : (
-    <p>No collaborative wall found</p>
+      </>
+    )
   );
 };
