@@ -144,7 +144,7 @@ export const CollaborativeWall = () => {
         </AppHeader>
       )}
       <div className="collaborativewall-container">
-        {wall?.description && (
+        {wall?.description && !isMobile && (
           <DescriptionWall
             setIsOpen={setIsOpen}
             description={wall?.description}
