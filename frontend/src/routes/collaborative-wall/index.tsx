@@ -1,6 +1,6 @@
 import { Suspense, lazy, useEffect, useState } from "react";
 
-import { DndContext, Active } from "@dnd-kit/core";
+import { DndContext } from "@dnd-kit/core";
 import {
   AppHeader,
   Breadcrumb,
@@ -27,9 +27,9 @@ import { EmptyScreenError } from "~/components/emptyscreen-error";
 import { Note } from "~/components/note";
 import { WhiteboardWrapper } from "~/components/whiteboard-wrapper";
 import { useDndKit } from "~/hooks/useDndKit";
+import { useMoveNote } from "~/hooks/useMoveNote";
 import { NoteProps } from "~/models/notes";
 import { CollaborativeWallProps } from "~/models/wall";
-import { updateNote } from "~/services/api";
 import { notesQueryOptions, wallQueryOptions } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 
@@ -82,13 +82,12 @@ export const CollaborativeWall = () => {
 
   const sensors = useDndKit();
 
-  const { zoom, isMobile, setIsMobile, notes, setNotes, updateNotePosition } =
+  const { openShareModal, setOpenShareModal, zoom, isMobile, setIsMobile } =
     useWhiteboard(
       useShallow((state) => ({
+        openShareModal: state.openShareModal,
+        setOpenShareModal: state.setOpenShareModal,
         zoom: state.zoom,
-        notes: state.notes,
-        setNotes: state.setNotes,
-        updateNotePosition: state.updateNotePosition,
         isMobile: state.isMobile,
         setIsMobile: state.setIsMobile,
       })),
@@ -97,14 +96,13 @@ export const CollaborativeWall = () => {
   useTrashedResource(params?.wallId);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [openShareModal, setOpenShareModal] = useState<boolean>(false);
 
   const { currentApp } = useOdeClient();
   const { t } = useTranslation();
 
   const [
     { data: wall, isPending: isWallLoading, isError: isWallError },
-    { data: dataNotes, isPending: isNotesLoading, isError: isNotesError },
+    { data: notes, isPending: isNotesLoading, isError: isNotesError },
   ] = useQueries({
     queries: [
       {
@@ -118,49 +116,12 @@ export const CollaborativeWall = () => {
     ],
   });
 
-  useEffect(() => {
-    if (dataNotes) setNotes(dataNotes);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataNotes]);
+  const { updatedNote, handleOnDragEnd } = useMoveNote({ zoom, notes });
 
   useEffect(() => {
     if (query) setIsMobile(query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
-
-  const handleOnDragEnd = async ({
-    active,
-    delta,
-  }: {
-    active: Active;
-    delta: { x: number; y: number };
-  }) => {
-    const activeId = active.id as string;
-
-    const findNote = notes?.find((note) => note._id === activeId);
-
-    if (!findNote) return;
-
-    const note: {
-      content: string;
-      x: number;
-      y: number;
-      idwall: string;
-      color: string[];
-      modified?: { $date: number };
-    } = {
-      content: findNote.content,
-      color: findNote.color as string[],
-      idwall: findNote.idwall as string,
-      modified: findNote.modified,
-      x: Math.round(findNote.x + delta.x / zoom),
-      y: Math.round(findNote.y + delta.y / zoom),
-    };
-
-    updateNotePosition({ activeId, x: delta.x / zoom, y: delta.y / zoom });
-
-    await updateNote(note.idwall, findNote._id, note);
-  };
 
   if (isWallLoading && isNotesLoading) return <LoadingScreen />;
 
@@ -191,14 +152,17 @@ export const CollaborativeWall = () => {
         )}
         <WhiteboardWrapper>
           <DndContext sensors={sensors} onDragEnd={handleOnDragEnd}>
-            {notes.map((note: NoteProps, i: number) => {
+            {notes?.map((note: NoteProps, i: number) => {
+              const isUpdated = note._id === updatedNote?.activeId;
               return (
                 <Note
                   key={note._id}
                   note={{
                     ...note,
+                    x: isUpdated ? updatedNote.x : note.x,
+                    y: isUpdated ? updatedNote.y : note.y,
                     title: `title ${i}`,
-                    zIndex: note.zIndex ?? 1,
+                    zIndex: isUpdated ? updatedNote.y : note.y ?? 1,
                   }}
                   onClick={
                     !isMobile ? (id) => navigate(`note/${id}`) : undefined
@@ -215,15 +179,15 @@ export const CollaborativeWall = () => {
           <DescriptionModal
             isOpen={isOpen}
             setIsOpen={setIsOpen}
-            description={wall?.description}
+            description={wall.description}
           />
         )}
       </div>
       <Suspense fallback={<LoadingScreen />}>
-        {openShareModal && (
+        {openShareModal && wall && (
           <ShareModal
             isOpen={openShareModal}
-            resourceId={wall?._id as string}
+            resourceId={wall._id}
             onCancel={() => setOpenShareModal(false)}
             onSuccess={() => setOpenShareModal(false)}
           />
