@@ -1,4 +1,4 @@
-import { lazy, useEffect, useState } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 
 import { DndContext, Active } from "@dnd-kit/core";
 import {
@@ -38,6 +38,7 @@ import "~/styles/index.css";
 const DescriptionModal = lazy(
   async () => await import("~/components/description-modal"),
 );
+const ShareModal = lazy(async () => await import("~/features/share-modal"));
 
 interface LoaderData {
   wall: CollaborativeWallProps;
@@ -96,6 +97,7 @@ export const CollaborativeWall = () => {
   useTrashedResource(params?.wallId);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [openShareModal, setOpenShareModal] = useState<boolean>(false);
 
   const { currentApp } = useOdeClient();
   const { t } = useTranslation();
@@ -171,7 +173,7 @@ export const CollaborativeWall = () => {
           isFullscreen
           render={() => (
             <>
-              <Button variant="filled" /* onClick={() => setOpenShare(true)} */>
+              <Button variant="filled" onClick={() => setOpenShareModal(true)}>
                 {t("share")}
               </Button>
             </>
@@ -217,16 +219,16 @@ export const CollaborativeWall = () => {
           />
         )}
       </div>
-      {/* <Suspense fallback={<LoadingScreen />}>
-        {openShare && data && (
+      <Suspense fallback={<LoadingScreen />}>
+        {openShareModal && (
           <ShareModal
-            isOpen={openShare}
-            resourceId={data._id}
-            onCancel={handleCloseModal}
-            onSuccess={handleCloseModal}
+            isOpen={openShareModal}
+            resourceId={wall?._id as string}
+            onCancel={() => setOpenShareModal(false)}
+            onSuccess={() => setOpenShareModal(false)}
           />
         )}
-      </Suspense> */}
+      </Suspense>
     </>
   );
 };
