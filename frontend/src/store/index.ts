@@ -1,7 +1,6 @@
 import { create } from "zustand";
 
 import { OFFSET, zoomConfig } from "~/config/init-config";
-import { NoteProps } from "~/models/notes";
 
 type Offset = {
   x: number;
@@ -9,7 +8,6 @@ type Offset = {
 };
 
 type State = {
-  notes: NoteProps[];
   isMobile: boolean;
   canMoveBoard: boolean;
   canMoveNote: boolean;
@@ -18,6 +16,7 @@ type State = {
   startPosition: Offset;
   offset: Offset;
   zoom: number;
+  openShareModal: boolean;
 };
 
 type Action = {
@@ -26,21 +25,11 @@ type Action = {
   setCanMoveBoard: (value: boolean) => void;
   setCanMoveNote: (value: boolean) => void;
   setZoom: (value: number) => void;
-  setNotes: (notes: NoteProps[]) => void;
   setIsMobile: (query: string | null) => void;
-  updateNotePosition: ({
-    activeId,
-    x,
-    y,
-  }: {
-    activeId: string;
-    x: number;
-    y: number;
-  }) => void;
+  setOpenShareModal: (value: boolean) => void;
 };
 
 const initialState = {
-  notes: [],
   isMobile: false,
   canMoveBoard: false,
   canMoveNote: false,
@@ -49,6 +38,7 @@ const initialState = {
   startPosition: OFFSET,
   offset: OFFSET,
   zoom: zoomConfig.DEFAULT_ZOOM,
+  openShareModal: false,
 };
 
 export const useWhiteboard = create<State & Action>((set) => ({
@@ -65,36 +55,5 @@ export const useWhiteboard = create<State & Action>((set) => ({
   setCanMoveBoard: (value: boolean) => set({ canMoveBoard: value }),
   setCanMoveNote: (value: boolean) => set({ canMoveNote: value }),
   setZoom: (value: number) => set({ zoom: value }),
-  setNotes: (notes: NoteProps[]) => set({ notes }),
-  updateNotePosition: ({
-    activeId,
-    y,
-    x,
-  }: {
-    activeId: string;
-    x: number;
-    y: number;
-  }) => {
-    set((state: State): Partial<State> => {
-      const updatedNotes = state.notes?.map((note) => {
-        if (note._id === activeId) {
-          return {
-            ...note,
-            x: note.x + x,
-            y: note.y + y,
-            zIndex: 2,
-          };
-        }
-        return {
-          ...note,
-          zIndex: 1,
-        };
-      });
-
-      return {
-        ...state,
-        notes: updatedNotes,
-      };
-    });
-  },
+  setOpenShareModal: (value: boolean) => set({ openShareModal: value }),
 }));

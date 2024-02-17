@@ -4,8 +4,8 @@ export interface NoteProps {
   content: string;
   x: number;
   y: number;
-  idwall?: string;
-  color?: string[];
+  idwall: string;
+  color: string[];
   created?: { $date: number };
   modified?: { $date: number };
   owner?: {
