@@ -1,4 +1,4 @@
-import { Button } from "@edifice-ui/react";
+import { Button, useOdeClient } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
 
 export function DescriptionWall({
@@ -8,6 +8,7 @@ export function DescriptionWall({
   setIsOpen: (bool: boolean) => void;
   description: string;
 }) {
+  const { appCode } = useOdeClient();
   const { t } = useTranslation();
 
   return (
@@ -19,7 +20,7 @@ export function DescriptionWall({
         onClick={() => setIsOpen(true)}
         style={{ whiteSpace: "nowrap" }}
       >
-        {t("collaborativewall.see.more")}
+        {t("collaborativewall.see.more", { ns: appCode })}
       </Button>
     </div>
   );

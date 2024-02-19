@@ -1,4 +1,4 @@
-import { Modal, Button } from "@edifice-ui/react";
+import { Modal, Button, useOdeClient } from "@edifice-ui/react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 
@@ -11,6 +11,7 @@ export default function DescriptionModal({
   setIsOpen: (bool: boolean) => void;
   description: string;
 }): JSX.Element | null {
+  const { appCode } = useOdeClient();
   const { t } = useTranslation();
 
   const handleClose = () => setIsOpen(false);
@@ -25,7 +26,7 @@ export default function DescriptionModal({
           focusId="nextButtonId"
         >
           <Modal.Header onModalClose={handleClose}>
-            {t("collaborativewall.modal.description")}
+            {t("collaborativewall.modal.description", { ns: appCode })}
           </Modal.Header>
           <Modal.Body>
             <p>{description}</p>
@@ -37,7 +38,7 @@ export default function DescriptionModal({
               variant="filled"
               onClick={handleClose}
             >
-              {t("collaborativewall.modal.close")}
+              {t("collaborativewall.modal.close", { ns: appCode })}
             </Button>
           </Modal.Footer>
         </Modal>,
