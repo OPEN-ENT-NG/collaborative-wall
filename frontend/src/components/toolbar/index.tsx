@@ -8,7 +8,7 @@ import {
   ZoomIn,
   ZoomOut,
 } from "@edifice-ui/icons";
-import { Toolbar, ToolbarItem } from "@edifice-ui/react";
+import { Toolbar, ToolbarItem, useOdeClient } from "@edifice-ui/react";
 import { ID } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
@@ -51,6 +51,7 @@ export const ToolbarWrapper = ({
   );
 
   const { t } = useTranslation();
+  const { appCode } = useOdeClient();
 
   const createNote = useCreateNote(wallId as string);
 
@@ -69,10 +70,7 @@ export const ToolbarWrapper = ({
         color: "tertiary",
         onClick: () => console.log("undo"),
       },
-      tooltip: {
-        message: t("collaborativewall.toolbar.undo"),
-        position: "top",
-      },
+      tooltip: t("collaborativewall.toolbar.undo", { ns: appCode }),
     },
     {
       type: "icon",
@@ -83,10 +81,7 @@ export const ToolbarWrapper = ({
         color: "tertiary",
         onClick: () => console.log("redo"),
       },
-      tooltip: {
-        message: t("collaborativewall.toolbar.redo"),
-        position: "top",
-      },
+      tooltip: t("collaborativewall.toolbar.redo", { ns: appCode }),
     },
     {
       type: "divider",
@@ -106,10 +101,7 @@ export const ToolbarWrapper = ({
           setCanMoveBoard(false);
         },
       },
-      tooltip: {
-        message: t("collaborativewall.toolbar.movenote"),
-        position: "top",
-      },
+      tooltip: t("collaborativewall.toolbar.movenote", { ns: appCode }),
     },
     {
       type: "icon",
@@ -124,10 +116,7 @@ export const ToolbarWrapper = ({
           setCanMoveNote(false);
         },
       },
-      tooltip: {
-        message: t("collaborativewall.toolbar.movewhiteboard"),
-        position: "top",
-      },
+      tooltip: t("collaborativewall.toolbar.movewhiteboard", { ns: appCode }),
     },
 
     {
@@ -143,25 +132,19 @@ export const ToolbarWrapper = ({
         color: "tertiary",
         onClick: () => setTransform(offsetX, offsetY, zoomConfig.DEFAULT_ZOOM),
       },
-      tooltip: {
-        message: t("collaborativewall.toolbar.center"),
-        position: "top",
-      },
+      tooltip: t("collaborativewall.toolbar.center", { ns: appCode }),
     },
     {
       type: "icon",
-      name: "zoomOut",
+      name: "zoomIn",
       props: {
-        icon: <ZoomOut />,
-        className: "zoom-out",
-        "aria-label": t("collaborativewall.toolbar.zoomout"),
+        icon: <ZoomIn />,
+        className: "zoom-in",
+        "aria-label": t("collaborativewall.toolbar.zoomin"),
         color: "tertiary",
-        onClick: () => zoomOut(zoomConfig.SCALE_ZOOM),
+        onClick: () => zoomIn(zoomConfig.SCALE_ZOOM),
       },
-      tooltip: {
-        message: t("collaborativewall.toolbar.zoomout"),
-        position: "top",
-      },
+      tooltip: t("collaborativewall.toolbar.zoomin", { ns: appCode }),
     },
     {
       type: "button",
@@ -175,18 +158,15 @@ export const ToolbarWrapper = ({
     },
     {
       type: "icon",
-      name: "zoomIn",
+      name: "zoomOut",
       props: {
-        icon: <ZoomIn />,
-        className: "zoom-in",
-        "aria-label": t("collaborativewall.toolbar.zoomin"),
+        icon: <ZoomOut />,
+        className: "zoom-out",
+        "aria-label": t("collaborativewall.toolbar.zoomout"),
         color: "tertiary",
-        onClick: () => zoomIn(zoomConfig.SCALE_ZOOM),
+        onClick: () => zoomOut(zoomConfig.SCALE_ZOOM),
       },
-      tooltip: {
-        message: t("collaborativewall.toolbar.zoomin"),
-        position: "top",
-      },
+      tooltip: t("collaborativewall.toolbar.zoomout", { ns: appCode }),
     },
     {
       type: "divider",
@@ -209,10 +189,7 @@ export const ToolbarWrapper = ({
             y: 10,
           } as any),
       },
-      tooltip: {
-        message: t("collaborativewall.toolbar.create"),
-        position: "top",
-      },
+      tooltip: t("collaborativewall.toolbar.create", { ns: appCode }),
     },
   ];
 

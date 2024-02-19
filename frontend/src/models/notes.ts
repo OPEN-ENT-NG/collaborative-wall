@@ -17,5 +17,5 @@ export interface NoteProps {
 
 export type PickedNoteProps = Pick<
   NoteProps,
-  "content" | "x" | "x" | "idwall" | "color" | "modified"
+  "content" | "x" | "y" | "idwall" | "color" | "modified"
 >;

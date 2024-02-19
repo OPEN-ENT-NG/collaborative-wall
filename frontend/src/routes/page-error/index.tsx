@@ -13,7 +13,7 @@ export const PageError = () => {
           {t("oops")}
         </Heading>
         <div className="text">
-          {t("collaborativewall.or.page.notfound.or.unauthorized", {
+          {t("collaborativewall.notfound.or.unauthorized", {
             ns: "collaborativewall",
           })}
         </div>
