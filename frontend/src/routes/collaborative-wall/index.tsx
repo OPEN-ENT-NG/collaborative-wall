@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useState } from "react";
 
 import { DndContext } from "@dnd-kit/core";
+import { restrictToParentElement } from "@dnd-kit/modifiers";
 import {
   AppHeader,
   Breadcrumb,
@@ -151,7 +152,11 @@ export const CollaborativeWall = () => {
           />
         )}
         <WhiteboardWrapper>
-          <DndContext sensors={sensors} onDragEnd={handleOnDragEnd}>
+          <DndContext
+            sensors={sensors}
+            onDragEnd={handleOnDragEnd}
+            modifiers={[restrictToParentElement]}
+          >
             {notes?.map((note: NoteProps, i: number) => {
               const isUpdated = note._id === updatedNote?.activeId;
               return (
