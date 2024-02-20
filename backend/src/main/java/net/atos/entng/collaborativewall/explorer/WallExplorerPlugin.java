@@ -112,7 +112,7 @@ public class WallExplorerPlugin extends ExplorerPluginResourceMongo {
     }
 
     @Override
-    protected void setCreatorForModel(UserInfos user, JsonObject json) {
+    public void setCreatorForModel(UserInfos user, JsonObject json) {
         final JsonObject author = new JsonObject();
         author.put("userId", user.getUserId());
         author.put("displayName", user.getUsername());
