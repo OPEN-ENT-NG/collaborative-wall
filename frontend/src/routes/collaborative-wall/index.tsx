@@ -133,6 +133,7 @@ export const CollaborativeWall = () => {
       {!isMobile && (
         <AppHeader
           isFullscreen
+          style={{ position: "sticky" }}
           render={() => (
             <>
               <Button variant="filled" onClick={() => setOpenShareModal(true)}>
