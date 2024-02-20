@@ -48,11 +48,7 @@ export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
         panning={{ wheelPanning: canMoveBoard, disabled: !canMoveBoard }}
       >
         {({ zoomIn, zoomOut, setTransform }) => (
-          <div
-            style={{
-              background: "linear-gradient(#46AFE6, #E5F5FF)",
-            }}
-          >
+          <div>
             <WhiteboardComponent
               children={children}
               zoomIn={zoomIn}

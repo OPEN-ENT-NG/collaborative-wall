@@ -1,12 +1,13 @@
 import { ReactNode, useEffect } from "react";
 
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { Image } from "@edifice-ui/react";
+//import { useQuery } from "@tanstack/react-query";
+//import { useParams } from "react-router-dom";
 import { TransformComponent } from "react-zoom-pan-pinch";
 import { useShallow } from "zustand/react/shallow";
 
 import { wallConfig, zoomConfig } from "~/config/init-config";
-import { wallQueryOptions } from "~/services/queries";
+//import { wallQueryOptions } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 
 const defaultBackground = "/img/cloud.png";
@@ -22,12 +23,12 @@ export const WhiteboardComponent = ({
   zoomOut: (value: number) => void;
   canUpdate: boolean | undefined;
 }) => {
-  const params = useParams();
+  //const params = useParams();
 
-  const { data } = useQuery({
+  /* const { data } = useQuery({
     queryKey: wallQueryOptions(params.wallId as string).queryKey,
     queryFn: wallQueryOptions(params.wallId as string).queryFn,
-  });
+  }); */
 
   const { canMoveBoard, isDragging, setCanMoveBoard, setCanMoveNote } =
     useWhiteboard(
@@ -100,15 +101,36 @@ export const WhiteboardComponent = ({
           maxWidth: "100%",
           maxHeight: "calc(100vh)",
           cursor: canMoveBoard ? (isDragging ? "grabbing" : "grab") : "default",
+          backgroundColor: "black",
         }}
       >
         <div
           style={{
-            backgroundImage: `url(${data?.background ?? defaultBackground})`,
             height: wallConfig.HEIGHT_WALL,
             width: wallConfig.WIDTH_WALL,
+            background: "linear-gradient(115deg, #E5F5FF 0.32%, #46AFE6 100%)",
           }}
         >
+          {Array.from(Array(2).keys()).map(() => (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              {Array.from(Array(2).keys()).map(() => (
+                <Image
+                  className="imgBackground"
+                  src={defaultBackground}
+                  alt=""
+                  style={{
+                    height: wallConfig.HEIGHT_WALL / 2,
+                    width: wallConfig.WIDTH_WALL / 2,
+                  }}
+                />
+              ))}
+            </div>
+          ))}
           {children}
         </div>
       </TransformComponent>
