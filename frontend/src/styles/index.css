@@ -1,3 +1,6 @@
+:root {
+  overflow: hidden;
+}
 .toolbar {
   position: fixed;
   bottom: 24px;
@@ -54,7 +57,8 @@
 
 @media (max-width: 440px) {
   .toolbar {
-    bottom: 0px;
+    bottom: 0px !important;
+    border-radius: 0 !important;
     width: 100%;
     padding: 8 0 !important;
     gap: 0px !important;
