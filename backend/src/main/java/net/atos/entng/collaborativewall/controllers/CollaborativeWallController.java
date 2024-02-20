@@ -199,9 +199,9 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                             // notify creation event
                             eventHelper.onCreateResource(request, RESOURCE_NAME);
                             // notify EUR
-                            final JsonObject json = r.right().getValue();
-                            json.put("version", System.currentTimeMillis());
-                            plugin.notifyUpsert(user, json).onSuccess(e -> {
+                            wall.put("version", System.currentTimeMillis());
+                            plugin.setCreatorForModel(user, wall);
+                            plugin.notifyUpsert(user, wall).onSuccess(e -> {
                                 // on success return 200
                                 handler.handle(r);
                             }).onFailure(e -> {
