@@ -1,4 +1,4 @@
-import { ReactNode, useRef } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -11,6 +11,7 @@ import { zoomConfig } from "~/config/init-config";
 import { useUserRights } from "~/hooks/useUserRights";
 import { wallQueryOptions } from "~/services/queries";
 import { useWhiteboard } from "~/store";
+import { calculateMinScale } from "~/utils/calculMinScale";
 
 export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
   const { setZoom, isMobile, canMoveBoard } = useWhiteboard(
@@ -20,6 +21,8 @@ export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
       isMobile: state.isMobile,
     })),
   );
+
+  const [minScale, setMinScale] = useState(1);
 
   const params = useParams();
 
@@ -36,12 +39,24 @@ export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
 
   const { canUpdate } = useUserRights({ data });
 
+  useEffect(() => {
+    const handleResize = () => {
+      const newMinScale = calculateMinScale;
+      setMinScale(newMinScale);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, [window.innerHeight, window.innerWidth]);
+
   return (
     <>
       <TransformWrapper
         ref={ref}
         initialScale={zoomConfig.DEFAULT_ZOOM}
-        minScale={zoomConfig.MIN_ZOOM}
+        minScale={minScale}
         maxScale={zoomConfig.MAX_ZOOM}
         onTransformed={(e) => handleScaleChange(e)}
         wheel={{ wheelDisabled: canMoveBoard }}
