@@ -1,25 +1,7 @@
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
-import {
-  Editor,
-  EditorRef,
-  useMediaLibraryModal,
-  useTipTapEditor,
-} from "@edifice-ui/editor";
-import {
-  Landscape,
-  Link,
-  Mic,
-  Paperclip,
-  RecordVideo,
-} from "@edifice-ui/icons";
-import {
-  Button,
-  MediaLibrary,
-  Modal,
-  Toolbar,
-  useOdeClient,
-} from "@edifice-ui/react";
+import { Editor, EditorRef } from "@edifice-ui/editor";
+import { Button, Modal, useOdeClient } from "@edifice-ui/react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -29,6 +11,7 @@ import {
 } from "react-router-dom";
 
 import { ColorSelect } from "../color-select";
+import { ToolbarMedia } from "../toolbar-media";
 import { noteColors } from "~/config/init-config";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
@@ -67,11 +50,6 @@ export const NoteModal = () => {
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
 
-  const { editor } = useTipTapEditor(true, data?.content);
-
-  const { ref: mediaLibraryModalRef, ...mediaLibraryModalHandlers } =
-    useMediaLibraryModal(editor);
-
   const [colorValue, setColorValue] = useState<string[]>([
     noteColors.white.background,
   ]);
@@ -90,71 +68,6 @@ export const NoteModal = () => {
 
   const handleNavigateBack = () => navigate("..");
 
-  const toolbarItems: any[] = useMemo(() => {
-    return [
-      //--------------- IMAGE ---------------//
-      {
-        type: "icon",
-        props: {
-          icon: <Landscape />,
-          className: "bg-green-200",
-          "aria-label": t("tiptap.toolbar.picture"),
-          onClick: () => mediaLibraryModalRef.current?.show("image"),
-        },
-        name: "image",
-        tooltip: t("tiptap.toolbar.picture"),
-      },
-      //--------------- VIDEO ---------------//
-      {
-        type: "icon",
-        props: {
-          icon: <RecordVideo />,
-          className: "bg-purple-200",
-          "aria-label": t("tiptap.toolbar.video"),
-          onClick: () => mediaLibraryModalRef.current?.show("video"),
-        },
-        name: "video",
-        tooltip: t("tiptap.toolbar.video"),
-      },
-      //--------------- AUDIO ---------------//
-      {
-        type: "icon",
-        props: {
-          icon: <Mic />,
-          className: "bg-red-200",
-          "aria-label": t("tiptap.toolbar.audio"),
-          onClick: () => mediaLibraryModalRef.current?.show("audio"),
-        },
-        name: "audio",
-        tooltip: t("tiptap.toolbar.audio"),
-      },
-      //--------------- ATTACHMENT ---------------//
-      {
-        type: "icon",
-        props: {
-          icon: <Paperclip />,
-          className: "bg-yellow-200",
-          "aria-label": t("tiptap.toolbar.attachment"),
-          onClick: () => mediaLibraryModalRef.current?.show("attachment"),
-        },
-        name: "attachment",
-        tooltip: t("tiptap.toolbar.attachment"),
-      },
-      //--------------- LINKER ---------------//
-      {
-        type: "icon",
-        props: {
-          icon: <Link />,
-          "aria-label": t("tiptap.toolbar.linker"),
-          className: "bg-blue-200",
-          //onClick: () => showLinkModal(),
-        },
-        name: "linker",
-        tooltip: t("tiptap.toolbar.linker"),
-      },
-    ];
-  }, [t]);
-
   return data ? (
     createPortal(
       <Modal
@@ -170,25 +83,13 @@ export const NoteModal = () => {
         </Modal.Header>
         <Modal.Subtitle>{data.owner?.displayName}</Modal.Subtitle>
         <Modal.Body>
-          <Toolbar
-            items={toolbarItems}
-            variant="no-shadow"
-            className="rounded-top px-16"
-            ariaControls="editorContent"
-          />
+          <ToolbarMedia />
           <ColorSelect data={data} setColorValue={setColorValue} />
           <Editor
             ref={editorRef}
             content={data?.content || ""}
             mode={editorMode}
-          ></Editor>
-
-          <MediaLibrary
-            appCode={appCode}
-            ref={mediaLibraryModalRef}
-            {...mediaLibraryModalHandlers}
           />
-
           <p>{data.content}</p>
         </Modal.Body>
         <Modal.Footer>
