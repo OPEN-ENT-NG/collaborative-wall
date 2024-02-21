@@ -19,13 +19,13 @@ dependencies:
     version: 3.2.2(react@18.2.0)
   '@edifice-ui/editor':
     specifier: develop-pedago
-    version: 1.4.2-develop-pedago.15(@edifice-ui/icons@1.4.2-develop-pedago.8)(@edifice-ui/react@1.4.2-develop-pedago.15)(@react-spring/web@9.7.3)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.0.1)(react@18.2.0)
+    version: 1.4.2-develop-pedago.16(@edifice-ui/icons@1.4.2-develop-pedago.8)(@edifice-ui/react@1.4.2-develop-pedago.16)(@react-spring/web@9.7.3)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.0.1)(react@18.2.0)
   '@edifice-ui/icons':
     specifier: develop-pedago
     version: 1.4.2-develop-pedago.8(react-dom@18.2.0)(react@18.2.0)
   '@edifice-ui/react':
     specifier: develop-pedago
-    version: 1.4.2-develop-pedago.15(@babel/runtime@7.23.9)(@edifice-ui/icons@1.4.2-develop-pedago.8)(@pixi/app@7.4.0)(@pixi/constants@7.4.0)(@pixi/core@7.4.0)(@pixi/display@7.4.0)(@pixi/extensions@7.4.0)(@pixi/graphics@7.4.0)(@pixi/math@7.4.0)(@pixi/mesh-extras@7.4.0)(@pixi/mesh@7.4.0)(@pixi/particle-container@7.4.0)(@pixi/sprite-animated@7.4.0)(@pixi/sprite-tiling@7.4.0)(@pixi/sprite@7.4.0)(@pixi/text-bitmap@7.4.0)(@pixi/text@7.4.0)(@pixi/ticker@7.4.0)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.3)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)
+    version: 1.4.2-develop-pedago.16(@babel/runtime@7.23.9)(@edifice-ui/icons@1.4.2-develop-pedago.8)(@pixi/app@7.4.0)(@pixi/constants@7.4.0)(@pixi/core@7.4.0)(@pixi/display@7.4.0)(@pixi/extensions@7.4.0)(@pixi/graphics@7.4.0)(@pixi/math@7.4.0)(@pixi/mesh-extras@7.4.0)(@pixi/mesh@7.4.0)(@pixi/particle-container@7.4.0)(@pixi/sprite-animated@7.4.0)(@pixi/sprite-tiling@7.4.0)(@pixi/sprite@7.4.0)(@pixi/text-bitmap@7.4.0)(@pixi/text@7.4.0)(@pixi/ticker@7.4.0)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.3)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)
   '@react-spring/web':
     specifier: 9.7.3
     version: 9.7.3(react-dom@18.2.0)(react@18.2.0)
@@ -52,7 +52,7 @@ dependencies:
     version: 2.4.2
   ode-explorer:
     specifier: develop-pedago
-    version: 1.3.3-develop-pedago.202402161612(@edifice-ui/icons@1.4.2-develop-pedago.8)(@edifice-ui/react@1.4.2-develop-pedago.15)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(clsx@2.1.0)(i18next-http-backend@2.4.2)(i18next@23.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)(zustand@4.5.0)
+    version: 1.3.3-develop-pedago.202402201007(@edifice-ui/icons@1.4.2-develop-pedago.8)(@edifice-ui/react@1.4.2-develop-pedago.16)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(clsx@2.1.0)(i18next-http-backend@2.4.2)(i18next@23.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)(zustand@4.5.0)
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -608,8 +608,8 @@ packages:
       '@tiptap/pm': 2.0.3(@tiptap/core@2.0.3)
     dev: false
 
-  /@edifice-ui/editor@1.4.2-develop-pedago.15(@edifice-ui/icons@1.4.2-develop-pedago.8)(@edifice-ui/react@1.4.2-develop-pedago.15)(@react-spring/web@9.7.3)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.0.1)(react@18.2.0):
-    resolution: {integrity: sha512-dfaIbGbVXc4HBCu+tC1L7a+1SbqkvVg+cXy4Mcrh4iH2Xy2y4Om2vyqsOWz8ww3Dnyo+sxLRAlIOfqpURGabLA==}
+  /@edifice-ui/editor@1.4.2-develop-pedago.16(@edifice-ui/icons@1.4.2-develop-pedago.8)(@edifice-ui/react@1.4.2-develop-pedago.16)(@react-spring/web@9.7.3)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.0.1)(react@18.2.0):
+    resolution: {integrity: sha512-R8KaDesrYtct1BJWOy4kgytsps8NKHyryO0QJEpKyEYnLs6u9Qw1CpCjvHbw2n+CK2Hr9+eykmPDdecXYk4cQQ==}
     peerDependencies:
       '@edifice-ui/icons': '*'
       '@edifice-ui/react': '*'
@@ -634,7 +634,7 @@ packages:
       '@edifice-tiptap-extensions/extension-table-cell': 1.0.4-develop-pedago.0(@tiptap/core@2.0.3)(@tiptap/pm@2.0.3)
       '@edifice-tiptap-extensions/extension-video': 1.0.4-develop-pedago.0(@tiptap/core@2.0.3)(@tiptap/pm@2.0.3)
       '@edifice-ui/icons': 1.4.2-develop-pedago.8(react-dom@18.2.0)(react@18.2.0)
-      '@edifice-ui/react': 1.4.2-develop-pedago.15(@babel/runtime@7.23.9)(@edifice-ui/icons@1.4.2-develop-pedago.8)(@pixi/app@7.4.0)(@pixi/constants@7.4.0)(@pixi/core@7.4.0)(@pixi/display@7.4.0)(@pixi/extensions@7.4.0)(@pixi/graphics@7.4.0)(@pixi/math@7.4.0)(@pixi/mesh-extras@7.4.0)(@pixi/mesh@7.4.0)(@pixi/particle-container@7.4.0)(@pixi/sprite-animated@7.4.0)(@pixi/sprite-tiling@7.4.0)(@pixi/sprite@7.4.0)(@pixi/text-bitmap@7.4.0)(@pixi/text@7.4.0)(@pixi/ticker@7.4.0)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.3)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)
+      '@edifice-ui/react': 1.4.2-develop-pedago.16(@babel/runtime@7.23.9)(@edifice-ui/icons@1.4.2-develop-pedago.8)(@pixi/app@7.4.0)(@pixi/constants@7.4.0)(@pixi/core@7.4.0)(@pixi/display@7.4.0)(@pixi/extensions@7.4.0)(@pixi/graphics@7.4.0)(@pixi/math@7.4.0)(@pixi/mesh-extras@7.4.0)(@pixi/mesh@7.4.0)(@pixi/particle-container@7.4.0)(@pixi/sprite-animated@7.4.0)(@pixi/sprite-tiling@7.4.0)(@pixi/sprite@7.4.0)(@pixi/text-bitmap@7.4.0)(@pixi/text@7.4.0)(@pixi/ticker@7.4.0)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.3)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)
       '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
       '@tiptap-pro/extension-mathematics': 2.2.1(@tiptap/core@2.0.3)(@tiptap/pm@2.0.3)(katex@0.16.8)
       '@tiptap/core': 2.0.3(@tiptap/pm@2.0.3)
@@ -677,8 +677,8 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@edifice-ui/react@1.4.2-develop-pedago.15(@babel/runtime@7.23.9)(@edifice-ui/icons@1.4.2-develop-pedago.8)(@pixi/app@7.4.0)(@pixi/constants@7.4.0)(@pixi/core@7.4.0)(@pixi/display@7.4.0)(@pixi/extensions@7.4.0)(@pixi/graphics@7.4.0)(@pixi/math@7.4.0)(@pixi/mesh-extras@7.4.0)(@pixi/mesh@7.4.0)(@pixi/particle-container@7.4.0)(@pixi/sprite-animated@7.4.0)(@pixi/sprite-tiling@7.4.0)(@pixi/sprite@7.4.0)(@pixi/text-bitmap@7.4.0)(@pixi/text@7.4.0)(@pixi/ticker@7.4.0)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.3)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0):
-    resolution: {integrity: sha512-wzpgiFuMoa8Pfd1+xwJdauwPe6gTI2d5bhuQlnkSjdcKXNM2w6okWa+VOHa7T7F6VBhjNQZuyAsFqzMKwoxfMQ==}
+  /@edifice-ui/react@1.4.2-develop-pedago.16(@babel/runtime@7.23.9)(@edifice-ui/icons@1.4.2-develop-pedago.8)(@pixi/app@7.4.0)(@pixi/constants@7.4.0)(@pixi/core@7.4.0)(@pixi/display@7.4.0)(@pixi/extensions@7.4.0)(@pixi/graphics@7.4.0)(@pixi/math@7.4.0)(@pixi/mesh-extras@7.4.0)(@pixi/mesh@7.4.0)(@pixi/particle-container@7.4.0)(@pixi/sprite-animated@7.4.0)(@pixi/sprite-tiling@7.4.0)(@pixi/sprite@7.4.0)(@pixi/text-bitmap@7.4.0)(@pixi/text@7.4.0)(@pixi/ticker@7.4.0)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.3)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0):
+    resolution: {integrity: sha512-enGxKyhVBnTSDoMj5cAyRE2nQPnm1adIDw5syhUw0dExIAa5QfTFgXW87OaQUaUvom0vbJxn+na8UdUhIlypoA==}
     peerDependencies:
       '@edifice-ui/icons': '*'
       '@react-spring/web': 9.7.3
@@ -2801,7 +2801,7 @@ packages:
       es-errors: 1.3.0
       get-intrinsic: 1.2.4
       is-array-buffer: 3.0.4
-      is-shared-array-buffer: 1.0.2
+      is-shared-array-buffer: 1.0.3
     dev: true
 
   /ast-types-flow@0.0.8:
@@ -2818,9 +2818,11 @@ packages:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
     dev: true
 
-  /available-typed-arrays@1.0.6:
-    resolution: {integrity: sha512-j1QzY8iPNPG4o4xmO3ptzpRxTciqD3MgEHtifP/YnJpIo58Xu+ne4BejlbkuaLfXn/nz6HFiw29bLpj2PNMdGg==}
+  /available-typed-arrays@1.0.7:
+    resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
+    dependencies:
+      possible-typed-array-names: 1.0.0
     dev: true
 
   /axe-core@4.7.0:
@@ -2886,8 +2888,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001587
-      electron-to-chromium: 1.4.672
+      caniuse-lite: 1.0.30001588
+      electron-to-chromium: 1.4.677
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.23.0)
     dev: true
@@ -2907,8 +2909,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /caniuse-lite@1.0.30001587:
-    resolution: {integrity: sha512-HMFNotUmLXn71BQxg8cijvqxnIAofforZOwGsxyXJ0qugTdspUF4sPSJ2vhgprHCB996tIDzEq1ubumPDV8ULA==}
+  /caniuse-lite@1.0.30001588:
+    resolution: {integrity: sha512-+hVY9jE44uKLkH0SrUTqxjxqNTOWHsbnQDIKjwkZ3lNTzUUVdBLBGXtj/q5Mp5u98r3droaZAewQuEDzjQdZlQ==}
     dev: true
 
   /case-anything@2.1.13:
@@ -3214,8 +3216,8 @@ packages:
       - debug
     dev: true
 
-  /electron-to-chromium@1.4.672:
-    resolution: {integrity: sha512-YYCy+goe3UqZqa3MOQCI5Mx/6HdBLzXL/mkbGCEWL3sP3Z1BP9zqAzeD3YEmLZlespYGFtyM8tRp5i2vfaUGCA==}
+  /electron-to-chromium@1.4.677:
+    resolution: {integrity: sha512-erDa3CaDzwJOpyvfKhOiJjBVNnMM0qxHq47RheVVwsSQrgBA9ZSGV9kdaOfZDPXcHzhG7lBxhj6A7KvfLJBd6Q==}
     dev: true
 
   /emoji-picker-react@4.5.2(react@18.2.0):
@@ -3251,11 +3253,11 @@ packages:
     dependencies:
       array-buffer-byte-length: 1.0.1
       arraybuffer.prototype.slice: 1.0.3
-      available-typed-arrays: 1.0.6
+      available-typed-arrays: 1.0.7
       call-bind: 1.0.7
       es-define-property: 1.0.0
       es-errors: 1.3.0
-      es-set-tostringtag: 2.0.2
+      es-set-tostringtag: 2.0.3
       es-to-primitive: 1.2.1
       function.prototype.name: 1.1.6
       get-intrinsic: 1.2.4
@@ -3263,15 +3265,15 @@ packages:
       globalthis: 1.0.3
       gopd: 1.0.1
       has-property-descriptors: 1.0.2
-      has-proto: 1.0.1
+      has-proto: 1.0.3
       has-symbols: 1.0.3
       hasown: 2.0.1
       internal-slot: 1.0.7
       is-array-buffer: 3.0.4
       is-callable: 1.2.7
-      is-negative-zero: 2.0.2
+      is-negative-zero: 2.0.3
       is-regex: 1.1.4
-      is-shared-array-buffer: 1.0.2
+      is-shared-array-buffer: 1.0.3
       is-string: 1.0.7
       is-typed-array: 1.1.13
       is-weakref: 1.0.2
@@ -3284,10 +3286,10 @@ packages:
       string.prototype.trim: 1.2.8
       string.prototype.trimend: 1.0.7
       string.prototype.trimstart: 1.0.7
-      typed-array-buffer: 1.0.1
-      typed-array-byte-length: 1.0.0
-      typed-array-byte-offset: 1.0.0
-      typed-array-length: 1.0.4
+      typed-array-buffer: 1.0.2
+      typed-array-byte-length: 1.0.1
+      typed-array-byte-offset: 1.0.2
+      typed-array-length: 1.0.5
       unbox-primitive: 1.0.2
       which-typed-array: 1.1.14
     dev: true
@@ -3315,20 +3317,20 @@ packages:
       define-properties: 1.2.1
       es-abstract: 1.22.4
       es-errors: 1.3.0
-      es-set-tostringtag: 2.0.2
+      es-set-tostringtag: 2.0.3
       function-bind: 1.1.2
       get-intrinsic: 1.2.4
       globalthis: 1.0.3
       has-property-descriptors: 1.0.2
-      has-proto: 1.0.1
+      has-proto: 1.0.3
       has-symbols: 1.0.3
       internal-slot: 1.0.7
       iterator.prototype: 1.1.2
       safe-array-concat: 1.1.0
     dev: true
 
-  /es-set-tostringtag@2.0.2:
-    resolution: {integrity: sha512-BuDyupZt65P9D2D2vA/zqcI3G5xRsklm5N3xCwuiy+/vKy8i0ifdsQP1sLgO4tZDSCaQUSnmC48khknGMV3D2Q==}
+  /es-set-tostringtag@2.0.3:
+    resolution: {integrity: sha512-3T8uNMC3OQTHkFUsFq8r/BwAXLHvU/9O9mE0fBc/MY5iq/8H7ncvO947LmYA6ldWw9Uh8Yhf25zu6n7nML5QWQ==}
     engines: {node: '>= 0.4'}
     dependencies:
       get-intrinsic: 1.2.4
@@ -3708,13 +3710,13 @@ packages:
     resolution: {integrity: sha512-CYcENa+FtcUKLmhhqyctpclsq7QF38pKjZHsGNiSQF5r4FtoKDWabFDl3hzaEQMvT1LHEysw5twgLvpYYb4vbw==}
     engines: {node: ^10.12.0 || >=12.0.0}
     dependencies:
-      flatted: 3.2.9
+      flatted: 3.3.1
       keyv: 4.5.4
       rimraf: 3.0.2
     dev: true
 
-  /flatted@3.2.9:
-    resolution: {integrity: sha512-36yxDn5H7OFZQla0/jFJmbIKTdZAQHngCedGxiMmpNfEZM0sdEeT+WczLQrjK6D7o2aiyLYDnkw0R3JK0Qv1RQ==}
+  /flatted@3.3.1:
+    resolution: {integrity: sha512-X8cqMLLie7KsNUDSdzeN8FYK9rEt4Dt67OsG/DNGnYTSDBG4uFAJFBnUeiV+zCVAvwFy56IjM9sH51jVaEhNxw==}
     dev: true
 
   /follow-redirects@1.15.5:
@@ -3792,7 +3794,7 @@ packages:
     dependencies:
       es-errors: 1.3.0
       function-bind: 1.1.2
-      has-proto: 1.0.1
+      has-proto: 1.0.3
       has-symbols: 1.0.3
       hasown: 2.0.1
 
@@ -3906,8 +3908,8 @@ packages:
     dependencies:
       es-define-property: 1.0.0
 
-  /has-proto@1.0.1:
-    resolution: {integrity: sha512-7qE+iP+O+bgF9clE5+UoBFzE65mlBiVj3tKCrlNQ0Ogwm0BjpT/gK4SlLYDMybDh5I3TCTKnPPa0oMG7JDYrhg==}
+  /has-proto@1.0.3:
+    resolution: {integrity: sha512-SJ1amZAJUiZS+PhsVLf5tGydlaVB8EdFpaSO4gmiUKUOxk8qzn5AIy4ZeJUmh22znIdk/uMAUT2pl3FxzVUH+Q==}
     engines: {node: '>= 0.4'}
 
   /has-symbols@1.0.3:
@@ -4128,8 +4130,8 @@ packages:
     resolution: {integrity: sha512-cOZFQQozTha1f4MxLFzlgKYPTyj26picdZTx82hbc/Xf4K/tZOOXSCkMvU4pKioRXGDLJRn0GM7Upe7kR721yg==}
     dev: true
 
-  /is-negative-zero@2.0.2:
-    resolution: {integrity: sha512-dqJvarLawXsFbNDeJW7zAz8ItJ9cd28YufuuFzh0G8pNHjJMnY08Dv7sYX2uF5UpQOwieAeOExEYAWWfu7ZZUA==}
+  /is-negative-zero@2.0.3:
+    resolution: {integrity: sha512-5KoIu2Ngpyek75jXodFvnafB6DJgr3u8uuK0LEZJjrU19DrMD3EVERaR8sjz8CCGgpZvxPl9SuE1GMVPFHx1mw==}
     engines: {node: '>= 0.4'}
     dev: true
 
@@ -4169,8 +4171,9 @@ packages:
     resolution: {integrity: sha512-+2cnTEZeY5z/iXGbLhPrOAaK/Mau5k5eXq9j14CpRTftq0pAJu2MwVRSZhyZWBzx3o6X795Lz6Bpb6R0GKf37g==}
     dev: true
 
-  /is-shared-array-buffer@1.0.2:
-    resolution: {integrity: sha512-sqN2UDu1/0y6uvXyStCOzyhAjCSlHceFoMKJW8W9EU9cvic/QdsZ0kEU93HEy3IUEFZIiH/3w+AH/UQbPHNdhA==}
+  /is-shared-array-buffer@1.0.3:
+    resolution: {integrity: sha512-nA2hv5XIhLR3uVzDDfCIknerhx8XUKnstuOERPNNIinXG7v9u+ohXF67vxm4TPTEPU6lm61ZkwP3c9PCB97rhg==}
+    engines: {node: '>= 0.4'}
     dependencies:
       call-bind: 1.0.7
     dev: true
@@ -4242,7 +4245,7 @@ packages:
       get-intrinsic: 1.2.4
       has-symbols: 1.0.3
       reflect.getprototypeof: 1.0.5
-      set-function-name: 2.0.1
+      set-function-name: 2.0.2
     dev: true
 
   /js-tokens@4.0.0:
@@ -4624,8 +4627,8 @@ packages:
       es-abstract: 1.22.4
     dev: true
 
-  /ode-explorer@1.3.3-develop-pedago.202402161612(@edifice-ui/icons@1.4.2-develop-pedago.8)(@edifice-ui/react@1.4.2-develop-pedago.15)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(clsx@2.1.0)(i18next-http-backend@2.4.2)(i18next@23.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)(zustand@4.5.0):
-    resolution: {integrity: sha512-Sgt2eHpkLS1E/LvlvCdtci4uX6LgdxSsPRyT+Jym/jcBh7yG6nHGn1EtV9aV3+M0SyDG78nWUt5HbW200l2ZkQ==}
+  /ode-explorer@1.3.3-develop-pedago.202402201007(@edifice-ui/icons@1.4.2-develop-pedago.8)(@edifice-ui/react@1.4.2-develop-pedago.16)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(clsx@2.1.0)(i18next-http-backend@2.4.2)(i18next@23.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)(zustand@4.5.0):
+    resolution: {integrity: sha512-HbmgkkEPODr7ovJx6Oa6pPMWQi60QkWJwaksewHIysDvTkwv6AkvMxLOhqpMcks4AbZCFeMDyXBPiqgUqLZb8w==}
     engines: {node: 18 || 20}
     requiresBuild: true
     peerDependencies:
@@ -4643,7 +4646,7 @@ packages:
       zustand: 4.5.0
     dependencies:
       '@edifice-ui/icons': 1.4.2-develop-pedago.8(react-dom@18.2.0)(react@18.2.0)
-      '@edifice-ui/react': 1.4.2-develop-pedago.15(@babel/runtime@7.23.9)(@edifice-ui/icons@1.4.2-develop-pedago.8)(@pixi/app@7.4.0)(@pixi/constants@7.4.0)(@pixi/core@7.4.0)(@pixi/display@7.4.0)(@pixi/extensions@7.4.0)(@pixi/graphics@7.4.0)(@pixi/math@7.4.0)(@pixi/mesh-extras@7.4.0)(@pixi/mesh@7.4.0)(@pixi/particle-container@7.4.0)(@pixi/sprite-animated@7.4.0)(@pixi/sprite-tiling@7.4.0)(@pixi/sprite@7.4.0)(@pixi/text-bitmap@7.4.0)(@pixi/text@7.4.0)(@pixi/ticker@7.4.0)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.3)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)
+      '@edifice-ui/react': 1.4.2-develop-pedago.16(@babel/runtime@7.23.9)(@edifice-ui/icons@1.4.2-develop-pedago.8)(@pixi/app@7.4.0)(@pixi/constants@7.4.0)(@pixi/core@7.4.0)(@pixi/display@7.4.0)(@pixi/extensions@7.4.0)(@pixi/graphics@7.4.0)(@pixi/math@7.4.0)(@pixi/mesh-extras@7.4.0)(@pixi/mesh@7.4.0)(@pixi/particle-container@7.4.0)(@pixi/sprite-animated@7.4.0)(@pixi/sprite-tiling@7.4.0)(@pixi/sprite@7.4.0)(@pixi/text-bitmap@7.4.0)(@pixi/text@7.4.0)(@pixi/ticker@7.4.0)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.3)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)
       '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-query': 5.18.0(react@18.2.0)
       clsx: 2.1.0
@@ -4804,6 +4807,11 @@ packages:
     transitivePeerDependencies:
       - '@pixi/utils'
     dev: false
+
+  /possible-typed-array-names@1.0.0:
+    resolution: {integrity: sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==}
+    engines: {node: '>= 0.4'}
+    dev: true
 
   /postcss@8.4.35:
     resolution: {integrity: sha512-u5U8qYpBCpN13BsiEB0CbR1Hhh4Gc0zLFuedrHJKMctHCHAGrMdG0PRM/KErzAL3CU6/eckEtmHNB3x6e3c0vA==}
@@ -5167,7 +5175,7 @@ packages:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-errors: 1.3.0
-      set-function-name: 2.0.1
+      set-function-name: 2.0.2
     dev: true
 
   /requestidlecallback@0.3.0:
@@ -5314,11 +5322,12 @@ packages:
       gopd: 1.0.1
       has-property-descriptors: 1.0.2
 
-  /set-function-name@2.0.1:
-    resolution: {integrity: sha512-tMNCiqYVkXIZgc2Hnoy2IvC/f8ezc5koaRFkCjrpWzGpCd3qbZXPzVy9MAZzK1ch/X0jvSkojys3oqJN0qCmdA==}
+  /set-function-name@2.0.2:
+    resolution: {integrity: sha512-7PGFlmtwsEADb0WYyvCMa1t+yke6daIG4Wirafur5kcf+MhUnPms1UeR0CKQdTZD81yESwMHbtn+TR+dMviakQ==}
     engines: {node: '>= 0.4'}
     dependencies:
       define-data-property: 1.1.4
+      es-errors: 1.3.0
       functions-have-names: 1.2.3
       has-property-descriptors: 1.0.2
     dev: true
@@ -5420,7 +5429,7 @@ packages:
       has-symbols: 1.0.3
       internal-slot: 1.0.7
       regexp.prototype.flags: 1.5.2
-      set-function-name: 2.0.1
+      set-function-name: 2.0.2
       side-channel: 1.0.5
     dev: true
 
@@ -5617,8 +5626,8 @@ packages:
     engines: {node: '>=14.16'}
     dev: true
 
-  /typed-array-buffer@1.0.1:
-    resolution: {integrity: sha512-RSqu1UEuSlrBhHTWC8O9FnPjOduNs4M7rJ4pRKoEjtx1zUNOPN2sSXHLDX+Y2WPbHIxbvg4JFo2DNAEfPIKWoQ==}
+  /typed-array-buffer@1.0.2:
+    resolution: {integrity: sha512-gEymJYKZtKXzzBzM4jqa9w6Q1Jjm7x2d+sh19AdsD4wqnMPDYyvwpsIc2Q/835kHuo3BEQ7CjelGhfTsoBb2MQ==}
     engines: {node: '>= 0.4'}
     dependencies:
       call-bind: 1.0.7
@@ -5626,33 +5635,39 @@ packages:
       is-typed-array: 1.1.13
     dev: true
 
-  /typed-array-byte-length@1.0.0:
-    resolution: {integrity: sha512-Or/+kvLxNpeQ9DtSydonMxCx+9ZXOswtwJn17SNLvhptaXYDJvkFFP5zbfU/uLmvnBJlI4yrnXRxpdWH/M5tNA==}
+  /typed-array-byte-length@1.0.1:
+    resolution: {integrity: sha512-3iMJ9q0ao7WE9tWcaYKIptkNBuOIcZCCT0d4MRvuuH88fEoEH62IuQe0OtraD3ebQEoTRk8XCBoknUNc1Y67pw==}
     engines: {node: '>= 0.4'}
     dependencies:
       call-bind: 1.0.7
       for-each: 0.3.3
-      has-proto: 1.0.1
+      gopd: 1.0.1
+      has-proto: 1.0.3
       is-typed-array: 1.1.13
     dev: true
 
-  /typed-array-byte-offset@1.0.0:
-    resolution: {integrity: sha512-RD97prjEt9EL8YgAgpOkf3O4IF9lhJFr9g0htQkm0rchFp/Vx7LW5Q8fSXXub7BXAODyUQohRMyOc3faCPd0hg==}
+  /typed-array-byte-offset@1.0.2:
+    resolution: {integrity: sha512-Ous0vodHa56FviZucS2E63zkgtgrACj7omjwd/8lTEMEPFFyjfixMZ1ZXenpgCFBBt4EC1J2XsyVS2gkG0eTFA==}
     engines: {node: '>= 0.4'}
     dependencies:
-      available-typed-arrays: 1.0.6
+      available-typed-arrays: 1.0.7
       call-bind: 1.0.7
       for-each: 0.3.3
-      has-proto: 1.0.1
+      gopd: 1.0.1
+      has-proto: 1.0.3
       is-typed-array: 1.1.13
     dev: true
 
-  /typed-array-length@1.0.4:
-    resolution: {integrity: sha512-KjZypGq+I/H7HI5HlOoGHkWUUGq+Q0TPhQurLbyrVrvnKTBgzLhIJ7j6J/XTQOi0d1RjyZ0wdas8bKs2p0x3Ng==}
+  /typed-array-length@1.0.5:
+    resolution: {integrity: sha512-yMi0PlwuznKHxKmcpoOdeLwxBoVPkqZxd7q2FgMkmD3bNwvF5VW0+UlUQ1k1vmktTu4Yu13Q0RIxEP8+B+wloA==}
+    engines: {node: '>= 0.4'}
     dependencies:
       call-bind: 1.0.7
       for-each: 0.3.3
+      gopd: 1.0.1
+      has-proto: 1.0.3
       is-typed-array: 1.1.13
+      possible-typed-array-names: 1.0.0
     dev: true
 
   /typescript@5.3.3:
@@ -5834,7 +5849,7 @@ packages:
     resolution: {integrity: sha512-VnXFiIW8yNn9kIHN88xvZ4yOWchftKDsRJ8fEPacX/wl1lOvBrhsJ/OeJCXq7B0AaijRuqgzSKalJoPk+D8MPg==}
     engines: {node: '>= 0.4'}
     dependencies:
-      available-typed-arrays: 1.0.6
+      available-typed-arrays: 1.0.7
       call-bind: 1.0.7
       for-each: 0.3.3
       gopd: 1.0.1
