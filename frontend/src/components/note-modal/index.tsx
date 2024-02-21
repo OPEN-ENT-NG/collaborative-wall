@@ -1,7 +1,12 @@
 import { useRef, useState } from "react";
 
-import { Editor, EditorRef } from "@edifice-ui/editor";
-import { Button, Modal, useOdeClient } from "@edifice-ui/react";
+import {
+  Editor,
+  EditorRef,
+  useMediaLibraryModal,
+  useTipTapEditor,
+} from "@edifice-ui/editor";
+import { Button, MediaLibrary, Modal, useOdeClient } from "@edifice-ui/react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -50,6 +55,11 @@ export const NoteModal = () => {
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
 
+  const { editor } = useTipTapEditor(true, data?.content);
+
+  const { ref: mediaLibraryModalRef, ...mediaLibraryModalHandlers } =
+    useMediaLibraryModal(editor);
+
   const [colorValue, setColorValue] = useState<string[]>([
     noteColors.white.background,
   ]);
@@ -68,6 +78,10 @@ export const NoteModal = () => {
 
   const handleNavigateBack = () => navigate("..");
 
+  const handleClick = (type: any) => {
+    mediaLibraryModalRef.current?.show(type);
+  };
+
   return data ? (
     createPortal(
       <Modal
@@ -83,8 +97,18 @@ export const NoteModal = () => {
         </Modal.Header>
         <Modal.Subtitle>{data.owner?.displayName}</Modal.Subtitle>
         <Modal.Body>
-          <ToolbarMedia />
           <ColorSelect data={data} setColorValue={setColorValue} />
+          <div className="multimedia-section my-24">
+            <div className="toolbar-media py-48 px-12">
+              <ToolbarMedia handleClick={handleClick} />
+              {t("collaborativewall.add.media")}
+            </div>
+          </div>
+          <MediaLibrary
+            appCode={appCode}
+            ref={mediaLibraryModalRef}
+            {...mediaLibraryModalHandlers}
+          />
           <Editor
             ref={editorRef}
             content={data?.content || ""}
