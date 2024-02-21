@@ -8,13 +8,26 @@ import {
   Paperclip,
   RecordVideo,
 } from "@edifice-ui/icons";
-import { MediaLibrary, Toolbar, useOdeClient } from "@edifice-ui/react";
+import {
+  MediaLibrary,
+  MediaLibraryResult,
+  MediaLibraryType,
+  Toolbar,
+  useOdeClient,
+} from "@edifice-ui/react";
+import { WorkspaceElement } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { useLoaderData } from "react-router-dom";
 
 import { NoteProps } from "~/models/notes";
 
-export const ToolbarMedia = () => {
+export const ToolbarMedia = ({
+  setMediaNote,
+  setMediaType,
+}: {
+  setMediaNote: (value: WorkspaceElement) => void;
+  setMediaType: (value: MediaLibraryType) => void;
+}) => {
   const data = useLoaderData() as NoteProps;
 
   const { t } = useTranslation();
@@ -25,6 +38,15 @@ export const ToolbarMedia = () => {
   const { ref: mediaLibraryModalRef, ...mediaLibraryModalHandlers } =
     useMediaLibraryModal(editor);
 
+  mediaLibraryModalHandlers.onSuccess = (result: MediaLibraryResult) => {
+    setMediaNote(result[result.length - 1]);
+  };
+
+  const handleClickMedia = (type: MediaLibraryType) => {
+    setMediaType(type);
+    return mediaLibraryModalRef.current?.show(type);
+  };
+
   const toolbarItems: any[] = useMemo(() => {
     return [
       //--------------- IMAGE ---------------//
@@ -34,7 +56,7 @@ export const ToolbarMedia = () => {
           icon: <Landscape />,
           className: "bg-green-200",
           "aria-label": t("tiptap.toolbar.picture"),
-          onClick: () => mediaLibraryModalRef.current?.show("image"),
+          onClick: () => handleClickMedia("image"),
         },
         name: "image",
         tooltip: t("tiptap.toolbar.picture"),
@@ -46,7 +68,7 @@ export const ToolbarMedia = () => {
           icon: <RecordVideo />,
           className: "bg-purple-200",
           "aria-label": t("tiptap.toolbar.video"),
-          onClick: () => mediaLibraryModalRef.current?.show("video"),
+          onClick: () => handleClickMedia("video"),
         },
         name: "video",
         tooltip: t("tiptap.toolbar.video"),
@@ -58,7 +80,7 @@ export const ToolbarMedia = () => {
           icon: <Mic />,
           className: "bg-red-200",
           "aria-label": t("tiptap.toolbar.audio"),
-          onClick: () => mediaLibraryModalRef.current?.show("audio"),
+          onClick: () => handleClickMedia("audio"),
         },
         name: "audio",
         tooltip: t("tiptap.toolbar.audio"),
@@ -70,7 +92,7 @@ export const ToolbarMedia = () => {
           icon: <Paperclip />,
           className: "bg-yellow-200",
           "aria-label": t("tiptap.toolbar.attachment"),
-          onClick: () => mediaLibraryModalRef.current?.show("attachment"),
+          onClick: () => handleClickMedia("attachment"),
         },
         name: "attachment",
         tooltip: t("tiptap.toolbar.attachment"),
@@ -82,13 +104,13 @@ export const ToolbarMedia = () => {
           icon: <Link />,
           "aria-label": t("tiptap.toolbar.linker"),
           className: "bg-blue-200",
-          onClick: () => mediaLibraryModalRef.current?.show("hyperlink"),
+          onClick: () => handleClickMedia("hyperlink"),
         },
         name: "linker",
         tooltip: t("tiptap.toolbar.linker"),
       },
     ];
-  }, [t]);
+  }, []);
 
   return (
     <>

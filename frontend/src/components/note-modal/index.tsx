@@ -1,7 +1,13 @@
 import { useRef, useState } from "react";
 
 import { Editor, EditorRef } from "@edifice-ui/editor";
-import { Button, Modal, useOdeClient } from "@edifice-ui/react";
+import {
+  Button,
+  MediaLibraryType,
+  Modal,
+  useOdeClient,
+} from "@edifice-ui/react";
+import { WorkspaceElement } from "edifice-ts-client";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -11,6 +17,7 @@ import {
 } from "react-router-dom";
 
 import { ColorSelect } from "../color-select";
+import { ShowMediaType } from "../show-media-type";
 import { ToolbarMedia } from "../toolbar-media";
 import { noteColors } from "~/config/init-config";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
@@ -53,6 +60,8 @@ export const NoteModal = () => {
   const [colorValue, setColorValue] = useState<string[]>([
     noteColors.white.background,
   ]);
+  const [mediaNote, setMediaNote] = useState<WorkspaceElement>();
+  const [mediaType, setMediaType] = useState<MediaLibraryType>();
 
   const handleSaveNote = () => {
     const note: PickedNoteProps = {
@@ -83,8 +92,16 @@ export const NoteModal = () => {
         </Modal.Header>
         <Modal.Subtitle>{data.owner?.displayName}</Modal.Subtitle>
         <Modal.Body>
-          <ToolbarMedia />
           <ColorSelect data={data} setColorValue={setColorValue} />
+
+          {!mediaNote ? (
+            <ToolbarMedia
+              setMediaNote={setMediaNote}
+              setMediaType={setMediaType}
+            />
+          ) : (
+            <ShowMediaType media={mediaNote} mediaType={mediaType} />
+          )}
           <Editor
             ref={editorRef}
             content={data?.content || ""}
