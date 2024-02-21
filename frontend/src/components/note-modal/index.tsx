@@ -11,6 +11,7 @@ import {
 } from "react-router-dom";
 
 import { ColorSelect } from "../color-select";
+import { ToolbarMedia } from "../toolbar-media";
 import { noteColors } from "~/config/init-config";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
@@ -82,13 +83,13 @@ export const NoteModal = () => {
         </Modal.Header>
         <Modal.Subtitle>{data.owner?.displayName}</Modal.Subtitle>
         <Modal.Body>
+          <ToolbarMedia />
           <ColorSelect data={data} setColorValue={setColorValue} />
           <Editor
             ref={editorRef}
             content={data?.content || ""}
             mode={editorMode}
-          ></Editor>
-
+          />
           <p>{data.content}</p>
         </Modal.Body>
         <Modal.Footer>
