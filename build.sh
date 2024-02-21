@@ -7,12 +7,12 @@ cd ..
 
 # Create directory structure and copy frontend dist
 cd backend
+rm -rf ./src/main/resources/public/*.js
+rm -rf ./src/main/resources/public/*.css
 cp -R ../frontend/dist/* ./src/main/resources/
 
 # Create view directory and copy HTML files
-mkdir -p ./src/main/resources/view
 mv ./src/main/resources/*.html ./src/main/resources/view
-cp -R ./src/main/resources/notify ./src/main/resources/view/notify
 
 # Build .
 ./build.sh --no-docker clean build
