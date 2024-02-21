@@ -1,8 +1,15 @@
 import { useRef, useState } from "react";
 
-import { Editor, EditorRef } from "@edifice-ui/editor";
+import {
+  Editor,
+  EditorRef,
+  useMediaLibraryModal,
+  useTipTapEditor,
+} from "@edifice-ui/editor";
 import {
   Button,
+  MediaLibrary,
+  MediaLibraryResult,
   MediaLibraryType,
   Modal,
   useOdeClient,
@@ -57,6 +64,11 @@ export const NoteModal = () => {
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
 
+  const { editor } = useTipTapEditor(true, data?.content);
+
+  const { ref: mediaLibraryModalRef, ...mediaLibraryModalHandlers } =
+    useMediaLibraryModal(editor);
+
   const [colorValue, setColorValue] = useState<string[]>([
     noteColors.white.background,
   ]);
@@ -77,6 +89,15 @@ export const NoteModal = () => {
 
   const handleNavigateBack = () => navigate("..");
 
+  const handleClick = (type: any) => {
+    setMediaType(type);
+    mediaLibraryModalRef.current?.show(type);
+  };
+
+  mediaLibraryModalHandlers.onSuccess = (result: MediaLibraryResult) => {
+    setMediaNote(result[result.length - 1]);
+  };
+
   return data ? (
     createPortal(
       <Modal
@@ -94,14 +115,21 @@ export const NoteModal = () => {
         <Modal.Body>
           <ColorSelect data={data} setColorValue={setColorValue} />
 
-          {!mediaNote ? (
-            <ToolbarMedia
-              setMediaNote={setMediaNote}
-              setMediaType={setMediaType}
-            />
-          ) : (
-            <ShowMediaType media={mediaNote} mediaType={mediaType} />
-          )}
+          <div className="multimedia-section my-24">
+            <div className="toolbar-media py-48 px-12">
+              {!mediaNote ? (
+                <ToolbarMedia handleClickMedia={handleClick} />
+              ) : (
+                <ShowMediaType media={mediaNote} mediaType={mediaType} />
+              )}
+              <p>{t("collaborativewall.add.media")}</p>
+            </div>
+          </div>
+          <MediaLibrary
+            appCode={appCode}
+            ref={mediaLibraryModalRef}
+            {...mediaLibraryModalHandlers}
+          />
           <Editor
             ref={editorRef}
             content={data?.content || ""}

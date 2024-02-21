@@ -9,10 +9,18 @@
   transform: translateX(-50%);
 }
 
-#NoteModal .toolbar {
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
+#NoteModal .toolbar-media {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#NoteModal .multimedia-section {
+  width: 100%;
+  min-height: 178px;
+  border-radius: 16px;
+  border: 1px solid #f2f2f2;
+  gap: 8px;
 }
 
 .btn.focus,

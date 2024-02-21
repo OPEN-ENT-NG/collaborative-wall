@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 
-import { useMediaLibraryModal, useTipTapEditor } from "@edifice-ui/editor";
 import {
   Landscape,
   Link,
@@ -8,44 +7,15 @@ import {
   Paperclip,
   RecordVideo,
 } from "@edifice-ui/icons";
-import {
-  MediaLibrary,
-  MediaLibraryResult,
-  MediaLibraryType,
-  Toolbar,
-  useOdeClient,
-} from "@edifice-ui/react";
-import { WorkspaceElement } from "edifice-ts-client";
+import { Toolbar } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
-import { useLoaderData } from "react-router-dom";
-
-import { NoteProps } from "~/models/notes";
 
 export const ToolbarMedia = ({
-  setMediaNote,
-  setMediaType,
+  handleClickMedia,
 }: {
-  setMediaNote: (value: WorkspaceElement) => void;
-  setMediaType: (value: MediaLibraryType) => void;
+  handleClickMedia: (type: any) => void;
 }) => {
-  const data = useLoaderData() as NoteProps;
-
   const { t } = useTranslation();
-  const { appCode } = useOdeClient();
-
-  const { editor } = useTipTapEditor(true, data?.content);
-
-  const { ref: mediaLibraryModalRef, ...mediaLibraryModalHandlers } =
-    useMediaLibraryModal(editor);
-
-  mediaLibraryModalHandlers.onSuccess = (result: MediaLibraryResult) => {
-    setMediaNote(result[result.length - 1]);
-  };
-
-  const handleClickMedia = (type: MediaLibraryType) => {
-    setMediaType(type);
-    return mediaLibraryModalRef.current?.show(type);
-  };
 
   const toolbarItems: any[] = useMemo(() => {
     return [
@@ -119,11 +89,6 @@ export const ToolbarMedia = ({
         variant="no-shadow"
         className="rounded-top px-16"
         ariaControls="editorContent"
-      />
-      <MediaLibrary
-        appCode={appCode}
-        ref={mediaLibraryModalRef}
-        {...mediaLibraryModalHandlers}
       />
     </>
   );
