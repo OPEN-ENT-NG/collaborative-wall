@@ -1,6 +1,6 @@
 {
   "name": "collaborative-wall",
-  "version": "1.0.0-develop-pedago.202402211413",
+  "version": "1.0.0-develop-pedago.202402211455",
   "description": "Collaborative editor for ENT Core.",
   "homepage": "https://github.com/OPEN-ENT-NG/collaborative-wall#readme",
   "bugs": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OPEN-ENT-NG/collaborative-wall.git"
+    "url": "https://github.com/OPEN-ENT-NG/collaborative-wall.git"
   },
   "license": "GPL-3.0",
   "author": "Edifice",
