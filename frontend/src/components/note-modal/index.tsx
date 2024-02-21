@@ -1,12 +1,13 @@
 import { useRef, useState } from "react";
 
+import { Editor, EditorRef } from "@edifice-ui/editor";
 import {
-  Editor,
-  EditorRef,
-  useMediaLibraryModal,
-  useTipTapEditor,
-} from "@edifice-ui/editor";
-import { Button, MediaLibrary, Modal, useOdeClient } from "@edifice-ui/react";
+  Button,
+  MediaLibraryType,
+  Modal,
+  useOdeClient,
+} from "@edifice-ui/react";
+import { WorkspaceElement } from "edifice-ts-client";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -16,6 +17,7 @@ import {
 } from "react-router-dom";
 
 import { ColorSelect } from "../color-select";
+import { ShowMediaType } from "../show-media-type";
 import { ToolbarMedia } from "../toolbar-media";
 import { noteColors } from "~/config/init-config";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
@@ -63,6 +65,8 @@ export const NoteModal = () => {
   const [colorValue, setColorValue] = useState<string[]>([
     noteColors.white.background,
   ]);
+  const [mediaNote, setMediaNote] = useState<WorkspaceElement>();
+  const [mediaType, setMediaType] = useState<MediaLibraryType>();
 
   const handleSaveNote = () => {
     const note: PickedNoteProps = {
@@ -98,17 +102,15 @@ export const NoteModal = () => {
         <Modal.Subtitle>{data.owner?.displayName}</Modal.Subtitle>
         <Modal.Body>
           <ColorSelect data={data} setColorValue={setColorValue} />
-          <div className="multimedia-section my-24">
-            <div className="toolbar-media py-48 px-12">
-              <ToolbarMedia handleClick={handleClick} />
-              {t("collaborativewall.add.media")}
-            </div>
-          </div>
-          <MediaLibrary
-            appCode={appCode}
-            ref={mediaLibraryModalRef}
-            {...mediaLibraryModalHandlers}
-          />
+
+          {!mediaNote ? (
+            <ToolbarMedia
+              setMediaNote={setMediaNote}
+              setMediaType={setMediaType}
+            />
+          ) : (
+            <ShowMediaType media={mediaNote} mediaType={mediaType} />
+          )}
           <Editor
             ref={editorRef}
             content={data?.content || ""}
