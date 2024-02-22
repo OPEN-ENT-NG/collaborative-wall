@@ -11,9 +11,9 @@ import { Toolbar } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
 
 export const ToolbarMedia = ({
-  handleClick,
+  handleClickMedia,
 }: {
-  handleClick: (type: any) => void;
+  handleClickMedia: (type: any) => void;
 }) => {
   const { t } = useTranslation();
 
@@ -26,7 +26,7 @@ export const ToolbarMedia = ({
           icon: <Landscape />,
           className: "bg-green-200",
           "aria-label": t("tiptap.toolbar.picture"),
-          onClick: () => handleClick("image"),
+          onClick: () => handleClickMedia("image"),
         },
         name: "image",
         tooltip: t("tiptap.toolbar.picture"),
@@ -38,7 +38,7 @@ export const ToolbarMedia = ({
           icon: <RecordVideo />,
           className: "bg-purple-200",
           "aria-label": t("tiptap.toolbar.video"),
-          onClick: () => handleClick("video"),
+          onClick: () => handleClickMedia("video"),
         },
         name: "video",
         tooltip: t("tiptap.toolbar.video"),
@@ -50,7 +50,7 @@ export const ToolbarMedia = ({
           icon: <Mic />,
           className: "bg-red-200",
           "aria-label": t("tiptap.toolbar.audio"),
-          onClick: () => handleClick("audio"),
+          onClick: () => handleClickMedia("audio"),
         },
         name: "audio",
         tooltip: t("tiptap.toolbar.audio"),
@@ -62,7 +62,7 @@ export const ToolbarMedia = ({
           icon: <Paperclip />,
           className: "bg-yellow-200",
           "aria-label": t("tiptap.toolbar.attachment"),
-          onClick: () => handleClick("attachment"),
+          onClick: () => handleClickMedia("attachment"),
         },
         name: "attachment",
         tooltip: t("tiptap.toolbar.attachment"),
@@ -74,13 +74,13 @@ export const ToolbarMedia = ({
           icon: <Link />,
           "aria-label": t("tiptap.toolbar.linker"),
           className: "bg-blue-200",
-          onClick: () => handleClick("hyperlink"),
+          onClick: () => handleClickMedia("hyperlink"),
         },
         name: "linker",
         tooltip: t("tiptap.toolbar.linker"),
       },
     ];
-  }, [t]);
+  }, []);
 
   return (
     <>
