@@ -1,7 +1,4 @@
-:root {
-  overflow: hidden;
-}
-.toolbar {
+.collaborativewall-container .toolbar {
   position: fixed;
   bottom: 24px;
   left: 50%;
