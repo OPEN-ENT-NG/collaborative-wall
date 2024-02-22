@@ -23,6 +23,13 @@
   gap: 8px;
 }
 
+#NoteModal .delete-button {
+  position: absolute;
+  background-color: #fff;
+  right: 0px;
+  gap: 8px;
+}
+
 .btn.focus,
 .btn:focus {
   box-shadow: unset;
