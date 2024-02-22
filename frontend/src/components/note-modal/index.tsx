@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { Editor, EditorRef } from "@edifice-ui/editor";
 import {
   Button,
+  MediaLibrary,
   MediaLibraryType,
   Modal,
   useOdeClient,
@@ -20,6 +21,7 @@ import { ColorSelect } from "../color-select";
 import { ShowMediaType } from "../show-media-type";
 import { ToolbarMedia } from "../toolbar-media";
 import { noteColors } from "~/config/init-config";
+import { useMediaLibrary } from "~/hooks/useMediaLibrary";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
 import { useUpdateNote } from "~/services/queries";
@@ -57,16 +59,13 @@ export const NoteModal = () => {
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
 
-  const { editor } = useTipTapEditor(true, data?.content);
-
-  const { ref: mediaLibraryModalRef, ...mediaLibraryModalHandlers } =
-    useMediaLibraryModal(editor);
-
   const [colorValue, setColorValue] = useState<string[]>([
     noteColors.white.background,
   ]);
-  const [mediaNote, setMediaNote] = useState<WorkspaceElement>();
-  const [mediaType, setMediaType] = useState<MediaLibraryType>();
+  const [mediaNote, setMediaNote] = useState<WorkspaceElement | undefined>();
+
+  const { ref: mediaLibraryRef, ...mediaLibraryModalHandlers } =
+    useMediaLibrary({ setMediaNote });
 
   const handleSaveNote = () => {
     const note: PickedNoteProps = {
@@ -82,8 +81,8 @@ export const NoteModal = () => {
 
   const handleNavigateBack = () => navigate("..");
 
-  const handleClick = (type: any) => {
-    mediaLibraryModalRef.current?.show(type);
+  const handleClickMedia = (type: MediaLibraryType) => {
+    mediaLibraryRef.current?.show(type);
   };
 
   return data ? (
@@ -102,15 +101,25 @@ export const NoteModal = () => {
         <Modal.Subtitle>{data.owner?.displayName}</Modal.Subtitle>
         <Modal.Body>
           <ColorSelect data={data} setColorValue={setColorValue} />
-
-          {!mediaNote ? (
-            <ToolbarMedia
-              setMediaNote={setMediaNote}
-              setMediaType={setMediaType}
-            />
-          ) : (
-            <ShowMediaType media={mediaNote} mediaType={mediaType} />
-          )}
+          <div className="multimedia-section my-24">
+            {!mediaNote ? (
+              <div className="toolbar-media py-48 px-12">
+                <ToolbarMedia handleClickMedia={handleClickMedia} />
+                {t("collaborativewall.add.media")}
+              </div>
+            ) : (
+              <ShowMediaType
+                media={mediaNote}
+                mediaLibraryRef={mediaLibraryRef}
+                setMediaNote={setMediaNote}
+              />
+            )}
+          </div>
+          <MediaLibrary
+            appCode={appCode}
+            ref={mediaLibraryRef}
+            {...mediaLibraryModalHandlers}
+          />
           <Editor
             ref={editorRef}
             content={data?.content || ""}
