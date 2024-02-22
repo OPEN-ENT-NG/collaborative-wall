@@ -7,7 +7,7 @@ import {
 } from "@dnd-kit/core";
 
 const activationConstraint = {
-  delay: 250,
+  delay: 200,
   tolerance: 5,
 };
 

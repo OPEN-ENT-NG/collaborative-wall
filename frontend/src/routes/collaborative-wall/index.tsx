@@ -168,7 +168,7 @@ export const CollaborativeWall = () => {
                     x: isUpdated ? updatedNote.x : note.x,
                     y: isUpdated ? updatedNote.y : note.y,
                     title: `title ${i}`,
-                    zIndex: isUpdated ? updatedNote.y : note.y ?? 1,
+                    zIndex: isUpdated ? 2 : 1,
                   }}
                   onClick={
                     !isMobile ? (id) => navigate(`note/${id}`) : undefined
