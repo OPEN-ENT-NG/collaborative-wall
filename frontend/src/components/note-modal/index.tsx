@@ -105,7 +105,7 @@ export const NoteModal = () => {
             {!mediaNote ? (
               <div className="toolbar-media py-48 px-12">
                 <ToolbarMedia handleClickMedia={handleClickMedia} />
-                {t("collaborativewall.add.media")}
+                {t("collaborativewall.add.media", { ns: appCode })}
               </div>
             ) : (
               <ShowMediaType
