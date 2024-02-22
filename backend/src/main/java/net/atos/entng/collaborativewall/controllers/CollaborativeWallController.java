@@ -52,6 +52,8 @@ import io.vertx.core.json.JsonArray;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 
 import static org.entcore.common.http.response.DefaultResponseHandler.defaultResponseHandler;
 
@@ -91,6 +93,18 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         this.notesHelper = new NotesHelper(noteService);
         final EventStore eventStore = EventStoreFactory.getFactory().getEventStore(CollaborativeWall.class.getSimpleName());
         this.eventHelper = new EventHelper(eventStore);
+    }
+
+    @Override
+    protected boolean shouldNormalizedRights() {
+        return true;
+    }
+
+    @Override
+    protected Function<JsonObject, Optional<String>> jsonToOwnerId() {
+        return json -> {
+            return plugin.getCreatorForModel(json).map(user -> user.getUserId());
+        };
     }
 
     @Get("")
