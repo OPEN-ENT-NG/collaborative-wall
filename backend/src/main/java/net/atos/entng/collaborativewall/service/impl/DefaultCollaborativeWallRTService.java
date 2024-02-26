@@ -16,6 +16,7 @@ import io.vertx.redis.client.RedisOptions;
 import net.atos.entng.collaborativewall.events.CollaborativeWallMessage;
 import net.atos.entng.collaborativewall.events.RealTimeStatus;
 import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
+import net.atos.entng.collaborativewall.service.CollaborativeWallService;
 import org.entcore.common.user.UserInfos;
 
 import java.util.ArrayList;
@@ -24,15 +25,16 @@ import java.util.UUID;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-public class MongoDbCollaborativeWallRTService implements CollaborativeWallRTService {
+public class DefaultCollaborativeWallRTService implements CollaborativeWallRTService {
 
   private final Vertx vertx;
+  private final CollaborativeWallService collaborativeWallService;
   private final RedisAPI redisSubscriber;
   private final RedisAPI redisPublisher;
   private final String serverId;
   private RealTimeStatus realTimeStatus;
   private final CollaborativeMessageFactory messageFactory;
-  private static final Logger log = LoggerFactory.getLogger(MongoDbCollaborativeWallRTService.class);
+  private static final Logger log = LoggerFactory.getLogger(DefaultCollaborativeWallRTService.class);
   private MessageConsumer<Object> ebConsumer;
   private final long reConnectionDelay;
   private long restartAttempt = 0;
@@ -41,8 +43,10 @@ public class MongoDbCollaborativeWallRTService implements CollaborativeWallRTSer
 
   private static final String channelName = "__realtime@collaborativewall";
 
-  public MongoDbCollaborativeWallRTService(Vertx vertx, final JsonObject config) {
+  public DefaultCollaborativeWallRTService(Vertx vertx, final JsonObject config,
+                                           final CollaborativeWallService collaborativeWallService) {
     this.vertx = vertx;
+    this.collaborativeWallService = collaborativeWallService;
     this.realTimeStatus = RealTimeStatus.STOPPED;
     final RedisOptions redisOptions = getRedisOptions(vertx, config);
     final Redis subscriberClient = Redis.createClient(vertx, redisOptions);
@@ -183,10 +187,14 @@ public class MongoDbCollaborativeWallRTService implements CollaborativeWallRTSer
     // Create a message for the user new connection
     // Create a message with the wall context
     final CollaborativeWallMessage newUserMessage = this.messageFactory.connection(wallId, wsId, userId);
-    final List<CollaborativeWallMessage> messages = new ArrayList<>();
-    messages.add(newUserMessage);
+    return this.collaborativeWallService.getWall(wallId)
+      .map(this::makeContext)
+      .map(contextMessage -> newArrayList(newUserMessage, contextMessage))
+      .compose(messages -> publishMessagesOnRedis(messages).map(messages));
+  }
 
-    return publishMessagesOnRedis(messages).map(messages);
+  private CollaborativeWallMessage makeContext(JsonObject wall) {
+    throw new RuntimeException("makeContext.not.implemented");
   }
 
   @Override

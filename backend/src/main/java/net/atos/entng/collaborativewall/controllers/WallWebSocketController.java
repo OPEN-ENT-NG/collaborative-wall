@@ -10,7 +10,7 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import net.atos.entng.collaborativewall.events.CollaborativeWallMessage;
 import net.atos.entng.collaborativewall.events.RealTimeStatus;
-import net.atos.entng.collaborativewall.service.CollaborativeWallService;
+import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
@@ -23,20 +23,20 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
     private static final Logger log = LoggerFactory.getLogger(WallWebSocketController.class);
 
     private final Map<String, Map<String, ServerWebSocket>> wallIdToWSIdToWS = new HashMap<>();
-    private final CollaborativeWallService collaborativeWallService;
+    private final CollaborativeWallRTService collaborativeWallRTService;
     private final int maxConnections;
 
     public WallWebSocketController(final Vertx vertx,
                                    final int maxConnections,
-                                   final CollaborativeWallService collaborativeWallService) {
+                                   final CollaborativeWallRTService collaborativeWallRTService) {
         this.vertx = vertx;
-        this.collaborativeWallService = collaborativeWallService;
-        this.collaborativeWallService.subscribeToStatusChanges(newStatus -> {
+        this.collaborativeWallRTService = collaborativeWallRTService;
+        this.collaborativeWallRTService.subscribeToStatusChanges(newStatus -> {
             if(RealTimeStatus.ERROR.equals(newStatus) || RealTimeStatus.STOPPED.equals(newStatus)) {
                 this.closeConnections();
             }
         });
-        this.collaborativeWallService.subscribeToNewMessagesToSend(messages -> {
+        this.collaborativeWallRTService.subscribeToNewMessagesToSend(messages -> {
             if(CollectionUtils.isNotEmpty(messages)) {
                 this.broadcastMessagesLocally(messages, null);
             }
@@ -46,7 +46,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
 
     @Override
     public void handle(ServerWebSocket ws) {
-        if(!RealTimeStatus.STARTED.equals(this.collaborativeWallService.getStatus())) {
+        if(!RealTimeStatus.STARTED.equals(this.collaborativeWallRTService.getStatus())) {
             log.info("This instance is not ready for connections");
             ws.reject(503);
         } else if(maxConnections > 0 && getNbConnections() >= maxConnections) {
@@ -83,7 +83,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                         } else {
                             final String message = frame.textData();
                             log.info("Received message : " + message);
-                            this.collaborativeWallService.onNewUserMessage(message, wallId, wsId, session);
+                            this.collaborativeWallRTService.onNewUserMessage(message, wallId, wsId, session);
                         }
                     });
                     ws.closeHandler(e -> onCloseWSConnection(wallId, userId, wsId));
@@ -100,7 +100,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
     }
 
     protected void onCloseWSConnection(final String wallId, final String userId, final String wsId) {
-        this.collaborativeWallService.onUserDisconnection(wallId, userId, wsId)
+        this.collaborativeWallRTService.onUserDisconnection(wallId, userId, wsId)
         .compose(messages -> this.broadcastMessagesLocally(messages, wsId))
         .onComplete(e -> {
             final Map<String, ServerWebSocket> wss = wallIdToWSIdToWS.get(wallId);
@@ -127,7 +127,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
         final Map<String, ServerWebSocket> wsIdToWs = wallIdToWSIdToWS.computeIfAbsent(wallId, k -> new HashMap<>());
         wsIdToWs.put(wsId, ws);
         final Promise<Void> promise = Promise.promise();
-        this.collaborativeWallService.onNewConnection(wallId, userId, wsId)
+        this.collaborativeWallRTService.onNewConnection(wallId, userId, wsId)
         .onSuccess(messages -> broadcastMessagesLocally(messages, null))
         .onFailure(promise::fail);
         return promise.future();

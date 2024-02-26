@@ -25,8 +25,10 @@ import net.atos.entng.collaborativewall.controllers.CollaborativeWallController;
 import net.atos.entng.collaborativewall.events.CollaborativeWallSearchingEvents;
 import net.atos.entng.collaborativewall.explorer.WallExplorerPlugin;
 import net.atos.entng.collaborativewall.service.CollaborativeWallRepositoryEvents;
+import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
 import net.atos.entng.collaborativewall.service.CollaborativeWallService;
 import net.atos.entng.collaborativewall.service.NoteService;
+import net.atos.entng.collaborativewall.service.impl.DefaultCollaborativeWallRTService;
 import net.atos.entng.collaborativewall.service.impl.MongoDbCollaborativeWallService;
 import net.atos.entng.collaborativewall.service.impl.MongoDbNoteService;
 import net.atos.entng.collaborativewall.controllers.WallWebSocketController;
@@ -55,7 +57,7 @@ public class CollaborativeWall extends BaseServer {
     public static final String COLLABORATIVE_WALL_COLLECTION = "collaborativewall";
     public static final String COLLABORATIVE_WALL_NOTES_COLLECTION = "collaborativewall.notes";
     private WallExplorerPlugin plugin;
-    private CollaborativeWallService collaborativeWallService;
+    private CollaborativeWallRTService collaborativeWallRTService;
 
     /**
      * Entry point of the Vert.x module
@@ -81,6 +83,8 @@ public class CollaborativeWall extends BaseServer {
 
         final NoteService noteService = new MongoDbNoteService(COLLABORATIVE_WALL_NOTES_COLLECTION);
 
+        final CollaborativeWallService collaborativeWallService = new MongoDbCollaborativeWallService();
+
         setDefaultResourceFilter(new ShareAndOwner());
 
         addController(new CollaborativeWallController(COLLABORATIVE_WALL_COLLECTION, noteService, this.plugin));
@@ -92,15 +96,15 @@ public class CollaborativeWall extends BaseServer {
             log.info("Starting real time services");
             final int port = rtConfig.getInteger("port");
             final int maxConnections = rtConfig.getInteger("max-connections", 0);
-            this.collaborativeWallService = new MongoDbCollaborativeWallService(vertx, config);
-            final WallWebSocketController rtController = new WallWebSocketController(vertx, maxConnections, collaborativeWallService);
+            this.collaborativeWallRTService = new DefaultCollaborativeWallRTService(vertx, config, collaborativeWallService);
+            final WallWebSocketController rtController = new WallWebSocketController(vertx, maxConnections, collaborativeWallRTService);
             final HttpServerOptions options = new HttpServerOptions().setMaxWebSocketFrameSize(1024 * 1024);
             vertx.createHttpServer(options)
                 .webSocketHandler(rtController)
                 .listen(port, asyncResult -> {
                     if(asyncResult.succeeded()) {
                         log.info("Websocket server started for collaborativewall and listening on port " + port);
-                        collaborativeWallService.start()
+                        collaborativeWallRTService.start()
                             .onSuccess(e -> log.info("Real time server started"))
                             .onFailure(th -> log.error("Error while starting real time server", th));
                     } else {
@@ -117,8 +121,8 @@ public class CollaborativeWall extends BaseServer {
         if(this.plugin != null){
             this.plugin.stop();
         }
-        if(this.collaborativeWallService != null) {
-            this.collaborativeWallService.stop();
+        if(this.collaborativeWallRTService != null) {
+            this.collaborativeWallRTService.stop();
         }
 
     }

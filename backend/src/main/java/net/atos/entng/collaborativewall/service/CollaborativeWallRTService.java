@@ -2,14 +2,13 @@ package net.atos.entng.collaborativewall.service;
 
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
-import io.vertx.core.json.JsonObject;
 import net.atos.entng.collaborativewall.events.CollaborativeWallMessage;
 import net.atos.entng.collaborativewall.events.RealTimeStatus;
 import org.entcore.common.user.UserInfos;
 
 import java.util.List;
 
-public interface CollaborativeWallService {
+public interface CollaborativeWallRTService {
   Future<Void> start();
 
   void subscribeToStatusChanges(Handler<RealTimeStatus> subscriber);
