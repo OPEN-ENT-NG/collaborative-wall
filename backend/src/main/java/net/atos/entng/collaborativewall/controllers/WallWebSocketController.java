@@ -86,11 +86,10 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                             this.collaborativeWallService.onNewUserMessage(message, wallId, wsId, session);
                         }
                     });
-                    ws.closeHandler(e -> onCloseWSConnection(wallId, wsId));
+                    ws.closeHandler(e -> onCloseWSConnection(wallId, userId, wsId));
                 } catch (Exception e) {
                     ws.close();
                     log.error("An error occurred while treating ws", e);
-                    this.onCloseWSConnection(wallId, wsId);
                 }
             });
         }
@@ -100,15 +99,19 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
         return wallIdToWSIdToWS.values().size();
     }
 
-    protected void onCloseWSConnection(final String wallId, final String wsId) {
-        Map<String, ServerWebSocket> wss = wallIdToWSIdToWS.get(wallId);
-        if (wss != null) {
-            if (wss.remove(wsId) == null) {
-                log.warn("No ws removed");
-            } else {
-                log.info("WS correctly removed");
+    protected void onCloseWSConnection(final String wallId, final String userId, final String wsId) {
+        this.collaborativeWallService.onUserDisconnection(wallId, userId, wsId)
+        .compose(messages -> this.broadcastMessagesLocally(messages, wsId))
+        .onComplete(e -> {
+            final Map<String, ServerWebSocket> wss = wallIdToWSIdToWS.get(wallId);
+            if (wss != null) {
+                if (wss.remove(wsId) == null) {
+                    log.warn("No ws removed");
+                } else {
+                    log.info("WS correctly removed");
+                }
             }
-        }
+        });
     }
 
 
@@ -124,7 +127,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
         final Map<String, ServerWebSocket> wsIdToWs = wallIdToWSIdToWS.computeIfAbsent(wallId, k -> new HashMap<>());
         wsIdToWs.put(wsId, ws);
         final Promise<Void> promise = Promise.promise();
-        this.collaborativeWallService.onNewConnection(wallId, userId)
+        this.collaborativeWallService.onNewConnection(wallId, userId, wsId)
         .onSuccess(messages -> broadcastMessagesLocally(messages, null))
         .onFailure(promise::fail);
         return promise.future();
@@ -164,7 +167,6 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
     }
 
     private void closeConnections() {
-        log.warn("WebSocketHandler: closing");
         wallIdToWSIdToWS.values().stream().flatMap(e -> e.values().stream()).forEach(ServerWebSocket::close);
         wallIdToWSIdToWS.clear();
     }

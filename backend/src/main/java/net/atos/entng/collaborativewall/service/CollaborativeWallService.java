@@ -20,10 +20,12 @@ public interface CollaborativeWallService {
 
   Future<Void> stop();
 
-  Future<List<CollaborativeWallMessage>> onNewConnection(final String wallId, final String userId);
+  Future<List<CollaborativeWallMessage>> onNewConnection(final String wallId, final String userId, final String wsId);
 
   Future<List<CollaborativeWallMessage>> onNewUserMessage(final String message, final String wallId,
                                                           final String wsId, final UserInfos session);
+
+  Future<List<CollaborativeWallMessage>> onUserDisconnection(final String wallId, final String userId, final String wsId);
 
   void subscribeToNewMessagesToSend(Handler<List<CollaborativeWallMessage>> messages);
 }

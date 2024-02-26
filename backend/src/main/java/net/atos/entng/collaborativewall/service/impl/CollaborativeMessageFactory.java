@@ -19,6 +19,11 @@ public class CollaborativeMessageFactory {
         CollaborativeWallMessageType.connection, null, null,
         userId, null, null, null, emptyList(), emptyList());
   }
+  public CollaborativeWallMessage disconnection(final String wallId, final String wsId, final String userId) {
+    return new CollaborativeWallMessage(wallId, System.currentTimeMillis(), serverId, wsId,
+        CollaborativeWallMessageType.disconnection, null, null,
+        userId, null, null, null, emptyList(), emptyList());
+  }
 
   public CollaborativeWallMessage context(final String wallId, final String wsId, final String userId,
                                           final CollaborativeWallContext wallContext) {

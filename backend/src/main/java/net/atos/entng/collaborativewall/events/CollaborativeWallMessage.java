@@ -1,9 +1,13 @@
 package net.atos.entng.collaborativewall.events;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vertx.core.json.JsonObject;
 
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CollaborativeWallMessage {
   private final String wallId;
   private final long emittedAt;
@@ -20,9 +24,14 @@ public class CollaborativeWallMessage {
   private final List<NoteMove> move; // Replace Move with your class
   private final List<CollaborativeWallEditingInformation> editing; // Replace Editing with your class
 
-  public CollaborativeWallMessage(String wallId, long emittedAt, String emittedBy, String originator, CollaborativeWallMessageType type,
-                                  String deletedBy, Long deletedAt, String userId, JsonObject wall, String noteId,
-                                  JsonObject note, List<NoteMove> move, List<CollaborativeWallEditingInformation> editing) {
+  @JsonCreator
+  public CollaborativeWallMessage(@JsonProperty("wallId") final String wallId, @JsonProperty("emittedAt") final long emittedAt,
+                                  @JsonProperty("emittedBy") final String emittedBy, @JsonProperty("originator") final String originator,
+                                  @JsonProperty("type") final CollaborativeWallMessageType type, @JsonProperty("deletedBy") final String deletedBy,
+                                  @JsonProperty("deletedAt") final Long deletedAt, @JsonProperty("userId") final String userId,
+                                  @JsonProperty("wall") final JsonObject wall, @JsonProperty("noteId") final String noteId,
+                                  @JsonProperty("note") final JsonObject note, @JsonProperty("move") final List<NoteMove> move,
+                                  @JsonProperty("editing") final List<CollaborativeWallEditingInformation> editing) {
     this.wallId = wallId;
     this.emittedAt = emittedAt;
     this.emittedBy = emittedBy;

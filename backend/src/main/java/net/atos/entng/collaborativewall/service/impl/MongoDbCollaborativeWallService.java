@@ -1,10 +1,11 @@
 package net.atos.entng.collaborativewall.service.impl;
 
-import com.google.common.collect.Lists;
 import fr.wseduc.webutils.Utils;
-import io.vertx.core.*;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
+import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.MessageConsumer;
-import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
@@ -12,7 +13,6 @@ import io.vertx.core.logging.LoggerFactory;
 import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
 import io.vertx.redis.client.RedisOptions;
-import net.atos.entng.collaborativewall.CollaborativeWall;
 import net.atos.entng.collaborativewall.events.CollaborativeWallMessage;
 import net.atos.entng.collaborativewall.events.RealTimeStatus;
 import net.atos.entng.collaborativewall.service.CollaborativeWallService;
@@ -20,7 +20,6 @@ import org.entcore.common.user.UserInfos;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -39,6 +38,8 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
   private long restartAttempt = 0;
   private final List<Handler<RealTimeStatus>> statusSubscribers;
   private final List<Handler<List<CollaborativeWallMessage>>> messagesSubscribers;
+
+  private static final String channelName = "__realtime@collaborativewall";
 
   public MongoDbCollaborativeWallService(Vertx vertx, final JsonObject config) {
     this.vertx = vertx;
@@ -64,16 +65,16 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
       changeRealTimeStatus(RealTimeStatus.STARTING);
       try {
         if (this.ebConsumer == null) {
-          this.ebConsumer = vertx.eventBus().consumer("io.vertx.redis.__realtime@collaborativewall");
+          this.ebConsumer = vertx.eventBus().consumer("io.vertx.redis." + channelName);
           this.ebConsumer
-              .handler(m -> this.onNewRedisMessage((String) m.body()))
+              .handler(m -> this.onNewRedisMessage(((JsonObject) m.body()).getJsonObject("value").getString("message")))
               .exceptionHandler(e -> log.error("Uncaught exception while listening to Redis", e));
         } else {
           log.debug("Already listening for collaborativewall redis messages");
         }
         final Promise<Void> promise = Promise.promise();
         log.info("Connecting to Redis....");
-        redisSubscriber.subscribe(newArrayList("__realtime@collaborativewall"), asyncResult -> {
+        redisSubscriber.subscribe(newArrayList(channelName), asyncResult -> {
               if (asyncResult.succeeded()) {
                 log.info("Connection to redis established");
                 changeRealTimeStatus(RealTimeStatus.STARTED);
@@ -178,10 +179,19 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
   }
 
   @Override
-  public Future<List<CollaborativeWallMessage>> onNewConnection(String wallId, String userId) {
+  public Future<List<CollaborativeWallMessage>> onNewConnection(String wallId, String userId, final String wsId) {
     // Create a message for the user new connection
     // Create a message with the wall context
-    throw new RuntimeException("onNewConnection.not.implemented");
+    final CollaborativeWallMessage newUserMessage = this.messageFactory.connection(wallId, wsId, userId);
+    final List<CollaborativeWallMessage> messages = newArrayList(newUserMessage);
+    return publishMessagesOnRedis(messages).map(messages);
+  }
+
+  @Override
+  public Future<List<CollaborativeWallMessage>> onUserDisconnection(String wallId, String userId, String wsId) {
+    final CollaborativeWallMessage disconnectedUserMessage = this.messageFactory.disconnection(wallId, wsId, userId);
+    final List<CollaborativeWallMessage> messages = newArrayList(disconnectedUserMessage);
+    return publishMessagesOnRedis(messages).map(messages);
   }
 
   @Override
@@ -190,6 +200,42 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
     // Notify other apps via Redis
     // Send back the same messages to be handled internally
     throw new RuntimeException("onNewUserMessage.not.implemented");
+  }
+
+  /**
+   * Publish messages sequentially on Redis for other APPs.
+   * @param messages Messages to send
+   * @return Completes when <b>ALL</b> the messages have been successfully published
+   * but fails as soon as one of them fails
+   */
+  private Future<Void> publishMessagesOnRedis(final List<CollaborativeWallMessage> messages) {
+    return publishMessagesOnRedis(messages, 0)
+        .onSuccess(e -> log.debug(messages.size() + " messages published on redis"));
+  }
+
+  /**
+   * Publish messages sequentially starting at a specific index.
+   * @param messages Messages to send
+   * @param index index of the first message to be sent
+   * @return Completes when <b>ALL</b> the messages (as of the index)have been successfully published
+   * but fails as soon as one of them fails
+   */
+  private Future<Void> publishMessagesOnRedis(final List<CollaborativeWallMessage> messages, final int index) {
+    final Promise<Void> promise = Promise.promise();
+    if(messages == null || messages.size() <= index) {
+      promise.complete();
+    } else {
+      final String payload = Json.encode(messages.get(0));
+      redisPublisher.publish(channelName, payload, e -> {
+        if (e.succeeded()) {
+          publishMessagesOnRedis(messages, index + 1).onComplete(promise);
+        } else {
+          log.error("An error occurred while publishing redis message : " + payload, e.cause());
+          promise.fail(e.cause());
+        }
+      });
+    }
+    return promise.future();
   }
 
   @Override
