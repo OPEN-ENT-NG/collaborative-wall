@@ -91,5 +91,6 @@
   "explorer.emptyScreen.txt1d.consultation": "Idéal pour s’organiser ou simplement épingler toutes ses idées, le Mur collaboratif est un tableau virtuel interactif. Et comme son nom l’indique, on peut s’y mettre à plusieurs !",
   "explorer.emptyScreen.txt2d.create": "Idéal pour s’organiser ou simplement épingler toutes ses idées, le Mur collaboratif est un tableau virtuel interactif. Et comme son nom l’indique, on peut s’y mettre à plusieurs !",
   "explorer.emptyScreen.txt1d.create": "Idéal pour s’organiser ou simplement épingler toutes ses idées, le Mur collaboratif est un tableau virtuel interactif. Et comme son nom l’indique, on peut s’y mettre à plusieurs !",
-  "explorer.emptyScreen.search.text": "Désolé, il n’y a rien sous ce nom-là... Aucun mur collaboratif ne correspond à votre recherche. Modifiez les critères et tentez à nouveau !"
+  "explorer.emptyScreen.search.text": "Désolé, il n’y a rien sous ce nom-là... Aucun mur collaboratif ne correspond à votre recherche. Modifiez les critères et tentez à nouveau !",
+  "tooltip.shared": "Mur partagé"
 }
