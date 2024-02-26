@@ -14,6 +14,9 @@
         "app-type" : "END_USER",
         "mode" : "${mode}",
         "entcore.port" : 8009,
+        "real-time": {
+             "port": 9091
+        }
         "publicConf": {
           <% if ("true".equals(xitiSwitch)) { %>
             "xiti": {

@@ -99,7 +99,10 @@ public class CollaborativeWall extends BaseServer {
                 .webSocketHandler(rtController)
                 .listen(port, asyncResult -> {
                     if(asyncResult.succeeded()) {
-                        collaborativeWallService.start();
+                        log.info("Websocket server started for collaborativewall and listening on port " + port);
+                        collaborativeWallService.start()
+                            .onSuccess(e -> log.info("Real time server started"))
+                            .onFailure(th -> log.error("Error while starting real time server", th));
                     } else {
                         log.error("Cannot start websocket controller", asyncResult.cause());
                     }

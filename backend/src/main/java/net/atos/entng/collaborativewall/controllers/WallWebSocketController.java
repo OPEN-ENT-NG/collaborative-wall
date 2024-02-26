@@ -56,6 +56,14 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
             ws.pause();
             log.info("Handle websocket");
             final String sessionId = CookieHelper.getInstance().getSigned(UserAuthFilter.SESSION_ID, ws);
+            final Optional<String> maybeWallId = getWallId(ws.path());
+            if (!maybeWallId.isPresent()) {
+                ws.reject();
+                log.error("No wall id provided");
+                return;
+            }
+            final String wallId = maybeWallId.get();
+            final String wsId = UUID.randomUUID().toString();
             UserUtils.getSession(Server.getEventBus(vertx), sessionId, infos -> {
                 log.info("Get Session");
                 try {
@@ -65,16 +73,8 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                         return;
                     }
                     log.info("Get Session is ok");
-                    final String wsId = UUID.randomUUID().toString();
                     final UserInfos session = UserUtils.sessionToUserInfos(infos);
                     final String userId = session.getUserId();
-                    final Optional<String> maybeWallId = getWallId(ws.path());
-                    if (!maybeWallId.isPresent()) {
-                        ws.reject();
-                        log.error("No wall id provided");
-                        return;
-                    }
-                    final String wallId = maybeWallId.get();
                     onConnect(userId, wallId, wsId, ws);
                     ws.resume();
                     ws.frameHandler(frame -> {
@@ -89,7 +89,8 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                     ws.closeHandler(e -> onCloseWSConnection(wallId, wsId));
                 } catch (Exception e) {
                     ws.close();
-                    log.error("An error occurred while trating ws", e);
+                    log.error("An error occurred while treating ws", e);
+                    this.onCloseWSConnection(wallId, wsId);
                 }
             });
         }

@@ -72,12 +72,15 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
           log.debug("Already listening for collaborativewall redis messages");
         }
         final Promise<Void> promise = Promise.promise();
+        log.info("Connecting to Redis....");
         redisSubscriber.subscribe(newArrayList("__realtime@collaborativewall"), asyncResult -> {
               if (asyncResult.succeeded()) {
+                log.info("Connection to redis established");
                 changeRealTimeStatus(RealTimeStatus.STARTED);
                 this.restartAttempt = 0;
+                promise.complete();
               } else {
-                this.onRedisConnectionStopped(asyncResult.cause());
+                this.onRedisConnectionStopped(asyncResult.cause()).onComplete(promise);
               }
             }
         );
@@ -94,16 +97,18 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
     return changeRealTimeStatus(RealTimeStatus.STOPPED).onComplete(e -> this.statusSubscribers.clear());
   }
 
-  private void onRedisConnectionStopped(final Throwable cause) {
+  private Future<Void> onRedisConnectionStopped(final Throwable cause) {
     log.error("Error while subscribing to __realtime@collaborativewall ", cause);
     changeRealTimeStatus(RealTimeStatus.ERROR);
     this.restartAttempt++;
     final long factor = Math.max(0L, restartAttempt - 1);
+    final Promise<Void> promise = Promise.promise();
     vertx.setTimer((long) (reConnectionDelay * Math.pow(2, factor)), e -> {
       restartAttempt++;
       log.info("Trying to reconnect to Redis....");
-      start();
+      start().onComplete(promise);
     });
+    return promise.future();
   }
 
   private Future<Void> changeRealTimeStatus(RealTimeStatus realTimeStatus) {
@@ -142,7 +147,9 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
     JsonObject redisConfig = conf.getJsonObject("redisConfig");
     if (redisConfig == null) {
       final String redisConf = (String) vertx.sharedData().getLocalMap("server").get("redisConfig");
-      if (redisConf != null) {
+      if (redisConf == null) {
+        throw new IllegalStateException("missing.redis.config");
+      } else {
         redisConfig = new JsonObject(redisConf);
       }
     }
