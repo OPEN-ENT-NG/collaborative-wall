@@ -9,5 +9,6 @@ export interface CollaborativeWallProps {
     displayName: string;
   };
   shared: string[];
+  rights: string[];
   description?: string;
 }
