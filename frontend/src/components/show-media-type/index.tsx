@@ -1,20 +1,18 @@
-import { RefObject } from "react";
-
 import { Delete } from "@edifice-ui/icons";
-import { IconButton, Image, MediaLibraryRef } from "@edifice-ui/react";
+import { IconButton, Image, MediaLibraryType } from "@edifice-ui/react";
 import { WorkspaceElement } from "edifice-ts-client";
 
 export const ShowMediaType = ({
   media,
-  mediaLibraryRef,
+  mediaType,
   setMediaNote,
 }: {
   media: WorkspaceElement;
-  mediaLibraryRef: RefObject<MediaLibraryRef>;
+  mediaType?: MediaLibraryType;
   setMediaNote: (value: WorkspaceElement | undefined) => void;
 }) => {
   const showGetMedia = () => {
-    switch (mediaLibraryRef.current?.type) {
+    switch (mediaType) {
       case "image":
         return (
           <div style={{ position: "relative" }}>
@@ -27,15 +25,30 @@ export const ShowMediaType = ({
             />
             <Image
               src={`/workspace/document/${media._id}`}
-              alt={mediaLibraryRef.current?.type}
+              alt={mediaType}
               width="100%"
-              height="350"
               style={{ borderRadius: "16px" }}
             />
           </div>
         );
+      case "audio":
+        return (
+          <div className="audio-center py-48 px-12">
+            <audio
+              src={`/workspace/document/${media._id}`}
+              controls
+              data-document-id={media._id}
+              muted
+            />
+            <IconButton
+              icon={<Delete />}
+              variant="outline"
+              color="danger"
+              onClick={() => setMediaNote(undefined)}
+            />
+          </div>
+        );
       default:
-        setMediaNote(undefined);
         break;
     }
   };

@@ -26,6 +26,13 @@
   gap: 8px;
 }
 
+.audio-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
 .btn.focus,
 .btn:focus {
   box-shadow: unset;

@@ -63,6 +63,7 @@ export const NoteModal = () => {
     noteColors.white.background,
   ]);
   const [mediaNote, setMediaNote] = useState<WorkspaceElement | undefined>();
+  const [mediaType, setMediaType] = useState<MediaLibraryType>();
 
   const { ref: mediaLibraryRef, ...mediaLibraryModalHandlers } =
     useMediaLibrary({ setMediaNote });
@@ -82,6 +83,7 @@ export const NoteModal = () => {
   const handleNavigateBack = () => navigate("..");
 
   const handleClickMedia = (type: MediaLibraryType) => {
+    setMediaType(type);
     mediaLibraryRef.current?.show(type);
   };
 
@@ -110,7 +112,7 @@ export const NoteModal = () => {
             ) : (
               <ShowMediaType
                 media={mediaNote}
-                mediaLibraryRef={mediaLibraryRef}
+                mediaType={mediaType}
                 setMediaNote={setMediaNote}
               />
             )}
