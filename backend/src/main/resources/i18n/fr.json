@@ -75,10 +75,10 @@
   "group.school.Guest": "Invités de l'{0}.",
   "collaborativewall.push.notif.shared": "{0} vous a partagé le mur collaboratif {1}",
   "warning.no.mobile": "L'édition du mur collaboratif n'est pas optimisée sur support mobile. Pour toute modification, nous vous recommandons d'utiliser un ordinateur.",
-  "explorer.filter.all": "Toutes les murs collaboratifs",
+  "explorer.filter.all": "Tous les murs collaboratifs",
   "explorer.filter.shared": "Les murs collaboratifs partagées avec moi",
   "explorer.filter.public": "Les murs collaboratifs publiques",
-  "explorer.filters.mine": "Toutes les murs collaboratifs",
+  "explorer.filters.mine": "Tous les murs collaboratifs",
   "explorer.filter.owner": "Mes murs collaboratifs",
   "explorer.create.title": "Créer un mur collaboratif",
   "explorer.emptyScreen.label": "Ce dossier est vide pour le moment. Vous pouvez organiser vos murs collaboratifs dedans, dès maintenant !",
@@ -91,5 +91,6 @@
   "explorer.emptyScreen.txt1d.consultation": "Idéal pour s’organiser ou simplement épingler toutes ses idées, le Mur collaboratif est un tableau virtuel interactif. Et comme son nom l’indique, on peut s’y mettre à plusieurs !",
   "explorer.emptyScreen.txt2d.create": "Idéal pour s’organiser ou simplement épingler toutes ses idées, le Mur collaboratif est un tableau virtuel interactif. Et comme son nom l’indique, on peut s’y mettre à plusieurs !",
   "explorer.emptyScreen.txt1d.create": "Idéal pour s’organiser ou simplement épingler toutes ses idées, le Mur collaboratif est un tableau virtuel interactif. Et comme son nom l’indique, on peut s’y mettre à plusieurs !",
-  "explorer.emptyScreen.search.text": "Désolé, il n’y a rien sous ce nom-là... Aucun mur collaboratif ne correspond à votre recherche. Modifiez les critères et tentez à nouveau !"
+  "explorer.emptyScreen.search.text": "Désolé, il n’y a rien sous ce nom-là... Aucun mur collaboratif ne correspond à votre recherche. Modifiez les critères et tentez à nouveau !",
+  "tooltip.shared": "Mur partagé"
 }

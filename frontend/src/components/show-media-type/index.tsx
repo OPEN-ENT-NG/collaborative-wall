@@ -3,16 +3,16 @@ import { IconButton, Image, MediaLibraryType } from "@edifice-ui/react";
 import { WorkspaceElement } from "edifice-ts-client";
 
 export const ShowMediaType = ({
-  media,
-  mediaType,
-  setMediaNote,
+  medias,
+  setMedias,
+  mediasType,
 }: {
-  media: WorkspaceElement;
-  mediaType?: MediaLibraryType;
-  setMediaNote: (value: WorkspaceElement | undefined) => void;
+  medias: WorkspaceElement;
+  setMedias: (value: WorkspaceElement | undefined) => void;
+  mediasType: MediaLibraryType | undefined;
 }) => {
   const showGetMedia = () => {
-    switch (mediaType) {
+    switch (mediasType) {
       case "image":
         return (
           <div style={{ position: "relative" }}>
@@ -21,11 +21,11 @@ export const ShowMediaType = ({
               icon={<Delete />}
               variant="outline"
               color="danger"
-              onClick={() => setMediaNote(undefined)}
+              onClick={() => setMedias(undefined)}
             />
             <Image
-              src={`/workspace/document/${media._id}`}
-              alt={mediaType}
+              src={`/workspace/document/${medias?._id}`}
+              alt={mediasType}
               width="100%"
               style={{ borderRadius: "16px" }}
             />
@@ -35,16 +35,16 @@ export const ShowMediaType = ({
         return (
           <div className="audio-center py-48 px-12">
             <audio
-              src={`/workspace/document/${media._id}`}
+              src={`/workspace/document/${medias._id}`}
               controls
-              data-document-id={media._id}
+              data-document-id={medias._id}
               muted
             />
             <IconButton
               icon={<Delete />}
               variant="outline"
               color="danger"
-              onClick={() => setMediaNote(undefined)}
+              onClick={() => setMedias(undefined)}
             />
           </div>
         );
