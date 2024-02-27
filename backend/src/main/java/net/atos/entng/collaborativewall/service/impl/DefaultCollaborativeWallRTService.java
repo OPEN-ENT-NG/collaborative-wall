@@ -1,10 +1,7 @@
 package net.atos.entng.collaborativewall.service.impl;
 
 import fr.wseduc.webutils.Utils;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.Promise;
-import io.vertx.core.Vertx;
+import io.vertx.core.*;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -24,7 +21,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static java.util.Collections.emptyList;
 
 public class DefaultCollaborativeWallRTService implements CollaborativeWallRTService {
 
@@ -247,21 +243,24 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     // Get the context of other servers
     // Create a message with the wall context
     final CollaborativeWallMessage newUserMessage = this.messageFactory.connection(wallId, wsId, userId);
-    return this.collaborativeWallService.getWall(wallId)
-      .flatMap(wall -> {
-        final CollaborativeWallUsersMetadata context = metadataByWallId.computeIfAbsent(wallId, k -> new CollaborativeWallUsersMetadata());
-        context.getConnectedUsers().add(userId);
-        publishMetadata();
-        return this.getUsersContext(wallId).map(userContext -> Pair.of(wall, userContext));
-      })
-      .map(context -> {
-        final JsonObject wall = context.getKey();
-        final CollaborativeWallUsersMetadata userContext = context.getRight();
-        return this.messageFactory.metadata(wallId, wsId, userId,
-            new CollaborativeWallMetadata(wall, emptyList(), userContext.getEditing(), userContext.getConnectedUsers()));
-      })
-      .map(contextMessage -> newArrayList(newUserMessage, contextMessage))
-      .compose(messages -> publishMessagesOnRedis(messages).map(messages));
+    return CompositeFuture.all(
+        this.collaborativeWallService.getWall(wallId),
+        this.collaborativeWallService.getNotesOfWall(wallId)
+    ).flatMap(wall -> {
+      final CollaborativeWallUsersMetadata context = metadataByWallId.computeIfAbsent(wallId, k -> new CollaborativeWallUsersMetadata());
+      context.getConnectedUsers().add(userId);
+      publishMetadata();
+      return this.getUsersContext(wallId).map(userContext -> Pair.of(wall, userContext));
+    })
+    .map(context -> {
+      final JsonObject wall = context.getKey().resultAt(0);
+      final List<JsonObject> notes = context.getKey().resultAt(1);
+      final CollaborativeWallUsersMetadata userContext = context.getRight();
+      return this.messageFactory.metadata(wallId, wsId, userId,
+          new CollaborativeWallMetadata(wall, notes, userContext.getEditing(), userContext.getConnectedUsers()));
+    })
+    .map(contextMessage -> newArrayList(newUserMessage, contextMessage))
+    .compose(messages -> publishMessagesOnRedis(messages).map(messages));
   }
 
   private Future<CollaborativeWallUsersMetadata> getUsersContext(final String wallId) {

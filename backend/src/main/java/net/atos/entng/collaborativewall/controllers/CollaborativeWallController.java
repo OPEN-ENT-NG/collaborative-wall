@@ -22,40 +22,36 @@ package net.atos.entng.collaborativewall.controllers;
 import fr.wseduc.rs.*;
 import fr.wseduc.security.ActionType;
 import fr.wseduc.security.SecuredAction;
-import fr.wseduc.webutils.DefaultAsyncResult;
 import fr.wseduc.webutils.Either;
+import fr.wseduc.webutils.I18n;
 import fr.wseduc.webutils.http.Renders;
 import fr.wseduc.webutils.request.RequestUtils;
-import fr.wseduc.webutils.I18n;
+import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 import net.atos.entng.collaborativewall.CollaborativeWall;
 import net.atos.entng.collaborativewall.controllers.helpers.NotesHelper;
 import net.atos.entng.collaborativewall.explorer.WallExplorerPlugin;
 import net.atos.entng.collaborativewall.service.NoteService;
-import org.entcore.common.controller.ControllerHelper;
 import org.entcore.common.events.EventHelper;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
 import org.entcore.common.explorer.IdAndVersion;
 import org.entcore.common.http.response.DefaultResponseHandler;
 import org.entcore.common.mongodb.MongoDbControllerHelper;
+import org.entcore.common.service.CrudService;
 import org.entcore.common.service.VisibilityFilter;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
-import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpServerRequest;
 import org.vertx.java.core.http.RouteMatcher;
-import io.vertx.core.json.JsonObject;
-import io.vertx.core.json.JsonArray;
-
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-
-import static org.entcore.common.http.response.DefaultResponseHandler.defaultResponseHandler;
 
 /**
  * Controller to manage URL paths for collaborative walls.
@@ -443,4 +439,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         notesHelper.delete(request);
     }
 
+    public CrudService getCrudService() {
+        return this.crudService;
+    }
 }

@@ -20,19 +20,19 @@ public class CollaborativeMessageFactory {
   public CollaborativeWallMessage connection(final String wallId, final String wsId, final String userId) {
     return new CollaborativeWallMessage(wallId, System.currentTimeMillis(), serverId, wsId,
         CollaborativeWallMessageType.connection, null, null,
-        userId, null, null, null, emptyList(), emptyList());
+        userId, null, null, null, null, null, null);
   }
   public CollaborativeWallMessage disconnection(final String wallId, final String wsId, final String userId) {
     return new CollaborativeWallMessage(wallId, System.currentTimeMillis(), serverId, wsId,
         CollaborativeWallMessageType.disconnection, null, null,
-        userId, null, null, null, emptyList(), emptyList());
+        userId, null, null, null, null, null, null);
   }
 
   public CollaborativeWallMessage metadata(final String wallId, final String wsId, final String userId,
                                            final CollaborativeWallMetadata wallContext) {
     return new CollaborativeWallMessage(wallId, System.currentTimeMillis(), serverId, wsId,
         CollaborativeWallMessageType.metadata, null, null,
-        userId, wallContext.getWall(), null, null, emptyList(),
+        userId, wallContext.getWall(), null, null, wallContext.getNotes(), null,
         wallContext.getEditing());
   }
 }

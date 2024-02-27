@@ -81,11 +81,15 @@ public class CollaborativeWall extends BaseServer {
 
         final NoteService noteService = new MongoDbNoteService(COLLABORATIVE_WALL_NOTES_COLLECTION);
 
-        final CollaborativeWallService collaborativeWallService = new MongoDbCollaborativeWallService();
-
         setDefaultResourceFilter(new ShareAndOwner());
 
-        addController(new CollaborativeWallController(COLLABORATIVE_WALL_COLLECTION, noteService, this.plugin));
+        final CollaborativeWallController controller = new CollaborativeWallController(COLLABORATIVE_WALL_COLLECTION, noteService, this.plugin);
+
+        addController(controller);
+
+        final CollaborativeWallService collaborativeWallService = new MongoDbCollaborativeWallService(
+            controller.getCrudService(),
+            noteService);
 
         final JsonObject rtConfig = config.getJsonObject("real-time");
         if(rtConfig == null) {

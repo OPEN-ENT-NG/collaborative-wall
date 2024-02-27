@@ -21,6 +21,8 @@ public class CollaborativeWallMessage {
   private final JsonObject wall; // Replace Object with your class
   private final String noteId;
   private final JsonObject note; // Replace Object with your class
+
+  private final List<JsonObject> notes;
   private final List<NoteMove> move; // Replace Move with your class
   private final List<CollaborativeWallEditingInformation> editing; // Replace Editing with your class
 
@@ -30,7 +32,8 @@ public class CollaborativeWallMessage {
                                   @JsonProperty("type") final CollaborativeWallMessageType type, @JsonProperty("deletedBy") final String deletedBy,
                                   @JsonProperty("deletedAt") final Long deletedAt, @JsonProperty("userId") final String userId,
                                   @JsonProperty("wall") final JsonObject wall, @JsonProperty("noteId") final String noteId,
-                                  @JsonProperty("note") final JsonObject note, @JsonProperty("move") final List<NoteMove> move,
+                                  @JsonProperty("note") final JsonObject note, @JsonProperty("notes") List<JsonObject> notes,
+                                  @JsonProperty("move") final List<NoteMove> move,
                                   @JsonProperty("editing") final List<CollaborativeWallEditingInformation> editing) {
     this.wallId = wallId;
     this.emittedAt = emittedAt;
@@ -43,6 +46,7 @@ public class CollaborativeWallMessage {
     this.wall = wall;
     this.noteId = noteId;
     this.note = note;
+    this.notes = notes;
     this.move = move;
     this.editing = editing;
   }
@@ -97,5 +101,9 @@ public class CollaborativeWallMessage {
 
   public String getOriginator() {
     return originator;
+  }
+
+  public List<JsonObject> getNotes() {
+    return notes;
   }
 }
