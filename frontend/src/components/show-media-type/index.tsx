@@ -5,13 +5,13 @@ import { IconButton, Image, MediaLibraryRef } from "@edifice-ui/react";
 import { WorkspaceElement } from "edifice-ts-client";
 
 export const ShowMediaType = ({
-  media,
+  medias,
   mediaLibraryRef,
-  setMediaNote,
+  setMedias,
 }: {
-  media: WorkspaceElement;
+  medias: WorkspaceElement;
   mediaLibraryRef: RefObject<MediaLibraryRef>;
-  setMediaNote: (value: WorkspaceElement | undefined) => void;
+  setMedias: (value: WorkspaceElement | undefined) => void;
 }) => {
   const showGetMedia = () => {
     switch (mediaLibraryRef.current?.type) {
@@ -23,10 +23,10 @@ export const ShowMediaType = ({
               icon={<Delete />}
               variant="outline"
               color="danger"
-              onClick={() => setMediaNote(undefined)}
+              onClick={() => setMedias(undefined)}
             />
             <Image
-              src={`/workspace/document/${media._id}`}
+              src={`/workspace/document/${medias?._id}`}
               alt={mediaLibraryRef.current?.type}
               width="100%"
               height="350"
@@ -35,7 +35,7 @@ export const ShowMediaType = ({
           </div>
         );
       default:
-        setMediaNote(undefined);
+        setMedias(undefined);
         break;
     }
   };
