@@ -42,13 +42,15 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
   private final List<Handler<RealTimeStatus>> statusSubscribers;
   private final List<Handler<List<CollaborativeWallMessage>>> messagesSubscribers;
 
-  private final Map<String, CollaborativeWallUsersMetadata> contextByWallId;
+  private final Map<String, CollaborativeWallUsersMetadata> metadataByWallId;
 
   private long contextPublisherId = -1;
 
   private final long publishPeriodInMs;
 
   private static final String channelName = "__realtime@collaborativewall";
+
+  private static final String metadataCollectionPrefix = "rt_collaborativewall_context_";
 
   private CollaborativeWallMetricsRecorder metricsRecorder;
 
@@ -68,7 +70,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     this.messagesSubscribers = new ArrayList<>();
     this.reConnectionDelay = config.getLong("reconnection-delay-in-ms", 1000L);
     this.publishPeriodInMs = config.getLong("publish-context-period-in-ms", 60000L);
-    contextByWallId = new HashMap<>();
+    metadataByWallId = new HashMap<>();
   }
 
   @Override
@@ -126,9 +128,9 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
   private Future<Void> publishMetadata() {
     final Promise<Void> promise = Promise.promise();
     log.debug("Publishing contexts to Redis...");
-    final String payload = Json.encode(contextByWallId);
+    final String payload = Json.encode(metadataByWallId);
     redisPublisher.set(newArrayList(
-        "rt_collaborativewall_context_" + serverId,
+        metadataCollectionPrefix + serverId,
         payload,
         "PX",
         String.valueOf(2 * publishPeriodInMs)
@@ -247,14 +249,15 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     final CollaborativeWallMessage newUserMessage = this.messageFactory.connection(wallId, wsId, userId);
     return this.collaborativeWallService.getWall(wallId)
       .flatMap(wall -> {
-        final CollaborativeWallUsersMetadata context = contextByWallId.computeIfAbsent(wallId, k -> new CollaborativeWallUsersMetadata());
+        final CollaborativeWallUsersMetadata context = metadataByWallId.computeIfAbsent(wallId, k -> new CollaborativeWallUsersMetadata());
         context.getConnectedUsers().add(userId);
+        publishMetadata();
         return this.getUsersContext(wallId).map(userContext -> Pair.of(wall, userContext));
       })
       .map(context -> {
         final JsonObject wall = context.getKey();
         final CollaborativeWallUsersMetadata userContext = context.getRight();
-        return this.messageFactory.context(wallId, wsId, userId,
+        return this.messageFactory.metadata(wallId, wsId, userId,
             new CollaborativeWallMetadata(wall, emptyList(), userContext.getEditing(), userContext.getConnectedUsers()));
       })
       .map(contextMessage -> newArrayList(newUserMessage, contextMessage))
@@ -263,31 +266,21 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
 
   private Future<CollaborativeWallUsersMetadata> getUsersContext(final String wallId) {
     final Promise<CollaborativeWallUsersMetadata> promise = Promise.promise();
-    this.redisPublisher.keys("rt_collaborativewall_context_*", e -> {
+    this.redisPublisher.keys(metadataCollectionPrefix + "*", e -> {
       if(e.succeeded()) {
         log.debug("Fetched context ok");
         final List<String> keys = e.result().stream()
             .map(Response::toString)
-            .filter(key -> !serverId.equals(key))
+            .filter(key -> !key.endsWith(serverId))
+            .distinct()
             .collect(Collectors.toList());
-        this.redisPublisher.mget(keys, entriesResponse -> {
-          if(entriesResponse.succeeded()) {
-            final CollaborativeWallUsersMetadata otherAppsContext = entriesResponse.result().stream()
-                .map(entry -> new JsonObject(entry.toString()))
-                .map(entry -> entry.getJsonObject(wallId))
-                .filter(Objects::nonNull)
-                .map(rawContext -> rawContext.mapTo(CollaborativeWallUsersMetadata.class))
-                .reduce(CollaborativeWallUsersMetadata::merge)
-                .orElseGet(CollaborativeWallUsersMetadata::new);
-            final CollaborativeWallUsersMetadata thisAppContext = this.contextByWallId.computeIfAbsent(
-                wallId,
-                k -> new CollaborativeWallUsersMetadata());
-            promise.complete(CollaborativeWallUsersMetadata.merge(thisAppContext, otherAppsContext));
-          } else {
-            log.error("Cannot get context values");
-            promise.fail(e.cause());
-          }
-        });
+        getOtherAppsMetadata(wallId, keys).map(otherAppsMetadataResult -> {
+          final CollaborativeWallUsersMetadata thisAppMetadata = this.metadataByWallId.computeIfAbsent(
+              wallId,
+              k -> new CollaborativeWallUsersMetadata());
+          return CollaborativeWallUsersMetadata.merge(thisAppMetadata, otherAppsMetadataResult);
+        })
+        .onComplete(promise);
       } else {
         log.error("Cannot get context keys");
         promise.fail(e.cause());
@@ -296,10 +289,37 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     return promise.future().onFailure(th -> changeRealTimeStatus(RealTimeStatus.ERROR));
   }
 
+  private Future<CollaborativeWallUsersMetadata> getOtherAppsMetadata(final String wallId, final List<String> keys) {
+    final Promise<CollaborativeWallUsersMetadata> promise = Promise.promise();
+    if(keys.isEmpty()) {
+      promise.complete(new CollaborativeWallUsersMetadata());
+    } else {
+      this.redisPublisher.mget(keys, entriesResponse -> {
+        if (entriesResponse.succeeded()) {
+          final CollaborativeWallUsersMetadata otherAppsContext = entriesResponse.result().stream()
+              .map(entry -> new JsonObject(entry.toString()))
+              .map(entry -> entry.getJsonObject(wallId))
+              .filter(Objects::nonNull)
+              .map(rawContext -> rawContext.mapTo(CollaborativeWallUsersMetadata.class))
+              .reduce(CollaborativeWallUsersMetadata::merge)
+              .orElseGet(CollaborativeWallUsersMetadata::new);
+          final CollaborativeWallUsersMetadata thisAppContext = this.metadataByWallId.computeIfAbsent(
+              wallId,
+              k -> new CollaborativeWallUsersMetadata());
+          promise.complete(CollaborativeWallUsersMetadata.merge(thisAppContext, otherAppsContext));
+        } else {
+          log.error("Cannot get context values", entriesResponse.cause());
+          promise.fail(entriesResponse.cause());
+        }
+      });
+    }
+    return promise.future();
+  }
+
   @Override
   public Future<List<CollaborativeWallMessage>> onUserDisconnection(String wallId, String userId, String wsId) {
     final CollaborativeWallMessage disconnectedUserMessage = this.messageFactory.disconnection(wallId, wsId, userId);
-    final CollaborativeWallUsersMetadata context = this.contextByWallId.get(wallId);
+    final CollaborativeWallUsersMetadata context = this.metadataByWallId.get(wallId);
     if(context != null) {
       context.getConnectedUsers().remove(userId);
       // TODO remove from context editing users

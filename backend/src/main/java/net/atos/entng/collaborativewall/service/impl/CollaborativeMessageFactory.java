@@ -28,10 +28,10 @@ public class CollaborativeMessageFactory {
         userId, null, null, null, emptyList(), emptyList());
   }
 
-  public CollaborativeWallMessage context(final String wallId, final String wsId, final String userId,
-                                          final CollaborativeWallMetadata wallContext) {
+  public CollaborativeWallMessage metadata(final String wallId, final String wsId, final String userId,
+                                           final CollaborativeWallMetadata wallContext) {
     return new CollaborativeWallMessage(wallId, System.currentTimeMillis(), serverId, wsId,
-        CollaborativeWallMessageType.context, null, null,
+        CollaborativeWallMessageType.metadata, null, null,
         userId, wallContext.getWall(), null, null, emptyList(),
         wallContext.getEditing());
   }
