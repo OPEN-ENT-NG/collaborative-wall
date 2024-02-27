@@ -13,17 +13,18 @@ import io.vertx.core.logging.LoggerFactory;
 import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
 import io.vertx.redis.client.RedisOptions;
-import net.atos.entng.collaborativewall.events.CollaborativeWallMessage;
-import net.atos.entng.collaborativewall.events.RealTimeStatus;
+import io.vertx.redis.client.Response;
+import net.atos.entng.collaborativewall.events.*;
 import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
 import net.atos.entng.collaborativewall.service.CollaborativeWallService;
+import org.apache.commons.lang3.tuple.Pair;
 import org.entcore.common.user.UserInfos;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Collections.emptyList;
 
 public class DefaultCollaborativeWallRTService implements CollaborativeWallRTService {
 
@@ -40,6 +41,12 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
   private long restartAttempt = 0;
   private final List<Handler<RealTimeStatus>> statusSubscribers;
   private final List<Handler<List<CollaborativeWallMessage>>> messagesSubscribers;
+
+  private final Map<String, CollaborativeWallUsersMetadata> contextByWallId;
+
+  private long contextPublisherId = -1;
+
+  private final long publishPeriodInMs;
 
   private static final String channelName = "__realtime@collaborativewall";
 
@@ -58,6 +65,8 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     this.statusSubscribers = new ArrayList<>();
     this.messagesSubscribers = new ArrayList<>();
     this.reConnectionDelay = config.getLong("reconnection-delay-in-ms", 1000L);
+    this.publishPeriodInMs = config.getLong("publish-context-period-in-ms", 60000L);
+    contextByWallId = new HashMap<>();
   }
 
   @Override
@@ -90,6 +99,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             }
         );
         future = promise.future();
+        future.onSuccess(e -> publishContextLoop());
       } catch (Exception e) {
         future = Future.failedFuture(e);
       }
@@ -97,8 +107,44 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     return future;
   }
 
+  private Future<Void> publishContextLoop() {
+    final Promise<Void> promise = Promise.promise();
+    if(contextPublisherId >= 0) {
+      this.contextPublisherId = vertx.setPeriodic(publishPeriodInMs, e -> {
+        publishMetadata().onComplete(promise);
+      });
+    } else {
+      promise.complete();
+    }
+    return promise.future();
+  }
+
+  private Future<Void> publishMetadata() {
+    final Promise<Void> promise = Promise.promise();
+    log.debug("Publishing contexts to Redis...");
+    final String payload = Json.encode(contextByWallId);
+    redisPublisher.set(newArrayList(
+        "rt_collaborativewall_context_" + serverId,
+        payload,
+        "PX",
+        String.valueOf(2 * publishPeriodInMs)
+    ), onPublishDone -> {
+      if(onPublishDone.succeeded()) {
+        promise.complete();
+      } else {
+        log.error("Cannot publish context to Redis");
+        changeRealTimeStatus(RealTimeStatus.ERROR);
+        promise.fail(onPublishDone.cause());
+      }
+    });
+    return promise.future();
+  }
+
   @Override
   public Future<Void> stop() {
+    if(this.contextPublisherId >= 0) {
+      vertx.cancelTimer(this.contextPublisherId);
+    }
     return changeRealTimeStatus(RealTimeStatus.STOPPED).onComplete(e -> this.statusSubscribers.clear());
   }
 
@@ -185,27 +231,77 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
   @Override
   public Future<List<CollaborativeWallMessage>> onNewConnection(String wallId, String userId, final String wsId) {
     // Create a message for the user new connection
+    // Update this server context for the wall
+    // Publish the context
+    // Get the context of other servers
     // Create a message with the wall context
     final CollaborativeWallMessage newUserMessage = this.messageFactory.connection(wallId, wsId, userId);
     return this.collaborativeWallService.getWall(wallId)
-      .map(this::makeContext)
+      .flatMap(wall -> {
+        final CollaborativeWallUsersMetadata context = contextByWallId.computeIfAbsent(wallId, k -> new CollaborativeWallUsersMetadata());
+        context.getConnectedUsers().add(userId);
+        return this.getUsersContext(wallId).map(userContext -> Pair.of(wall, userContext));
+      })
+      .map(context -> {
+        final JsonObject wall = context.getKey();
+        final CollaborativeWallUsersMetadata userContext = context.getRight();
+        return this.messageFactory.context(wallId, wsId, userId,
+            new CollaborativeWallMetadata(wall, emptyList(), userContext.getEditing(), userContext.getConnectedUsers()));
+      })
       .map(contextMessage -> newArrayList(newUserMessage, contextMessage))
       .compose(messages -> publishMessagesOnRedis(messages).map(messages));
   }
 
-  private CollaborativeWallMessage makeContext(JsonObject wall) {
-    throw new RuntimeException("makeContext.not.implemented");
+  private Future<CollaborativeWallUsersMetadata> getUsersContext(final String wallId) {
+    final Promise<CollaborativeWallUsersMetadata> promise = Promise.promise();
+    this.redisPublisher.keys("rt_collaborativewall_context_*", e -> {
+      if(e.succeeded()) {
+        log.debug("Fetched context ok");
+        final List<String> keys = e.result().stream()
+            .map(Response::toString)
+            .filter(key -> !serverId.equals(key))
+            .collect(Collectors.toList());
+        this.redisPublisher.mget(keys, entriesResponse -> {
+          if(entriesResponse.succeeded()) {
+            final CollaborativeWallUsersMetadata otherAppsContext = entriesResponse.result().stream()
+                .map(entry -> new JsonObject(entry.toString()))
+                .map(entry -> entry.getJsonObject(wallId))
+                .filter(Objects::nonNull)
+                .map(rawContext -> rawContext.mapTo(CollaborativeWallUsersMetadata.class))
+                .reduce(CollaborativeWallUsersMetadata::merge)
+                .orElseGet(CollaborativeWallUsersMetadata::new);
+            final CollaborativeWallUsersMetadata thisAppContext = this.contextByWallId.computeIfAbsent(
+                wallId,
+                k -> new CollaborativeWallUsersMetadata());
+            promise.complete(CollaborativeWallUsersMetadata.merge(thisAppContext, otherAppsContext));
+          } else {
+            log.error("Cannot get context values");
+            promise.fail(e.cause());
+          }
+        });
+      } else {
+        log.error("Cannot get context keys");
+        promise.fail(e.cause());
+      }
+    });
+    return promise.future().onFailure(th -> changeRealTimeStatus(RealTimeStatus.ERROR));
   }
 
   @Override
   public Future<List<CollaborativeWallMessage>> onUserDisconnection(String wallId, String userId, String wsId) {
     final CollaborativeWallMessage disconnectedUserMessage = this.messageFactory.disconnection(wallId, wsId, userId);
+    final CollaborativeWallUsersMetadata context = this.contextByWallId.get(wallId);
+    if(context != null) {
+      context.getConnectedUsers().remove(userId);
+      // TODO remove from context editing users
+      publishMetadata();
+    }
     final List<CollaborativeWallMessage> messages = newArrayList(disconnectedUserMessage);
     return publishMessagesOnRedis(messages).map(messages);
   }
 
   @Override
-  public Future<List<CollaborativeWallMessage>> onNewUserMessage(String message, String wallId, String wsId, UserInfos session) {
+  public Future<List<CollaborativeWallMessage>> onNewUserMessage(String message, String wallId, String wsId) {
     // Register (if need be) the data in the message
     // Notify other apps via Redis
     // Send back the same messages to be handled internally

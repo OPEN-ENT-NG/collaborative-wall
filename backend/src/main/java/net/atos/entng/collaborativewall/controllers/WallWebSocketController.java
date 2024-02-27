@@ -65,7 +65,6 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
             final String wallId = maybeWallId.get();
             final String wsId = UUID.randomUUID().toString();
             UserUtils.getSession(Server.getEventBus(vertx), sessionId, infos -> {
-                log.info("Get Session");
                 try {
                     if (infos == null) {
                         log.info("Get Session is null");
@@ -75,19 +74,24 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                     log.info("Get Session is ok");
                     final UserInfos session = UserUtils.sessionToUserInfos(infos);
                     final String userId = session.getUserId();
-                    onConnect(userId, wallId, wsId, ws);
-                    ws.resume();
-                    ws.frameHandler(frame -> {
-                        if (frame.isBinary()) {
-                            log.warn("Binary is not handled");
-                        } else {
-                            final String message = frame.textData();
-                            log.info("Received message : " + message);
-                            this.collaborativeWallRTService.onNewUserMessage(message, wallId, wsId, session);
-                        }
-                    });
                     ws.closeHandler(e -> onCloseWSConnection(wallId, userId, wsId));
+                    onConnect(userId, wallId, wsId, ws).onSuccess(onSuccess -> {
+                        ws.resume();
+                        ws.frameHandler(frame -> {
+                            if (frame.isBinary()) {
+                                log.warn("Binary is not handled");
+                            } else {
+                                final String message = frame.textData();
+                                log.info("Received message : " + message);
+                                this.collaborativeWallRTService.onNewUserMessage(message, wallId, wsId);
+                            }
+                        });
+                    }).onFailure(th -> {
+                        log.error("An error occurred while opening the websocket", th);
+                        ws.close();
+                    });
                 } catch (Exception e) {
+                    ws.resume();
                     ws.close();
                     log.error("An error occurred while treating ws", e);
                 }
