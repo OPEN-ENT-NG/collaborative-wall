@@ -62,10 +62,13 @@ export const NoteModal = () => {
   const [colorValue, setColorValue] = useState<string[]>([
     noteColors.white.background,
   ]);
-  const [mediaNote, setMediaNote] = useState<WorkspaceElement | undefined>();
 
-  const { ref: mediaLibraryRef, ...mediaLibraryModalHandlers } =
-    useMediaLibrary({ setMediaNote });
+  const {
+    ref: mediaLibraryRef,
+    medias,
+    setMedias,
+    ...mediaLibraryModalHandlers
+  } = useMediaLibrary();
 
   const handleSaveNote = () => {
     const note: PickedNoteProps = {
@@ -102,22 +105,23 @@ export const NoteModal = () => {
         <Modal.Body>
           <ColorSelect data={data} setColorValue={setColorValue} />
           <div className="multimedia-section my-24">
-            {!mediaNote ? (
+            {!medias ? (
               <div className="toolbar-media py-48 px-12">
                 <ToolbarMedia handleClickMedia={handleClickMedia} />
                 {t("collaborativewall.add.media", { ns: appCode })}
               </div>
             ) : (
               <ShowMediaType
-                media={mediaNote}
+                medias={medias as WorkspaceElement}
                 mediaLibraryRef={mediaLibraryRef}
-                setMediaNote={setMediaNote}
+                setMedias={setMedias}
               />
             )}
           </div>
           <MediaLibrary
             appCode={appCode}
             ref={mediaLibraryRef}
+            multiple={false}
             {...mediaLibraryModalHandlers}
           />
           <Editor

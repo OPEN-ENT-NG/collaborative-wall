@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import {
   MediaLibraryRef,
@@ -8,12 +8,9 @@ import {
 } from "@edifice-ui/react";
 import { WorkspaceElement } from "edifice-ts-client";
 
-export const useMediaLibrary = ({
-  setMediaNote,
-}: {
-  setMediaNote: (value: WorkspaceElement | undefined) => void;
-}) => {
+export const useMediaLibrary = () => {
   const mediaLibraryRef = useRef<MediaLibraryRef>(null);
+  const [medias, setMedias] = useState<WorkspaceElement | undefined>();
   const { remove } = useWorkspaceFile();
 
   const onCancel = async (uploads?: WorkspaceElement[]) => {
@@ -25,7 +22,7 @@ export const useMediaLibrary = ({
   const onSuccess = (result: MediaLibraryResult) => {
     if (mediaLibraryRef.current?.type) {
       mediaLibraryRef.current?.hide();
-      setMediaNote(result[result.length - 1]);
+      setMedias(result[result.length - 1]);
     }
   };
   const onTabChange = async (
@@ -39,6 +36,8 @@ export const useMediaLibrary = ({
 
   return {
     ref: mediaLibraryRef,
+    medias,
+    setMedias,
     onCancel,
     onSuccess,
     onTabChange,
