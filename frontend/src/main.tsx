@@ -1,4 +1,4 @@
-import React from "react";
+import React /* , { StrictMode } */ from "react";
 
 import "./i18n";
 import { OdeClientProvider, ThemeProvider } from "@edifice-ui/react";
@@ -16,14 +16,14 @@ import { router } from "./routes";
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement!);
 
-if (process.env.NODE_ENV !== "production") {
+if (import.meta.env.DEV) {
   // eslint-disable-next-line global-require
   import("@axe-core/react").then((axe) => {
     axe.default(React, root, 1000);
   });
 }
 
-if (process.env.NODE_ENV !== "production") {
+if (import.meta.env.DEV) {
   import("edifice-bootstrap/dist/index.css");
 }
 
@@ -37,11 +37,13 @@ const queryClient = new QueryClient({
     queries: {
       retry: false,
       refetchOnWindowFocus: false,
+      // staleTime: 1000 * 60 * 5,
     },
   },
 });
 
 root.render(
+  // <StrictMode>
   <QueryClientProvider client={queryClient}>
     <OdeClientProvider
       params={{
@@ -54,4 +56,5 @@ root.render(
     </OdeClientProvider>
     <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>,
+  // </StrictMode>,
 );
