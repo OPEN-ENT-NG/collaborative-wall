@@ -15,10 +15,10 @@ import io.vertx.redis.client.RedisAPI;
 import io.vertx.redis.client.RedisOptions;
 import io.vertx.redis.client.Response;
 import net.atos.entng.collaborativewall.events.*;
+import net.atos.entng.collaborativewall.service.CollaborativeWallMetricsRecorder;
 import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
 import net.atos.entng.collaborativewall.service.CollaborativeWallService;
 import org.apache.commons.lang3.tuple.Pair;
-import org.entcore.common.user.UserInfos;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -50,6 +50,8 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
 
   private static final String channelName = "__realtime@collaborativewall";
 
+  private CollaborativeWallMetricsRecorder metricsRecorder;
+
   public DefaultCollaborativeWallRTService(Vertx vertx, final JsonObject config,
                                            final CollaborativeWallService collaborativeWallService) {
     this.vertx = vertx;
@@ -70,7 +72,9 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
   }
 
   @Override
-  public Future<Void> start() {
+  public Future<Void> start(CollaborativeWallMetricsRecorder metricsRecorder) {
+    this.metricsRecorder = metricsRecorder;
+    this.metricsRecorder.onStart();
     Future<Void> future;
     if(RealTimeStatus.STARTED.equals(this.realTimeStatus) || RealTimeStatus.LIMIT.equals(this.realTimeStatus)) {
       future = Future.failedFuture(this.realTimeStatus + ".cannot.be.started");
@@ -83,7 +87,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
               .handler(m -> this.onNewRedisMessage(((JsonObject) m.body()).getJsonObject("value").getString("message")))
               .exceptionHandler(e -> log.error("Uncaught exception while listening to Redis", e));
         } else {
-          log.debug("Already listening for collaborativewall redis messages");
+          log.debug("Already listening for collaborative wall redis messages");
         }
         final Promise<Void> promise = Promise.promise();
         log.info("Connecting to Redis....");
@@ -157,7 +161,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     vertx.setTimer((long) (reConnectionDelay * Math.pow(2, factor)), e -> {
       restartAttempt++;
       log.info("Trying to reconnect to Redis....");
-      start().onComplete(promise);
+      start(metricsRecorder).onComplete(promise);
     });
     return promise.future();
   }
@@ -221,6 +225,11 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
   @Override
   public void subscribeToStatusChanges(final Handler<RealTimeStatus> subscriber) {
     this.statusSubscribers.add(subscriber);
+  }
+
+  @Override
+  public String getServerId() {
+    return serverId;
   }
 
   @Override
@@ -353,4 +362,5 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
   public RealTimeStatus getStatus() {
     return this.realTimeStatus;
   }
+
 }

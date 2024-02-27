@@ -10,6 +10,7 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import net.atos.entng.collaborativewall.events.CollaborativeWallMessage;
 import net.atos.entng.collaborativewall.events.RealTimeStatus;
+import net.atos.entng.collaborativewall.service.CollaborativeWallMetricsRecorder;
 import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.entcore.common.user.UserInfos;
@@ -17,6 +18,8 @@ import org.entcore.common.user.UserUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.lang.System.currentTimeMillis;
 
 public class WallWebSocketController implements Handler<ServerWebSocket> {
     private final Vertx vertx;
@@ -26,22 +29,25 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
     private final CollaborativeWallRTService collaborativeWallRTService;
     private final int maxConnections;
 
+    private CollaborativeWallMetricsRecorder metricsRecorder;
+
     public WallWebSocketController(final Vertx vertx,
                                    final int maxConnections,
                                    final CollaborativeWallRTService collaborativeWallRTService) {
         this.vertx = vertx;
         this.collaborativeWallRTService = collaborativeWallRTService;
-        this.collaborativeWallRTService.subscribeToStatusChanges(newStatus -> {
+      this.collaborativeWallRTService.subscribeToStatusChanges(newStatus -> {
             if(RealTimeStatus.ERROR.equals(newStatus) || RealTimeStatus.STOPPED.equals(newStatus)) {
                 this.closeConnections();
             }
         });
         this.collaborativeWallRTService.subscribeToNewMessagesToSend(messages -> {
             if(CollectionUtils.isNotEmpty(messages)) {
-                this.broadcastMessagesLocally(messages, null);
+                this.broadcastMessagesLocally(messages, false, true, null);
             }
         });
         this.maxConnections = maxConnections;
+        this.metricsRecorder = CollaborativeWallMetricsRecorder.NoopRecorder.instance;
     }
 
     @Override
@@ -49,9 +55,11 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
         if(!RealTimeStatus.STARTED.equals(this.collaborativeWallRTService.getStatus())) {
             log.info("This instance is not ready for connections");
             ws.reject(503);
+            this.metricsRecorder.onConnectionRejected();
         } else if(maxConnections > 0 && getNbConnections() >= maxConnections) {
             log.info("This instance reached its capacity, it does not accept connections anymore");
             ws.reject(503);
+            this.metricsRecorder.onConnectionRejected();
         } else {
             ws.pause();
             log.info("Handle websocket");
@@ -105,7 +113,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
 
     protected void onCloseWSConnection(final String wallId, final String userId, final String wsId) {
         this.collaborativeWallRTService.onUserDisconnection(wallId, userId, wsId)
-        .compose(messages -> this.broadcastMessagesLocally(messages, wsId))
+        .compose(messages -> this.broadcastMessagesLocally(messages, true, false, wsId))
         .onComplete(e -> {
             final Map<String, ServerWebSocket> wss = wallIdToWSIdToWS.get(wallId);
             if (wss != null) {
@@ -132,7 +140,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
         wsIdToWs.put(wsId, ws);
         final Promise<Void> promise = Promise.promise();
         this.collaborativeWallRTService.onNewConnection(wallId, userId, wsId)
-        .onSuccess(messages -> broadcastMessagesLocally(messages, null))
+        .onSuccess(messages -> broadcastMessagesLocally(messages, true, false, null))
         .onFailure(promise::fail);
         return promise.future();
     }
@@ -144,7 +152,10 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
      * @param exceptWsId Id of the websocket that should not receive the messages
      * @return Completes when every message has been sent
      */
-    private Future<Void> broadcastMessagesLocally(final List<CollaborativeWallMessage> messages, final String exceptWsId) {
+    private Future<Void> broadcastMessagesLocally(final List<CollaborativeWallMessage> messages,
+                                                  final boolean allowInternalMessages,
+                                                  final boolean allowExternalMessages,
+                                                  final String exceptWsId) {
         final List<Future<Object>> futures = messages.stream().map(message -> {
             final String payload = Json.encode(message);
             final String wallId = message.getWallId();
@@ -155,11 +166,24 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                 .map(ws -> {
                     final Promise<Void> writeMessagePromise = Promise.promise();
                     ws.writeTextMessage(payload, writeMessagePromise);
-                    return writeMessagePromise.future();
+                    return writeMessagePromise.future()
+                        .onSuccess(e -> registerSendMetrics(message, allowInternalMessages, allowExternalMessages))
+                        .onFailure(th -> this.metricsRecorder.onSendError());
                 }).collect(Collectors.toList());
             return CompositeFuture.join((List) writeMessagesPromise).mapEmpty();
         }).collect(Collectors.toList());
         return CompositeFuture.join((List) futures).mapEmpty();
+    }
+
+    private void registerSendMetrics(final CollaborativeWallMessage message, final boolean allowInternalMessages, final boolean allowExternalMessages) {
+        final long lifespan = currentTimeMillis() - message.getEmittedAt();
+        if(message.getEmittedBy().equals(this.collaborativeWallRTService.getServerId())) {
+            if(allowInternalMessages) {
+                this.metricsRecorder.onLocalBroadcast(lifespan);
+            }
+        } else if(allowExternalMessages) {
+            this.metricsRecorder.onExternalBroadcast(lifespan);
+        }
     }
 
     private Optional<String> getWallId(String path) {
@@ -175,9 +199,11 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
         wallIdToWSIdToWS.clear();
     }
 
-    private void onNewWebSocketMessage(final String message, final String wallId,
-                                       final String wsId, final UserInfos session) {
-        throw new RuntimeException("onNewWebSocketMessage.not.implemented");
+    public int getNumberOfConnectedUsers() {
+        return this.wallIdToWSIdToWS.values().stream().mapToInt(e -> e.values().size()).sum();
     }
 
+    public void setMetricsRecorder(CollaborativeWallMetricsRecorder metricsRecorder) {
+        this.metricsRecorder = metricsRecorder;
+    }
 }

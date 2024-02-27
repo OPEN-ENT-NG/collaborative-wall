@@ -24,10 +24,8 @@ import io.vertx.core.json.JsonObject;
 import net.atos.entng.collaborativewall.controllers.CollaborativeWallController;
 import net.atos.entng.collaborativewall.events.CollaborativeWallSearchingEvents;
 import net.atos.entng.collaborativewall.explorer.WallExplorerPlugin;
-import net.atos.entng.collaborativewall.service.CollaborativeWallRepositoryEvents;
-import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
-import net.atos.entng.collaborativewall.service.CollaborativeWallService;
-import net.atos.entng.collaborativewall.service.NoteService;
+import net.atos.entng.collaborativewall.service.*;
+import net.atos.entng.collaborativewall.service.impl.CollaborativeWallMetricsRecorderFactory;
 import net.atos.entng.collaborativewall.service.impl.DefaultCollaborativeWallRTService;
 import net.atos.entng.collaborativewall.service.impl.MongoDbCollaborativeWallService;
 import net.atos.entng.collaborativewall.service.impl.MongoDbNoteService;
@@ -94,18 +92,31 @@ public class CollaborativeWall extends BaseServer {
             log.info("This instance won't be listening for real time messages");
         } else {
             log.info("Starting real time services");
+            CollaborativeWallMetricsRecorderFactory.init(vertx, rtConfig);
             final int port = rtConfig.getInteger("port");
             final int maxConnections = rtConfig.getInteger("max-connections", 0);
-            this.collaborativeWallRTService = new DefaultCollaborativeWallRTService(vertx, config, collaborativeWallService);
+            this.collaborativeWallRTService = new DefaultCollaborativeWallRTService(vertx, rtConfig, collaborativeWallService);
             final WallWebSocketController rtController = new WallWebSocketController(vertx, maxConnections, collaborativeWallRTService);
+            final CollaborativeWallMetricsRecorder metricsRecorder = CollaborativeWallMetricsRecorderFactory.getRecorder(rtController, collaborativeWallRTService);
             final HttpServerOptions options = new HttpServerOptions().setMaxWebSocketFrameSize(1024 * 1024);
             vertx.createHttpServer(options)
                 .webSocketHandler(rtController)
                 .listen(port, asyncResult -> {
                     if(asyncResult.succeeded()) {
                         log.info("Websocket server started for collaborativewall and listening on port " + port);
-                        collaborativeWallRTService.start()
-                            .onSuccess(e -> log.info("Real time server started"))
+                        collaborativeWallRTService.start(metricsRecorder)
+                            .onSuccess(e -> {
+                                log.info("Real time server started");
+                                vertx.setPeriodic(30000L, periodic -> {
+                                    switch (collaborativeWallRTService.getStatus()) {
+                                        case ERROR:
+                                        case STOPPED:
+                                            log.warn("Real-time server is in state " + collaborativeWallRTService.getStatus() + ". Restarting....");
+                                            collaborativeWallRTService.start(metricsRecorder);
+                                            break;
+                                    }
+                                });
+                            })
                             .onFailure(th -> log.error("Error while starting real time server", th));
                     } else {
                         log.error("Cannot start websocket controller", asyncResult.cause());

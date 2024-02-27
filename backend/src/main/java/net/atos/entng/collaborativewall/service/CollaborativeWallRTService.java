@@ -13,12 +13,12 @@ import java.util.List;
 public interface CollaborativeWallRTService {
   /** Start to process real time events
    * @return A Future that completes when the service is ready to accept real time connections .*/
-  Future<Void> start();
+  Future<Void> start(final CollaborativeWallMetricsRecorder metricsRecorder);
 
   void unsubscribeToStatusChanges(Handler<RealTimeStatus> subscriber);
 
   /**
-   * @return The current status of the real time server
+   * @return The current status of the real-time server
    */
   RealTimeStatus getStatus();
 
@@ -68,4 +68,6 @@ public interface CollaborativeWallRTService {
    * @param subscriber The callback that will receive the new status of the server
    */
   void subscribeToStatusChanges(Handler<RealTimeStatus> subscriber);
+
+  String getServerId();
 }
