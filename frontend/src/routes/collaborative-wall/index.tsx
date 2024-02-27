@@ -28,6 +28,7 @@ import { EmptyScreenError } from "~/components/emptyscreen-error";
 import { Note } from "~/components/note";
 import { WhiteboardWrapper } from "~/components/whiteboard-wrapper";
 import { useDndKit } from "~/hooks/useDndKit";
+import { useHasRights } from "~/hooks/useHasRights";
 import { useMoveNote } from "~/hooks/useMoveNote";
 import { NoteProps } from "~/models/notes";
 import { CollaborativeWallProps } from "~/models/wall";
@@ -119,10 +120,17 @@ export const CollaborativeWall = () => {
 
   const { updatedNote, handleOnDragEnd } = useMoveNote({ zoom, notes });
 
+  const canShare = useHasRights({
+    roles: "creator",
+    rights: wall?.rights,
+  });
+
   useEffect(() => {
     if (query) setIsMobile(query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
+
+  console.count("Collab");
 
   if (isWallLoading && isNotesLoading) return <LoadingScreen />;
 
@@ -134,13 +142,13 @@ export const CollaborativeWall = () => {
         <AppHeader
           isFullscreen
           style={{ position: "sticky" }}
-          render={() => (
-            <>
+          render={() =>
+            canShare ? (
               <Button variant="filled" onClick={() => setOpenShareModal(true)}>
                 {t("share")}
               </Button>
-            </>
-          )}
+            ) : null
+          }
         >
           <Breadcrumb app={currentApp as IWebApp} name={wall?.name} />
         </AppHeader>
