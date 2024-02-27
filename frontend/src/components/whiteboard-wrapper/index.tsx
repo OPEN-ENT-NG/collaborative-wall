@@ -8,7 +8,7 @@ import { useShallow } from "zustand/react/shallow";
 import { ToolbarWrapper } from "../toolbar";
 import { WhiteboardComponent } from "../whiteboard-component";
 import { zoomConfig } from "~/config/init-config";
-import { useUserRights } from "~/hooks/useUserRights";
+import { useHasRights } from "~/hooks/useHasRights";
 import { wallQueryOptions } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 import { calculateMinScale } from "~/utils/calculMinScale";
@@ -32,12 +32,15 @@ export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
     setZoom(event.instance.transformState.scale);
   };
 
-  const { data } = useQuery({
+  const { data: wall } = useQuery({
     queryKey: wallQueryOptions(params.wallId as string).queryKey,
     queryFn: wallQueryOptions(params.wallId as string).queryFn,
   });
 
-  const { canUpdate } = useUserRights({ data });
+  const canUpdate = useHasRights({
+    roles: ["creator"],
+    rights: wall?.rights,
+  });
 
   useEffect(() => {
     const handleResize = () => {
@@ -72,7 +75,7 @@ export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
             />
             {!isMobile && (
               <ToolbarWrapper
-                wallId={data?._id}
+                wallId={wall?._id}
                 zoomIn={zoomIn}
                 zoomOut={zoomOut}
                 setTransform={setTransform}
