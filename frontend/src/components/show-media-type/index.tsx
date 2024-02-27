@@ -1,20 +1,18 @@
-import { RefObject } from "react";
-
 import { Delete } from "@edifice-ui/icons";
-import { IconButton, Image, MediaLibraryRef } from "@edifice-ui/react";
+import { IconButton, Image, MediaLibraryType } from "@edifice-ui/react";
 import { WorkspaceElement } from "edifice-ts-client";
 
 export const ShowMediaType = ({
   medias,
-  mediaLibraryRef,
   setMedias,
+  mediasType,
 }: {
   medias: WorkspaceElement;
-  mediaLibraryRef: RefObject<MediaLibraryRef>;
   setMedias: (value: WorkspaceElement | undefined) => void;
+  mediasType: MediaLibraryType | undefined;
 }) => {
   const showGetMedia = () => {
-    switch (mediaLibraryRef.current?.type) {
+    switch (mediasType) {
       case "image":
         return (
           <div style={{ position: "relative" }}>
@@ -27,7 +25,7 @@ export const ShowMediaType = ({
             />
             <Image
               src={`/workspace/document/${medias?._id}`}
-              alt={mediaLibraryRef.current?.type}
+              alt={mediasType}
               width="100%"
               height="350"
               style={{ borderRadius: "16px" }}
