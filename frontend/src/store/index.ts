@@ -32,7 +32,7 @@ type Action = {
 const initialState = {
   isMobile: false,
   canMoveBoard: false,
-  canMoveNote: false,
+  canMoveNote: true,
   canZoom: true,
   isDragging: false,
   startPosition: OFFSET,

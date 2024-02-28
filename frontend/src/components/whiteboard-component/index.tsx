@@ -57,7 +57,7 @@ export const WhiteboardComponent = ({
   const handleKeyUp = (event: KeyboardEvent) => {
     if (event.code === "Space") {
       setCanMoveBoard(false);
-      setCanMoveNote(false);
+      setCanMoveNote(true);
     }
     if (canUpdate && event.key === "v") {
       setCanMoveNote(true);
