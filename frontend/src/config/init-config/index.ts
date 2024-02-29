@@ -60,3 +60,12 @@ export const noteColors: Colors = {
     background: "#E6F9F8",
   },
 };
+
+export const defaultBackground = "/img/cloud.png";
+
+export const backgroundImages = [
+  "/img/cloud.png",
+  "/img/default.jpg",
+  "/img/paper.jpg",
+  "/img/wood.jpg",
+];

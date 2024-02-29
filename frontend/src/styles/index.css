@@ -33,7 +33,7 @@
 
 .description-wall {
   position: fixed;
-  z-index: 11;
+  z-index: 2;
   background-color: rgb(255 255 255 / 80%);
   width: 100%;
   display: flex;
