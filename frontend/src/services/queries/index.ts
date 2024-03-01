@@ -12,9 +12,11 @@ import {
   getWall,
   sessionHasWorkflowRights,
   updateNote,
+  updateWall,
 } from "../api";
 import { workflows } from "~/config";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
+import { PickedCollaborativeWallProps } from "~/models/wall";
 
 export const wallQueryOptions = (wallId: string) =>
   queryOptions({
@@ -64,6 +66,22 @@ export const useActions = () => {
 
 export const useGetWall = (wallId: string) => {
   return useQuery(wallQueryOptions(wallId));
+};
+
+export const useUpdateWall = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      wallId,
+      newWall,
+    }: {
+      wallId: ID;
+      newWall: PickedCollaborativeWallProps;
+    }) => await updateWall(wallId as string, newWall),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ["wall"] });
+    },
+  });
 };
 
 export const useGetNotes = (wallId: string) => {
