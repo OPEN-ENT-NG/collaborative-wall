@@ -27,13 +27,28 @@ export const ShowMediaType = ({
               src={`/workspace/document/${medias?._id}`}
               alt={mediasType}
               width="100%"
-              height="350"
               style={{ borderRadius: "16px" }}
             />
           </div>
         );
+      case "audio":
+        return (
+          <div className="audio-center py-48 px-12">
+            <audio
+              src={`/workspace/document/${medias._id}`}
+              controls
+              data-document-id={medias._id}
+              muted
+            />
+            <IconButton
+              icon={<Delete />}
+              variant="outline"
+              color="danger"
+              onClick={() => setMedias(undefined)}
+            />
+          </div>
+        );
       default:
-        setMedias(undefined);
         break;
     }
   };
