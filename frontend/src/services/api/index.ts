@@ -1,7 +1,10 @@
 import { odeServices } from "edifice-ts-client";
 
 import { NoteProps, PickedNoteProps } from "~/models/notes";
-import { CollaborativeWallProps } from "~/models/wall";
+import {
+  CollaborativeWallProps,
+  PickedCollaborativeWallProps,
+} from "~/models/wall";
 
 /**
  * getWall API
@@ -16,6 +19,18 @@ export const getWall = async (
     .get<CollaborativeWallProps>(`/collaborativewall/${wallId}`);
 
   return wall;
+};
+
+/**
+ * updateWall API
+ * @param wallId, string
+ * @returns status and updated wall
+ */
+export const updateWall = async (
+  wallId: string,
+  wall: PickedCollaborativeWallProps,
+) => {
+  return await odeServices.http().put(`/collaborativewall/${wallId}`, wall);
 };
 
 /**

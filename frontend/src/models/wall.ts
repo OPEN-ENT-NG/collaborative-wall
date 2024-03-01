@@ -12,3 +12,8 @@ export interface CollaborativeWallProps {
   rights: string[];
   description?: string;
 }
+
+export type PickedCollaborativeWallProps = Pick<
+  CollaborativeWallProps,
+  "background" | "name" | "description"
+>;
