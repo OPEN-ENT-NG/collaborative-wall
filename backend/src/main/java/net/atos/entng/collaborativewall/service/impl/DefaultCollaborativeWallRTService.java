@@ -16,6 +16,7 @@ import net.atos.entng.collaborativewall.service.CollaborativeWallMetricsRecorder
 import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
 import net.atos.entng.collaborativewall.service.CollaborativeWallService;
 import org.apache.commons.lang3.tuple.Pair;
+import org.entcore.common.user.UserInfos;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -329,11 +330,25 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
   }
 
   @Override
-  public Future<List<CollaborativeWallMessage>> onNewUserMessage(String message, String wallId, String wsId) {
+  public Future<List<CollaborativeWallMessage>> onNewUserAction(final CollaborativeWallUserAction action, String wallId, String wsId, final UserInfos user) {
     // Register (if need be) the data in the message
     // Notify other apps via Redis
     // Send back the same messages to be handled internally
-    throw new RuntimeException("onNewUserMessage.not.implemented");
+    final Promise<List<CollaborativeWallMessage>> promise = Promise.promise();
+    if(action == null || action.getType() == null) {
+      log.warn("Message does not contain a type");
+    } else {
+      // TODO implement this function
+      final List<CollaborativeWallMessage> messagesToTransmit = newArrayList(this.messageFactory.ping(wallId, wsId, user.getUserId()));
+      publishMessagesOnRedis(messagesToTransmit).onComplete(e -> {
+        if(e.succeeded()) {
+          promise.complete(messagesToTransmit);
+        } else {
+          promise.fail(e.cause());
+        }
+      });
+    }
+    return promise.future();
   }
 
   /**

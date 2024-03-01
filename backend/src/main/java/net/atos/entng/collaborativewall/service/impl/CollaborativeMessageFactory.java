@@ -35,4 +35,11 @@ public class CollaborativeMessageFactory {
         userId, wallContext.getWall(), null, null, wallContext.getNotes(), null,
         wallContext.getEditing());
   }
+
+  public CollaborativeWallMessage ping(final String wallId, final String wsId, final String userId) {
+    return new CollaborativeWallMessage(wallId, System.currentTimeMillis(), serverId, wsId,
+        CollaborativeWallMessageType.ping, null, null,
+        userId, null, null, null, null, null,
+        null);
+  }
 }

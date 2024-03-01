@@ -3,7 +3,9 @@ package net.atos.entng.collaborativewall.service;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import net.atos.entng.collaborativewall.events.CollaborativeWallMessage;
+import net.atos.entng.collaborativewall.events.CollaborativeWallUserAction;
 import net.atos.entng.collaborativewall.events.RealTimeStatus;
+import org.entcore.common.user.UserInfos;
 
 import java.util.List;
 
@@ -38,13 +40,13 @@ public interface CollaborativeWallRTService {
 
   /**
    * To be called when a user with an open connection sends a message.
-   * @param message Message sent by the user
+   * @param action Action sent by the user
    * @param wallId Id to which the user is connected
    * @param wsId Id of the connection of the user
    * @return List of messages that should be dispatched to <b>other</b> users in response to the incoming emssage
    */
-  Future<List<CollaborativeWallMessage>> onNewUserMessage(final String message, final String wallId,
-                                                          final String wsId);
+
+  Future<List<CollaborativeWallMessage>> onNewUserAction(CollaborativeWallUserAction action, String wallId, String wsId, UserInfos user);
 
   /**
    * To be called when a user closes their connection. The underlying implementation will clean the resources allocated

@@ -2,11 +2,13 @@ package net.atos.entng.collaborativewall.events;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vertx.core.json.JsonObject;
 
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CollaborativeWallMessage {
   private final String wallId;
@@ -18,13 +20,13 @@ public class CollaborativeWallMessage {
   private final String deletedBy;
   private final Long deletedAt;
   private final String userId;
-  private final JsonObject wall; // Replace Object with your class
+  private final JsonObject wall;
   private final String noteId;
-  private final JsonObject note; // Replace Object with your class
+  private final JsonObject note;
 
   private final List<JsonObject> notes;
-  private final List<NoteMove> move; // Replace Move with your class
-  private final List<CollaborativeWallEditingInformation> editing; // Replace Editing with your class
+  private final List<NoteMove> move;
+  private final List<CollaborativeWallEditingInformation> editing;
 
   @JsonCreator
   public CollaborativeWallMessage(@JsonProperty("wallId") final String wallId, @JsonProperty("emittedAt") final long emittedAt,

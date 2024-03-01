@@ -6,9 +6,11 @@ import fr.wseduc.webutils.request.filter.UserAuthFilter;
 import io.vertx.core.*;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import net.atos.entng.collaborativewall.events.CollaborativeWallMessage;
+import net.atos.entng.collaborativewall.events.CollaborativeWallUserAction;
 import net.atos.entng.collaborativewall.events.RealTimeStatus;
 import net.atos.entng.collaborativewall.service.CollaborativeWallMetricsRecorder;
 import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
@@ -54,11 +56,11 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
     public void handle(ServerWebSocket ws) {
         if(!RealTimeStatus.STARTED.equals(this.collaborativeWallRTService.getStatus())) {
             log.info("This instance is not ready for connections");
-            ws.reject(503);
+            closeWithError("not.ready.yet", (short) 503, ws);
             this.metricsRecorder.onConnectionRejected();
         } else if(maxConnections > 0 && getNbConnections() >= maxConnections) {
             log.info("This instance reached its capacity, it does not accept connections anymore");
-            ws.reject(503);
+            closeWithError("overload", (short) 503, ws);
             this.metricsRecorder.onConnectionRejected();
         } else {
             ws.pause();
@@ -66,7 +68,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
             final String sessionId = CookieHelper.getInstance().getSigned(UserAuthFilter.SESSION_ID, ws);
             final Optional<String> maybeWallId = getWallId(ws.path());
             if (!maybeWallId.isPresent()) {
-                ws.reject();
+                closeWithError("missing.wall.id", (short) 400, ws);
                 log.error("No wall id provided");
                 return;
             }
@@ -76,7 +78,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                 try {
                     if (infos == null) {
                         log.info("Get Session is null");
-                        ws.reject();
+                        closeWithError("not.authenticated", (short) 401, ws);
                         return;
                     }
                     log.info("Get Session is ok");
@@ -91,7 +93,10 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                             } else {
                                 final String message = frame.textData();
                                 log.info("Received message : " + message);
-                                this.collaborativeWallRTService.onNewUserMessage(message, wallId, wsId);
+                                final CollaborativeWallUserAction action = Json.decodeValue(message, CollaborativeWallUserAction.class);
+                                this.collaborativeWallRTService.onNewUserAction(action, wallId, wsId, session)
+                                    .onSuccess(messages -> this.broadcastMessagesLocally(messages, true, false, wsId))
+                                    .onFailure(th -> this.sendError(th, ws));
                             }
                         });
                     }).onFailure(th -> {
@@ -100,11 +105,24 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                     });
                 } catch (Exception e) {
                     ws.resume();
-                    ws.close();
+                    closeWithError("unknown.error", (short) 500, ws);
                     log.error("An error occurred while treating ws", e);
                 }
             });
         }
+    }
+
+    private void sendError(Throwable th, ServerWebSocket ws) {
+        this.metricsRecorder.onError();
+        log.warn("An error occurred while treating a user action", th);
+        ws.writeTextMessage(Json.encode(new JsonObject().put("error", th.getCause()).put("status", 500)));
+    }
+
+    private void closeWithError(String errorMessage, short errorCode, ServerWebSocket ws) {
+        this.metricsRecorder.onError();
+        ws.close(errorCode, errorMessage, e -> {
+            log.warn("Connection closed with error " + errorCode + " - " + errorMessage);
+        });
     }
 
     private int getNbConnections() {
@@ -135,13 +153,13 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
      * @param wsId Unique id of the socket
      * @param ws actual websocket
      */
-    private Future<Void> onConnect(final String userId, final String wallId, final String wsId, final ServerWebSocket ws) {
+    private Future<Void>  onConnect(final String userId, final String wallId, final String wsId, final ServerWebSocket ws) {
         final Map<String, ServerWebSocket> wsIdToWs = wallIdToWSIdToWS.computeIfAbsent(wallId, k -> new HashMap<>());
         wsIdToWs.put(wsId, ws);
         final Promise<Void> promise = Promise.promise();
         this.collaborativeWallRTService.onNewConnection(wallId, userId, wsId)
-        .onSuccess(messages -> broadcastMessagesLocally(messages, true, false, null))
-        .onFailure(promise::fail);
+        .compose(messages -> broadcastMessagesLocally(messages, true, false, null))
+        .onComplete(promise);
         return promise.future();
     }
 
@@ -163,6 +181,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
             final List<Future<Void>> writeMessagesPromise = wsIdToWs.entrySet().stream()
                 .filter(e -> !e.getKey().equals(exceptWsId))
                 .map(Map.Entry::getValue)
+                .filter(ws -> !ws.isClosed())
                 .map(ws -> {
                     final Promise<Void> writeMessagePromise = Promise.promise();
                     ws.writeTextMessage(payload, writeMessagePromise);

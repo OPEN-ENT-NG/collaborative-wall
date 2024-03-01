@@ -24,6 +24,8 @@ public interface CollaborativeWallMetricsRecorder {
 
   void onStart();
 
+  void onError();
+
   class NoopRecorder implements CollaborativeWallMetricsRecorder {
 
     public static final NoopRecorder instance = new NoopRecorder();
@@ -49,6 +51,11 @@ public interface CollaborativeWallMetricsRecorder {
 
     @Override
     public void onStart() {
+
+    }
+
+    @Override
+    public void onError() {
 
     }
   }

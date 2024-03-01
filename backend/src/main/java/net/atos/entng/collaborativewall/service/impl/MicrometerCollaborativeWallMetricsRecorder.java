@@ -19,6 +19,7 @@ public class MicrometerCollaborativeWallMetricsRecorder implements Collaborative
   private final Timer localMessagesLifespan;
   private final Timer externalMessagesLifespan;
   private final Counter errorCounter;
+  private final Counter sendErrorCounter;
   private final Counter connectionRejectionCounter;
   private final Counter restartCounter;
 
@@ -55,7 +56,10 @@ public class MicrometerCollaborativeWallMetricsRecorder implements Collaborative
       timerBuilder.sla(configuration.sla.toArray(new Duration[0]));
     }
     externalMessagesLifespan = timerBuilder.register(registry);
-    errorCounter = Counter.builder("collaborativewall.rt.senderror")
+    errorCounter = Counter.builder("collaborativewall.rt.error")
+        .description("number of ws connection closed because of errors")
+        .register(registry);
+    sendErrorCounter = Counter.builder("collaborativewall.rt.senderror")
         .description("number of errors while sending messages to client")
         .register(registry);
     connectionRejectionCounter = Counter.builder("collaborativewall.rt.connectionrejection")
@@ -78,7 +82,7 @@ public class MicrometerCollaborativeWallMetricsRecorder implements Collaborative
 
   @Override
   public void onSendError() {
-    this.errorCounter.increment();
+    this.sendErrorCounter.increment();
   }
 
   @Override
@@ -89,6 +93,11 @@ public class MicrometerCollaborativeWallMetricsRecorder implements Collaborative
   @Override
   public void onStart() {
     this.restartCounter.increment();
+  }
+
+  @Override
+  public void onError() {
+    this.errorCounter.increment();;
   }
 
   public static class Configuration {
