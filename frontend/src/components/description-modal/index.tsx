@@ -19,7 +19,7 @@ export default function DescriptionModal({
   return isOpen
     ? createPortal(
         <Modal
-          id="TrashModal"
+          id="DescriptionModal"
           onModalClose={handleClose}
           size="md"
           isOpen={isOpen}

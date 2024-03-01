@@ -1,11 +1,15 @@
-import { Suspense, lazy, useEffect, useState } from "react";
+import { RefAttributes, Suspense, lazy, useEffect, useState } from "react";
 
 import { DndContext } from "@dnd-kit/core";
 import { restrictToParentElement } from "@dnd-kit/modifiers";
+import { Landscape, Options } from "@edifice-ui/icons";
 import {
   AppHeader,
   Breadcrumb,
   Button,
+  Dropdown,
+  IconButton,
+  IconButtonProps,
   LoadingScreen,
   useOdeClient,
   useTrashedResource,
@@ -23,6 +27,7 @@ import {
 } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
+import BackgroundModal from "~/components/background-modal";
 import { DescriptionWall } from "~/components/description-wall";
 import { EmptyScreenError } from "~/components/emptyscreen-error";
 import { Note } from "~/components/note";
@@ -34,7 +39,6 @@ import { NoteProps } from "~/models/notes";
 import { CollaborativeWallProps } from "~/models/wall";
 import { notesQueryOptions, wallQueryOptions } from "~/services/queries";
 import { useWhiteboard } from "~/store";
-
 import "~/styles/index.css";
 
 const DescriptionModal = lazy(
@@ -97,7 +101,10 @@ export const CollaborativeWall = () => {
 
   useTrashedResource(params?.wallId);
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpenDescriptionModal, setIsOpenDescriptionModal] =
+    useState<boolean>(false);
+  const [isOpenBackgroundModal, setIsOpenBackgroundModal] =
+    useState<boolean>(false);
 
   const { currentApp } = useOdeClient();
   const { t } = useTranslation();
@@ -142,13 +149,45 @@ export const CollaborativeWall = () => {
         <AppHeader
           isFullscreen
           style={{ position: "sticky" }}
-          render={() =>
-            canShare ? (
-              <Button variant="filled" onClick={() => setOpenShareModal(true)}>
-                {t("share")}
-              </Button>
-            ) : null
-          }
+          render={() => (
+            <>
+              {canShare && (
+                <Button
+                  variant="filled"
+                  onClick={() => setOpenShareModal(true)}
+                >
+                  {t("share")}
+                </Button>
+              )}
+              <Dropdown>
+                {(
+                  triggerProps: JSX.IntrinsicAttributes &
+                    Omit<IconButtonProps, "ref"> &
+                    RefAttributes<HTMLButtonElement>,
+                ) => (
+                  <>
+                    <IconButton
+                      {...triggerProps}
+                      type="button"
+                      aria-label="label"
+                      color="primary"
+                      variant="outline"
+                      icon={<Options />}
+                    />
+
+                    <Dropdown.Menu>
+                      <Dropdown.Item
+                        icon={<Landscape />}
+                        onClick={() => setIsOpenBackgroundModal(true)}
+                      >
+                        {t("collaborativewall.modal.background")}
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </>
+                )}
+              </Dropdown>
+            </>
+          )}
         >
           <Breadcrumb app={currentApp as IWebApp} name={wall?.name} />
         </AppHeader>
@@ -156,7 +195,7 @@ export const CollaborativeWall = () => {
       <div className="collaborativewall-container">
         {wall?.description && !isMobile && (
           <DescriptionWall
-            setIsOpen={setIsOpen}
+            setIsOpen={setIsOpenDescriptionModal}
             description={wall?.description}
           />
         )}
@@ -191,9 +230,16 @@ export const CollaborativeWall = () => {
 
         {wall?.description && (
           <DescriptionModal
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
+            isOpen={isOpenDescriptionModal}
+            setIsOpen={setIsOpenDescriptionModal}
             description={wall.description}
+          />
+        )}
+        {wall && (
+          <BackgroundModal
+            setIsOpen={setIsOpenBackgroundModal}
+            isOpen={isOpenBackgroundModal}
+            wall={wall}
           />
         )}
       </div>
