@@ -111,8 +111,8 @@ public class CollaborativeWall extends BaseServer {
                         collaborativeWallRTService.start(metricsRecorder)
                             .onSuccess(e -> {
                                 log.info("Real time server started");
-                                vertx.setPeriodic(30000L, periodic -> {
-                                    switch (collaborativeWallRTService.getStatus()) {
+                                collaborativeWallRTService.subscribeToStatusChanges(newStatus -> {
+                                    switch (newStatus) {
                                         case ERROR:
                                         case STOPPED:
                                             log.warn("Real-time server is in state " + collaborativeWallRTService.getStatus() + ". Restarting....");

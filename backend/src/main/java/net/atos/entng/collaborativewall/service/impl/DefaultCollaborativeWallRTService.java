@@ -27,8 +27,9 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
 
   private final Vertx vertx;
   private final CollaborativeWallService collaborativeWallService;
-  private final RedisAPI redisSubscriber;
-  private final RedisAPI redisPublisher;
+  private final JsonObject config;
+  private RedisAPI redisSubscriber;
+  private RedisAPI redisPublisher;
   private final String serverId;
   private RealTimeStatus realTimeStatus;
   private final CollaborativeMessageFactory messageFactory;
@@ -54,13 +55,9 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
   public DefaultCollaborativeWallRTService(Vertx vertx, final JsonObject config,
                                            final CollaborativeWallService collaborativeWallService) {
     this.vertx = vertx;
+    this.config = config;
     this.collaborativeWallService = collaborativeWallService;
     this.realTimeStatus = RealTimeStatus.STOPPED;
-    final RedisOptions redisOptions = getRedisOptions(vertx, config);
-    final Redis subscriberClient = Redis.createClient(vertx, redisOptions);
-    redisSubscriber = RedisAPI.api(subscriberClient);
-    final Redis publisherClient = Redis.createClient(vertx, redisOptions);
-    redisPublisher = RedisAPI.api(publisherClient);
     this.serverId = UUID.randomUUID().toString();
     this.messageFactory = new CollaborativeMessageFactory(serverId);
     this.statusSubscribers = new ArrayList<>();
@@ -80,6 +77,12 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     } else {
       changeRealTimeStatus(RealTimeStatus.STARTING);
       try {
+        final RedisOptions redisOptions = getRedisOptions(vertx, config);
+        final Redis subscriberClient = Redis.createClient(vertx, redisOptions);
+        redisSubscriber = RedisAPI.api(subscriberClient);
+        final Redis publisherClient = Redis.createClient(vertx, redisOptions);
+        redisPublisher = RedisAPI.api(publisherClient);
+
         if (this.ebConsumer == null) {
           this.ebConsumer = vertx.eventBus().consumer("io.vertx.redis." + channelName);
           this.ebConsumer
@@ -166,18 +169,44 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
   }
 
   private Future<Void> changeRealTimeStatus(RealTimeStatus realTimeStatus) {
-    log.debug("Changing real time status : " + this.realTimeStatus + " -> " + realTimeStatus);
-    this.realTimeStatus = realTimeStatus;
-
     final Promise<Void> promise = Promise.promise();
-    for (Handler<RealTimeStatus> statusSubscriber : this.statusSubscribers) {
-      try {
-        statusSubscriber.handle(this.realTimeStatus);
-      } catch (Exception e) {
-        log.error("Error occurred while calling status change handler", e);
+    if(realTimeStatus == this.realTimeStatus) {
+      promise.complete();
+    } else {
+      log.debug("Changing real time status : " + this.realTimeStatus + " -> " + realTimeStatus);
+      this.realTimeStatus = realTimeStatus;
+      final Future<Void> cleanPromise;
+      if(realTimeStatus == RealTimeStatus.ERROR) {
+        cleanPromise = closeAndClean();
+      } else {
+        cleanPromise = Future.succeededFuture();
       }
+      cleanPromise.onComplete(e -> {
+        for (Handler<RealTimeStatus> statusSubscriber : this.statusSubscribers) {
+          try {
+            statusSubscriber.handle(this.realTimeStatus);
+          } catch (Exception exc) {
+            log.error("Error occurred while calling status change handler", exc);
+          }
+        }
+        promise.complete();
+      });
     }
     return promise.future();
+  }
+
+  private Future<Void> closeAndClean() {
+    try {
+      redisSubscriber.close();
+    } catch (Exception e) {
+      log.error("Cannot close redis subscriber", e);
+    }
+    try {
+      redisPublisher.close();
+    } catch (Exception e) {
+      log.error("Cannot close redis publisher", e);
+    }
+    return Future.succeededFuture();
   }
 
   private void onNewRedisMessage(final String payload) {

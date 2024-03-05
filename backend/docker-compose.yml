@@ -15,8 +15,10 @@ services:
     environment:
       ROOT_URL: http://172.17.0.1:8090
       DATA_ROOT_PATH: /home/k6/data
-      DURATION: 80000
+      MAX_DURATION: 45s
+      USER_TTL: 20000
       NB_USERS: 500
-      DELAY_BEFORE_SEND: 60000
+      DELAY_BEFORE_SEND: 45000
+      NB_MESSAGES: 10000
       ADMC_LOGIN: tom.mate
       ADMC_PASSWORD: password

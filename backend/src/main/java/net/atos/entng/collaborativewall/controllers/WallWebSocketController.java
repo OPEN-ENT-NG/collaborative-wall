@@ -77,11 +77,10 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
             UserUtils.getSession(Server.getEventBus(vertx), sessionId, infos -> {
                 try {
                     if (infos == null) {
-                        log.info("Get Session is null");
                         closeWithError("not.authenticated", (short) 401, ws);
                         return;
                     }
-                    log.info("Get Session is ok");
+                    // TODO check permissions to access wall
                     final UserInfos session = UserUtils.sessionToUserInfos(infos);
                     final String userId = session.getUserId();
                     ws.closeHandler(e -> onCloseWSConnection(wallId, userId, wsId));
@@ -101,7 +100,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                         });
                     }).onFailure(th -> {
                         log.error("An error occurred while opening the websocket", th);
-                        ws.close();
+                        closeWithError("unknown.error", (short) 500, ws);
                     });
                 } catch (Exception e) {
                     ws.resume();
@@ -115,7 +114,12 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
     private void sendError(Throwable th, ServerWebSocket ws) {
         this.metricsRecorder.onError();
         log.warn("An error occurred while treating a user action", th);
-        ws.writeTextMessage(Json.encode(new JsonObject().put("error", th.getCause()).put("status", 500)));
+        try {
+            ws.writeTextMessage(Json.encode(new JsonObject().put("error", th.getCause()).put("status", 500)));
+        } catch (Exception e) {
+            log.warn("Cannot send message to this websocket", e);
+            closeWithError("write.error", (short)500, ws);
+        }
     }
 
     private void closeWithError(String errorMessage, short errorCode, ServerWebSocket ws) {
@@ -184,10 +188,19 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                 .filter(ws -> !ws.isClosed())
                 .map(ws -> {
                     final Promise<Void> writeMessagePromise = Promise.promise();
-                    ws.writeTextMessage(payload, writeMessagePromise);
-                    return writeMessagePromise.future()
-                        .onSuccess(e -> registerSendMetrics(message, allowInternalMessages, allowExternalMessages))
-                        .onFailure(th -> this.metricsRecorder.onSendError());
+                    Future<Void> sent;
+                    vertx.setTimer(1L, p -> {
+                        try {
+                            ws.writeTextMessage(payload, writeMessagePromise);
+                             writeMessagePromise.future()
+                                .onSuccess(e -> registerSendMetrics(message, allowInternalMessages, allowExternalMessages))
+                                .onFailure(th -> this.metricsRecorder.onSendError());
+                        } catch (Throwable e) {
+                            log.warn("An exception occurred while writing to ws", e);
+                        }
+                    });
+                    sent = Future.succeededFuture();
+                    return sent;
                 }).collect(Collectors.toList());
             return CompositeFuture.join((List) writeMessagesPromise).mapEmpty();
         }).collect(Collectors.toList());

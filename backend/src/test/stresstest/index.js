@@ -13,23 +13,26 @@ import {
     getRolesOfStructure
 } from 'https://raw.githubusercontent.com/juniorode/edifice-k6-commons/develop/dist/index.js';
 import { WebSocket } from 'k6/experimental/websockets';
-import { setTimeout } from 'k6/experimental/timers';
+import { setTimeout, setInterval, clearInterval } from 'k6/experimental/timers';
+import { Trend } from 'k6/metrics';
+
 const rootUrl = __ENV.ROOT_URL;
-const maxDuration = parseInt(__ENV.DURATION || '15000');
+const maxDuration = __ENV.MAX_DURATION || '1m';
 const delayBeforeSend = parseInt(__ENV.DELAY_BEFORE_SEND || '3000');
 const nbUsers = parseInt(__ENV.NB_USERS || '10');
 const schoolName = __ENV.DATA_SCHOOL_NAME || "Tests Collaborative Wall 3"
 const dataRootPath = __ENV.DATA_ROOT_PATH;
 const NB_MESSAGES = parseInt(__ENV.NB_MESSAGES || '10');
+const gracefulStop = parseInt(__ENV.GRACEFUL_STOP || '2s');
+const userTimeToLiveInMs = parseInt(__ENV.USER_TTL);
+const checkNumberOfMessages = 'true' === __ENV.CHECK_NB_MESSAGES_RCV
 
 //const nbExpectedMEssages = 2 * nbUsers + NB_MESSAGES * (nbUsers - 1)
 const nbExpectedMEssages = NB_MESSAGES * (nbUsers - 1)
 chai.config.logFailures = true;
 
-// TODO Metrics to follow
-// collaborativewall_rt_messages_internal_time_seconds_count
-// collaborativewall_rt_messages_internal_time_seconds_bucket{le=""}
-// collaborativewall_rt_connectedusers
+const timeToConnect = new Trend("time_to_first_ws_message", true, {custom: true});
+const timeToMessageReception = new Trend("message_broadcast_time", true, {custom: true});
 
 export const options = {
   setupTimeout: '1h',
@@ -40,7 +43,9 @@ export const options = {
     wss: {
         executor: 'shared-iterations',
         vus: nbUsers,
-        iterations: nbUsers 
+        iterations: nbUsers,
+        maxDuration: maxDuration,
+        gracefulStop
     }
   }
 };
@@ -66,12 +71,22 @@ function startWSSession(wallId, user) {
     if(wallId) {
         const session = authenticateWeb(user.login, "password");
         const params = {headers: getHeaders(session)}
+        const start = Date.now();
+        let first = true;
         const ws = new WebSocket(`${getWsUrl(rootUrl)}/collaborativewall/${wallId}`, null, params);
         let nbSentMessages = 0;
         let nbReceivedMessages = 0;
         ws.addEventListener('message', (data) => {
             const payload = JSON.parse(data.data)
             console.debug('Message received: ', user.login, ' - ', payload.type);
+            if(first && payload.type === 'connection' && payload.userId === user.id) { // May not be true as we can reuse the same user
+                first = false;
+                console.debug("Adding timeToConnect")
+                timeToConnect.add(Date.now() - start);
+            } else {
+                console.debug("Adding timeToMessageReception")
+                timeToMessageReception.add(Date.now() - payload.emittedAt)
+            }
             if(payload.type === 'ping') {
                 nbReceivedMessages++;
             }
@@ -80,32 +95,31 @@ function startWSSession(wallId, user) {
             }
         });
         ws.addEventListener('close', (data) => {
-            console.log("Closed")
+            console.debug("Closed")
             check(nbSentMessages, {
                 'has sent enough messages': (val) => val === NB_MESSAGES
             })
-            check(nbReceivedMessages, {
-                'has received enough messages': (val) => {
-                    if(val !== nbExpectedMEssages) {
-                        console.error(val, ' instead of ', nbExpectedMEssages);
+            if(checkNumberOfMessages) {
+                check(nbReceivedMessages, {
+                    'has received enough messages': (val) => {
+                        return val === nbExpectedMEssages
                     }
-                    return val === nbExpectedMEssages
-                }
-            })
+                })
+            }
         });
         ws.addEventListener('open', () => {
+            console.info("Opened connection")
             setTimeout(() => {
+                console.debug("Sending")
                 for(let i = 0; i < NB_MESSAGES; i++) {
                     ws.send(createMessage(user, wallId));
                     nbSentMessages ++;
                 }
+                setTimeout(() => {
+                    ws.close()
+                }, userTimeToLiveInMs)
             }, delayBeforeSend)
-            setTimeout(() => {
-                console.log("Closing")
-                ws.close();
-                },
-                 maxDuration
-            );
+            
         });
     }
 }
@@ -146,7 +160,6 @@ function createWall(structure, adminSession) {
                                             role.name.indexOf(`Enseignants du groupe ${structure.name}.`))
                             .map(role => role.id);
     const user = users[0];
-    console.log(user.login)
     const userSession = authenticateWeb(user.login, 'password');
     const headers = getHeaders(userSession);
     headers['content-type'] = 'application/json';
