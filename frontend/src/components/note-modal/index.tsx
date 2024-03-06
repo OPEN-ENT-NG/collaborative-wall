@@ -103,7 +103,6 @@ export const NoteModal = () => {
         <Modal.Header onModalClose={handleNavigateBack}>
           {t("Note")}
         </Modal.Header>
-        <Modal.Subtitle>{data.owner?.displayName}</Modal.Subtitle>
         <Modal.Body>
           <ColorSelect data={data} setColorValue={setColorValue} />
           <div className="multimedia-section my-24">
