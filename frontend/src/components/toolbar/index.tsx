@@ -152,8 +152,8 @@ export const ToolbarWrapper = ({
       props: {
         "aria-label": t("collaborativewall.toolbar.zoom"),
         color: "tertiary",
+        className: "p-0 bg-transparent",
         children: (zoom * 100).toFixed(0) + "%",
-        onClick: () => setTransform(offsetX, offsetY, zoomConfig.DEFAULT_ZOOM),
       },
     },
     {
