@@ -131,7 +131,6 @@ export const NoteModal = () => {
             content={data?.content || ""}
             mode={editorMode}
           />
-          <p>{data.content}</p>
         </Modal.Body>
         <Modal.Footer>
           <Button
