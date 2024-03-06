@@ -19,12 +19,15 @@ export default function CreateNoteModal({ wallId }: { wallId: string }) {
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
 
-  const { setOpenCreateModal, openCreateModal } = useWhiteboard(
-    useShallow((state) => ({
-      setOpenCreateModal: state.setOpenCreateModal,
-      openCreateModal: state.openCreateModal,
-    })),
-  );
+  const { setOpenCreateModal, openCreateModal, positionViewport, zoom } =
+    useWhiteboard(
+      useShallow((state) => ({
+        setOpenCreateModal: state.setOpenCreateModal,
+        openCreateModal: state.openCreateModal,
+        positionViewport: state.positionViewport,
+        zoom: state.zoom,
+      })),
+    );
 
   const [colorValue, setColorValue] = useState<string[]>([
     noteColors.white.background,
@@ -36,8 +39,8 @@ export default function CreateNoteModal({ wallId }: { wallId: string }) {
       color: colorValue,
       idwall: wallId,
       modified: data.modified,
-      x: 10,
-      y: 10,
+      x: Math.trunc((positionViewport.x * -1 + window.innerWidth / 2) / zoom),
+      y: Math.trunc((positionViewport.y * -1 + window.innerHeight / 2) / zoom),
     };
     createNote.mutate(note as any);
 

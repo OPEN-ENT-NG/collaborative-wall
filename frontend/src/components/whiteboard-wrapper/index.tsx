@@ -14,13 +14,15 @@ import { useWhiteboard } from "~/store";
 import { calculateMinScale } from "~/utils/calculMinScale";
 
 export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
-  const { setZoom, isMobile, canMoveBoard } = useWhiteboard(
-    useShallow((state) => ({
-      setZoom: state.setZoom,
-      canMoveBoard: state.canMoveBoard,
-      isMobile: state.isMobile,
-    })),
-  );
+  const { setZoom, isMobile, canMoveBoard, setPositionViewport } =
+    useWhiteboard(
+      useShallow((state) => ({
+        setZoom: state.setZoom,
+        setPositionViewport: state.setPositionViewport,
+        canMoveBoard: state.canMoveBoard,
+        isMobile: state.isMobile,
+      })),
+    );
 
   const [minScale, setMinScale] = useState(1);
 
@@ -29,6 +31,10 @@ export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
   const ref = useRef<any>(null);
 
   const handleScaleChange = (event: any) => {
+    setPositionViewport({
+      x: event.instance.transformState.positionX,
+      y: event.instance.transformState.positionY,
+    });
     setZoom(event.instance.transformState.scale);
   };
 

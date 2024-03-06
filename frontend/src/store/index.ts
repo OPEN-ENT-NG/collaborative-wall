@@ -19,6 +19,7 @@ type State = {
   openShareModal: boolean;
   openCreateModal: boolean;
   openDescriptionModal: boolean;
+  positionViewport: Offset;
 };
 
 type Action = {
@@ -30,7 +31,8 @@ type Action = {
   setIsMobile: (query: string | null) => void;
   setOpenShareModal: (value: boolean) => void;
   setOpenCreateModal: (value: boolean) => void;
-  seOpenDescriptionModal: (value: boolean) => void;
+  setOpenDescriptionModal: (value: boolean) => void;
+  setPositionViewport: (value: { x: number; y: number }) => void;
 };
 
 const initialState = {
@@ -45,6 +47,10 @@ const initialState = {
   openShareModal: false,
   openCreateModal: false,
   openDescriptionModal: false,
+  positionViewport: {
+    x: 0,
+    y: 0,
+  },
 };
 
 export const useWhiteboard = create<State & Action>((set) => ({
@@ -63,6 +69,8 @@ export const useWhiteboard = create<State & Action>((set) => ({
   setZoom: (value: number) => set({ zoom: value }),
   setOpenShareModal: (value: boolean) => set({ openShareModal: value }),
   setOpenCreateModal: (value: boolean) => set({ openCreateModal: value }),
-  seOpenDescriptionModal: (value: boolean) =>
+  setOpenDescriptionModal: (value: boolean) =>
     set({ openDescriptionModal: value }),
+  setPositionViewport: (value: { x: number; y: number }) =>
+    set({ positionViewport: value }),
 }));

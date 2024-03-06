@@ -10,7 +10,7 @@ export function DescriptionWall({ description }: { description: string }) {
 
   const { seOpenDescriptionModal } = useWhiteboard(
     useShallow((state) => ({
-      seOpenDescriptionModal: state.seOpenDescriptionModal,
+      seOpenDescriptionModal: state.setOpenDescriptionModal,
       openDescriptionModal: state.openDescriptionModal,
     })),
   );

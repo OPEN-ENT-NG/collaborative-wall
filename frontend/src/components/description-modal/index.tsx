@@ -15,7 +15,7 @@ export default function DescriptionModal({
 
   const { openDescriptionModal, seOpenDescriptionModal } = useWhiteboard(
     useShallow((state) => ({
-      seOpenDescriptionModal: state.seOpenDescriptionModal,
+      seOpenDescriptionModal: state.setOpenDescriptionModal,
       openDescriptionModal: state.openDescriptionModal,
     })),
   );
