@@ -9,22 +9,18 @@ import {
   ZoomOut,
 } from "@edifice-ui/icons";
 import { Toolbar, ToolbarItem, useOdeClient } from "@edifice-ui/react";
-import { ID } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
 import { wallConfig, zoomConfig } from "~/config/init-config";
-import { useCreateNote } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 
 export const ToolbarWrapper = ({
-  wallId,
   zoomIn,
   zoomOut,
   setTransform,
   canUpdate,
 }: {
-  wallId: ID | undefined;
   zoomIn: (value: number) => void;
   zoomOut: (value: number) => void;
   setTransform: any;
@@ -38,6 +34,7 @@ export const ToolbarWrapper = ({
     setCanMoveNote,
     toggleCanMoveBoard,
     toggleCanMoveNote,
+    setOpenCreateModal,
   } = useWhiteboard(
     useShallow((state) => ({
       canMoveBoard: state.canMoveBoard,
@@ -47,15 +44,12 @@ export const ToolbarWrapper = ({
       setCanMoveNote: state.setCanMoveNote,
       toggleCanMoveBoard: state.toggleCanMoveBoard,
       toggleCanMoveNote: state.toggleCanMoveNote,
+      setOpenCreateModal: state.setOpenCreateModal,
     })),
   );
 
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
-
-  const createNote = useCreateNote(wallId as string);
-
-  const result = Math.random().toString(36).substring(2, 7);
 
   const offsetX = (window.innerWidth - wallConfig.WIDTH_WALL) / 2;
   const offsetY = (window.innerHeight - wallConfig.HEIGHT_WALL) / 2;
@@ -180,14 +174,7 @@ export const ToolbarWrapper = ({
         icon: <Plus />,
         variant: "filled",
         color: "secondary",
-        onClick: () =>
-          createNote.mutate({
-            color: ["#F5F6CE", "#F2F5A9"],
-            content: result,
-            idwall: wallId,
-            x: 10,
-            y: 10,
-          } as any),
+        onClick: () => setOpenCreateModal(true),
       },
       tooltip: t("collaborativewall.toolbar.create", { ns: appCode }),
     },

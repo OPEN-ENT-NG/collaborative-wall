@@ -1,28 +1,34 @@
 import { Modal, Button, useOdeClient } from "@edifice-ui/react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
+import { useShallow } from "zustand/react/shallow";
+
+import { useWhiteboard } from "~/store";
 
 export default function DescriptionModal({
-  isOpen,
-  setIsOpen,
   description,
 }: {
-  isOpen: boolean;
-  setIsOpen: (bool: boolean) => void;
   description: string;
 }): JSX.Element | null {
   const { appCode } = useOdeClient();
   const { t } = useTranslation();
 
-  const handleClose = () => setIsOpen(false);
+  const { openDescriptionModal, seOpenDescriptionModal } = useWhiteboard(
+    useShallow((state) => ({
+      seOpenDescriptionModal: state.seOpenDescriptionModal,
+      openDescriptionModal: state.openDescriptionModal,
+    })),
+  );
 
-  return isOpen
+  const handleClose = () => seOpenDescriptionModal(false);
+
+  return openDescriptionModal
     ? createPortal(
         <Modal
           id="DescriptionModal"
           onModalClose={handleClose}
           size="md"
-          isOpen={isOpen}
+          isOpen={openDescriptionModal}
           focusId="nextButtonId"
         >
           <Modal.Header onModalClose={handleClose}>

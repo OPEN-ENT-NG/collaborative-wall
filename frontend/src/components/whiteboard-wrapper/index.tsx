@@ -75,7 +75,6 @@ export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
             />
             {!isMobile && (
               <ToolbarWrapper
-                wallId={wall?._id}
                 zoomIn={zoomIn}
                 zoomOut={zoomOut}
                 setTransform={setTransform}
