@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Editor, EditorRef } from "@edifice-ui/editor";
 import {
@@ -8,7 +8,6 @@ import {
   Modal,
   useOdeClient,
 } from "@edifice-ui/react";
-import { WorkspaceElement } from "edifice-ts-client";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -22,6 +21,7 @@ import { ShowMediaType } from "../show-media-type";
 import { ToolbarMedia } from "../toolbar-media";
 import { noteColors } from "~/config/init-config";
 import { useMediaLibrary } from "~/hooks/useMediaLibrary";
+import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
 import { useUpdateNote } from "~/services/queries";
@@ -49,44 +49,57 @@ export async function noteLoader({ params }: LoaderFunctionArgs) {
 }
 
 export const NoteModal = () => {
+  const data = useLoaderData() as NoteProps;
+
   const [editorMode] = useState<"read" | "edit">("read");
+  const [media, setMedia] = useState<NoteMedia | null>(data.media);
+  const [colorValue, setColorValue] = useState<string[]>([
+    noteColors.white.background,
+  ]);
 
   const editorRef = useRef<EditorRef>(null);
-  const data = useLoaderData() as NoteProps;
   const updateNote = useUpdateNote();
   const navigate = useNavigate();
 
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
 
-  const [colorValue, setColorValue] = useState<string[]>([
-    noteColors.white.background,
-  ]);
-  const [mediasType, setMediasType] = useState<MediaLibraryType | undefined>();
-
   const {
     ref: mediaLibraryRef,
-    medias,
-    setMedias,
+    libraryMedia,
     ...mediaLibraryModalHandlers
   } = useMediaLibrary();
+
+  useEffect(() => {
+    if (libraryMedia) {
+      setMedia({
+        ...(media as NoteMedia),
+        id: libraryMedia?._id || "",
+        name: libraryMedia?.name || "",
+        url: `/workspace/document/${libraryMedia?._id}`,
+      });
+    }
+  }, [libraryMedia]);
 
   const handleSaveNote = () => {
     const note: PickedNoteProps = {
       content: data.content,
       color: colorValue,
       idwall: data.idwall as string,
+      media: media || null,
       modified: data.modified,
       x: data.x,
       y: data.y,
     };
+
     updateNote.mutateAsync({ id: data._id, note });
+    navigate("..");
   };
 
   const handleNavigateBack = () => navigate("..");
 
   const handleClickMedia = (type: MediaLibraryType) => {
-    setMediasType(type);
+    setMedia({ ...(media as NoteMedia), type });
     mediaLibraryRef.current?.show(type);
   };
 
@@ -106,17 +119,13 @@ export const NoteModal = () => {
         <Modal.Body>
           <ColorSelect data={data} setColorValue={setColorValue} />
           <div className="multimedia-section my-24">
-            {!medias ? (
+            {!media ? (
               <div className="toolbar-media py-48 px-12">
                 <ToolbarMedia handleClickMedia={handleClickMedia} />
                 {t("collaborativewall.add.media", { ns: appCode })}
               </div>
             ) : (
-              <ShowMediaType
-                medias={medias as WorkspaceElement}
-                setMedias={setMedias}
-                mediasType={mediasType}
-              />
+              <ShowMediaType media={media} setMedia={setMedia} />
             )}
           </div>
           <MediaLibrary
@@ -134,8 +143,8 @@ export const NoteModal = () => {
         <Modal.Footer>
           <Button
             type="button"
-            color="primary"
-            variant="filled"
+            color="tertiary"
+            variant="ghost"
             onClick={handleNavigateBack}
           >
             {t("collaborativewall.modal.close", { ns: appCode })}
@@ -146,7 +155,7 @@ export const NoteModal = () => {
             variant="filled"
             onClick={handleSaveNote}
           >
-            {t("Save")}
+            {t("save")}
           </Button>
         </Modal.Footer>
       </Modal>,

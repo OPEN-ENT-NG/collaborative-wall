@@ -20,6 +20,9 @@
     },
     "color": {
       "type": "array"
+    },
+    "media": {
+      "type": ["object", "null"]
     }
   },
   "required": [
