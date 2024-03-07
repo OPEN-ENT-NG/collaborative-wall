@@ -1,3 +1,5 @@
+import { NoteMedia } from "./noteMedia";
+
 export interface NoteProps {
   _id: string;
   title?: string;
@@ -6,6 +8,7 @@ export interface NoteProps {
   y: number;
   idwall: string;
   color: string[];
+  media: NoteMedia | null;
   created?: { $date: number };
   modified?: { $date: number };
   owner?: {
@@ -17,5 +20,5 @@ export interface NoteProps {
 
 export type PickedNoteProps = Pick<
   NoteProps,
-  "content" | "x" | "y" | "idwall" | "color" | "modified"
+  "content" | "x" | "y" | "idwall" | "color" | "modified" | "media"
 >;

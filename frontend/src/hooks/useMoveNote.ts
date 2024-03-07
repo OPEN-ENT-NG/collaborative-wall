@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Active } from "@dnd-kit/core";
 import { useQueryClient } from "@tanstack/react-query";
 
+import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps } from "~/models/notes";
 import { updateNote } from "~/services/api";
 import { notesQueryOptions } from "~/services/queries";
@@ -46,11 +47,13 @@ export const useMoveNote = ({
       y: number;
       idwall: string;
       color: string[];
+      media: NoteMedia | null;
       modified?: { $date: number };
     } = {
       content: findNote.content,
       color: findNote.color,
       idwall: wallId,
+      media: findNote.media,
       modified: findNote.modified,
       x: Math.round(findNote.x + delta.x / zoom),
       y: Math.round(findNote.y + delta.y / zoom),
