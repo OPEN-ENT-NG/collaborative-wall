@@ -118,16 +118,16 @@ export const NoteModal = () => {
         </Modal.Header>
         <Modal.Body>
           <ColorSelect data={data} setColorValue={setColorValue} />
-          <div className="multimedia-section my-24">
-            {!media ? (
+          {!media ? (
+            <div className="multimedia-section my-24">
               <div className="toolbar-media py-48 px-12">
                 <ToolbarMedia handleClickMedia={handleClickMedia} />
                 {t("collaborativewall.add.media", { ns: appCode })}
               </div>
-            ) : (
-              <ShowMediaType media={media} setMedia={setMedia} />
-            )}
-          </div>
+            </div>
+          ) : (
+            <ShowMediaType media={media} setMedia={setMedia} />
+          )}
           <MediaLibrary
             appCode={appCode}
             ref={mediaLibraryRef}
