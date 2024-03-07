@@ -35,7 +35,9 @@ export const ShowMediaType = ({
     case "audio":
       return (
         <div className="audio-center py-48 px-12">
-          <audio src={media.url} controls data-document-id={media.id} muted />
+          <audio src={media.url} controls data-document-id={media.id} muted>
+            <track default kind="captions" srcLang="fr" src=""></track>
+          </audio>
           <IconButton
             icon={<Delete />}
             variant="outline"
@@ -70,6 +72,30 @@ export const ShowMediaType = ({
               </>
             }
           ></Attachment>
+        </div>
+      );
+    case "video":
+      return (
+        <div style={{ position: "relative" }} className="my-24">
+          <IconButton
+            className="delete-button mt-8 me-8"
+            icon={<Delete />}
+            variant="outline"
+            color="danger"
+            onClick={() => setMedia(null)}
+            style={{ zIndex: "1" }}
+          />
+          <video
+            src={media.url}
+            data-document-id={media.id}
+            controls
+            style={{
+              borderRadius: "16px",
+              maxHeight: "350px",
+            }}
+          >
+            <track default kind="captions" srcLang="fr" src=""></track>
+          </video>
         </div>
       );
     default:
