@@ -14,6 +14,7 @@ import net.atos.entng.collaborativewall.events.CollaborativeWallUserAction;
 import net.atos.entng.collaborativewall.events.RealTimeStatus;
 import net.atos.entng.collaborativewall.service.CollaborativeWallMetricsRecorder;
 import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
+import net.atos.entng.collaborativewall.service.CollaborativeWallService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
@@ -30,22 +31,24 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
     private final Map<String, Map<String, ServerWebSocket>> wallIdToWSIdToWS = new HashMap<>();
     private final CollaborativeWallRTService collaborativeWallRTService;
     private final int maxConnections;
-
+    private final CollaborativeWallService collaborativeWallService;
     private CollaborativeWallMetricsRecorder metricsRecorder;
 
     public WallWebSocketController(final Vertx vertx,
                                    final int maxConnections,
-                                   final CollaborativeWallRTService collaborativeWallRTService) {
+                                   final CollaborativeWallRTService collaborativeWallRTService,
+                                    final CollaborativeWallService collaborativeWallService) {
         this.vertx = vertx;
+        this.collaborativeWallService = collaborativeWallService;
         this.collaborativeWallRTService = collaborativeWallRTService;
-      this.collaborativeWallRTService.subscribeToStatusChanges(newStatus -> {
+        this.collaborativeWallRTService.subscribeToStatusChanges(newStatus -> {
             if(RealTimeStatus.ERROR.equals(newStatus) || RealTimeStatus.STOPPED.equals(newStatus)) {
                 this.closeConnections();
             }
         });
         this.collaborativeWallRTService.subscribeToNewMessagesToSend(messages -> {
             if(CollectionUtils.isNotEmpty(messages)) {
-                this.broadcastMessagesLocally(messages, false, true, null);
+                this.broadcastMessagesToUsers(messages, false, true, null);
             }
         });
         this.maxConnections = maxConnections;
@@ -80,27 +83,35 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                         closeWithError("not.authenticated", (short) 401, ws);
                         return;
                     }
-                    // TODO check permissions to access wall
                     final UserInfos session = UserUtils.sessionToUserInfos(infos);
-                    final String userId = session.getUserId();
-                    ws.closeHandler(e -> onCloseWSConnection(wallId, userId, wsId));
-                    onConnect(userId, wallId, wsId, ws).onSuccess(onSuccess -> {
-                        ws.resume();
-                        ws.frameHandler(frame -> {
-                            if (frame.isBinary()) {
-                                log.warn("Binary is not handled");
-                            } else {
-                                final String message = frame.textData();
-                                log.info("Received message : " + message);
-                                final CollaborativeWallUserAction action = Json.decodeValue(message, CollaborativeWallUserAction.class);
-                                this.collaborativeWallRTService.onNewUserAction(action, wallId, wsId, session)
-                                    .onSuccess(messages -> this.broadcastMessagesLocally(messages, true, false, wsId))
-                                    .onFailure(th -> this.sendError(th, ws));
-                            }
-                        });
-                    }).onFailure(th -> {
-                        log.error("An error occurred while opening the websocket", th);
+                    this.collaborativeWallService.canAccess(wallId, session).onFailure(e -> {
+                        log.error("An error occurred while checking access to wall", e);
                         closeWithError("unknown.error", (short) 500, ws);
+                    }).onSuccess(canAccess -> {
+                        if(!canAccess){
+                            closeWithError("not.authorized", (short) 403, ws);
+                            return;
+                        }
+                        final String userId = session.getUserId();
+                        ws.closeHandler(e -> onCloseWSConnection(wallId, userId, wsId));
+                        onConnect(userId, wallId, wsId, ws).onSuccess(onSuccess -> {
+                            ws.resume();
+                            ws.frameHandler(frame -> {
+                                if (frame.isBinary()) {
+                                    log.warn("Binary is not handled");
+                                } else {
+                                    final String message = frame.textData();
+                                    log.info("Received message : " + message);
+                                    final CollaborativeWallUserAction action = Json.decodeValue(message, CollaborativeWallUserAction.class);
+                                    this.collaborativeWallRTService.onNewUserAction(action, wallId, wsId, session)
+                                            .onSuccess(messages -> this.broadcastMessagesToUsers(messages, true, false, wsId))
+                                            .onFailure(th -> this.sendError(th, ws));
+                                }
+                            });
+                        }).onFailure(th -> {
+                            log.error("An error occurred while opening the websocket", th);
+                            closeWithError("unknown.error", (short) 500, ws);
+                        });
                     });
                 } catch (Exception e) {
                     ws.resume();
@@ -135,7 +146,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
 
     protected void onCloseWSConnection(final String wallId, final String userId, final String wsId) {
         this.collaborativeWallRTService.onUserDisconnection(wallId, userId, wsId)
-        .compose(messages -> this.broadcastMessagesLocally(messages, true, false, wsId))
+        .compose(messages -> this.broadcastMessagesToUsers(messages, true, false, wsId))
         .onComplete(e -> {
             final Map<String, ServerWebSocket> wss = wallIdToWSIdToWS.get(wallId);
             if (wss != null) {
@@ -162,7 +173,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
         wsIdToWs.put(wsId, ws);
         final Promise<Void> promise = Promise.promise();
         this.collaborativeWallRTService.onNewConnection(wallId, userId, wsId)
-        .compose(messages -> broadcastMessagesLocally(messages, true, false, null))
+        .compose(messages -> broadcastMessagesToUsers(messages, true, false, null))
         .onComplete(promise);
         return promise.future();
     }
@@ -174,7 +185,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
      * @param exceptWsId Id of the websocket that should not receive the messages
      * @return Completes when every message has been sent
      */
-    private Future<Void> broadcastMessagesLocally(final List<CollaborativeWallMessage> messages,
+    private Future<Void> broadcastMessagesToUsers(final List<CollaborativeWallMessage> messages,
                                                   final boolean allowInternalMessages,
                                                   final boolean allowExternalMessages,
                                                   final String exceptWsId) {

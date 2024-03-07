@@ -89,7 +89,7 @@ public class CollaborativeWall extends BaseServer {
 
         final CollaborativeWallService collaborativeWallService = new MongoDbCollaborativeWallService(
             controller.getCrudService(),
-            noteService);
+            noteService, securedActions);
 
         final JsonObject rtConfig = config.getJsonObject("real-time");
         if(rtConfig == null) {
@@ -100,7 +100,7 @@ public class CollaborativeWall extends BaseServer {
             final int port = rtConfig.getInteger("port");
             final int maxConnections = rtConfig.getInteger("max-connections", 0);
             this.collaborativeWallRTService = new DefaultCollaborativeWallRTService(vertx, rtConfig, collaborativeWallService);
-            final WallWebSocketController rtController = new WallWebSocketController(vertx, maxConnections, collaborativeWallRTService);
+            final WallWebSocketController rtController = new WallWebSocketController(vertx, maxConnections, collaborativeWallRTService, collaborativeWallService);
             final CollaborativeWallMetricsRecorder metricsRecorder = CollaborativeWallMetricsRecorderFactory.getRecorder(rtController, collaborativeWallRTService);
             final HttpServerOptions options = new HttpServerOptions().setMaxWebSocketFrameSize(1024 * 1024);
             vertx.createHttpServer(options)
