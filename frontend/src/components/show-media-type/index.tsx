@@ -16,7 +16,7 @@ export const ShowMediaType = ({
   switch (media.type) {
     case "image":
       return (
-        <div style={{ position: "relative" }} className="my-24">
+        <div style={{ position: "relative", width: "100%" }} className="my-24">
           <IconButton
             className="delete-button mt-8 me-8"
             icon={<Delete />}
@@ -29,6 +29,7 @@ export const ShowMediaType = ({
             src={media.url}
             alt={media.type}
             width="100%"
+            objectFit="cover"
             ratio="16"
             style={{
               borderRadius: "16px",
