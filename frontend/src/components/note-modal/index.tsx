@@ -19,7 +19,6 @@ import {
 import { ColorSelect } from "../color-select";
 import { ShowMediaType } from "../show-media-type";
 import { ToolbarMedia } from "../toolbar-media";
-import { noteColors } from "~/config/init-config";
 import { useMediaLibrary } from "~/hooks/useMediaLibrary";
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
@@ -53,9 +52,7 @@ export const NoteModal = () => {
 
   const [editorMode] = useState<"read" | "edit">("read");
   const [media, setMedia] = useState<NoteMedia | null>(data.media);
-  const [colorValue, setColorValue] = useState<string[]>([
-    noteColors.white.background,
-  ]);
+  const [colorValue, setColorValue] = useState<string[]>(data.color);
 
   const editorRef = useRef<EditorRef>(null);
   const updateNote = useUpdateNote();
