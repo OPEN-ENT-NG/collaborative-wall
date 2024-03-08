@@ -54,7 +54,20 @@ export const ShowMediaType = ({
     case "audio":
       return (
         <div className={mediaClasses}>
-          <audio src={media.url} controls data-document-id={media.id} muted />
+          <audio
+            src={media.url}
+            controls
+            data-document-id={media.id}
+            muted
+            style={{
+              width: "100%",
+              zIndex: "1",
+              position: "relative",
+              maxWidth: "206px",
+            }}
+          >
+            <track default kind="captions" srcLang="fr" src=""></track>
+          </audio>
           {!readonly && (
             <IconButton
               icon={<Delete />}
