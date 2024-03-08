@@ -54,7 +54,9 @@ export const ShowMediaType = ({
     case "audio":
       return (
         <div className={mediaClasses}>
-          <audio src={media.url} controls data-document-id={media.id} muted />
+          <audio src={media.url} controls data-document-id={media.id} muted>
+            <track default kind="captions" srcLang="fr" src=""></track>
+          </audio>
           {!readonly && (
             <IconButton
               icon={<Delete />}
@@ -93,6 +95,34 @@ export const ShowMediaType = ({
               </>
             }
           ></Attachment>
+        </div>
+      );
+    case "video":
+      return (
+        <div style={{ position: "relative" }} className="my-24">
+          {!readonly && (
+            <IconButton
+              className="delete-button mt-8 me-8"
+              icon={<Delete />}
+              variant="outline"
+              color="danger"
+              onClick={() => setMedia?.(null)}
+              style={{ zIndex: "1" }}
+            />
+          )}
+          <video
+            src={media.url}
+            data-document-id={media.id}
+            controls
+            style={{
+              borderRadius: "16px",
+              maxHeight: "350px",
+              position: "relative",
+              zIndex: "1",
+            }}
+          >
+            <track default kind="captions" srcLang="fr" src=""></track>
+          </video>
         </div>
       );
     default:
