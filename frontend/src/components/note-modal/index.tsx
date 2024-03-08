@@ -126,7 +126,7 @@ export const NoteModal = () => {
               </div>
             </div>
           ) : (
-            <ShowMediaType media={media} setMedia={setMedia} />
+            <ShowMediaType media={media} setMedia={setMedia} readonly={false} />
           )}
           <MediaLibrary
             appCode={appCode}
