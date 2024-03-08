@@ -27,7 +27,10 @@ export const ShowMediaType = ({
   switch (media.type) {
     case "image":
       return (
-        <div style={{ position: "relative", width: "100%" }} className="my-24">
+        <div
+          style={{ position: "relative", width: "100%" }}
+          className={!readonly ? "my-24" : ""}
+        >
           {!readonly && (
             <IconButton
               className="delete-button mt-8 me-8"
