@@ -113,7 +113,10 @@ export const ShowMediaType = ({
       );
     case "video":
       return (
-        <div style={{ position: "relative" }} className="my-24">
+        <div
+          style={{ position: "relative" }}
+          className={!readonly ? "my-24" : ""}
+        >
           {!readonly && (
             <IconButton
               className="delete-button mt-8 me-8"
@@ -121,7 +124,7 @@ export const ShowMediaType = ({
               variant="outline"
               color="danger"
               onClick={() => setMedia?.(null)}
-              style={{ zIndex: "1" }}
+              style={{ zIndex: "2" }}
             />
           )}
           <video
