@@ -109,6 +109,7 @@ export const ColorSelect = ({
 
   return (
     <Select
+      size="sm"
       icon={
         placeholderValue()?.icon ?? (
           <Square borderColor={noteColors.white.border} />
