@@ -4,6 +4,7 @@ import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useShallow } from "zustand/react/shallow";
 
+import { ShowMediaType } from "../show-media-type";
 import { NoteProps } from "~/models/notes";
 import { useWhiteboard } from "~/store";
 
@@ -76,8 +77,9 @@ export const Note = ({
         onClick={() => handleClick(note._id)}
       >
         <Card.Body>
+          {note.media && <ShowMediaType media={note.media}></ShowMediaType>}
           {/* Modifier l'image lorsqu'on récupéreré une image */}
-          {defaultImage && (
+          {!note.media && defaultImage && (
             <Image alt="test" ratio="16" src={defaultImage} height="120" />
           )}
           <Card.Text
