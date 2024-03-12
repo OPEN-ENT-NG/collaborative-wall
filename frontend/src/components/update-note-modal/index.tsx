@@ -10,7 +10,7 @@ import {
 } from "react-router-dom";
 
 import { ContentNote } from "../content-note";
-import { noteColors } from "~/config/init-config";
+import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
 import { useUpdateNote } from "~/services/queries";
@@ -39,28 +39,29 @@ export async function noteLoader({ params }: LoaderFunctionArgs) {
 
 export const UpdateNoteModal = () => {
   const data = useLoaderData() as NoteProps;
+
+  const [colorValue, setColorValue] = useState<string[]>(data.color);
+  const [media, setMedia] = useState<NoteMedia | null>(data.media);
+
   const updateNote = useUpdateNote();
   const navigate = useNavigate();
 
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
 
-  const [colorValue, setColorValue] = useState<string[]>([
-    noteColors.white.background,
-  ]);
-
   const handleSaveNote = () => {
     const note: PickedNoteProps = {
       content: data.content,
       color: colorValue,
       idwall: data.idwall as string,
+      media: media || null,
       modified: data.modified,
       x: data.x,
       y: data.y,
     };
-    updateNote.mutateAsync({ id: data._id, note });
 
-    handleNavigateBack();
+    updateNote.mutateAsync({ id: data._id, note });
+    navigate("..");
   };
 
   const handleNavigateBack = () => navigate("..");
@@ -80,7 +81,12 @@ export const UpdateNoteModal = () => {
         </Modal.Header>
         <Modal.Subtitle>{data.owner?.displayName}</Modal.Subtitle>
         <Modal.Body>
-          <ContentNote dataNote={data} setColorValue={setColorValue} />
+          <ContentNote
+            dataNote={data}
+            setColorValue={setColorValue}
+            setMedia={setMedia}
+            media={media}
+          />
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -97,7 +103,7 @@ export const UpdateNoteModal = () => {
             variant="filled"
             onClick={handleSaveNote}
           >
-            {t("Save")}
+            {t("save")}
           </Button>
         </Modal.Footer>
       </Modal>,

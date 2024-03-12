@@ -1,92 +1,148 @@
 import { Delete, Download } from "@edifice-ui/icons";
-import {
-  Attachment,
-  IconButton,
-  Image,
-  MediaLibraryType,
-} from "@edifice-ui/react";
-import { WorkspaceElement } from "edifice-ts-client";
+import { Attachment, IconButton, Image } from "@edifice-ui/react";
+import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 
+import { NoteMedia } from "~/models/noteMedia";
+
+export interface ShowMediaTypeProps {
+  media: NoteMedia;
+  setMedia?: (value: NoteMedia | null) => void;
+  readonly?: boolean;
+}
+
 export const ShowMediaType = ({
-  medias,
-  setMedias,
-  mediasType,
-}: {
-  medias: WorkspaceElement;
-  setMedias: (value: WorkspaceElement | undefined) => void;
-  mediasType: MediaLibraryType | undefined;
-}) => {
+  media,
+  setMedia,
+  readonly = true,
+}: ShowMediaTypeProps) => {
   const { t } = useTranslation();
 
-  const showGetMedia = () => {
-    switch (mediasType) {
-      case "image":
-        return (
-          <div style={{ position: "relative" }}>
+  const mediaClasses = clsx("media-center", {
+    "d-block": readonly,
+    "py-48": !readonly,
+    "px-12": !readonly,
+  });
+
+  switch (media.type) {
+    case "image":
+      return (
+        <div
+          style={{ position: "relative", width: "100%" }}
+          className={!readonly ? "my-24" : ""}
+        >
+          {!readonly && (
             <IconButton
               className="delete-button mt-8 me-8"
               icon={<Delete />}
               variant="outline"
               color="danger"
-              onClick={() => setMedias(undefined)}
+              style={{ zIndex: "1" }}
+              onClick={() => setMedia?.(null)}
             />
-            <Image
-              src={`/workspace/document/${medias?._id}`}
-              alt={mediasType}
-              width="100%"
-              style={{ borderRadius: "16px" }}
-            />
-          </div>
-        );
-      case "audio":
-        return (
-          <div className="audio-center py-48 px-12">
-            <audio
-              src={`/workspace/document/${medias._id}`}
-              controls
-              data-document-id={medias._id}
-              muted
-            />
+          )}
+          <Image
+            src={media.url}
+            alt={media.type}
+            width="100%"
+            objectFit="cover"
+            ratio="16"
+            style={{
+              borderRadius: "16px",
+              maxHeight: "350px",
+            }}
+          />
+        </div>
+      );
+    case "audio":
+      return (
+        <div className={mediaClasses}>
+          <audio
+            src={media.url}
+            controls
+            data-document-id={media.id}
+            muted
+            style={{
+              width: "100%",
+              zIndex: "1",
+              position: "relative",
+              maxWidth: "206px",
+            }}
+          >
+            <track default kind="captions" srcLang="fr" src=""></track>
+          </audio>
+          {!readonly && (
             <IconButton
               icon={<Delete />}
               variant="outline"
               color="danger"
-              onClick={() => setMedias(undefined)}
+              onClick={() => setMedia?.(null)}
             />
-          </div>
-        );
-      case "attachment":
-        return (
-          <div className="audio-center py-48 px-12">
-            <Attachment
-              name={medias.name}
-              options={
-                <>
-                  <a href={`/workspace/document/${medias._id}`} download>
-                    <IconButton
-                      icon={<Download />}
-                      color="tertiary"
-                      type="button"
-                      variant="ghost"
-                      aria-label={t("download")}
-                    />
-                  </a>
+          )}
+        </div>
+      );
+    case "attachment":
+      return (
+        <div className={mediaClasses}>
+          <Attachment
+            name={media.name}
+            options={
+              <>
+                <a href={media.url} download>
+                  <IconButton
+                    icon={<Download />}
+                    color="tertiary"
+                    type="button"
+                    variant="ghost"
+                    aria-label={t("download")}
+                  />
+                </a>
+                {!readonly && (
                   <IconButton
                     icon={<Delete />}
                     variant="ghost"
                     color="danger"
                     aria-label={t("remove")}
-                    onClick={() => setMedias(undefined)}
+                    onClick={() => setMedia?.(null)}
                   />
-                </>
-              }
-            ></Attachment>
-          </div>
-        );
-      default:
-        break;
-    }
-  };
-  return showGetMedia();
+                )}
+              </>
+            }
+          ></Attachment>
+        </div>
+      );
+    case "video":
+      return (
+        <div
+          style={{ position: "relative" }}
+          className={!readonly ? "my-24" : ""}
+        >
+          {!readonly && (
+            <IconButton
+              className="delete-button mt-8 me-8"
+              icon={<Delete />}
+              variant="outline"
+              color="danger"
+              onClick={() => setMedia?.(null)}
+              style={{ zIndex: "2" }}
+            />
+          )}
+          <video
+            src={media.url}
+            data-document-id={media.id}
+            controls
+            style={{
+              borderRadius: "16px",
+              maxHeight: "350px",
+              position: "relative",
+              zIndex: "1",
+            }}
+          >
+            <track default kind="captions" srcLang="fr" src=""></track>
+          </video>
+        </div>
+      );
+    default:
+      break;
+  }
 };

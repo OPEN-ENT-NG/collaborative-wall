@@ -3,17 +3,16 @@ import { useState } from "react";
 import { Button, Modal, useOdeClient } from "@edifice-ui/react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
-import { useLoaderData } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
 import { ContentNote } from "../content-note";
 import { noteColors } from "~/config/init-config";
-import { NoteProps, PickedNoteProps } from "~/models/notes";
+import { NoteMedia } from "~/models/noteMedia";
+import { PickedNoteProps } from "~/models/notes";
 import { useCreateNote } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 
 export default function CreateNoteModal({ wallId }: { wallId: string }) {
-  const data = useLoaderData() as NoteProps;
   const createNote = useCreateNote(wallId);
 
   const { t } = useTranslation();
@@ -32,13 +31,14 @@ export default function CreateNoteModal({ wallId }: { wallId: string }) {
   const [colorValue, setColorValue] = useState<string[]>([
     noteColors.white.background,
   ]);
+  const [media, setMedia] = useState<NoteMedia | null>(null);
 
   const handleCreateNote = () => {
     const note: PickedNoteProps = {
       content: "",
       color: colorValue,
       idwall: wallId,
-      modified: data.modified,
+      media: media,
       x: Math.trunc((positionViewport.x * -1 + window.innerWidth / 2) / zoom),
       y: Math.trunc((positionViewport.y * -1 + window.innerHeight / 2) / zoom),
     };
@@ -61,7 +61,11 @@ export default function CreateNoteModal({ wallId }: { wallId: string }) {
             {t("collaborativewall.create.note")}
           </Modal.Header>
           <Modal.Body>
-            <ContentNote dataNote={data} setColorValue={setColorValue} />
+            <ContentNote
+              setColorValue={setColorValue}
+              setMedia={setMedia}
+              media={media}
+            />
           </Modal.Body>
           <Modal.Footer>
             <Button

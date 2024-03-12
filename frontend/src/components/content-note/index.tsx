@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Editor, EditorRef } from "@edifice-ui/editor";
 import {
@@ -6,7 +6,6 @@ import {
   MediaLibraryType,
   useOdeClient,
 } from "@edifice-ui/react";
-import { WorkspaceElement } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs } from "react-router-dom";
 
@@ -14,6 +13,7 @@ import { ColorSelect } from "../color-select";
 import { ShowMediaType } from "../show-media-type";
 import { ToolbarMedia } from "../toolbar-media";
 import { useMediaLibrary } from "~/hooks/useMediaLibrary";
+import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
 
@@ -40,11 +40,15 @@ export async function noteLoader({ params }: LoaderFunctionArgs) {
 }
 
 export const ContentNote = ({
-  dataNote,
   setColorValue,
+  setMedia,
+  media,
+  dataNote,
 }: {
-  dataNote: NoteProps;
   setColorValue: (value: string[]) => void;
+  setMedia: (value: NoteMedia | null) => void;
+  media: NoteMedia | null;
+  dataNote?: NoteProps;
 }) => {
   const [editorMode] = useState<"read" | "edit">("read");
 
@@ -53,35 +57,39 @@ export const ContentNote = ({
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
 
-  const [mediasType, setMediasType] = useState<MediaLibraryType | undefined>();
-
   const {
     ref: mediaLibraryRef,
-    medias,
-    setMedias,
+    libraryMedia,
     ...mediaLibraryModalHandlers
   } = useMediaLibrary();
 
   const handleClickMedia = (type: MediaLibraryType) => {
-    setMediasType(type);
+    setMedia({ ...(media as NoteMedia), type });
     mediaLibraryRef.current?.show(type);
   };
+
+  useEffect(() => {
+    if (libraryMedia) {
+      setMedia({
+        ...(media as NoteMedia),
+        id: libraryMedia?._id || "",
+        name: libraryMedia?.name || "",
+        url: `/workspace/document/${libraryMedia?._id}`,
+      });
+    }
+  }, [libraryMedia]);
 
   return (
     <>
       <ColorSelect dataNote={dataNote} setColorValue={setColorValue} />
       <div className="multimedia-section my-24">
-        {!medias ? (
+        {!media ? (
           <div className="toolbar-media py-48 px-12">
             <ToolbarMedia handleClickMedia={handleClickMedia} />
             {t("collaborativewall.add.media", { ns: appCode })}
           </div>
         ) : (
-          <ShowMediaType
-            medias={medias as WorkspaceElement}
-            setMedias={setMedias}
-            mediasType={mediasType}
-          />
+          <ShowMediaType media={media} setMedia={setMedia} readonly={false} />
         )}
       </div>
       <MediaLibrary
@@ -95,7 +103,7 @@ export const ContentNote = ({
         content={dataNote?.content || ""}
         mode={editorMode}
       />
-      <p>{dataNote.content || ""}</p>{" "}
+      <p>{dataNote?.content || ""}</p>{" "}
     </>
   );
 };
