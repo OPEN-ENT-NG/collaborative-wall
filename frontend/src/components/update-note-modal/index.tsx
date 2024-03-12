@@ -1,13 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
-import { Editor, EditorRef } from "@edifice-ui/editor";
-import {
-  Button,
-  MediaLibrary,
-  MediaLibraryType,
-  Modal,
-  useOdeClient,
-} from "@edifice-ui/react";
+import { Button, Modal, useOdeClient } from "@edifice-ui/react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -16,10 +9,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-import { ColorSelect } from "../color-select";
-import { ShowMediaType } from "../show-media-type";
-import { ToolbarMedia } from "../toolbar-media";
-import { useMediaLibrary } from "~/hooks/useMediaLibrary";
+import { ContentNote } from "../content-note";
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
@@ -47,36 +37,17 @@ export async function noteLoader({ params }: LoaderFunctionArgs) {
   return note;
 }
 
-export const NoteModal = () => {
+export const UpdateNoteModal = () => {
   const data = useLoaderData() as NoteProps;
 
-  const [editorMode] = useState<"read" | "edit">("read");
-  const [media, setMedia] = useState<NoteMedia | null>(data.media);
   const [colorValue, setColorValue] = useState<string[]>(data.color);
+  const [media, setMedia] = useState<NoteMedia | null>(data.media);
 
-  const editorRef = useRef<EditorRef>(null);
   const updateNote = useUpdateNote();
   const navigate = useNavigate();
 
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
-
-  const {
-    ref: mediaLibraryRef,
-    libraryMedia,
-    ...mediaLibraryModalHandlers
-  } = useMediaLibrary();
-
-  useEffect(() => {
-    if (libraryMedia) {
-      setMedia({
-        ...(media as NoteMedia),
-        id: libraryMedia?._id || "",
-        name: libraryMedia?.name || "",
-        url: `/workspace/document/${libraryMedia?._id}`,
-      });
-    }
-  }, [libraryMedia]);
 
   const handleSaveNote = () => {
     const note: PickedNoteProps = {
@@ -95,11 +66,6 @@ export const NoteModal = () => {
 
   const handleNavigateBack = () => navigate("..");
 
-  const handleClickMedia = (type: MediaLibraryType) => {
-    setMedia({ ...(media as NoteMedia), type });
-    mediaLibraryRef.current?.show(type);
-  };
-
   return data ? (
     createPortal(
       <Modal
@@ -113,28 +79,13 @@ export const NoteModal = () => {
         <Modal.Header onModalClose={handleNavigateBack}>
           {t("Note")}
         </Modal.Header>
+        <Modal.Subtitle>{data.owner?.displayName}</Modal.Subtitle>
         <Modal.Body>
-          <ColorSelect data={data} setColorValue={setColorValue} />
-          {!media ? (
-            <div className="multimedia-section my-24">
-              <div className="toolbar-media py-48 px-12">
-                <ToolbarMedia handleClickMedia={handleClickMedia} />
-                {t("collaborativewall.add.media", { ns: appCode })}
-              </div>
-            </div>
-          ) : (
-            <ShowMediaType media={media} setMedia={setMedia} readonly={false} />
-          )}
-          <MediaLibrary
-            appCode={appCode}
-            ref={mediaLibraryRef}
-            multiple={false}
-            {...mediaLibraryModalHandlers}
-          />
-          <Editor
-            ref={editorRef}
-            content={data?.content || ""}
-            mode={editorMode}
+          <ContentNote
+            dataNote={data}
+            setColorValue={setColorValue}
+            setMedia={setMedia}
+            media={media}
           />
         </Modal.Body>
         <Modal.Footer>
@@ -144,7 +95,7 @@ export const NoteModal = () => {
             variant="ghost"
             onClick={handleNavigateBack}
           >
-            {t("collaborativewall.modal.close", { ns: appCode })}
+            {t("collaborativewall.modal.cancel", { ns: appCode })}
           </Button>
           <Button
             type="button"

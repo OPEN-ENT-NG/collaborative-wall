@@ -27,10 +27,7 @@ export const ShowMediaType = ({
   switch (media.type) {
     case "image":
       return (
-        <div
-          style={{ position: "relative", width: "100%" }}
-          className={!readonly ? "my-24" : ""}
-        >
+        <div style={{ position: "relative", width: "100%" }}>
           {!readonly && (
             <IconButton
               className="delete-button mt-8 me-8"
@@ -113,10 +110,7 @@ export const ShowMediaType = ({
       );
     case "video":
       return (
-        <div
-          style={{ position: "relative" }}
-          className={!readonly ? "my-24" : ""}
-        >
+        <div style={{ position: "relative" }}>
           {!readonly && (
             <IconButton
               className="delete-button mt-8 me-8"
@@ -134,6 +128,10 @@ export const ShowMediaType = ({
             style={{
               borderRadius: "16px",
               maxHeight: "350px",
+              position: "relative",
+              zIndex: "1",
+              width: "100%",
+              marginBottom: "-8px",
             }}
           >
             <track default kind="captions" srcLang="fr" src=""></track>

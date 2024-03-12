@@ -33,10 +33,10 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
       {
         path: "note/:noteId",
         async lazy() {
-          const { noteLoader, NoteModal } = await import(
-            "../components/note-modal"
+          const { noteLoader, UpdateNoteModal } = await import(
+            "../components/update-note-modal"
           );
-          return { loader: noteLoader, Component: NoteModal };
+          return { loader: noteLoader, Component: UpdateNoteModal };
         },
       },
     ],

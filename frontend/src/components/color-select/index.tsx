@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs } from "react-router-dom";
 
 import { noteColors } from "~/config/init-config";
+import { NoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
 import { Square } from "~/utils/square";
 
@@ -29,11 +30,11 @@ export async function noteLoader({ params }: LoaderFunctionArgs) {
 }
 
 export const ColorSelect = ({
-  data,
   setColorValue,
+  dataNote,
 }: {
-  data: any;
-  setColorValue: any;
+  setColorValue: (value: string[]) => void;
+  dataNote?: NoteProps;
 }) => {
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
@@ -101,7 +102,9 @@ export const ColorSelect = ({
   ];
 
   const placeholderValue = () => {
-    const color = colorsList.find((value) => value.value === data.color?.[0]);
+    const color = colorsList.find(
+      (value) => value.value === dataNote?.color?.[0],
+    );
 
     if (!color) return undefined;
     return color;
@@ -112,13 +115,16 @@ export const ColorSelect = ({
       size="sm"
       icon={
         placeholderValue()?.icon ?? (
-          <Square borderColor={noteColors.white.border} />
+          <Square
+            className="bg-yellow-200"
+            borderColor={noteColors.yellow.border}
+          />
         )
       }
       options={colorsList}
       placeholderOption={
         placeholderValue()?.label ??
-        t("collaborativewall.color.white", { ns: appCode })
+        t("collaborativewall.color.yellow", { ns: appCode })
       }
       onValueChange={(value) => setColorValue([value as string])}
     />

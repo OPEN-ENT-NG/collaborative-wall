@@ -45,6 +45,9 @@ const DescriptionModal = lazy(
   async () => await import("~/components/description-modal"),
 );
 const ShareModal = lazy(async () => await import("~/features/share-modal"));
+const CreateNoteModal = lazy(
+  async () => await import("~/components/create-note-modal"),
+);
 
 interface LoaderData {
   wall: CollaborativeWallProps;
@@ -88,21 +91,26 @@ export const CollaborativeWall = () => {
 
   const sensors = useDndKit();
 
-  const { openShareModal, setOpenShareModal, zoom, isMobile, setIsMobile } =
-    useWhiteboard(
-      useShallow((state) => ({
-        openShareModal: state.openShareModal,
-        setOpenShareModal: state.setOpenShareModal,
-        zoom: state.zoom,
-        isMobile: state.isMobile,
-        setIsMobile: state.setIsMobile,
-      })),
-    );
+  const {
+    openShareModal,
+    setOpenShareModal,
+    zoom,
+    isMobile,
+    setIsMobile,
+    openCreateModal,
+  } = useWhiteboard(
+    useShallow((state) => ({
+      openShareModal: state.openShareModal,
+      setOpenShareModal: state.setOpenShareModal,
+      zoom: state.zoom,
+      isMobile: state.isMobile,
+      setIsMobile: state.setIsMobile,
+      openCreateModal: state.openCreateModal,
+    })),
+  );
 
   useTrashedResource(params?.wallId);
 
-  const [isOpenDescriptionModal, setIsOpenDescriptionModal] =
-    useState<boolean>(false);
   const [isOpenBackgroundModal, setIsOpenBackgroundModal] =
     useState<boolean>(false);
 
@@ -194,10 +202,7 @@ export const CollaborativeWall = () => {
       )}
       <div className="collaborativewall-container">
         {wall?.description && !isMobile && (
-          <DescriptionWall
-            setIsOpen={setIsOpenDescriptionModal}
-            description={wall?.description}
-          />
+          <DescriptionWall description={wall?.description} />
         )}
         <WhiteboardWrapper>
           <DndContext
@@ -229,11 +234,7 @@ export const CollaborativeWall = () => {
         <Outlet />
 
         {wall?.description && (
-          <DescriptionModal
-            isOpen={isOpenDescriptionModal}
-            setIsOpen={setIsOpenDescriptionModal}
-            description={wall.description}
-          />
+          <DescriptionModal description={wall.description} />
         )}
         {wall && (
           <BackgroundModal
@@ -252,6 +253,7 @@ export const CollaborativeWall = () => {
             onSuccess={() => setOpenShareModal(false)}
           />
         )}
+        {openCreateModal && wall && <CreateNoteModal wallId={wall._id} />}
       </Suspense>
     </>
   );
