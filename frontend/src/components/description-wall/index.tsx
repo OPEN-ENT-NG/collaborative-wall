@@ -1,15 +1,19 @@
 import { Button, useOdeClient } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
+import { useShallow } from "zustand/react/shallow";
 
-export function DescriptionWall({
-  setIsOpen,
-  description,
-}: {
-  setIsOpen: (bool: boolean) => void;
-  description: string;
-}) {
+import { useWhiteboard } from "~/store";
+
+export function DescriptionWall({ description }: { description: string }) {
   const { appCode } = useOdeClient();
   const { t } = useTranslation();
+
+  const { seOpenDescriptionModal } = useWhiteboard(
+    useShallow((state) => ({
+      seOpenDescriptionModal: state.setOpenDescriptionModal,
+      openDescriptionModal: state.openDescriptionModal,
+    })),
+  );
 
   return (
     <div className="description-wall">
@@ -17,7 +21,7 @@ export function DescriptionWall({
       <Button
         variant="ghost"
         color="tertiary"
-        onClick={() => setIsOpen(true)}
+        onClick={() => seOpenDescriptionModal(true)}
         style={{ whiteSpace: "nowrap" }}
       >
         {t("collaborativewall.see.more", { ns: appCode })}

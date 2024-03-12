@@ -1,5 +1,5 @@
 import { useDraggable } from "@dnd-kit/core";
-import { Card, Image } from "@edifice-ui/react";
+import { Card } from "@edifice-ui/react";
 import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useShallow } from "zustand/react/shallow";
@@ -78,10 +78,6 @@ export const Note = ({
       >
         <Card.Body>
           {note.media && <ShowMediaType media={note.media}></ShowMediaType>}
-          {/* Modifier l'image lorsqu'on récupéreré une image */}
-          {!note.media && defaultImage && (
-            <Image alt="test" ratio="16" src={defaultImage} height="120" />
-          )}
           <Card.Text
             className={`text-truncate ${defaultImage ? "text-truncate-8" : "text-truncate-12"}`}
           >
