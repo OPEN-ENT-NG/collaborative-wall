@@ -115,13 +115,16 @@ export const ColorSelect = ({
       size="sm"
       icon={
         placeholderValue()?.icon ?? (
-          <Square borderColor={noteColors.white.border} />
+          <Square
+            className="bg-yellow-200"
+            borderColor={noteColors.yellow.border}
+          />
         )
       }
       options={colorsList}
       placeholderOption={
         placeholderValue()?.label ??
-        t("collaborativewall.color.white", { ns: appCode })
+        t("collaborativewall.color.yellow", { ns: appCode })
       }
       onValueChange={(value) => setColorValue([value as string])}
     />

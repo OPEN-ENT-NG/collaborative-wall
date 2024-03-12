@@ -59,8 +59,6 @@ export const useMoveNote = ({
       y: Math.round(findNote.y + delta.y / zoom),
     };
 
-    console.log(note);
-
     setUpdatedNote({
       activeId,
       x: Math.round(findNote.x + delta.x / zoom),

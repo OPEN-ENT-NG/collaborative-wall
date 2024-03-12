@@ -29,7 +29,7 @@ export default function CreateNoteModal({ wallId }: { wallId: string }) {
     );
 
   const [colorValue, setColorValue] = useState<string[]>([
-    noteColors.white.background,
+    noteColors.yellow.background,
   ]);
   const [media, setMedia] = useState<NoteMedia | null>(null);
 
