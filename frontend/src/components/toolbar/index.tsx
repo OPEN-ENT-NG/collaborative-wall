@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
 import { wallConfig, zoomConfig } from "~/config/init-config";
+import { useHistory } from "~/hooks/useHistory";
 import { useWhiteboard } from "~/store";
 
 export const ToolbarWrapper = ({
@@ -54,6 +55,8 @@ export const ToolbarWrapper = ({
   const offsetX = (window.innerWidth - wallConfig.WIDTH_WALL) / 2;
   const offsetY = (window.innerHeight - wallConfig.HEIGHT_WALL) / 2;
 
+  const { canUndo, canRedo, handleUndo, handleRedo } = useHistory();
+
   const WhiteboardItems: ToolbarItem[] = [
     {
       type: "icon",
@@ -62,7 +65,8 @@ export const ToolbarWrapper = ({
         icon: <Undo />,
         "aria-label": t("collaborativewall.toolbar.undo"),
         color: "tertiary",
-        onClick: () => console.log("undo"),
+        disabled: !canUndo,
+        onClick: handleUndo,
       },
       tooltip: t("collaborativewall.toolbar.undo", { ns: appCode }),
     },
@@ -73,7 +77,8 @@ export const ToolbarWrapper = ({
         icon: <Redo />,
         "aria-label": t("collaborativewall.toolbar.redo"),
         color: "tertiary",
-        onClick: () => console.log("redo"),
+        disabled: !canRedo,
+        onClick: handleRedo,
       },
       tooltip: t("collaborativewall.toolbar.redo", { ns: appCode }),
     },

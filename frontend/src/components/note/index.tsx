@@ -1,24 +1,31 @@
 import { useDraggable } from "@dnd-kit/core";
 import { Card } from "@edifice-ui/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useShallow } from "zustand/react/shallow";
 
 import { ShowMediaType } from "../show-media-type";
 import { NoteProps } from "~/models/notes";
-import { useWhiteboard } from "~/store";
+import { notesQueryOptions, useDeleteNote } from "~/services/queries";
+import { useHistoryStore, useWhiteboard } from "~/store";
 
 export const Note = ({
   note,
+  disabled,
   onClick,
 }: {
   note: NoteProps;
+  disabled: () => boolean;
   onClick?: (id: string) => void;
 }) => {
-  const { zoom, canMoveNote, isBoardDragging } = useWhiteboard(
+  const queryClient = useQueryClient();
+  const deleteNote = useDeleteNote();
+
+  const { zoom, isMovingNote, isBoardDragging } = useWhiteboard(
     useShallow((state) => ({
       zoom: state.zoom,
-      canMoveNote: state.canMoveNote,
+      isMovingNote: state.canMoveNote,
       isBoardDragging: state.isDragging,
     })),
   );
@@ -26,7 +33,7 @@ export const Note = ({
   const { attributes, isDragging, listeners, setNodeRef, transform } =
     useDraggable({
       id: note._id,
-      disabled: !canMoveNote,
+      disabled: !disabled,
     });
 
   const editor: Editor | null = useEditor({
@@ -42,7 +49,7 @@ export const Note = ({
     userSelect: (isDragging || isBoardDragging) && "none",
     top: (transform?.y ?? 0) / zoom,
     left: (transform?.x ?? 0) / zoom,
-    cursor: canMoveNote ? (isDragging ? "grabbing" : "grab") : "default",
+    cursor: isMovingNote ? (isDragging ? "grabbing" : "grab") : "default",
     boxShadow: isDragging
       ? "-1px 0 15px 0 rgba(34, 33, 81, 0.01), 0px 15px 15px 0 rgba(34, 33, 81, 0.25)"
       : "0 2px 6px 0px rgba(0, 0, 0, 0.15)",
@@ -53,6 +60,8 @@ export const Note = ({
   const handleClick = (noteId: string): void => {
     onClick?.(noteId);
   };
+
+  const { setHistory } = useHistoryStore();
 
   return (
     <div
@@ -71,8 +80,29 @@ export const Note = ({
         } as React.CSSProperties
       }
     >
+      <button
+        onClick={async () => {
+          await deleteNote.mutateAsync(note);
+
+          queryClient.setQueryData(
+            notesQueryOptions(note.idwall).queryKey,
+            (previousNotes) => {
+              return previousNotes?.filter(
+                (previousNote) => previousNote._id !== note._id,
+              );
+            },
+          );
+
+          setHistory({
+            type: "delete",
+            item: note,
+          });
+        }}
+      >
+        delete
+      </button>
       <Card
-        className={`note ${isDragging && "is-dragging"} ${canMoveNote && !isDragging && "is-grab"}`}
+        className={`note ${isDragging && "is-dragging"} ${isMovingNote && !isDragging && "is-grab"}`}
         isSelectable={false}
         onClick={() => handleClick(note._id)}
       >

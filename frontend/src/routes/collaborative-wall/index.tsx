@@ -13,10 +13,10 @@ import {
   LoadingScreen,
   useOdeClient,
   useTrashedResource,
+  useUser,
 } from "@edifice-ui/react";
 import { QueryClient, useQueries } from "@tanstack/react-query";
 import { IWebApp } from "edifice-ts-client";
-// @ts-ignore
 import { useTranslation } from "react-i18next";
 import {
   LoaderFunctionArgs,
@@ -38,7 +38,7 @@ import { useMoveNote } from "~/hooks/useMoveNote";
 import { NoteProps } from "~/models/notes";
 import { CollaborativeWallProps } from "~/models/wall";
 import { notesQueryOptions, wallQueryOptions } from "~/services/queries";
-import { useWhiteboard } from "~/store";
+import { useHistoryStore, useWhiteboard } from "~/store";
 import "~/styles/index.css";
 
 const DescriptionModal = lazy(
@@ -94,7 +94,6 @@ export const CollaborativeWall = () => {
   const {
     openShareModal,
     setOpenShareModal,
-    zoom,
     isMobile,
     setIsMobile,
     openCreateModal,
@@ -102,7 +101,6 @@ export const CollaborativeWall = () => {
     useShallow((state) => ({
       openShareModal: state.openShareModal,
       setOpenShareModal: state.setOpenShareModal,
-      zoom: state.zoom,
       isMobile: state.isMobile,
       setIsMobile: state.setIsMobile,
       openCreateModal: state.openCreateModal,
@@ -133,10 +131,18 @@ export const CollaborativeWall = () => {
     ],
   });
 
-  const { updatedNote, handleOnDragEnd } = useMoveNote({ zoom, notes });
+  const { user } = useUser();
+
+  const moveNote = useMoveNote(notes as NoteProps[]);
+  const { updatedNote } = useHistoryStore();
 
   const canShare = useHasRights({
     roles: "creator",
+    rights: wall?.rights,
+  });
+
+  const canManage = useHasRights({
+    roles: ["creator", "manager"],
     rights: wall?.rights,
   });
 
@@ -144,8 +150,6 @@ export const CollaborativeWall = () => {
     if (query) setIsMobile(query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
-
-  console.count("Collab");
 
   if (isWallLoading && isNotesLoading) return <LoadingScreen />;
 
@@ -207,11 +211,12 @@ export const CollaborativeWall = () => {
         <WhiteboardWrapper>
           <DndContext
             sensors={sensors}
-            onDragEnd={handleOnDragEnd}
+            onDragEnd={moveNote}
             modifiers={[restrictToParentElement]}
           >
             {notes?.map((note: NoteProps, i: number) => {
               const isUpdated = note._id === updatedNote?.activeId;
+
               return (
                 <Note
                   key={note._id}
@@ -221,6 +226,12 @@ export const CollaborativeWall = () => {
                     y: isUpdated ? updatedNote.y : note.y,
                     title: `title ${i}`,
                     zIndex: isUpdated ? 2 : 1,
+                  }}
+                  disabled={() => {
+                    return (canManage &&
+                      note?.owner?.userId.includes(
+                        user?.userId as string,
+                      )) as boolean;
                   }}
                   onClick={
                     !isMobile ? (id) => navigate(`note/${id}`) : undefined

@@ -88,12 +88,14 @@ export const useGetNotes = (wallId: string) => {
   return useQuery(notesQueryOptions(wallId));
 };
 
-export const useCreateNote = (id: string) => {
+export const useCreateNote = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data) =>
-      await odeServices.http().post(`/collaborativewall/${id}/note`, data),
+    mutationFn: async (data: PickedNoteProps) =>
+      await odeServices
+        .http()
+        .post(`/collaborativewall/${data.idwall}/note`, data),
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
     },
@@ -122,6 +124,18 @@ export const useUpdateNote = () => {
           },
         );
       }
+    },
+  });
+};
+
+export const useDeleteNote = () => {
+  return useMutation({
+    mutationFn: async (data: NoteProps) => {
+      return await odeServices
+        .http()
+        .delete(
+          `/collaborativewall/${data.idwall}/note/${data._id}?lastEdit=${data.modified?.$date}`,
+        );
     },
   });
 };
