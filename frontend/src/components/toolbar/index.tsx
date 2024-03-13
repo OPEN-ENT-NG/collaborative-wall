@@ -135,15 +135,15 @@ export const ToolbarWrapper = ({
     },
     {
       type: "icon",
-      name: "zoomIn",
+      name: "zoomOut",
       props: {
-        icon: <ZoomIn />,
-        className: "zoom-in",
-        "aria-label": t("collaborativewall.toolbar.zoomin"),
+        icon: <ZoomOut />,
+        className: "zoom-out",
+        "aria-label": t("collaborativewall.toolbar.zoomout"),
         color: "tertiary",
-        onClick: () => zoomIn(zoomConfig.SCALE_ZOOM),
+        onClick: () => zoomOut(zoomConfig.SCALE_ZOOM),
       },
-      tooltip: t("collaborativewall.toolbar.zoomin", { ns: appCode }),
+      tooltip: t("collaborativewall.toolbar.zoomout", { ns: appCode }),
     },
     {
       type: "button",
@@ -158,16 +158,17 @@ export const ToolbarWrapper = ({
     },
     {
       type: "icon",
-      name: "zoomOut",
+      name: "zoomIn",
       props: {
-        icon: <ZoomOut />,
-        className: "zoom-out",
-        "aria-label": t("collaborativewall.toolbar.zoomout"),
+        icon: <ZoomIn />,
+        className: "zoom-in",
+        "aria-label": t("collaborativewall.toolbar.zoomin"),
         color: "tertiary",
-        onClick: () => zoomOut(zoomConfig.SCALE_ZOOM),
+        onClick: () => zoomIn(zoomConfig.SCALE_ZOOM),
       },
-      tooltip: t("collaborativewall.toolbar.zoomout", { ns: appCode }),
+      tooltip: t("collaborativewall.toolbar.zoomin", { ns: appCode }),
     },
+
     {
       type: "divider",
       name: "div-3",
