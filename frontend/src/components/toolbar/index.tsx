@@ -14,6 +14,7 @@ import { useShallow } from "zustand/react/shallow";
 
 import { wallConfig, zoomConfig } from "~/config/init-config";
 import { useHistory } from "~/features/history/hooks/useHistory";
+import { useAccess } from "~/hooks/useAccess";
 import { useWhiteboard } from "~/store";
 
 export const ToolbarWrapper = ({
@@ -57,6 +58,14 @@ export const ToolbarWrapper = ({
 
   const { canUndo, canRedo, handleUndo, handleRedo } = useHistory();
 
+  const { hasRightsToHistory } = useAccess();
+
+  const showIf = (truthy: boolean) => (truthy ? "show" : "hide");
+
+  console.log(hasRightsToHistory);
+
+  console.log(showIf(hasRightsToHistory));
+
   const WhiteboardItems: ToolbarItem[] = [
     {
       type: "icon",
@@ -69,6 +78,7 @@ export const ToolbarWrapper = ({
         onClick: handleUndo,
       },
       tooltip: t("collaborativewall.toolbar.undo", { ns: appCode }),
+      visibility: showIf(hasRightsToHistory),
     },
     {
       type: "icon",
@@ -81,10 +91,12 @@ export const ToolbarWrapper = ({
         onClick: handleRedo,
       },
       tooltip: t("collaborativewall.toolbar.redo", { ns: appCode }),
+      visibility: showIf(hasRightsToHistory),
     },
     {
       type: "divider",
       name: "div-1",
+      visibility: showIf(hasRightsToHistory),
     },
     {
       type: "icon",

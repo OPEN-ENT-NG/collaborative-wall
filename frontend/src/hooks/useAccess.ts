@@ -22,7 +22,7 @@ export const useAccess = () => {
   });
 
   const isManager = useHasRights({
-    roles: ["manager"],
+    roles: "manager",
     rights: wall?.rights,
   });
 
@@ -36,11 +36,23 @@ export const useAccess = () => {
     rights: wall?.rights,
   });
 
+  const hasRightsToHistory = useHasRights({
+    roles: ["creator", "manager", "contrib"],
+    rights: wall?.rights,
+  });
+
   const hasRightsToMoveNote = (note: NoteProps) => {
     return ((isCreator && isManager) ||
       (isContributor &&
         note?.owner?.userId.includes(user?.userId as string))) as boolean;
   };
 
-  return { isCreator, isManager, isContributor, isReader, hasRightsToMoveNote };
+  return {
+    isCreator,
+    isManager,
+    isContributor,
+    isReader,
+    hasRightsToMoveNote,
+    hasRightsToHistory,
+  };
 };
