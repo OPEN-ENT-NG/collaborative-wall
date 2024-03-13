@@ -42,7 +42,7 @@ export const ShowMediaType = ({
             src={media.url}
             alt={media.type}
             width="100%"
-            objectFit="cover"
+            objectFit={readonly ? "cover" : "contain"}
             ratio="16"
             style={{
               borderRadius: "16px",
