@@ -6,6 +6,7 @@ import {
   MediaLibraryType,
   useOdeClient,
 } from "@edifice-ui/react";
+import { WorkspaceElement } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs } from "react-router-dom";
 
@@ -70,11 +71,14 @@ export const ContentNote = ({
 
   useEffect(() => {
     if (libraryMedia) {
+      const medialIb = libraryMedia as WorkspaceElement;
       setMedia({
-        ...(media as NoteMedia),
-        id: libraryMedia?._id || "",
-        name: libraryMedia?.name || "",
-        url: `/workspace/document/${libraryMedia?._id}`,
+        type: (media as NoteMedia).type,
+        id: medialIb?._id || "",
+        name: medialIb?.name || "",
+        url: medialIb?._id
+          ? `/workspace/document/${medialIb?._id}`
+          : (libraryMedia as string),
       });
     }
   }, [libraryMedia]);
@@ -83,7 +87,7 @@ export const ContentNote = ({
     <>
       <ColorSelect dataNote={dataNote} setColorValue={setColorValue} />
       <div className="multimedia-section my-24">
-        {!media ? (
+        {!media?.url ? (
           <div className="toolbar-media py-48 px-12">
             <ToolbarMedia handleClickMedia={handleClickMedia} />
             {t("collaborativewall.add.media", { ns: appCode })}

@@ -122,21 +122,36 @@ export const ShowMediaType = ({
               style={{ zIndex: "2" }}
             />
           )}
-          <video
-            src={media.url}
-            data-document-id={media.id}
-            controls
-            style={{
-              borderRadius: "16px",
-              maxHeight: "350px",
-              position: "relative",
-              zIndex: "1",
-              width: "100%",
-              marginBottom: "-8px",
-            }}
-          >
-            <track default kind="captions" srcLang="fr" src=""></track>
-          </video>
+          {!media.id ? (
+            <iframe
+              src={media.url}
+              title={media.name}
+              style={{
+                borderRadius: "16px",
+                maxHeight: "350px",
+                position: "relative",
+                zIndex: "1",
+                width: "100%",
+                height: readonly ? "" : "350px",
+              }}
+            ></iframe>
+          ) : (
+            <video
+              src={media.url}
+              data-document-id={media.id}
+              controls
+              style={{
+                borderRadius: "16px",
+                maxHeight: "350px",
+                position: "relative",
+                zIndex: "1",
+                width: "100%",
+                marginBottom: "-8px",
+              }}
+            >
+              <track default kind="captions" srcLang="fr" src=""></track>
+            </video>
+          )}
         </div>
       );
     default:
