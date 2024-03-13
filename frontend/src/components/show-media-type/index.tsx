@@ -86,7 +86,7 @@ export const ShowMediaType = ({
             name={media.name}
             options={
               <>
-                <a href={media.url} download>
+                <a href={media.url} style={{ zIndex: "1" }} download>
                   <IconButton
                     icon={<Download />}
                     color="tertiary"
