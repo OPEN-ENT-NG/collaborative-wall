@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-query";
 import { IAction, ID, odeServices } from "edifice-ts-client";
 
+import { updateData } from "./helpers";
 import {
   getNote,
   getNotes,
@@ -88,12 +89,14 @@ export const useGetNotes = (wallId: string) => {
   return useQuery(notesQueryOptions(wallId));
 };
 
-export const useCreateNote = (id: string) => {
+export const useCreateNote = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (data) =>
-      await odeServices.http().post(`/collaborativewall/${id}/note`, data),
+    mutationFn: async (data: PickedNoteProps) =>
+      await odeServices
+        .http()
+        .post(`/collaborativewall/${data.idwall}/note`, data),
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
     },
@@ -107,21 +110,35 @@ export const useUpdateNote = () => {
     mutationFn: async ({ id, note }: { id: ID; note: PickedNoteProps }) =>
       await updateNote(note.idwall as string, id, note),
     onSuccess: async (_, { id, note }) => {
-      const previousNotes = queryClient.getQueryData(["notes", note.idwall]);
+      const previousNotes = queryClient.getQueryData([
+        "notes",
+        note.idwall,
+      ]) as NoteProps[];
 
       if (previousNotes) {
-        queryClient.setQueryData(
-          notesQueryOptions(note.idwall as string).queryKey,
-          (oldNotes: NoteProps[] | undefined) => {
-            return oldNotes?.map((oldNote) => {
-              if (oldNote._id === id) {
-                return { ...oldNote, ...note, zIndex: 2 };
-              }
-              return { ...oldNote, zIndex: 1 };
-            });
-          },
+        const findNote = previousNotes?.find(
+          (previousNote) => previousNote._id === id,
         );
+
+        if (!findNote) return;
+
+        updateData(queryClient, {
+          ...findNote,
+          ...note,
+        });
       }
+    },
+  });
+};
+
+export const useDeleteNote = () => {
+  return useMutation({
+    mutationFn: async (data: NoteProps) => {
+      return await odeServices
+        .http()
+        .delete(
+          `/collaborativewall/${data.idwall}/note/${data._id}?lastEdit=${data.modified?.$date}`,
+        );
     },
   });
 };

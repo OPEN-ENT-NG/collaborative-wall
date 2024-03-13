@@ -1,46 +1,20 @@
-import { useState } from "react";
-
 import { Active } from "@dnd-kit/core";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps } from "~/models/notes";
 import { updateNote } from "~/services/api";
-import { notesQueryOptions } from "~/services/queries";
+import { updateData } from "~/services/queries/helpers";
+import { useHistoryStore, useWhiteboard } from "~/store";
 
-export const useMoveNote = ({
-  zoom,
-  notes,
-}: {
-  zoom: number;
-  notes: NoteProps[] | undefined;
-}) => {
+export const useMoveNote = () => {
   const queryClient = useQueryClient();
 
-  const [updatedNote, setUpdatedNote] = useState<
-    | {
-        activeId: string;
-        x: number;
-        y: number;
-        zIndex: number;
-      }
-    | undefined
-  >(undefined);
+  const zoom = useWhiteboard((state) => state.zoom);
 
-  const handleOnDragEnd = async ({
-    active,
-    delta,
-  }: {
-    active: Active;
-    delta: { x: number; y: number };
-  }) => {
-    const activeId = active.id as string;
-    const findNote = notes?.find((note) => note._id === activeId);
+  const { setUpdatedNote, setHistory } = useHistoryStore();
 
-    if (!findNote) return;
-
-    const { idwall: wallId, _id: noteId } = findNote;
-
+  const update = async (currentNote: NoteProps, x: number, y: number) => {
     const note: {
       content: string;
       x: number;
@@ -50,36 +24,79 @@ export const useMoveNote = ({
       media: NoteMedia | null;
       modified?: { $date: number };
     } = {
-      content: findNote.content,
-      color: findNote.color,
-      idwall: wallId,
-      media: findNote.media,
-      modified: findNote.modified,
-      x: Math.round(findNote.x + delta.x / zoom),
-      y: Math.round(findNote.y + delta.y / zoom),
+      content: currentNote.content,
+      color: currentNote.color,
+      idwall: currentNote.idwall,
+      media: currentNote.media,
+      modified: currentNote.modified,
+      x,
+      y,
     };
 
     setUpdatedNote({
-      activeId,
-      x: Math.round(findNote.x + delta.x / zoom),
-      y: Math.round(findNote.y + delta.y / zoom),
+      activeId: currentNote._id,
+      x,
+      y,
       zIndex: 2,
     });
 
-    await updateNote(wallId, noteId, note);
-
-    queryClient.setQueryData(
-      notesQueryOptions(wallId).queryKey,
-      (previousNotes: NoteProps[] | undefined) => {
-        return previousNotes?.map((prevNote) => {
-          if (prevNote._id === noteId) {
-            return { ...prevNote, ...note, zIndex: 2 };
-          }
-          return { ...prevNote, zIndex: 1 };
-        });
-      },
+    const response = await updateNote(
+      currentNote.idwall,
+      currentNote._id,
+      note,
     );
+
+    const { status, wall: updatedWall } = response;
+
+    if (status !== "ok") return;
+
+    const updatedNote = updatedWall.find(
+      (item: NoteProps) => item._id === currentNote._id,
+    );
+
+    updateData(queryClient, updatedNote);
+
+    return updatedNote;
   };
 
-  return { updatedNote, handleOnDragEnd };
+  const move =
+    (notes?: NoteProps[]) =>
+    async ({
+      active,
+      delta,
+    }: {
+      active: Active;
+      delta: { x: number; y: number };
+    }) => {
+      const activeId = active.id as string;
+      const findNote = notes?.find((note) => note._id === activeId);
+
+      if (!findNote) return;
+
+      const position = {
+        x: Math.round(findNote.x + delta.x / zoom),
+        y: Math.round(findNote.y + delta.y / zoom),
+      };
+
+      const updatedNote = await update(findNote, position.x, position.y);
+
+      if (!updatedNote) return;
+
+      setHistory({
+        type: "move",
+        item: updatedNote,
+        positions: {
+          previous: {
+            x: findNote.x,
+            y: findNote.y,
+          },
+          next: {
+            x: position.x,
+            y: position.y,
+          },
+        },
+      });
+    };
+
+  return { update, move };
 };
