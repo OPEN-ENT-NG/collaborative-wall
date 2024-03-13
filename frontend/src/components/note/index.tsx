@@ -1,20 +1,27 @@
 import { useDraggable } from "@dnd-kit/core";
 import { Card } from "@edifice-ui/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useShallow } from "zustand/react/shallow";
 
 import { ShowMediaType } from "../show-media-type";
 import { NoteProps } from "~/models/notes";
-import { useWhiteboard } from "~/store";
+import { notesQueryOptions, useDeleteNote } from "~/services/queries";
+import { useHistoryStore, useWhiteboard } from "~/store";
 
 export const Note = ({
   note,
+  disabled,
   onClick,
 }: {
   note: NoteProps;
+  disabled: () => boolean;
   onClick?: (id: string) => void;
 }) => {
+  const queryClient = useQueryClient();
+  const deleteNote = useDeleteNote();
+
   const { zoom, canMoveNote, isBoardDragging } = useWhiteboard(
     useShallow((state) => ({
       zoom: state.zoom,
@@ -26,7 +33,7 @@ export const Note = ({
   const { attributes, isDragging, listeners, setNodeRef, transform } =
     useDraggable({
       id: note._id,
-      disabled: !canMoveNote,
+      disabled: !disabled,
     });
 
   const editor: Editor | null = useEditor({
@@ -54,6 +61,8 @@ export const Note = ({
     onClick?.(noteId);
   };
 
+  const { setHistory } = useHistoryStore();
+
   return (
     <div
       ref={setNodeRef}
@@ -71,6 +80,27 @@ export const Note = ({
         } as React.CSSProperties
       }
     >
+      <button
+        onClick={async () => {
+          await deleteNote.mutateAsync(note);
+
+          queryClient.setQueryData(
+            notesQueryOptions(note.idwall).queryKey,
+            (previousNotes) => {
+              return previousNotes?.filter(
+                (previousNote) => previousNote._id !== note._id,
+              );
+            },
+          );
+
+          setHistory({
+            type: "delete",
+            item: note,
+          });
+        }}
+      >
+        delete
+      </button>
       <Card
         className={`note ${isDragging && "is-dragging"} ${canMoveNote && !isDragging && "is-grab"}`}
         isSelectable={false}

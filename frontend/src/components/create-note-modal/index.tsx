@@ -10,10 +10,10 @@ import { noteColors } from "~/config/init-config";
 import { NoteMedia } from "~/models/noteMedia";
 import { PickedNoteProps } from "~/models/notes";
 import { useCreateNote } from "~/services/queries";
-import { useWhiteboard } from "~/store";
+import { useHistoryStore, useWhiteboard } from "~/store";
 
 export default function CreateNoteModal({ wallId }: { wallId: string }) {
-  const createNote = useCreateNote(wallId);
+  const createNote = useCreateNote();
 
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
@@ -27,13 +27,14 @@ export default function CreateNoteModal({ wallId }: { wallId: string }) {
         zoom: state.zoom,
       })),
     );
+  const { setHistory } = useHistoryStore();
 
   const [colorValue, setColorValue] = useState<string[]>([
     noteColors.yellow.background,
   ]);
   const [media, setMedia] = useState<NoteMedia | null>(null);
 
-  const handleCreateNote = () => {
+  const handleCreateNote = async () => {
     const note: PickedNoteProps = {
       content: "",
       color: colorValue,
@@ -42,9 +43,25 @@ export default function CreateNoteModal({ wallId }: { wallId: string }) {
       x: Math.trunc((positionViewport.x * -1 + window.innerWidth / 2) / zoom),
       y: Math.trunc((positionViewport.y * -1 + window.innerHeight / 2) / zoom),
     };
-    createNote.mutate(note as any);
 
-    setOpenCreateModal(false);
+    try {
+      const response = await createNote.mutateAsync(note);
+
+      const { status, wall } = response;
+
+      if (status === "ok") {
+        const size = wall.length;
+        const note = wall[size - 1];
+
+        setHistory({
+          type: "create",
+          item: note,
+        });
+      }
+      setOpenCreateModal(false);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return openCreateModal
