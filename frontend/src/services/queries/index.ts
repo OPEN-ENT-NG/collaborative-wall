@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-query";
 import { IAction, ID, odeServices } from "edifice-ts-client";
 
+import { updateData } from "./helpers";
 import {
   getNote,
   getNotes,
@@ -109,20 +110,22 @@ export const useUpdateNote = () => {
     mutationFn: async ({ id, note }: { id: ID; note: PickedNoteProps }) =>
       await updateNote(note.idwall as string, id, note),
     onSuccess: async (_, { id, note }) => {
-      const previousNotes = queryClient.getQueryData(["notes", note.idwall]);
+      const previousNotes = queryClient.getQueryData([
+        "notes",
+        note.idwall,
+      ]) as NoteProps[];
 
       if (previousNotes) {
-        queryClient.setQueryData(
-          notesQueryOptions(note.idwall as string).queryKey,
-          (oldNotes: NoteProps[] | undefined) => {
-            return oldNotes?.map((oldNote) => {
-              if (oldNote._id === id) {
-                return { ...oldNote, ...note, zIndex: 2 };
-              }
-              return { ...oldNote, zIndex: 1 };
-            });
-          },
+        const findNote = previousNotes?.find(
+          (previousNote) => previousNote._id === id,
         );
+
+        if (!findNote) return;
+
+        updateData(queryClient, {
+          ...findNote,
+          ...note,
+        });
       }
     },
   });

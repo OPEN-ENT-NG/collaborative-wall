@@ -133,7 +133,7 @@ export const CollaborativeWall = () => {
 
   const { user } = useUser();
 
-  const moveNote = useMoveNote(notes as NoteProps[]);
+  const { move: moveNote } = useMoveNote();
   const { updatedNote } = useHistoryStore();
 
   const canShare = useHasRights({
@@ -211,7 +211,7 @@ export const CollaborativeWall = () => {
         <WhiteboardWrapper>
           <DndContext
             sensors={sensors}
-            onDragEnd={moveNote}
+            onDragEnd={moveNote(notes as NoteProps[])}
             modifiers={[restrictToParentElement]}
           >
             {notes?.map((note: NoteProps, i: number) => {

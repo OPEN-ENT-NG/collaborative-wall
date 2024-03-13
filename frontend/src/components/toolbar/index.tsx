@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
 import { wallConfig, zoomConfig } from "~/config/init-config";
-import { useHistory } from "~/hooks/useHistory";
+import { useHistory } from "~/features/history/hooks/useHistory";
 import { useWhiteboard } from "~/store";
 
 export const ToolbarWrapper = ({

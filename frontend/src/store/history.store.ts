@@ -1,53 +1,6 @@
-import { ID } from "edifice-ts-client";
 import { create } from "zustand";
 
-import { NoteProps } from "~/models/notes";
-
-/* History Store */
-export type HistoryState = {
-  past: NewState[];
-  present: NewState | null;
-  future: NewState[];
-  updatedNote:
-    | {
-        activeId: ID;
-        x: number;
-        y: number;
-        zIndex: number;
-      }
-    | undefined;
-};
-
-export type UpdateNote = {
-  activeId: ID;
-  x: number;
-  y: number;
-  zIndex: number;
-};
-
-export type HistoryPosition = {
-  previous: {
-    x: number;
-    y: number;
-  };
-  next: {
-    x: number;
-    y: number;
-  };
-};
-
-export type NewState = {
-  type: string;
-  item: NoteProps;
-  positions?: HistoryPosition;
-};
-
-type HistoryAction = {
-  setUpdatedNote: ({ activeId, x, y, zIndex }: UpdateNote) => void;
-  setHistory: (newState: NewState) => void;
-  undo: () => void;
-  redo: () => void;
-};
+import { HistoryAction, HistoryState, UpdateNote } from "~/models/store";
 
 const historyState = {
   past: [],

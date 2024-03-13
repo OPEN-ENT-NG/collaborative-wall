@@ -22,10 +22,10 @@ export const Note = ({
   const queryClient = useQueryClient();
   const deleteNote = useDeleteNote();
 
-  const { zoom, isMovingNote, isBoardDragging } = useWhiteboard(
+  const { zoom, canMoveNote, isBoardDragging } = useWhiteboard(
     useShallow((state) => ({
       zoom: state.zoom,
-      isMovingNote: state.canMoveNote,
+      canMoveNote: state.canMoveNote,
       isBoardDragging: state.isDragging,
     })),
   );
@@ -49,7 +49,7 @@ export const Note = ({
     userSelect: (isDragging || isBoardDragging) && "none",
     top: (transform?.y ?? 0) / zoom,
     left: (transform?.x ?? 0) / zoom,
-    cursor: isMovingNote ? (isDragging ? "grabbing" : "grab") : "default",
+    cursor: canMoveNote ? (isDragging ? "grabbing" : "grab") : "default",
     boxShadow: isDragging
       ? "-1px 0 15px 0 rgba(34, 33, 81, 0.01), 0px 15px 15px 0 rgba(34, 33, 81, 0.25)"
       : "0 2px 6px 0px rgba(0, 0, 0, 0.15)",
@@ -102,7 +102,7 @@ export const Note = ({
         delete
       </button>
       <Card
-        className={`note ${isDragging && "is-dragging"} ${isMovingNote && !isDragging && "is-grab"}`}
+        className={`note ${isDragging && "is-dragging"} ${canMoveNote && !isDragging && "is-grab"}`}
         isSelectable={false}
         onClick={() => handleClick(note._id)}
       >

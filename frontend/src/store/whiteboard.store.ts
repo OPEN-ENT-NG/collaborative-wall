@@ -1,39 +1,7 @@
 import { create } from "zustand";
 
 import { OFFSET, zoomConfig } from "~/config/init-config";
-
-type Offset = {
-  x: number;
-  y: number;
-};
-
-type State = {
-  isMobile: boolean;
-  canMoveBoard: boolean;
-  canMoveNote: boolean;
-  canZoom: boolean;
-  isDragging: boolean;
-  startPosition: Offset;
-  offset: Offset;
-  zoom: number;
-  openShareModal: boolean;
-  openCreateModal: boolean;
-  openDescriptionModal: boolean;
-  positionViewport: Offset;
-};
-
-type Action = {
-  toggleCanMoveBoard: () => void;
-  toggleCanMoveNote: () => void;
-  setCanMoveBoard: (value: boolean) => void;
-  setCanMoveNote: (value: boolean) => void;
-  setZoom: (value: number) => void;
-  setIsMobile: (query: string | null) => void;
-  setOpenShareModal: (value: boolean) => void;
-  setOpenCreateModal: (value: boolean) => void;
-  setOpenDescriptionModal: (value: boolean) => void;
-  setPositionViewport: (value: { x: number; y: number }) => void;
-};
+import { Action, State } from "~/models/store";
 
 const initialState = {
   isMobile: false,
