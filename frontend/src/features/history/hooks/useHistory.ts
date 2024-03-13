@@ -33,10 +33,12 @@ export const useHistory = () => {
   };
 
   const createAction = async (action: NewState) => {
+    console.log({ action });
     const response = await createNote.mutateAsync({
       color: action.item.color,
       content: action.item.content,
       idwall: action.item.idwall,
+      media: action.item.media,
       x: action.item.x,
       y: action.item.y,
     } as any);

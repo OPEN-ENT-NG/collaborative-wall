@@ -33,6 +33,13 @@ export const useMoveNote = () => {
       y,
     };
 
+    setUpdatedNote({
+      activeId: currentNote._id,
+      x,
+      y,
+      zIndex: 2,
+    });
+
     const response = await updateNote(
       currentNote.idwall,
       currentNote._id,
@@ -48,13 +55,6 @@ export const useMoveNote = () => {
     );
 
     updateData(queryClient, updatedNote);
-
-    setUpdatedNote({
-      activeId: currentNote._id,
-      x,
-      y,
-      zIndex: 2,
-    });
 
     return updatedNote;
   };
