@@ -46,6 +46,7 @@ export default ({ mode }: { mode: string }) => {
     "/collaborativewall": proxyObj,
     "/xiti": proxyObj,
     "/analyticsConf": proxyObj,
+    "/video": proxyObj,
   };
 
   const base = mode === "production" ? "/collaborativewall" : "";
