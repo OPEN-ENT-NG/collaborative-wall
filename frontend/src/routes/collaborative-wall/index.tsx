@@ -1,23 +1,16 @@
-import { RefAttributes, Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, lazy, useEffect } from "react";
 
 import { DndContext } from "@dnd-kit/core";
 import { restrictToParentElement } from "@dnd-kit/modifiers";
-import { Landscape, Options } from "@edifice-ui/icons";
 import {
   AppHeader,
   Breadcrumb,
-  Button,
-  Dropdown,
-  IconButton,
-  IconButtonProps,
   LoadingScreen,
   useOdeClient,
   useTrashedResource,
-  useUser,
 } from "@edifice-ui/react";
 import { QueryClient, useQueries } from "@tanstack/react-query";
 import { IWebApp } from "edifice-ts-client";
-import { useTranslation } from "react-i18next";
 import {
   LoaderFunctionArgs,
   Outlet,
@@ -32,13 +25,15 @@ import { DescriptionWall } from "~/components/description-wall";
 import { EmptyScreenError } from "~/components/emptyscreen-error";
 import { Note } from "~/components/note";
 import { WhiteboardWrapper } from "~/components/whiteboard-wrapper";
+import { AppActions } from "~/features/app-actions";
+import { useAccess } from "~/hooks/useAccess";
 import { useDndKit } from "~/hooks/useDndKit";
-import { useHasRights } from "~/hooks/useHasRights";
 import { useMoveNote } from "~/hooks/useMoveNote";
 import { NoteProps } from "~/models/notes";
 import { CollaborativeWallProps } from "~/models/wall";
 import { notesQueryOptions, wallQueryOptions } from "~/services/queries";
 import { useHistoryStore, useWhiteboard } from "~/store";
+
 import "~/styles/index.css";
 
 const DescriptionModal = lazy(
@@ -93,27 +88,27 @@ export const CollaborativeWall = () => {
 
   const {
     openShareModal,
-    setOpenShareModal,
     isMobile,
-    setIsMobile,
     openCreateModal,
+    openBackgroundModal,
+    setIsMobile,
+    setOpenShareModal,
+    setIsOpenBackgroundModal,
   } = useWhiteboard(
     useShallow((state) => ({
       openShareModal: state.openShareModal,
-      setOpenShareModal: state.setOpenShareModal,
       isMobile: state.isMobile,
-      setIsMobile: state.setIsMobile,
       openCreateModal: state.openCreateModal,
+      openBackgroundModal: state.openBackgroundModal,
+      setOpenShareModal: state.setOpenShareModal,
+      setIsOpenBackgroundModal: state.setIsOpenBackgroundModal,
+      setIsMobile: state.setIsMobile,
     })),
   );
 
   useTrashedResource(params?.wallId);
 
-  const [isOpenBackgroundModal, setIsOpenBackgroundModal] =
-    useState<boolean>(false);
-
   const { currentApp } = useOdeClient();
-  const { t } = useTranslation();
 
   const [
     { data: wall, isPending: isWallLoading, isError: isWallError },
@@ -131,20 +126,10 @@ export const CollaborativeWall = () => {
     ],
   });
 
-  const { user } = useUser();
-
   const { move: moveNote } = useMoveNote();
   const { updatedNote } = useHistoryStore();
 
-  const canShare = useHasRights({
-    roles: "creator",
-    rights: wall?.rights,
-  });
-
-  const canManage = useHasRights({
-    roles: ["creator", "manager"],
-    rights: wall?.rights,
-  });
+  const { hasRightsToMoveNote } = useAccess();
 
   useEffect(() => {
     if (query) setIsMobile(query);
@@ -161,45 +146,7 @@ export const CollaborativeWall = () => {
         <AppHeader
           isFullscreen
           style={{ position: "sticky" }}
-          render={() => (
-            <>
-              {canShare && (
-                <Button
-                  variant="filled"
-                  onClick={() => setOpenShareModal(true)}
-                >
-                  {t("share")}
-                </Button>
-              )}
-              <Dropdown>
-                {(
-                  triggerProps: JSX.IntrinsicAttributes &
-                    Omit<IconButtonProps, "ref"> &
-                    RefAttributes<HTMLButtonElement>,
-                ) => (
-                  <>
-                    <IconButton
-                      {...triggerProps}
-                      type="button"
-                      aria-label="label"
-                      color="primary"
-                      variant="outline"
-                      icon={<Options />}
-                    />
-
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        icon={<Landscape />}
-                        onClick={() => setIsOpenBackgroundModal(true)}
-                      >
-                        {t("collaborativewall.modal.background")}
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </>
-                )}
-              </Dropdown>
-            </>
-          )}
+          render={() => <AppActions />}
         >
           <Breadcrumb app={currentApp as IWebApp} name={wall?.name} />
         </AppHeader>
@@ -227,12 +174,7 @@ export const CollaborativeWall = () => {
                     title: `title ${i}`,
                     zIndex: isUpdated ? 2 : 1,
                   }}
-                  disabled={() => {
-                    return (canManage &&
-                      note?.owner?.userId.includes(
-                        user?.userId as string,
-                      )) as boolean;
-                  }}
+                  disabled={hasRightsToMoveNote(note)}
                   onClick={
                     !isMobile ? (id) => navigate(`note/${id}`) : undefined
                   }
@@ -250,7 +192,7 @@ export const CollaborativeWall = () => {
         {wall && (
           <BackgroundModal
             setIsOpen={setIsOpenBackgroundModal}
-            isOpen={isOpenBackgroundModal}
+            isOpen={openBackgroundModal}
             wall={wall}
           />
         )}

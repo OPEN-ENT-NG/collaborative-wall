@@ -32,6 +32,7 @@ export default function BackgroundModal({
   const { t } = useTranslation();
 
   const [backgroundValue, setBackgroundValue] = useState<string>("");
+
   const updateWall = useUpdateWall();
 
   const handleClose = () => setIsOpen(false);
@@ -42,7 +43,7 @@ export default function BackgroundModal({
       description: wall.description,
       name: wall.name,
     };
-    updateWall.mutateAsync({ wallId: wall._id, newWall });
+    updateWall.mutate({ wallId: wall._id, newWall });
   };
 
   return isOpen
@@ -72,7 +73,7 @@ export default function BackgroundModal({
               </Heading>
               <Grid>
                 {backgroundImages.map((image) => (
-                  <Grid.Col sm="2">
+                  <Grid.Col sm="2" key={image}>
                     <Card
                       isClickable={true}
                       isSelectable={false}
