@@ -11,7 +11,7 @@ import { WorkspaceElement } from "edifice-ts-client";
 export const useMediaLibrary = () => {
   const mediaLibraryRef = useRef<MediaLibraryRef>(null);
   const [libraryMedia, setLibraryMedia] = useState<
-    WorkspaceElement | undefined
+    WorkspaceElement | String | undefined
   >();
   const { remove } = useWorkspaceFile();
 
@@ -23,8 +23,18 @@ export const useMediaLibrary = () => {
   };
   const onSuccess = (result: MediaLibraryResult) => {
     if (mediaLibraryRef.current?.type) {
-      mediaLibraryRef.current?.hide();
-      setLibraryMedia(result[result.length - 1]);
+      if (result[result.length - 1]._id) {
+        mediaLibraryRef.current?.hide();
+        setLibraryMedia(result[result.length - 1]);
+      } else {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(result, "text/html");
+        const element = doc.body.firstChild as HTMLBodyElement;
+
+        const href = element?.getAttribute("src");
+        mediaLibraryRef.current?.hide();
+        setLibraryMedia(href ?? undefined);
+      }
     }
   };
   const onTabChange = async (
