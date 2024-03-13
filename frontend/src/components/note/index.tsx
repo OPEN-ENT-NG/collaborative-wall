@@ -3,6 +3,7 @@ import { Card } from "@edifice-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import clsx from "clsx";
 import { useShallow } from "zustand/react/shallow";
 
 import { ShowMediaType } from "../show-media-type";
@@ -16,17 +17,16 @@ export const Note = ({
   onClick,
 }: {
   note: NoteProps;
-  disabled: () => boolean;
+  disabled: boolean;
   onClick?: (id: string) => void;
 }) => {
   const queryClient = useQueryClient();
   const deleteNote = useDeleteNote();
 
-  const { zoom, canMoveNote, isBoardDragging } = useWhiteboard(
+  const { zoom } = useWhiteboard(
     useShallow((state) => ({
       zoom: state.zoom,
-      canMoveNote: state.canMoveNote,
-      isBoardDragging: state.isDragging,
+      isDragging: state.isDragging,
     })),
   );
 
@@ -45,10 +45,10 @@ export const Note = ({
   const style = {
     position: "absolute",
     zIndex: isDragging ? 200 : note.zIndex,
-    userSelect: (isDragging || isBoardDragging) && "none",
+    userSelect: isDragging && "none",
     top: (transform?.y ?? 0) / zoom,
     left: (transform?.x ?? 0) / zoom,
-    cursor: canMoveNote ? (isDragging ? "grabbing" : "grab") : "default",
+    // cursor: canMoveNote ? (isDragging ? "grabbing" : "grab") : "default",
     boxShadow: isDragging
       ? "-1px 0 15px 0 rgba(34, 33, 81, 0.01), 0px 15px 15px 0 rgba(34, 33, 81, 0.25)"
       : "0 2px 6px 0px rgba(0, 0, 0, 0.15)",
@@ -61,6 +61,11 @@ export const Note = ({
   };
 
   const { setHistory } = useHistoryStore();
+
+  const classes = clsx("note", {
+    "is-dragging": isDragging,
+    "is-grab": disabled && !isDragging,
+  });
 
   return (
     <div
@@ -101,7 +106,7 @@ export const Note = ({
         delete
       </button>
       <Card
-        className={`note ${isDragging && "is-dragging"} ${canMoveNote && !isDragging && "is-grab"}`}
+        className={classes}
         isSelectable={false}
         onClick={() => handleClick(note._id)}
       >

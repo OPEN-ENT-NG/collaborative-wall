@@ -66,6 +66,7 @@ export type State = {
   openShareModal: boolean;
   openCreateModal: boolean;
   openDescriptionModal: boolean;
+  openBackgroundModal: boolean;
   positionViewport: Offset;
 };
 
@@ -79,5 +80,6 @@ export type Action = {
   setOpenShareModal: (value: boolean) => void;
   setOpenCreateModal: (value: boolean) => void;
   setOpenDescriptionModal: (value: boolean) => void;
+  setIsOpenBackgroundModal: (value: boolean) => void;
   setPositionViewport: (value: { x: number; y: number }) => void;
 };
