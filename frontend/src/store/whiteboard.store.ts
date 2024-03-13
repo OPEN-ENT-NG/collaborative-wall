@@ -15,6 +15,7 @@ const initialState = {
   openShareModal: false,
   openCreateModal: false,
   openDescriptionModal: false,
+  openBackgroundModal: false,
   positionViewport: {
     x: 0,
     y: 0,
@@ -39,6 +40,8 @@ export const useWhiteboard = create<State & Action>((set) => ({
   setOpenCreateModal: (value: boolean) => set({ openCreateModal: value }),
   setOpenDescriptionModal: (value: boolean) =>
     set({ openDescriptionModal: value }),
+  setIsOpenBackgroundModal: (value: boolean) =>
+    set({ openBackgroundModal: value }),
   setPositionViewport: (value: { x: number; y: number }) =>
     set({ positionViewport: value }),
 }));

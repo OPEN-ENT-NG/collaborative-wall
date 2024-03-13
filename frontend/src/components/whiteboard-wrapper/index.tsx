@@ -1,15 +1,12 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
 import { TransformWrapper } from "react-zoom-pan-pinch";
 import { useShallow } from "zustand/react/shallow";
 
 import { ToolbarWrapper } from "../toolbar";
 import { WhiteboardComponent } from "../whiteboard-component";
 import { zoomConfig } from "~/config/init-config";
-import { useHasRights } from "~/hooks/useHasRights";
-import { wallQueryOptions } from "~/services/queries";
+import { useAccess } from "~/hooks/useAccess";
 import { useWhiteboard } from "~/store";
 import { calculateMinScale } from "~/utils/calculMinScale";
 
@@ -26,8 +23,6 @@ export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
 
   const [minScale, setMinScale] = useState(1);
 
-  const params = useParams();
-
   const ref = useRef<any>(null);
 
   const handleScaleChange = (event: any) => {
@@ -38,15 +33,7 @@ export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
     setZoom(event.instance.transformState.scale);
   };
 
-  const { data: wall } = useQuery({
-    queryKey: wallQueryOptions(params.wallId as string).queryKey,
-    queryFn: wallQueryOptions(params.wallId as string).queryFn,
-  });
-
-  const canUpdate = useHasRights({
-    roles: ["creator"],
-    rights: wall?.rights,
-  });
+  const { isCreator } = useAccess();
 
   useEffect(() => {
     const handleResize = () => {
@@ -58,6 +45,7 @@ export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
     handleResize();
 
     return () => window.removeEventListener("resize", handleResize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.innerHeight, window.innerWidth]);
 
   return (
@@ -77,14 +65,14 @@ export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
               children={children}
               zoomIn={zoomIn}
               zoomOut={zoomOut}
-              canUpdate={canUpdate}
+              canUpdate={isCreator}
             />
             {!isMobile && (
               <ToolbarWrapper
                 zoomIn={zoomIn}
                 zoomOut={zoomOut}
                 setTransform={setTransform}
-                canUpdate={canUpdate}
+                canUpdate={isCreator}
               />
             )}
           </div>
