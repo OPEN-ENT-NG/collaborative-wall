@@ -70,6 +70,7 @@ export const ShowMediaType = ({
           </audio>
           {!readonly && (
             <IconButton
+              className="ms-8"
               icon={<Delete />}
               variant="outline"
               color="danger"
