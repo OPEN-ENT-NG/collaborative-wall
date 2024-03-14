@@ -86,26 +86,28 @@ export const ShowMediaType = ({
           <Attachment
             name={media.name}
             options={
-              <>
-                <a href={media.url} style={{ zIndex: "1" }} download>
-                  <IconButton
-                    icon={<Download />}
-                    color="tertiary"
-                    type="button"
-                    variant="ghost"
-                    aria-label={t("download")}
-                  />
-                </a>
-                {!readonly && (
-                  <IconButton
-                    icon={<Delete />}
-                    variant="ghost"
-                    color="danger"
-                    aria-label={t("remove")}
-                    onClick={() => setMedia?.(null)}
-                  />
-                )}
-              </>
+              !readonly ? (
+                <>
+                  <a href={media.url} style={{ zIndex: "1" }} download>
+                    <IconButton
+                      icon={<Download />}
+                      color="tertiary"
+                      type="button"
+                      variant="ghost"
+                      aria-label={t("download")}
+                    />
+                  </a>
+                  {!readonly && (
+                    <IconButton
+                      icon={<Delete />}
+                      variant="ghost"
+                      color="danger"
+                      aria-label={t("remove")}
+                      onClick={() => setMedia?.(null)}
+                    />
+                  )}
+                </>
+              ) : undefined
             }
           ></Attachment>
         </div>
