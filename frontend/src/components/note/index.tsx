@@ -23,17 +23,17 @@ export const Note = ({
   const queryClient = useQueryClient();
   const deleteNote = useDeleteNote();
 
-  const { zoom } = useWhiteboard(
+  const { zoom, canMoveNote } = useWhiteboard(
     useShallow((state) => ({
       zoom: state.zoom,
-      isDragging: state.isDragging,
+      canMoveNote: state.canMoveNote,
     })),
   );
 
   const { attributes, isDragging, listeners, setNodeRef, transform } =
     useDraggable({
       id: note._id,
-      disabled: !disabled,
+      disabled: !canMoveNote || !disabled,
     });
 
   const editor: Editor | null = useEditor({
@@ -48,7 +48,7 @@ export const Note = ({
     userSelect: isDragging && "none",
     top: (transform?.y ?? 0) / zoom,
     left: (transform?.x ?? 0) / zoom,
-    // cursor: canMoveNote ? (isDragging ? "grabbing" : "grab") : "default",
+    cursor: canMoveNote ? (isDragging ? "grabbing" : "grab") : "default",
     boxShadow: isDragging
       ? "-1px 0 15px 0 rgba(34, 33, 81, 0.01), 0px 15px 15px 0 rgba(34, 33, 81, 0.25)"
       : "0 2px 6px 0px rgba(0, 0, 0, 0.15)",

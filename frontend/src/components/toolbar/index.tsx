@@ -14,6 +14,7 @@ import { useShallow } from "zustand/react/shallow";
 
 import { wallConfig, zoomConfig } from "~/config/init-config";
 import { useHistory } from "~/features/history/hooks/useHistory";
+import { useAccess } from "~/hooks/useAccess";
 import { useWhiteboard } from "~/store";
 
 export const ToolbarWrapper = ({
@@ -57,6 +58,10 @@ export const ToolbarWrapper = ({
 
   const { canUndo, canRedo, handleUndo, handleRedo } = useHistory();
 
+  const { allRolesButRead } = useAccess();
+
+  const showIf = (truthy: boolean) => (truthy ? "show" : "hide");
+
   const WhiteboardItems: ToolbarItem[] = [
     {
       type: "icon",
@@ -69,6 +74,7 @@ export const ToolbarWrapper = ({
         onClick: handleUndo,
       },
       tooltip: t("collaborativewall.toolbar.undo", { ns: appCode }),
+      visibility: showIf(allRolesButRead),
     },
     {
       type: "icon",
@@ -81,10 +87,12 @@ export const ToolbarWrapper = ({
         onClick: handleRedo,
       },
       tooltip: t("collaborativewall.toolbar.redo", { ns: appCode }),
+      visibility: showIf(allRolesButRead),
     },
     {
       type: "divider",
       name: "div-1",
+      visibility: showIf(allRolesButRead),
     },
     {
       type: "icon",
@@ -94,12 +102,14 @@ export const ToolbarWrapper = ({
         "aria-label": t("collaborativewall.toolbar.movenote"),
         color: "tertiary",
         className: canMoveNote ? "is-selected" : "",
+        // disabled: !canMoveNote,
         onClick: () => {
           toggleCanMoveNote();
           setCanMoveBoard(false);
         },
       },
       tooltip: t("collaborativewall.toolbar.movenote", { ns: appCode }),
+      visibility: showIf(allRolesButRead),
     },
     {
       type: "icon",
@@ -171,6 +181,7 @@ export const ToolbarWrapper = ({
     {
       type: "divider",
       name: "div-3",
+      visibility: showIf(allRolesButRead),
     },
     {
       type: "icon",
@@ -183,6 +194,7 @@ export const ToolbarWrapper = ({
         onClick: () => setOpenCreateModal(true),
       },
       tooltip: t("collaborativewall.toolbar.create", { ns: appCode }),
+      visibility: showIf(allRolesButRead),
     },
   ];
 

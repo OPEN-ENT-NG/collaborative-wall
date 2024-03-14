@@ -6,7 +6,6 @@ import { useShallow } from "zustand/react/shallow";
 import { ToolbarWrapper } from "../toolbar";
 import { WhiteboardComponent } from "../whiteboard-component";
 import { zoomConfig } from "~/config/init-config";
-import { useAccess } from "~/hooks/useAccess";
 import { useWhiteboard } from "~/store";
 import { calculateMinScale } from "~/utils/calculMinScale";
 
@@ -16,6 +15,7 @@ export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
       useShallow((state) => ({
         setZoom: state.setZoom,
         setPositionViewport: state.setPositionViewport,
+        canMoveNote: state.canMoveNote,
         canMoveBoard: state.canMoveBoard,
         isMobile: state.isMobile,
       })),
@@ -32,8 +32,6 @@ export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
     });
     setZoom(event.instance.transformState.scale);
   };
-
-  const { isCreator } = useAccess();
 
   useEffect(() => {
     const handleResize = () => {
@@ -65,14 +63,12 @@ export const WhiteboardWrapper = ({ children }: { children: ReactNode }) => {
               children={children}
               zoomIn={zoomIn}
               zoomOut={zoomOut}
-              canUpdate={isCreator}
             />
             {!isMobile && (
               <ToolbarWrapper
                 zoomIn={zoomIn}
                 zoomOut={zoomOut}
                 setTransform={setTransform}
-                canUpdate={isCreator}
               />
             )}
           </div>
