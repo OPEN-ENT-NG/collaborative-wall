@@ -24,38 +24,47 @@ export const AppActions = () => {
     })),
   );
 
-  return isCreator ? (
-    <>
+  const renderButton = () => {
+    return isCreator ? (
       <Button variant="filled" onClick={() => setOpenShareModal(true)}>
         {t("share")}
       </Button>
-      <Dropdown>
-        {(
-          triggerProps: JSX.IntrinsicAttributes &
-            Omit<IconButtonProps, "ref"> &
-            RefAttributes<HTMLButtonElement>,
-        ) => (
-          <>
-            <IconButton
-              {...triggerProps}
-              type="button"
-              aria-label="label"
-              color="primary"
-              variant="outline"
-              icon={<Options />}
-            />
+    ) : null;
+  };
 
-            <Dropdown.Menu>
-              <Dropdown.Item
-                icon={<Landscape />}
-                onClick={() => setIsOpenBackgroundModal(true)}
-              >
-                {t("collaborativewall.modal.background")}
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </>
-        )}
-      </Dropdown>
+  return (
+    <>
+      {renderButton()}
+
+      {isCreator && (
+        <Dropdown>
+          {(
+            triggerProps: JSX.IntrinsicAttributes &
+              Omit<IconButtonProps, "ref"> &
+              RefAttributes<HTMLButtonElement>,
+          ) => (
+            <>
+              <IconButton
+                {...triggerProps}
+                type="button"
+                aria-label="label"
+                color="primary"
+                variant="outline"
+                icon={<Options />}
+              />
+
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  icon={<Landscape />}
+                  onClick={() => setIsOpenBackgroundModal(true)}
+                >
+                  {t("collaborativewall.modal.background")}
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </>
+          )}
+        </Dropdown>
+      )}
     </>
-  ) : null;
+  );
 };

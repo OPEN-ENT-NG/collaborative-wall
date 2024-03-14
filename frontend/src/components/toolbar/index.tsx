@@ -21,12 +21,10 @@ export const ToolbarWrapper = ({
   zoomIn,
   zoomOut,
   setTransform,
-  canUpdate,
 }: {
   zoomIn: (value: number) => void;
   zoomOut: (value: number) => void;
   setTransform: any;
-  canUpdate: boolean | undefined;
 }) => {
   const {
     canMoveBoard,
@@ -58,13 +56,9 @@ export const ToolbarWrapper = ({
 
   const { canUndo, canRedo, handleUndo, handleRedo } = useHistory();
 
-  const { hasRightsToHistory } = useAccess();
+  const { allRolesButRead } = useAccess();
 
   const showIf = (truthy: boolean) => (truthy ? "show" : "hide");
-
-  console.log(hasRightsToHistory);
-
-  console.log(showIf(hasRightsToHistory));
 
   const WhiteboardItems: ToolbarItem[] = [
     {
@@ -78,7 +72,7 @@ export const ToolbarWrapper = ({
         onClick: handleUndo,
       },
       tooltip: t("collaborativewall.toolbar.undo", { ns: appCode }),
-      visibility: showIf(hasRightsToHistory),
+      visibility: showIf(allRolesButRead),
     },
     {
       type: "icon",
@@ -91,12 +85,12 @@ export const ToolbarWrapper = ({
         onClick: handleRedo,
       },
       tooltip: t("collaborativewall.toolbar.redo", { ns: appCode }),
-      visibility: showIf(hasRightsToHistory),
+      visibility: showIf(allRolesButRead),
     },
     {
       type: "divider",
       name: "div-1",
-      visibility: showIf(hasRightsToHistory),
+      visibility: showIf(allRolesButRead),
     },
     {
       type: "icon",
@@ -106,13 +100,14 @@ export const ToolbarWrapper = ({
         "aria-label": t("collaborativewall.toolbar.movenote"),
         color: "tertiary",
         className: canMoveNote ? "is-selected" : "",
-        disabled: !canUpdate,
+        // disabled: !canMoveNote,
         onClick: () => {
           toggleCanMoveNote();
           setCanMoveBoard(false);
         },
       },
       tooltip: t("collaborativewall.toolbar.movenote", { ns: appCode }),
+      visibility: showIf(allRolesButRead),
     },
     {
       type: "icon",
@@ -147,15 +142,15 @@ export const ToolbarWrapper = ({
     },
     {
       type: "icon",
-      name: "zoomIn",
+      name: "zoomOut",
       props: {
-        icon: <ZoomIn />,
-        className: "zoom-in",
-        "aria-label": t("collaborativewall.toolbar.zoomin"),
+        icon: <ZoomOut />,
+        className: "zoom-out",
+        "aria-label": t("collaborativewall.toolbar.zoomout"),
         color: "tertiary",
-        onClick: () => zoomIn(zoomConfig.SCALE_ZOOM),
+        onClick: () => zoomOut(zoomConfig.SCALE_ZOOM),
       },
-      tooltip: t("collaborativewall.toolbar.zoomin", { ns: appCode }),
+      tooltip: t("collaborativewall.toolbar.zoomout", { ns: appCode }),
     },
     {
       type: "button",
@@ -170,19 +165,20 @@ export const ToolbarWrapper = ({
     },
     {
       type: "icon",
-      name: "zoomOut",
+      name: "zoomIn",
       props: {
-        icon: <ZoomOut />,
-        className: "zoom-out",
-        "aria-label": t("collaborativewall.toolbar.zoomout"),
+        icon: <ZoomIn />,
+        className: "zoom-in",
+        "aria-label": t("collaborativewall.toolbar.zoomin"),
         color: "tertiary",
-        onClick: () => zoomOut(zoomConfig.SCALE_ZOOM),
+        onClick: () => zoomIn(zoomConfig.SCALE_ZOOM),
       },
-      tooltip: t("collaborativewall.toolbar.zoomout", { ns: appCode }),
+      tooltip: t("collaborativewall.toolbar.zoomin", { ns: appCode }),
     },
     {
       type: "divider",
       name: "div-3",
+      visibility: showIf(allRolesButRead),
     },
     {
       type: "icon",
@@ -195,6 +191,7 @@ export const ToolbarWrapper = ({
         onClick: () => setOpenCreateModal(true),
       },
       tooltip: t("collaborativewall.toolbar.create", { ns: appCode }),
+      visibility: showIf(allRolesButRead),
     },
   ];
 
