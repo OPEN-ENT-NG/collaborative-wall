@@ -8,6 +8,8 @@ import { useDeleteNote, useCreateNote } from "~/services/queries";
 import { filterData } from "~/services/queries/helpers";
 import { useHistoryStore } from "~/store";
 
+const MAX_HISTORY = 40;
+
 export const useHistory = () => {
   const { undo, redo, past, future } = useHistoryStore(
     useShallow((state) => ({
@@ -18,8 +20,8 @@ export const useHistory = () => {
     })),
   );
 
-  const canUndo = past.length > 0;
-  const canRedo = future.length > 0;
+  const canUndo = past.length > 0 && past.length < MAX_HISTORY;
+  const canRedo = future.length > 0 && future.length < MAX_HISTORY;
 
   const deleteNote = useDeleteNote();
   const createNote = useCreateNote();

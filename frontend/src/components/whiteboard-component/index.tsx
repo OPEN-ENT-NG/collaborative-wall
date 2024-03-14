@@ -17,12 +17,10 @@ export const WhiteboardComponent = ({
   children,
   zoomIn,
   zoomOut,
-  canUpdate,
 }: {
   children: ReactNode;
   zoomIn: (value: number) => void;
   zoomOut: (value: number) => void;
-  canUpdate: boolean | undefined;
 }) => {
   const params = useParams();
 
@@ -31,15 +29,21 @@ export const WhiteboardComponent = ({
     queryFn: wallQueryOptions(params.wallId as string).queryFn,
   });
 
-  const { canMoveBoard, isDragging, setCanMoveBoard, setCanMoveNote } =
-    useWhiteboard(
-      useShallow((state) => ({
-        canMoveBoard: state.canMoveBoard,
-        isDragging: state.isDragging,
-        setCanMoveBoard: state.setCanMoveBoard,
-        setCanMoveNote: state.setCanMoveNote,
-      })),
-    );
+  const {
+    canMoveBoard,
+    canMoveNote,
+    isDragging,
+    setCanMoveBoard,
+    setCanMoveNote,
+  } = useWhiteboard(
+    useShallow((state) => ({
+      canMoveBoard: state.canMoveBoard,
+      isDragging: state.isDragging,
+      canMoveNote: state.canMoveNote,
+      setCanMoveBoard: state.setCanMoveBoard,
+      setCanMoveNote: state.setCanMoveNote,
+    })),
+  );
 
   const handleKeyDown = (event: KeyboardEvent) => {
     /* This is just a test but create a note with cmd + k */
@@ -60,7 +64,7 @@ export const WhiteboardComponent = ({
       setCanMoveBoard(false);
       setCanMoveNote(true);
     }
-    if (canUpdate && event.key === "v") {
+    if (canMoveNote && event.key === "v") {
       setCanMoveNote(true);
       setCanMoveBoard(false);
     }
