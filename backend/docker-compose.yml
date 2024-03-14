@@ -13,7 +13,7 @@ services:
       - ./src/test/stresstest:/home/k6/src
       - ./src/test/resources/data:/home/k6/data
     environment:
-      ROOT_URL: http://172.17.0.1:8090
+      ROOT_URL: http://localhost:8090
       DATA_ROOT_PATH: /home/k6/data
       MAX_DURATION: 45s
       USER_TTL: 20000

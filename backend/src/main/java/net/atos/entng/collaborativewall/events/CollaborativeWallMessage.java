@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 import java.util.List;
@@ -20,21 +21,27 @@ public class CollaborativeWallMessage {
   private final String deletedBy;
   private final Long deletedAt;
   private final String userId;
-  private final JsonObject wall;
+  private final CollaborativeWallDetails wall;
   private final String noteId;
-  private final JsonObject note;
+  private final CollaborativeWallNote note;
 
-  private final List<JsonObject> notes;
+  private final List<CollaborativeWallNote> notes;
   private final List<NoteMove> move;
   private final List<CollaborativeWallEditingInformation> editing;
 
   @JsonCreator
-  public CollaborativeWallMessage(@JsonProperty("wallId") final String wallId, @JsonProperty("emittedAt") final long emittedAt,
-                                  @JsonProperty("emittedBy") final String emittedBy, @JsonProperty("originator") final String originator,
-                                  @JsonProperty("type") final CollaborativeWallMessageType type, @JsonProperty("deletedBy") final String deletedBy,
-                                  @JsonProperty("deletedAt") final Long deletedAt, @JsonProperty("userId") final String userId,
-                                  @JsonProperty("wall") final JsonObject wall, @JsonProperty("noteId") final String noteId,
-                                  @JsonProperty("note") final JsonObject note, @JsonProperty("notes") List<JsonObject> notes,
+  public CollaborativeWallMessage(@JsonProperty("wallId") final String wallId,
+                                  @JsonProperty("emittedAt") final long emittedAt,
+                                  @JsonProperty("emittedBy") final String emittedBy,
+                                  @JsonProperty("originator") final String originator,
+                                  @JsonProperty("type") final CollaborativeWallMessageType type,
+                                  @JsonProperty("deletedBy") final String deletedBy,
+                                  @JsonProperty("deletedAt") final Long deletedAt,
+                                  @JsonProperty("userId") final String userId,
+                                  @JsonProperty("wall") final CollaborativeWallDetails wall,
+                                  @JsonProperty("noteId") final String noteId,
+                                  @JsonProperty("note") final CollaborativeWallNote note,
+                                  @JsonProperty("notes") List<CollaborativeWallNote> notes,
                                   @JsonProperty("move") final List<NoteMove> move,
                                   @JsonProperty("editing") final List<CollaborativeWallEditingInformation> editing) {
     this.wallId = wallId;
@@ -81,7 +88,7 @@ public class CollaborativeWallMessage {
     return userId;
   }
 
-  public JsonObject getWall() {
+  public CollaborativeWallDetails getWall() {
     return wall;
   }
 
@@ -89,7 +96,7 @@ public class CollaborativeWallMessage {
     return noteId;
   }
 
-  public JsonObject getNote() {
+  public CollaborativeWallNote getNote() {
     return note;
   }
 
@@ -105,7 +112,7 @@ public class CollaborativeWallMessage {
     return originator;
   }
 
-  public List<JsonObject> getNotes() {
+  public List<CollaborativeWallNote> getNotes() {
     return notes;
   }
 }

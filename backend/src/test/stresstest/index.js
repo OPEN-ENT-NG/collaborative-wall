@@ -15,6 +15,8 @@ import {
 import { WebSocket } from 'k6/experimental/websockets';
 import { setTimeout, setInterval, clearInterval } from 'k6/experimental/timers';
 import { Trend } from 'k6/metrics';
+import { createRandomWallMessage } from './messages.js';
+import { createReport } from './report.js';
 
 const rootUrl = __ENV.ROOT_URL;
 const maxDuration = __ENV.MAX_DURATION || '1m';
@@ -74,8 +76,7 @@ function startWSSession(wallId, user) {
         const start = Date.now();
         let first = true;
         const ws = new WebSocket(`${getWsUrl(rootUrl)}/collaborativewall/${wallId}`, null, params);
-        let nbSentMessages = 0;
-        let nbReceivedMessages = 0;
+        let report = createReport()
         ws.addEventListener('message', (data) => {
             const payload = JSON.parse(data.data)
             console.debug('Message received: ', user.login, ' - ', payload.type);
@@ -87,16 +88,17 @@ function startWSSession(wallId, user) {
                 console.debug("Adding timeToMessageReception")
                 timeToMessageReception.add(Date.now() - payload.emittedAt)
             }
-            if(payload.type === 'ping') {
-                nbReceivedMessages++;
-            }
-            if(nbReceivedMessages === nbExpectedMEssages) {
+            report.onReceivedMessage(payload)
+            if(report.countReceivedMessages === nbExpectedMEssages) {
                 ws.close()
             }
         });
+        ws.addEventListener("error", (data)=>{
+            console.error(data)
+        })
         ws.addEventListener('close', (data) => {
             console.debug("Closed")
-            check(nbSentMessages, {
+            check(report.countSentMessages, {
                 'has sent enough messages': (val) => val === NB_MESSAGES
             })
             if(checkNumberOfMessages) {
@@ -112,8 +114,9 @@ function startWSSession(wallId, user) {
             setTimeout(() => {
                 console.debug("Sending")
                 for(let i = 0; i < NB_MESSAGES; i++) {
-                    ws.send(createMessage(user, wallId));
-                    nbSentMessages ++;
+                    let payload = createRandomWallMessage(user, wallId)
+                    ws.send(JSON.stringify(payload));
+                    report.onSentMessage(payload);
                 }
                 setTimeout(() => {
                     ws.close()
@@ -124,17 +127,6 @@ function startWSSession(wallId, user) {
     }
 }
 
-function createMessage(user, wallId) {
-    return JSON.stringify({
-        wallId,
-        type: 'ping'
-    });
-}
-
-function getWsUrl(httpUrl) {
-    return 'ws://172.17.0.1:9091';//httpUrl.replace('http', 'ws')
-}
-
 
 function initViewsData(schoolName, teacherData) {
     const session = authenticateWeb(__ENV.ADMC_LOGIN, __ENV.ADMC_PASSWORD);
@@ -142,7 +134,7 @@ function initViewsData(schoolName, teacherData) {
     describe("[CollaborativeWall] Init - Initialize collaborativewall data", () => {
         const structure = createStructure(schoolName, teacherData, session);
         const role = createAndSetRole('CollaborativeWall', session);
-        linkRoleToUsers(structure, role, session);
+        linkRoleToUsers(structure, role, [], session);
         activateUsers(structure, session);
         wallId = createWall(structure, session);
     });
@@ -156,9 +148,7 @@ function createWall(structure, adminSession) {
     })
     const users = JSON.parse(res.body);
     const roles = getRolesOfStructure(structure.id, adminSession);
-    const groupIds = roles.filter(role => role.name.indexOf(`from group ${structure.name}.`) >= 0 ||
-                                            role.name.indexOf(`Enseignants du groupe ${structure.name}.`))
-                            .map(role => role.id);
+    const groupIds = roles.map(role => role.id);
     const user = users[0];
     const userSession = authenticateWeb(user.login, 'password');
     const headers = getHeaders(userSession);
@@ -186,4 +176,18 @@ function createWall(structure, adminSession) {
     })
     
     return wallId
+}
+
+
+
+function getWsUrl(httpUrl) {
+    const url = extractHostname(httpUrl)
+    return `ws://${url}:9091`;
+}
+
+function extractHostname(url) {
+    let hostname = (url.indexOf("://") > -1) ? url.split('/')[2] : url.split('/')[0];
+    hostname = hostname.split(':')[0];
+    hostname = hostname.split('?')[0];
+    return hostname;
 }

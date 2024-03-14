@@ -1,10 +1,7 @@
 package net.atos.entng.collaborativewall.service.impl;
 
 import io.vertx.core.json.JsonObject;
-import net.atos.entng.collaborativewall.events.CollaborativeWallMetadata;
-import net.atos.entng.collaborativewall.events.CollaborativeWallMessage;
-import net.atos.entng.collaborativewall.events.CollaborativeWallMessageType;
-import net.atos.entng.collaborativewall.events.NoteMove;
+import net.atos.entng.collaborativewall.events.*;
 
 import java.util.List;
 
@@ -54,39 +51,59 @@ public class CollaborativeMessageFactory {
             null);
   }
 
-  public CollaborativeWallMessage noteAdded(final String wallId, final String wsId, final String userId, final JsonObject note) {
+  public CollaborativeWallMessage noteAdded(final String wallId, final String wsId, final String userId, final CollaborativeWallNote note) {
     return new CollaborativeWallMessage(wallId, System.currentTimeMillis(), serverId, wsId,
             CollaborativeWallMessageType.noteAdded, null, null,
             userId, null, null, note, null, null,
             null);
   }
 
-  public CollaborativeWallMessage noteImageUpdated(final String wallId, final String wsId, final String userId, final JsonObject note) {
+  public CollaborativeWallMessage noteAdded(final String wallId, final String wsId, final String userId, final JsonObject note) {
+    return noteAdded(wallId, wsId, userId, CollaborativeWallNote.fromJson(note));
+  }
+
+  public CollaborativeWallMessage noteImageUpdated(final String wallId, final String wsId, final String userId, final CollaborativeWallNote note) {
     return new CollaborativeWallMessage(wallId, System.currentTimeMillis(), serverId, wsId,
             CollaborativeWallMessageType.noteImageUpdated, null, null,
             userId, null, null, note, null, null,
             null);
   }
 
-  public CollaborativeWallMessage noteMoved(final String wallId, final String wsId, final String userId, final JsonObject note) {
+  public CollaborativeWallMessage noteImageUpdated(final String wallId, final String wsId, final String userId, final JsonObject note) {
+    return noteImageUpdated(wallId, wsId, userId, CollaborativeWallNote.fromJson(note));
+  }
+
+  public CollaborativeWallMessage noteMoved(final String wallId, final String wsId, final String userId, final CollaborativeWallNote note) {
     return new CollaborativeWallMessage(wallId, System.currentTimeMillis(), serverId, wsId,
             CollaborativeWallMessageType.noteMoved, null, null,
             userId, null, null, note, null, null,
             null);
   }
 
-  public CollaborativeWallMessage noteTextUpdated(final String wallId, final String wsId, final String userId, final JsonObject note) {
+  public CollaborativeWallMessage noteMoved(final String wallId, final String wsId, final String userId, final JsonObject note) {
+    return noteMoved(wallId, wsId, userId, CollaborativeWallNote.fromJson(note));
+  }
+
+  public CollaborativeWallMessage noteTextUpdated(final String wallId, final String wsId, final String userId, final CollaborativeWallNote note) {
     return new CollaborativeWallMessage(wallId, System.currentTimeMillis(), serverId, wsId,
             CollaborativeWallMessageType.noteTextUpdated, null, null,
             userId, null, null, note, null, null,
             null);
   }
 
-  public CollaborativeWallMessage wallUpdate(final String wallId, final String wsId, final String userId, final JsonObject wall) {
+  public CollaborativeWallMessage noteTextUpdated(final String wallId, final String wsId, final String userId, final JsonObject note) {
+    return noteTextUpdated(wallId, wsId, userId, CollaborativeWallNote.fromJson(note));
+  }
+
+  public CollaborativeWallMessage wallUpdate(final String wallId, final String wsId, final String userId, final CollaborativeWallDetails wall) {
     return new CollaborativeWallMessage(wallId, System.currentTimeMillis(), serverId, wsId,
             CollaborativeWallMessageType.wallUpdate, null, null,
             userId, wall, null, null, null, null,
             null);
+  }
+
+  public CollaborativeWallMessage wallUpdate(final String wallId, final String wsId, final String userId, final JsonObject wall) {
+    return wallUpdate(wallId, wsId, userId, CollaborativeWallDetails.fromJson(wall));
   }
 
   public CollaborativeWallMessage wallDeleted(final String wallId, final String wsId, final String userId) {

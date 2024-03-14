@@ -186,8 +186,18 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
       return new ShareModel(shared, this.securedActions, ownerId);
     }).map(shared -> {
       // check user rights
-      final Set<ShareRoles> rights = shared.getNormalizedRightsByUser().getOrDefault(user.getUserId(), Collections.EMPTY_SET);
-      return !rights.isEmpty();
+      final Set<ShareRoles> userRights = shared.getNormalizedRightsByUser().getOrDefault(user.getUserId(), Collections.EMPTY_SET);
+      if(!userRights.isEmpty()){
+        return true;
+      }
+      // check group rights
+      for(final String groupId : user.getGroupsIds()){
+        final Set<ShareRoles> groupRights = shared.getNormalizedRightsByGroup().getOrDefault(groupId, Collections.EMPTY_SET);
+        if(!groupRights.isEmpty()){
+          return true;
+        }
+      }
+      return false;
     });
   }
 }
