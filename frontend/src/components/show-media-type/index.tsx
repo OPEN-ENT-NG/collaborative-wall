@@ -18,10 +18,11 @@ export const ShowMediaType = ({
 }: ShowMediaTypeProps) => {
   const { t } = useTranslation();
 
-  const mediaClasses = clsx("media-center", {
+  const mediaClasses = clsx({
+    "media-center": readonly,
     "d-block": readonly,
-    "py-48": !readonly,
-    "px-12": !readonly,
+    "px-64": !readonly,
+    "py-32": !readonly,
   });
 
   switch (media.type) {
