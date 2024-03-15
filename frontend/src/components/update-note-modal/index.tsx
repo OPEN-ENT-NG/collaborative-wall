@@ -14,6 +14,7 @@ import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
 import { useUpdateNote } from "~/services/queries";
+import { useHistoryStore } from "~/store";
 
 export async function noteLoader({ params }: LoaderFunctionArgs) {
   const { wallId, noteId } = params;
@@ -49,7 +50,9 @@ export const UpdateNoteModal = () => {
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
 
-  const handleSaveNote = () => {
+  const { setHistory } = useHistoryStore();
+
+  const handleSaveNote = async () => {
     const note: PickedNoteProps = {
       content: data.content,
       color: colorValue,
@@ -60,7 +63,40 @@ export const UpdateNoteModal = () => {
       y: data.y,
     };
 
-    updateNote.mutateAsync({ id: data._id, note });
+    const response = await updateNote.mutateAsync({ id: data._id, note });
+
+    const { status, wall: updatedWall } = response;
+
+    if (status !== "ok") return;
+
+    const updatedNote: NoteProps = updatedWall.find(
+      (item: NoteProps) => item._id === data._id,
+    );
+
+    setHistory({
+      type: "edit",
+      item: {
+        ...updatedNote,
+        content: data.content,
+        color: data.color,
+        media: data.media,
+      },
+      previous: {
+        x: data.x,
+        y: data.y,
+        color: data.color,
+        content: data.content,
+        media: data.media || null,
+      },
+      next: {
+        x: updatedNote.x,
+        y: updatedNote.y,
+        color: updatedNote.color,
+        content: updatedNote.content,
+        media: updatedNote.media || null,
+      },
+    });
+
     navigate("..");
   };
 

@@ -28,7 +28,7 @@ import { WhiteboardWrapper } from "~/components/whiteboard-wrapper";
 import { AppActions } from "~/features/app-actions";
 import { useAccess } from "~/hooks/useAccess";
 import { useDndKit } from "~/hooks/useDndKit";
-import { useMoveNote } from "~/hooks/useMoveNote";
+import { useEditNote } from "~/hooks/useEditNote";
 import { NoteProps } from "~/models/notes";
 import { CollaborativeWallProps } from "~/models/wall";
 import { notesQueryOptions, wallQueryOptions } from "~/services/queries";
@@ -126,7 +126,7 @@ export const CollaborativeWall = () => {
     ],
   });
 
-  const { move: moveNote } = useMoveNote();
+  const { move } = useEditNote();
   const { updatedNote } = useHistoryStore();
 
   const { hasRightsToMoveNote } = useAccess();
@@ -158,7 +158,7 @@ export const CollaborativeWall = () => {
         <WhiteboardWrapper>
           <DndContext
             sensors={sensors}
-            onDragEnd={moveNote(notes as NoteProps[])}
+            onDragEnd={move(notes as NoteProps[])}
             modifiers={[restrictToParentElement]}
           >
             {notes?.map((note: NoteProps, i: number) => {
