@@ -1,5 +1,6 @@
 import { ID } from "edifice-ts-client";
 
+import { NoteMedia } from "./noteMedia";
 import { NoteProps } from "./notes";
 
 /* History Store */
@@ -24,21 +25,19 @@ export type UpdateNote = {
   zIndex: number;
 };
 
-export type HistoryPosition = {
-  previous: {
-    x: number;
-    y: number;
-  };
-  next: {
-    x: number;
-    y: number;
-  };
+type NoteState = {
+  x: number;
+  y: number;
+  color?: string[];
+  content?: string;
+  media?: NoteMedia | null;
 };
 
 export type NewState = {
   type: string;
   item: NoteProps;
-  positions?: HistoryPosition;
+  previous?: NoteState;
+  next?: NoteState;
 };
 
 export type HistoryAction = {

@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useShallow } from "zustand/react/shallow";
 
 import { updateState } from "~/features/history/utils/updateState";
-import { useMoveNote } from "~/hooks/useMoveNote";
+import { useEditNote } from "~/hooks/useEditNote";
 import { NewState } from "~/models/store";
 import { useDeleteNote, useCreateNote } from "~/services/queries";
 import { filterData } from "~/services/queries/helpers";
@@ -25,7 +25,7 @@ export const useHistory = () => {
 
   const deleteNote = useDeleteNote();
   const createNote = useCreateNote();
-  const { update } = useMoveNote();
+  const { update } = useEditNote();
 
   const queryClient = useQueryClient();
 
@@ -54,21 +54,50 @@ export const useHistory = () => {
     updateState(action, note);
   };
 
-  const moveAction = async (action: NewState, isUndo: boolean | undefined) => {
-    const { positions, item } = action;
+  const moveAction = async (action: NewState, isUndo: boolean) => {
+    const { previous, next, item } = action;
 
-    const x = isUndo ? positions?.previous.x ?? 0 : positions?.next.x ?? 0;
-    const y = isUndo ? positions?.previous.y ?? 0 : positions?.next.y ?? 0;
+    const x = isUndo ? previous?.x ?? 0 : next?.x ?? 0;
+    const y = isUndo ? previous?.y ?? 0 : next?.y ?? 0;
 
     try {
-      const updatedNote = await update(item, x, y);
+      const updatedNote = await update(item, { x, y });
+
       updateState(action, updatedNote);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const executeAction = async (action: NewState, isUndo?: boolean) => {
+  const editAction = async (action: NewState, isUndo: boolean) => {
+    const { previous, next, item } = action;
+
+    const color = isUndo
+      ? previous?.color ?? item.color
+      : next?.color ?? item.color;
+    const content = isUndo
+      ? previous?.content ?? item.content
+      : next?.content ?? item.content;
+    const media = isUndo
+      ? previous?.media ?? item.media
+      : next?.media ?? item.media;
+
+    try {
+      const updatedNote = await update(item, {
+        x: item.x,
+        y: item.y,
+        content,
+        color,
+        media,
+      });
+
+      updateState(action, updatedNote);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const executeAction = async (action: NewState, isUndo: boolean) => {
     switch (action.type) {
       case "create":
         isUndo ? await deleteAction(action) : await createAction(action);
@@ -78,6 +107,10 @@ export const useHistory = () => {
         break;
       case "move": {
         await moveAction(action, isUndo);
+        break;
+      }
+      case "edit": {
+        await editAction(action, isUndo);
         break;
       }
       default:

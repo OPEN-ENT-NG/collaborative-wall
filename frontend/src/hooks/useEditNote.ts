@@ -7,14 +7,23 @@ import { updateNote } from "~/services/api";
 import { updateData } from "~/services/queries/helpers";
 import { useHistoryStore, useWhiteboard } from "~/store";
 
-export const useMoveNote = () => {
+export const useEditNote = () => {
   const queryClient = useQueryClient();
 
   const zoom = useWhiteboard((state) => state.zoom);
 
   const { setUpdatedNote, setHistory } = useHistoryStore();
 
-  const update = async (currentNote: NoteProps, x: number, y: number) => {
+  const update = async (
+    currentNote: NoteProps,
+    changes: {
+      x: number;
+      y: number;
+      content?: string;
+      color?: string[];
+      media?: NoteMedia | null;
+    },
+  ) => {
     const note: {
       content: string;
       x: number;
@@ -24,19 +33,19 @@ export const useMoveNote = () => {
       media: NoteMedia | null;
       modified?: { $date: number };
     } = {
-      content: currentNote.content,
-      color: currentNote.color,
+      content: changes.content ?? currentNote.content,
+      color: changes.color ?? currentNote.color,
       idwall: currentNote.idwall,
-      media: currentNote.media,
+      media: changes.media ?? currentNote.media,
       modified: currentNote.modified,
-      x,
-      y,
+      x: changes.x,
+      y: changes.y,
     };
 
     setUpdatedNote({
       activeId: currentNote._id,
-      x,
-      y,
+      x: changes.x,
+      y: changes.y,
       zIndex: 2,
     });
 
@@ -78,22 +87,23 @@ export const useMoveNote = () => {
         y: Math.round(findNote.y + delta.y / zoom),
       };
 
-      const updatedNote = await update(findNote, position.x, position.y);
+      const updatedNote = await update(findNote, {
+        x: position.x,
+        y: position.y,
+      });
 
       if (!updatedNote) return;
 
       setHistory({
         type: "move",
         item: updatedNote,
-        positions: {
-          previous: {
-            x: findNote.x,
-            y: findNote.y,
-          },
-          next: {
-            x: position.x,
-            y: position.y,
-          },
+        previous: {
+          x: findNote.x,
+          y: findNote.y,
+        },
+        next: {
+          x: position.x,
+          y: position.y,
         },
       });
     };
