@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { Button, Modal, useOdeClient } from "@edifice-ui/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -14,6 +15,7 @@ import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
 import { useUpdateNote } from "~/services/queries";
+import { updateData } from "~/services/queries/helpers";
 import { useHistoryStore } from "~/store";
 
 export async function noteLoader({ params }: LoaderFunctionArgs) {
@@ -40,6 +42,7 @@ export async function noteLoader({ params }: LoaderFunctionArgs) {
 
 export const UpdateNoteModal = () => {
   const data = useLoaderData() as NoteProps;
+  const queryClient = useQueryClient();
 
   const [colorValue, setColorValue] = useState<string[]>(data.color);
   const [media, setMedia] = useState<NoteMedia | null>(data.media);
@@ -63,39 +66,44 @@ export const UpdateNoteModal = () => {
       y: data.y,
     };
 
-    const response = await updateNote.mutateAsync({ id: data._id, note });
+    await updateNote.mutateAsync(
+      { id: data._id, note },
+      {
+        onSuccess: async (responseData, { id }) => {
+          const { status, wall: notes } = responseData;
 
-    const { status, wall: updatedWall } = response;
+          if (status !== "ok") return;
 
-    if (status !== "ok") return;
+          const updatedNote = notes.find((note: NoteProps) => note._id === id);
 
-    const updatedNote: NoteProps = updatedWall.find(
-      (item: NoteProps) => item._id === data._id,
+          updateData(queryClient, updatedNote);
+
+          setHistory({
+            type: "edit",
+            item: {
+              ...updatedNote,
+              content: data.content,
+              color: data.color,
+              media: data.media,
+            },
+            previous: {
+              x: data.x,
+              y: data.y,
+              color: data.color,
+              content: data.content,
+              media: data.media || null,
+            },
+            next: {
+              x: updatedNote.x,
+              y: updatedNote.y,
+              color: updatedNote.color,
+              content: updatedNote.content,
+              media: updatedNote.media || null,
+            },
+          });
+        },
+      },
     );
-
-    setHistory({
-      type: "edit",
-      item: {
-        ...updatedNote,
-        content: data.content,
-        color: data.color,
-        media: data.media,
-      },
-      previous: {
-        x: data.x,
-        y: data.y,
-        color: data.color,
-        content: data.content,
-        media: data.media || null,
-      },
-      next: {
-        x: updatedNote.x,
-        y: updatedNote.y,
-        color: updatedNote.color,
-        content: updatedNote.content,
-        media: updatedNote.media || null,
-      },
-    });
 
     navigate("..");
   };

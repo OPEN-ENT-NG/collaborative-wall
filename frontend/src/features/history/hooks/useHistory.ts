@@ -2,21 +2,26 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useShallow } from "zustand/react/shallow";
 
 import { updateState } from "~/features/history/utils/updateState";
-import { useEditNote } from "~/hooks/useEditNote";
+import { NoteProps } from "~/models/notes";
 import { NewState } from "~/models/store";
-import { useDeleteNote, useCreateNote } from "~/services/queries";
-import { filterData } from "~/services/queries/helpers";
+import {
+  useDeleteNote,
+  useCreateNote,
+  useUpdateNote,
+} from "~/services/queries";
+import { filterData, updateData } from "~/services/queries/helpers";
 import { useHistoryStore } from "~/store";
 
 const MAX_HISTORY = 40;
 
 export const useHistory = () => {
-  const { undo, redo, past, future } = useHistoryStore(
+  const { undo, redo, past, future, setUpdatedNote } = useHistoryStore(
     useShallow((state) => ({
       undo: state.undo,
       redo: state.redo,
       past: state.past,
       future: state.future,
+      setUpdatedNote: state.setUpdatedNote,
     })),
   );
 
@@ -25,7 +30,7 @@ export const useHistory = () => {
 
   const deleteNote = useDeleteNote();
   const createNote = useCreateNote();
-  const { update } = useEditNote();
+  const updateNote = useUpdateNote();
 
   const queryClient = useQueryClient();
 
@@ -61,9 +66,41 @@ export const useHistory = () => {
     const y = isUndo ? previous?.y ?? 0 : next?.y ?? 0;
 
     try {
-      const updatedNote = await update(item, { x, y });
+      setUpdatedNote({
+        activeId: item._id,
+        x,
+        y,
+        zIndex: 2,
+      });
 
-      updateState(action, updatedNote);
+      await updateNote.mutateAsync(
+        {
+          id: item._id,
+          note: {
+            content: item.content,
+            color: item.color,
+            idwall: item.idwall,
+            media: item.media,
+            modified: item.modified,
+            x,
+            y,
+          },
+        },
+        {
+          onSuccess: async (data, { id }) => {
+            const { status, wall: notes } = data;
+
+            if (status !== "ok") return;
+
+            const updatedNote = notes.find(
+              (note: NoteProps) => note._id === id,
+            );
+
+            updateData(queryClient, updatedNote);
+            updateState(action, updatedNote);
+          },
+        },
+      );
     } catch (error) {
       console.error(error);
     }
@@ -78,20 +115,39 @@ export const useHistory = () => {
     const content = isUndo
       ? previous?.content ?? item.content
       : next?.content ?? item.content;
-    const media = isUndo
-      ? previous?.media ?? item.media
-      : next?.media ?? item.media;
+    const media = isUndo ? previous?.media || null : next?.media || null;
+    const x = isUndo ? previous?.x ?? item.x : next?.x ?? item.x;
+    const y = isUndo ? previous?.y ?? item.y : next?.y ?? item.y;
 
     try {
-      const updatedNote = await update(item, {
-        x: item.x,
-        y: item.y,
-        content,
-        color,
-        media,
-      });
+      await updateNote.mutateAsync(
+        {
+          id: item._id,
+          note: {
+            content,
+            color,
+            idwall: item.idwall,
+            media,
+            modified: item.modified,
+            x,
+            y,
+          },
+        },
+        {
+          onSuccess: async (data, { id }) => {
+            const { status, wall: notes } = data;
 
-      updateState(action, updatedNote);
+            if (status !== "ok") return;
+
+            const updatedNote = notes.find(
+              (note: NoteProps) => note._id === id,
+            );
+
+            updateData(queryClient, updatedNote);
+            updateState(action, updatedNote);
+          },
+        },
+      );
     } catch (error) {
       console.error(error);
     }
