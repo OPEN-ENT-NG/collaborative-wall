@@ -1,15 +1,14 @@
 import { useDraggable } from "@dnd-kit/core";
 import { Card } from "@edifice-ui/react";
-import { useQueryClient } from "@tanstack/react-query";
 import { Editor, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import clsx from "clsx";
 import { useShallow } from "zustand/react/shallow";
 
 import { ShowMediaType } from "../show-media-type";
+import { NoteActions } from "~/features/note-actions";
 import { NoteProps } from "~/models/notes";
-import { notesQueryOptions, useDeleteNote } from "~/services/queries";
-import { useHistoryStore, useWhiteboard } from "~/store";
+import { useWhiteboard } from "~/store";
 
 export const Note = ({
   note,
@@ -20,9 +19,6 @@ export const Note = ({
   disabled: boolean;
   onClick?: (id: string) => void;
 }) => {
-  const queryClient = useQueryClient();
-  const deleteNote = useDeleteNote();
-
   const { zoom, canMoveNote } = useWhiteboard(
     useShallow((state) => ({
       zoom: state.zoom,
@@ -61,8 +57,6 @@ export const Note = ({
     onClick?.(noteId);
   };
 
-  const { setHistory } = useHistoryStore();
-
   const classes = clsx("note", {
     "is-dragging": isDragging,
     "is-grab": disabled && !isDragging,
@@ -84,28 +78,8 @@ export const Note = ({
           }px, 0)`,
         } as React.CSSProperties
       }
+      className="card-container"
     >
-      <button
-        onClick={async () => {
-          await deleteNote.mutateAsync(note);
-
-          queryClient.setQueryData(
-            notesQueryOptions(note.idwall).queryKey,
-            (previousNotes) => {
-              return previousNotes?.filter(
-                (previousNote) => previousNote._id !== note._id,
-              );
-            },
-          );
-
-          setHistory({
-            type: "delete",
-            item: note,
-          });
-        }}
-      >
-        delete
-      </button>
       <Card
         className={classes}
         isSelectable={false}
@@ -123,6 +97,7 @@ export const Note = ({
           <Card.Text>{note.owner?.displayName}</Card.Text>
         </Card.Footer>
       </Card>
+      <NoteActions note={note}></NoteActions>
     </div>
   );
 };

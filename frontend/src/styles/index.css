@@ -76,6 +76,18 @@
   cursor: grab !important;
 }
 
+.card-container .card-actions-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  z-index: 3;
+}
+
+.card-container:hover .card-actions-btn {
+  opacity: 1;
+}
+
 @media (max-width: 440px) {
   .toolbar {
     bottom: 0px !important;
