@@ -54,7 +54,7 @@ export const ShowMediaType = ({
       );
     case "audio":
       return (
-        <div className={mediaClasses}>
+        <div className={`${mediaClasses} media-center`}>
           <audio
             src={media.url}
             controls
