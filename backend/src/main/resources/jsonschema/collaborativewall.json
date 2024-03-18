@@ -13,7 +13,7 @@
             "type": "string"
         },
         "background": {
-            "type": "string"
+            "type": "object"
         },
         "_id": {
             "type": "string"
