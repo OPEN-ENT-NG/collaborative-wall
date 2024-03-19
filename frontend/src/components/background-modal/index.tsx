@@ -74,7 +74,11 @@ export default function BackgroundModal({
           <Modal.Body>
             <>
               <Image
-                src={backgroundImageValue}
+                src={
+                  import.meta.env.PROD
+                    ? `/collaborativewall/public/${backgroundImageValue}`
+                    : backgroundImageValue
+                }
                 className="py-16"
                 alt=""
                 width={288}
@@ -101,7 +105,11 @@ export default function BackgroundModal({
                         >
                           <Card.Body space="0">
                             <Image
-                              src={image}
+                              src={
+                                import.meta.env.PROD
+                                  ? `/collaborativewall/public/${image}`
+                                  : image
+                              }
                               alt=""
                               ratio="4"
                               style={{ borderRadius: "4px" }}
