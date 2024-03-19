@@ -7,6 +7,7 @@ export interface CollaborativeWallProps {
   };
   created: { $date: number };
   modified: { $date: number };
+  icon: string;
   owner: {
     userId: string;
     displayName: string;
@@ -18,5 +19,5 @@ export interface CollaborativeWallProps {
 
 export type PickedCollaborativeWallProps = Pick<
   CollaborativeWallProps,
-  "background" | "name" | "description"
+  "background" | "name" | "description" | "icon"
 >;

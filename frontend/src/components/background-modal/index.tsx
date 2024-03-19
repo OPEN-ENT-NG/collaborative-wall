@@ -50,6 +50,7 @@ export default function BackgroundModal({
       },
       description: wall.description,
       name: wall.name,
+      icon: wall.icon,
     };
     updateWall.mutate({ wallId: wall._id, newWall });
   };
