@@ -1,7 +1,10 @@
 export interface CollaborativeWallProps {
   _id: string;
   name: string;
-  background: string;
+  background: {
+    path: string;
+    color: string;
+  };
   created: { $date: number };
   modified: { $date: number };
   owner: {

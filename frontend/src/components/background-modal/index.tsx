@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Modal,
@@ -12,7 +12,7 @@ import {
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 
-import { backgroundImages, defaultBackground } from "~/config/init-config";
+import { backgroundColors, backgroundImages } from "~/config/init-config";
 import {
   CollaborativeWallProps,
   PickedCollaborativeWallProps,
@@ -31,20 +31,32 @@ export default function BackgroundModal({
   const { appCode } = useOdeClient();
   const { t } = useTranslation();
 
-  const [backgroundValue, setBackgroundValue] = useState<string>("");
+  const [backgroundImageValue, setBackgroundImageValue] = useState<string>(
+    wall.background.path,
+  );
+  const [backgroundColorValue, setBackgroundColorValue] = useState<string>(
+    wall.background.color,
+  );
 
   const updateWall = useUpdateWall();
 
   const handleClose = () => setIsOpen(false);
 
-  const handleSaveNote = () => {
+  const handleSaveWall = () => {
     const newWall: PickedCollaborativeWallProps = {
-      background: backgroundValue,
+      background: {
+        path: backgroundImageValue,
+        color: backgroundColorValue,
+      },
       description: wall.description,
       name: wall.name,
     };
     updateWall.mutate({ wallId: wall._id, newWall });
   };
+
+  useEffect(() => {
+    setBackgroundImageValue(wall.background.path);
+  }, [isOpen, wall.background]);
 
   return isOpen
     ? createPortal(
@@ -61,36 +73,76 @@ export default function BackgroundModal({
           <Modal.Body>
             <>
               <Image
-                src={wall.background ?? defaultBackground}
+                src={backgroundImageValue}
                 className="py-16"
                 alt=""
                 width={288}
                 height={180}
-                style={{ margin: "auto" }}
+                style={{
+                  margin: "auto",
+                  background: `linear-gradient(${backgroundColorValue})`,
+                }}
               />
-              <Heading className="py-8" headingStyle="h5">
-                {t("collaborativewall.images")}
-              </Heading>
-              <Grid>
-                {backgroundImages.map((image) => (
-                  <Grid.Col sm="2" key={image}>
-                    <Card
-                      isClickable={true}
-                      isSelectable={false}
-                      onClick={() => setBackgroundValue(image)}
-                    >
-                      <Card.Body space="0">
-                        <Image
-                          src={image}
-                          alt=""
-                          ratio="4"
-                          style={{ borderRadius: "4px" }}
-                        />
-                      </Card.Body>
-                    </Card>
-                  </Grid.Col>
-                ))}
-              </Grid>
+              <div className="my-8">
+                <Heading className="py-8" headingStyle="h5">
+                  {t("collaborativewall.images")}
+                </Heading>
+                <Grid className="py-8">
+                  {backgroundImages.map((image) => {
+                    const isSelected = backgroundImageValue === image;
+                    return (
+                      <Grid.Col sm="2" key={image}>
+                        <Card
+                          isClickable={true}
+                          isSelectable={false}
+                          isSelected={isSelected}
+                          onClick={() => setBackgroundImageValue(image)}
+                        >
+                          <Card.Body space="0">
+                            <Image
+                              src={image}
+                              alt=""
+                              ratio="4"
+                              style={{ borderRadius: "4px" }}
+                            />
+                          </Card.Body>
+                        </Card>
+                      </Grid.Col>
+                    );
+                  })}
+                </Grid>
+              </div>
+              <div className="py-8">
+                <Heading className="py-8" headingStyle="h5">
+                  {t("collaborativewall.colors")}
+                </Heading>
+                <Grid className="my-8">
+                  {backgroundColors.map((color) => {
+                    const isSelected = backgroundColorValue === color;
+                    return (
+                      <Grid.Col sm="2" key={color}>
+                        <Card
+                          isClickable={true}
+                          isSelectable={false}
+                          isSelected={isSelected}
+                          onClick={() => setBackgroundColorValue(color)}
+                        >
+                          <Card.Body space="0">
+                            <div
+                              style={{
+                                background: `linear-gradient(${color})`,
+                                width: "100%",
+                                height: "52px",
+                                paddingBottom: "75%",
+                              }}
+                            ></div>
+                          </Card.Body>
+                        </Card>
+                      </Grid.Col>
+                    );
+                  })}
+                </Grid>
+              </div>
             </>
           </Modal.Body>
           <Modal.Footer>
@@ -106,7 +158,7 @@ export default function BackgroundModal({
               type="button"
               color="primary"
               variant="filled"
-              onClick={handleSaveNote}
+              onClick={handleSaveWall}
             >
               {t("collaborativewall.modal.modify", { ns: appCode })}
             </Button>
