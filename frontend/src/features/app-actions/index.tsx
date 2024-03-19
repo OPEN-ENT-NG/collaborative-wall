@@ -14,7 +14,7 @@ import { useAccess } from "~/hooks/useAccess";
 import { useWhiteboard } from "~/store";
 
 export const AppActions = () => {
-  const { isCreator } = useAccess();
+  const { isCreator, isManager } = useAccess();
   const { t } = useTranslation();
 
   const { setOpenShareModal, setIsOpenBackgroundModal } = useWhiteboard(
@@ -25,7 +25,7 @@ export const AppActions = () => {
   );
 
   const renderButton = () => {
-    return isCreator ? (
+    return isCreator || isManager ? (
       <Button variant="filled" onClick={() => setOpenShareModal(true)}>
         {t("share")}
       </Button>
@@ -36,7 +36,7 @@ export const AppActions = () => {
     <>
       {renderButton()}
 
-      {isCreator && (
+      {(isCreator || isManager) && (
         <Dropdown>
           {(
             triggerProps: JSX.IntrinsicAttributes &
