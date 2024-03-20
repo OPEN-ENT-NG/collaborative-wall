@@ -36,28 +36,28 @@ export const noteColors: Colors = {
     background: "#FFFFFF",
   },
   yellow: {
-    border: "#ECBE30",
-    background: "#FCF7DE",
+    border: "#F1CA00",
+    background: "#FBF4D5",
   },
   orange: {
     border: "#FF8D2E",
     background: "#FFEFE3",
   },
   red: {
-    border: "#E13A3A",
+    border: "#FF3A55",
     background: "#FFECEE",
   },
   purple: {
-    border: "#823AA1",
+    border: "#A348C0",
     background: "#F6ECF9",
   },
   blue: {
-    border: "#2A9CC8",
+    border: "#46AFE6",
     background: "#E5F5FF",
   },
   green: {
-    border: "#46BFAF",
-    background: "#E6F9F8",
+    border: "#5AC235",
+    background: "#EAF7E4",
   },
 };
 
