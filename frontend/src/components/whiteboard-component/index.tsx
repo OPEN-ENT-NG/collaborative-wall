@@ -115,7 +115,6 @@ export const WhiteboardComponent = ({
           <div
             style={{
               backgroundImage: `url(${import.meta.env.PROD ? `/collaborativewall/public/${data?.background.path}` : data?.background.path}`,
-              backgroundSize: `${wallConfig.WIDTH_WALL / 2}px ${wallConfig.HEIGHT_WALL / 2}px`,
               width: "100%",
               height: "100%",
             }}
