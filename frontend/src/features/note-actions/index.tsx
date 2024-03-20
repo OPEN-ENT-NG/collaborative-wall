@@ -46,7 +46,8 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
   };
 
   return (
-    <>
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+    <div onMouseDown={(event) => event.stopPropagation()}>
       <Dropdown placement="right-start">
         {(
           triggerProps: JSX.IntrinsicAttributes &
@@ -77,6 +78,6 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
           </>
         )}
       </Dropdown>
-    </>
+    </div>
   );
 };
