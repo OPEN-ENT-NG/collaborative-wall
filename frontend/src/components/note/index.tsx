@@ -38,7 +38,7 @@ export const Note = ({
 
   const style = {
     position: "absolute",
-    borderRadius: "0.8rem",
+    borderRadius: "12px",
     zIndex: isDragging ? 200 : note.zIndex,
     userSelect: isDragging && "none",
     top: (transform?.y ?? 0) / zoom,
