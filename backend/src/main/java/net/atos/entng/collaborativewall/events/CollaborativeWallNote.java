@@ -1,38 +1,41 @@
 package net.atos.entng.collaborativewall.events;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.vertx.core.json.JsonObject;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CollaborativeWallNote {
+  @JsonProperty("_id")
   private final String id;
   private final String content;
-  private final String owner;
+  private final JsonObject owner;
   private final Long x;
   private final Long y;
   private final List<String> color;
   private final String lastEdit;
   private final String media;
   private final String idwall;
+
   @JsonCreator
   public CollaborativeWallNote(@JsonProperty("_id") final String id,
                                @JsonProperty("content") final String content,
-                               @JsonProperty("owner") final String owner,
+                               @JsonProperty("owner") final Map<String, Object> owner,
                                @JsonProperty("x") final Long x,
                                @JsonProperty("y") final Long y,
                                @JsonProperty("color") final List<String> color,
                                @JsonProperty("lastEdit") final String lastEdit,
-                               @JsonProperty("media") final String media,
-                               @JsonProperty("idwall") final String idwall) {
+                               @JsonProperty("media") final Map<String, Object> media,
+                               @JsonProperty("idwall") final String idwall
+                               @JsonProperty("owner") final Map<String, Object> owner,) {
     this.id = id;
     this.content = content;
-    this.owner = owner;
+    this.owner = new JsonObject(owner);
     this.x = x;
     this.y = y;
     this.color = color;
@@ -41,15 +44,24 @@ public class CollaborativeWallNote {
     this.idwall = idwall;
   }
 
+  public CollaborativeWallNote(final String id, final CollaborativeWallNote other) {
+    this(id, other.content, other.owner.getMap(), other.x, other.y, new ArrayList<>(other.color), other.lastEdit, other.media, other.idwall);
+  }
+
   public String getId() {
     return id;
+  }
+
+  @JsonAnySetter
+  public void set(String name, Object value) {
+    owner.getMap().put(name, value);
   }
 
   public String getContent() {
     return content;
   }
 
-  public String getOwner() {
+  public JsonObject getOwner() {
     return owner;
   }
 

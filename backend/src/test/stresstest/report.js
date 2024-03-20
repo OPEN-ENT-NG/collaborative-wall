@@ -16,6 +16,9 @@ export function createReport() {
     },
     onSentMessage(payload) {
       this.countSentMessages++;
+      if(!payload.type){
+        console.warn("Invalid message sent", payload)
+      }
       if (!this.countSentMessagesByType[payload.type]) {
         this.countSentMessagesByType[payload.type] = 0;
       }
@@ -23,6 +26,9 @@ export function createReport() {
     },
     onReceivedMessage(payload) {
       this.countReceivedMessages++;
+      if(!payload.type){
+        console.warn("Invalid message received", payload)
+      }
       if (!this.countReceivedMessagesByType[payload.type]) {
         this.countReceivedMessagesByType[payload.type] = 0;
       }

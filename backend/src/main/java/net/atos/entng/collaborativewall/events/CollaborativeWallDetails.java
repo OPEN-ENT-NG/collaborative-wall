@@ -11,6 +11,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CollaborativeWallDetails {
+  @JsonProperty("_id")
   private final String id;
   private final String name;
   private final String description;
@@ -29,6 +30,10 @@ public class CollaborativeWallDetails {
     this.background = background;
     this.icon = icon;
   }
+  public CollaborativeWallDetails(final String id, final CollaborativeWallDetails other) {
+    this(id, other.name, other.description, other.background, other.icon);
+  }
+
 
   public String getId() {
     return id;

@@ -471,7 +471,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             }
             case wallDeleted: {
                 // client has deleted the wall => delete then broadcast to other users
-                return this.collaborativeWallService.deleteWall(wallId, action.getWall(), user)
+                return this.collaborativeWallService.deleteWall(wallId, user)
                         .map(saved -> newArrayList(this.messageFactory.wallDeleted(wallId, wsId, user.getUserId())));
             }
         }

@@ -1,3 +1,24 @@
+export function getMessageTypeList() {
+  return [
+    "connection",
+    "metadata",
+    "disconnection",
+    "ping",
+    "cursorMove",
+    "wallUpdate",
+    "wallDeleted",
+    "noteAdded",
+    "noteEditionStarted",
+    "noteTextUpdated",
+    "noteEditionEnded",
+    "noteImageUpdated",
+    "noteMoved",
+    "noteDeleted",
+    "noteSelected",
+    "noteUnselected",
+  ];
+}
+
 function createNotePayload(user, wallId, noteId) {
   return {
     _id: noteId,
@@ -70,39 +91,40 @@ export function createRandomNoteMessage(user, wallId, noteId) {
 }
 
 export function createPingMessage(user, wallId) {
-  return ({
+  return {
     wallId,
     type: "ping",
-  });
+  };
 }
 
 export function createMetadataMessage(user, wallId) {
-  return ({
+  return {
     wallId,
     type: "metadata",
-  });
+  };
 }
 export function createWallUpdateMessage(user, wallId) {
-  return ({
+  return {
     wallId,
     type: "wallUpdate",
     wall: createWallPayload(user, wallId),
-  });
+  };
 }
 export function createWallDeleteMessage(user, wallId) {
-  return ({
+  return {
     wallId,
     type: "wallDeleted",
-  });
+  };
 }
 export function createNodeAddedMessage(user, wallId) {
-  return ({
+  return {
     wallId,
-    type: "ping",
-  });
+    type: "noteAdded",
+    note: createNotePayload(user, wallId),
+  };
 }
 export function createCursorMoveMessage(user, wallId, noteId) {
-  return ({
+  return {
     wallId,
     noteId,
     move: [
@@ -110,61 +132,61 @@ export function createCursorMoveMessage(user, wallId, noteId) {
       { x: 2, y: 2 },
     ],
     type: "cursorMove",
-  });
+  };
 }
 export function createNodeEditionStartedMessage(user, wallId, noteId) {
-  return ({
+  return {
     wallId,
     type: "noteEditionStarted",
     noteId,
-  });
+  };
 }
 export function createTextUpdatedMessage(user, wallId, noteId) {
-  return ({
+  return {
     wallId,
     type: "noteTextUpdated",
     note: createNotePayload(user, wallId, noteId),
-  });
+  };
 }
 export function createEditionEndedMessage(user, wallId, noteId) {
-  return ({
+  return {
     wallId,
     type: "noteEditionEnded",
     noteId,
-  });
+  };
 }
 export function createImageUpdatedMessage(user, wallId, noteId) {
-  return ({
+  return {
     wallId,
     type: "noteImageUpdated",
     note: createNotePayload(user, wallId, noteId),
-  });
+  };
 }
 export function createNoteMovedMessage(user, wallId, noteId) {
-  return ({
+  return {
     wallId,
     type: "noteMoved",
     note: createNotePayload(user, wallId, noteId),
-  });
+  };
 }
 export function createNoteDeletedMessage(user, wallId, noteId) {
-  return ({
+  return {
     wallId,
     type: "noteDeleted",
     noteId,
-  });
+  };
 }
 export function createNoteSelectedMessage(user, wallId, noteId) {
-  return ({
+  return {
     wallId,
     type: "noteSelected",
     noteId,
-  });
+  };
 }
 export function createNoteUnSelectedMessage(user, wallId, noteId) {
-  return ({
+  return {
     wallId,
     type: "noteUnselected",
     noteId,
-  });
+  };
 }

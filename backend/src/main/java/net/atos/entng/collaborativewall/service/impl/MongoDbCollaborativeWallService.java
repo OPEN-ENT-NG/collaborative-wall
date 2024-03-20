@@ -5,6 +5,8 @@ import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import net.atos.entng.collaborativewall.events.CollaborativeWallDetails;
+import net.atos.entng.collaborativewall.events.CollaborativeWallNote;
 import net.atos.entng.collaborativewall.service.CollaborativeWallService;
 import net.atos.entng.collaborativewall.service.NoteService;
 import org.apache.commons.lang3.StringUtils;
@@ -58,11 +60,11 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
   }
 
   @Override
-  public Future<JsonObject> updateWall(final String wallId, final JsonObject wall, final UserInfos user) {
-    final Promise<JsonObject> promise = Promise.promise();
-    this.crudService.update(wallId, wall, result -> {
+  public Future<CollaborativeWallDetails> updateWall(final String wallId, final CollaborativeWallDetails wall, final UserInfos user) {
+    final Promise<CollaborativeWallDetails> promise = Promise.promise();
+    this.crudService.update(wallId, wall.toJson(), result -> {
       if(result.isRight()){
-        promise.complete(wall.put("_id", wallId));
+        promise.complete(new CollaborativeWallDetails(wallId, wall));
       }else{
         promise.fail(result.left().getValue());
       }
@@ -71,11 +73,11 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
   }
 
   @Override
-  public Future<JsonObject> deleteWall(final String wallId, final JsonObject wall, final UserInfos user) {
-    final Promise<JsonObject> promise = Promise.promise();
+  public Future<Void> deleteWall(final String wallId, final UserInfos user) {
+    final Promise<Void> promise = Promise.promise();
     this.crudService.delete(wallId, result -> {
       if(result.isRight()){
-        promise.complete(wall.put("_id", wallId));
+        promise.complete();
       }else{
         promise.fail(result.left().getValue());
       }
@@ -84,23 +86,23 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
   }
 
   @Override
-  public Future<JsonObject> upsertNote(final String wallId, final JsonObject note, final UserInfos user) {
-    final Promise<JsonObject> promise = Promise.promise();
-    final String id = note.getString("_id");
+  public Future<CollaborativeWallNote> upsertNote(final String wallId, final CollaborativeWallNote note, final UserInfos user) {
+    final Promise<CollaborativeWallNote> promise = Promise.promise();
+    final String id = note.getId();
     if(StringUtils.isBlank(id)){
       // create note
-      this.noteService.create(note, user, result ->{
+      this.noteService.create(note.toJson(), user, result ->{
         if(result.isRight()){
-          promise.complete();
+          promise.complete(new CollaborativeWallNote(result.right().getValue().getString("_id"), note));
         }else{
           promise.fail(result.left().getValue());
         }
       });
     }else{
       // update note
-      this.noteService.update(id, note, user, result ->{
+      this.noteService.update(id, note.toJson(), user, result ->{
         if(result.isRight()){
-          promise.complete(result.right().getValue());
+          promise.complete(note);
         }else{
           promise.fail(result.left().getValue());
         }
@@ -110,10 +112,10 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
   }
 
   @Override
-  public Future<JsonObject> patchNote(final String wallId, final PatchKind kind, final JsonObject note, final UserInfos user) {
-    final Promise<JsonObject> promise = Promise.promise();
+  public Future<CollaborativeWallNote> patchNote(final String wallId, final PatchKind kind, final CollaborativeWallNote note, final UserInfos user) {
+    final Promise<CollaborativeWallNote> promise = Promise.promise();
     // get and check id
-    final String id = note.getString("_id");
+    final String id = note.getId();
     if(StringUtils.isBlank(id)){
       promise.fail("note.id.missing");
       return promise.future();
@@ -127,16 +129,16 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
         final JsonObject patched = resGet.right().getValue();
         switch(kind){
           case Text:{
-            patched.put("content", note.getValue("content"));
+            patched.put("content", note.getContent());
             break;
           }
           case Image:{
-            patched.put("media", note.getValue("media"));
+            patched.put("media", note.getMedia());
             break;
           }
           case Position:{
-            patched.put("x", note.getValue("x"));
-            patched.put("y", note.getValue("y"));
+            patched.put("x", note.getX());
+            patched.put("y", note.getY());
             break;
           }
         }
@@ -145,7 +147,7 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
           if(resUpdate.isLeft()){
             promise.fail(resUpdate.left().getValue());
           }else{
-            promise.complete(patched);
+            promise.complete(CollaborativeWallNote.fromJson(patched));
           }
         });
       }

@@ -22,19 +22,19 @@ import static com.google.common.collect.Lists.newArrayList;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CollaborativeWallUserAction {
   private final CollaborativeWallMessageType type;
-  private final List<JsonObject> notes;
+  private final List<CollaborativeWallNote> notes;
   private final List<NoteMove> move;
   private final String noteId;
-  private final JsonObject note;
-  private final JsonObject wall;
+  private final CollaborativeWallNote note;
+  private final CollaborativeWallDetails wall;
 
   @JsonCreator
   public CollaborativeWallUserAction(@JsonProperty("type") final CollaborativeWallMessageType type,
-                                     @JsonProperty("notes") List<JsonObject> notes,
+                                     @JsonProperty("notes") List<CollaborativeWallNote> notes,
                                      @JsonProperty("move") final List<NoteMove> move,
                                      @JsonProperty("noteId") final String noteId,
-                                     @JsonProperty("note") final JsonObject note,
-                                     @JsonProperty("wall") final JsonObject wall) {
+                                     @JsonProperty("note") final CollaborativeWallNote note,
+                                     @JsonProperty("wall") final CollaborativeWallDetails wall) {
     this.type = type;
     this.notes = notes;
     this.move = move;
@@ -51,7 +51,7 @@ public class CollaborativeWallUserAction {
     return move;
   }
 
-  public List<JsonObject> getNotes() {
+  public List<CollaborativeWallNote> getNotes() {
     return notes;
   }
 
@@ -59,11 +59,11 @@ public class CollaborativeWallUserAction {
     return noteId;
   }
 
-  public JsonObject getNote() {
+  public CollaborativeWallNote getNote() {
     return note;
   }
 
-  public JsonObject getWall() {
+  public CollaborativeWallDetails getWall() {
     return wall;
   }
 
