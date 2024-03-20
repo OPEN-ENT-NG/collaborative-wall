@@ -1,7 +1,6 @@
 import {
   Center,
   Plus,
-  PointerDefault,
   PointerHand,
   Redo,
   Undo,
@@ -26,29 +25,17 @@ export const ToolbarWrapper = ({
   zoomOut: (value: number) => void;
   setTransform: any;
 }) => {
-  const {
-    canMoveBoard,
-    canMoveNote,
-    zoom,
-    resetZoom,
-    setCanMoveBoard,
-    setCanMoveNote,
-    toggleCanMoveBoard,
-    toggleCanMoveNote,
-    setOpenCreateModal,
-  } = useWhiteboard(
-    useShallow((state) => ({
-      canMoveBoard: state.canMoveBoard,
-      canMoveNote: state.canMoveNote,
-      zoom: state.zoom,
-      resetZoom: state.resetZoom,
-      setCanMoveBoard: state.setCanMoveBoard,
-      setCanMoveNote: state.setCanMoveNote,
-      toggleCanMoveBoard: state.toggleCanMoveBoard,
-      toggleCanMoveNote: state.toggleCanMoveNote,
-      setOpenCreateModal: state.setOpenCreateModal,
-    })),
-  );
+  const { zoom, setOpenCreateModal, canMoveNote, toggleCanMoveNote } =
+    useWhiteboard(
+      useShallow((state) => ({
+        canMoveBoard: state.canMoveBoard,
+        zoom: state.zoom,
+        setCanMoveNote: state.setCanMoveNote,
+        setOpenCreateModal: state.setOpenCreateModal,
+        canMoveNote: state.canMoveNote,
+        toggleCanMoveNote: state.toggleCanMoveNote,
+      })),
+    );
 
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
@@ -96,32 +83,14 @@ export const ToolbarWrapper = ({
     },
     {
       type: "icon",
-      name: "pointerDefault",
-      props: {
-        icon: <PointerDefault />,
-        "aria-label": t("collaborativewall.toolbar.movenote"),
-        color: "tertiary",
-        className: canMoveNote ? "is-selected" : "",
-        // disabled: !canMoveNote,
-        onClick: () => {
-          toggleCanMoveNote();
-          setCanMoveBoard(false);
-        },
-      },
-      tooltip: t("collaborativewall.toolbar.movenote", { ns: appCode }),
-      visibility: showIf(allRolesButRead),
-    },
-    {
-      type: "icon",
       name: "pointerHand",
       props: {
         icon: <PointerHand />,
         "aria-label": t("collaborativewall.toolbar.movewhiteboard"),
         color: "tertiary",
-        className: canMoveBoard ? "is-selected" : "",
+        className: `${!canMoveNote ? "is-selected" : ""} move`,
         onClick: () => {
-          toggleCanMoveBoard();
-          setCanMoveNote(false);
+          toggleCanMoveNote();
         },
       },
       tooltip: t("collaborativewall.toolbar.movewhiteboard", { ns: appCode }),

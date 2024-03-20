@@ -1,19 +1,33 @@
 import { Active } from "@dnd-kit/core";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { useShallow } from "zustand/react/shallow";
 
 import { NoteProps } from "~/models/notes";
 import { notesQueryOptions, useUpdateNote } from "~/services/queries";
 import { updateData } from "~/services/queries/helpers";
 import { useHistoryStore, useWhiteboard } from "~/store";
 
-export const useEditNote = () => {
+export const useEditNote = ({
+  onClick,
+}: {
+  onClick?: (id: string) => void;
+}) => {
   const { wallId } = useParams();
   const { setUpdatedNote, setHistory } = useHistoryStore();
 
   const queryClient = useQueryClient();
-  const zoom = useWhiteboard((state) => state.zoom);
+  const { zoom, toggleCanMoveBoard } = useWhiteboard(
+    useShallow((state) => ({
+      zoom: state.zoom,
+      toggleCanMoveBoard: state.toggleCanMoveBoard,
+    })),
+  );
   const updateNote = useUpdateNote();
+
+  const handleOnDragStart = () => {
+    toggleCanMoveBoard();
+  };
 
   const handleOnDragEnd = async ({
     active,
@@ -22,6 +36,7 @@ export const useEditNote = () => {
     active: Active;
     delta: { x: number; y: number };
   }) => {
+    toggleCanMoveBoard();
     const queryNotes = notesQueryOptions(wallId as string);
 
     const notes =
@@ -42,6 +57,10 @@ export const useEditNote = () => {
       x: Math.round(findNote.x + delta.x / zoom),
       y: Math.round(findNote.y + delta.y / zoom),
     };
+
+    if (previous.x === position.x && previous.y === position.y) {
+      onClick?.(findNote._id);
+    }
 
     setUpdatedNote({
       activeId: findNote._id,
@@ -90,5 +109,5 @@ export const useEditNote = () => {
     );
   };
 
-  return { handleOnDragEnd };
+  return { handleOnDragEnd, handleOnDragStart };
 };

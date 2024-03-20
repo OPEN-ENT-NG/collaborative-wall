@@ -13,11 +13,9 @@ import { useWhiteboard } from "~/store";
 export const Note = ({
   note,
   disabled,
-  onClick,
 }: {
   note: NoteProps;
   disabled: boolean;
-  onClick?: (id: string) => void;
 }) => {
   const { zoom, canMoveNote } = useWhiteboard(
     useShallow((state) => ({
@@ -44,7 +42,6 @@ export const Note = ({
     userSelect: isDragging && "none",
     top: (transform?.y ?? 0) / zoom,
     left: (transform?.x ?? 0) / zoom,
-    cursor: canMoveNote ? (isDragging ? "grabbing" : "grab") : "default",
     boxShadow: isDragging
       ? "-1px 0 15px 0 rgba(34, 33, 81, 0.01), 0px 15px 15px 0 rgba(34, 33, 81, 0.25)"
       : "0 2px 6px 0px rgba(0, 0, 0, 0.15)",
@@ -52,13 +49,9 @@ export const Note = ({
 
   const defaultImage = "/img/cloud.png";
 
-  const handleClick = (noteId: string): void => {
-    onClick?.(noteId);
-  };
-
   const classes = clsx("note", {
     "is-dragging": isDragging,
-    "is-grab": disabled && !isDragging,
+    "is-grab": disabled && !isDragging && !canMoveNote,
   });
 
   return (
@@ -79,11 +72,7 @@ export const Note = ({
       }
       className="card-container"
     >
-      <Card
-        className={classes}
-        isSelectable={false}
-        onClick={() => handleClick(note._id)}
-      >
+      <Card className={classes} isSelectable={false}>
         <Card.Body>
           {note.media && <ShowMediaType media={note.media}></ShowMediaType>}
           <Card.Text

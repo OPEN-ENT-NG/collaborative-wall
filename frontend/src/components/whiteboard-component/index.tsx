@@ -49,7 +49,7 @@ export const WhiteboardComponent = ({
 
     /* Enable moveboard when space is pressed */
     if (event.code === "Space") {
-      setCanMoveBoard(true);
+      event.preventDefault();
       setCanMoveNote(false);
     }
   };
@@ -57,7 +57,7 @@ export const WhiteboardComponent = ({
   /* Disable moveboard when space is released */
   const handleKeyUp = (event: KeyboardEvent) => {
     if (event.code === "Space") {
-      setCanMoveBoard(false);
+      event.preventDefault();
       setCanMoveNote(true);
     }
     if (canMoveNote && event.key === "v") {

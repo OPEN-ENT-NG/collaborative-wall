@@ -80,6 +80,9 @@
   cursor: grab !important;
 }
 
+.collaborativewall-container .toolbar .btn {
+  outline: none;
+}
 .card-container .card-actions-btn {
   position: absolute;
   top: 0;
