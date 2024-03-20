@@ -66,6 +66,11 @@ export const backgroundImages = [
   "/img/default.jpg",
   "/img/paper.jpg",
   "/img/wood.jpg",
+  "/img/blueTopo.png",
+  "/img/edifice.png",
+  "/img/greenColline.png",
+  "/img/orangeColline.png",
+  "/img/sport.png",
 ];
 
 export const backgroundColors = [
