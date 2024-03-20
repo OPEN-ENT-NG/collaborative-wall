@@ -46,7 +46,7 @@ export const ShowMediaType = ({
             objectFit={readonly ? "cover" : "contain"}
             ratio="16"
             style={{
-              borderRadius: "16px",
+              borderRadius: "8px",
               maxHeight: "350px",
             }}
           />
@@ -130,7 +130,7 @@ export const ShowMediaType = ({
               src={media.url}
               title={media.name}
               style={{
-                borderRadius: "16px",
+                borderRadius: "8px",
                 maxHeight: "350px",
                 position: "relative",
                 zIndex: "1",
@@ -144,7 +144,7 @@ export const ShowMediaType = ({
               data-document-id={media.id}
               controls
               style={{
-                borderRadius: "16px",
+                borderRadius: "8px",
                 maxHeight: "350px",
                 position: "relative",
                 zIndex: "1",
