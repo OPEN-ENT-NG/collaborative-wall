@@ -3,6 +3,7 @@ package net.atos.entng.collaborativewall;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
+import net.atos.entng.collaborativewall.events.CollaborativeWallDetails;
 import net.atos.entng.collaborativewall.events.CollaborativeWallNote;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,11 +15,21 @@ public class CollaborativeWallTest {
 
     @Test
     public void shouldSerializeNote(TestContext context) {
-        final CollaborativeWallNote note = new CollaborativeWallNote("ID", "CONTANT", new JsonObject().put("_id", "ID").getMap(), 10l, 10l, new ArrayList<>(), "LAS", "MEDIA", "WALLID");
+        final CollaborativeWallNote note = new CollaborativeWallNote("ID", "CONTANT", new JsonObject().put("_id", "ID").getMap(), 10l, 10l, new ArrayList<>(), "LAS", new JsonObject().put("url", "URL").getMap(), "WALLID");
         // parse
         final String toJson1 = note.toJson().toString();
         // parse then serialize
         final String toJson2 = CollaborativeWallNote.fromJson(note.toJson()).toJson().toString();
+        context.assertEquals(toJson1, toJson2);
+    }
+
+    @Test
+    public void shouldSerializeWall(TestContext context) {
+        final CollaborativeWallDetails note = new CollaborativeWallDetails("ID", "NAME", "DESCRIPTION", new JsonObject().put("color", "RED").getMap(), "ICON");
+        // parse
+        final String toJson1 = note.toJson().toString();
+        // parse then serialize
+        final String toJson2 = CollaborativeWallDetails.fromJson(note.toJson()).toJson().toString();
         context.assertEquals(toJson1, toJson2);
     }
 }

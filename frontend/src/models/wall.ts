@@ -15,7 +15,6 @@ export interface CollaborativeWallProps {
   shared: string[];
   rights: string[];
   description?: string;
-  icon?:string;
 }
 
 export type PickedCollaborativeWallProps = Pick<

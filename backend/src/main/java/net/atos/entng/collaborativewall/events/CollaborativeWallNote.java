@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.vertx.core.json.JsonObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class CollaborativeWallNote {
   private final Long y;
   private final List<String> color;
   private final String lastEdit;
-  private final String media;
+  private final JsonObject media;
   private final String idwall;
 
   @JsonCreator
@@ -31,8 +32,7 @@ public class CollaborativeWallNote {
                                @JsonProperty("color") final List<String> color,
                                @JsonProperty("lastEdit") final String lastEdit,
                                @JsonProperty("media") final Map<String, Object> media,
-                               @JsonProperty("idwall") final String idwall
-                               @JsonProperty("owner") final Map<String, Object> owner,) {
+                               @JsonProperty("idwall") final String idwall) {
     this.id = id;
     this.content = content;
     this.owner = new JsonObject(owner);
@@ -40,12 +40,12 @@ public class CollaborativeWallNote {
     this.y = y;
     this.color = color;
     this.lastEdit = lastEdit;
-    this.media = media;
+    this.media = new JsonObject(media);
     this.idwall = idwall;
   }
 
   public CollaborativeWallNote(final String id, final CollaborativeWallNote other) {
-    this(id, other.content, other.owner.getMap(), other.x, other.y, new ArrayList<>(other.color), other.lastEdit, other.media, other.idwall);
+    this(id, other.content, new HashMap<>(other.owner.getMap()), other.x, other.y, new ArrayList<>(other.color), other.lastEdit, new HashMap<>(other.media.getMap()), other.idwall);
   }
 
   public String getId() {
@@ -81,7 +81,7 @@ public class CollaborativeWallNote {
     return lastEdit;
   }
 
-  public String getMedia() {
+  public JsonObject getMedia() {
     return media;
   }
 
