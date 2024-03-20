@@ -126,7 +126,9 @@ export const CollaborativeWall = () => {
     ],
   });
 
-  const { handleOnDragEnd } = useEditNote();
+  const { handleOnDragEnd, handleOnDragStart } = useEditNote({
+    onClick: !isMobile ? (id: any) => navigate(`note/${id}`) : undefined,
+  });
   const { updatedNote } = useHistoryStore();
 
   const { hasRightsToMoveNote } = useAccess();
@@ -159,6 +161,7 @@ export const CollaborativeWall = () => {
           <DndContext
             sensors={sensors}
             onDragEnd={handleOnDragEnd}
+            onDragStart={handleOnDragStart}
             modifiers={[restrictToParentElement]}
           >
             {notes?.map((note: NoteProps, i: number) => {
@@ -175,9 +178,6 @@ export const CollaborativeWall = () => {
                     zIndex: isUpdated ? 2 : 1,
                   }}
                   disabled={hasRightsToMoveNote(note)}
-                  onClick={
-                    !isMobile ? (id) => navigate(`note/${id}`) : undefined
-                  }
                 />
               );
             })}

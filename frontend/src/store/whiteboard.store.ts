@@ -5,7 +5,7 @@ import { Action, State } from "~/models/store";
 
 const initialState = {
   isMobile: false,
-  canMoveBoard: false,
+  canMoveBoard: true,
   canMoveNote: true,
   canZoom: true,
   isDragging: false,
