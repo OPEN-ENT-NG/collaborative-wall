@@ -20,7 +20,7 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
   const { t } = useTranslation();
 
   const handleEdit = () => {
-    navigate(`note/${note._id}`);
+    navigate(`note/${note._id}?mode=edit`);
   };
 
   const handleCopy = () => {

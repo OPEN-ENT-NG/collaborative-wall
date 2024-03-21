@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
+import { EditorRef } from "@edifice-ui/editor";
 import { Button, Modal, useOdeClient } from "@edifice-ui/react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
@@ -14,6 +15,8 @@ import { useHistoryStore, useWhiteboard } from "~/store";
 
 export default function CreateNoteModal({ wallId }: { wallId: string }) {
   const createNote = useCreateNote();
+
+  const editorRef = useRef<EditorRef>(null);
 
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
@@ -36,7 +39,7 @@ export default function CreateNoteModal({ wallId }: { wallId: string }) {
 
   const handleCreateNote = async () => {
     const note: PickedNoteProps = {
-      content: "",
+      content: editorRef.current?.getContent("plain") as string,
       color: colorValue,
       idwall: wallId,
       media: media,
@@ -82,6 +85,8 @@ export default function CreateNoteModal({ wallId }: { wallId: string }) {
               setColorValue={setColorValue}
               setMedia={setMedia}
               media={media}
+              editionMode="edit"
+              editorRef={editorRef}
             />
           </Modal.Body>
           <Modal.Footer>

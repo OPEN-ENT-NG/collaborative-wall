@@ -127,7 +127,9 @@ export const CollaborativeWall = () => {
   });
 
   const { handleOnDragEnd, handleOnDragStart } = useEditNote({
-    onClick: !isMobile ? (id: any) => navigate(`note/${id}`) : undefined,
+    onClick: !isMobile
+      ? (id: any) => navigate(`note/${id}?mode=read`)
+      : undefined,
   });
   const { updatedNote } = useHistoryStore();
 
