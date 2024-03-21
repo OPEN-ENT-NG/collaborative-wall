@@ -11,7 +11,8 @@ rm -rf ./src/main/resources/public/*.js
 rm -rf ./src/main/resources/public/*.css
 cp -R ../frontend/dist/* ./src/main/resources/
 
-# Create view directory and copy HTML files
+# Copy Files
+mv ./src/main/resources/img/* ./src/main/resources/public/img
 mv ./src/main/resources/*.html ./src/main/resources/view
 
 # Build .
