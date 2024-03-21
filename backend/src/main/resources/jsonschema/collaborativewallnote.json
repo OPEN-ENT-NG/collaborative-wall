@@ -22,8 +22,17 @@
       "type": "array"
     },
     "media": {
-      "type": ["object", "null"]
+      "type": [
+        "object",
+        "null"
+      ]
     }
   },
-  "required": ["content", "x", "y", "color", "idwall"]
+  "required": [
+    "content",
+    "x",
+    "y",
+    "color",
+    "idwall"
+  ]
 }
