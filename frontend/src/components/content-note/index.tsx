@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { RefObject, useEffect } from "react";
 
 import { Editor, EditorRef } from "@edifice-ui/editor";
 import {
@@ -13,6 +13,7 @@ import { LoaderFunctionArgs } from "react-router-dom";
 import { ColorSelect } from "../color-select";
 import { ShowMediaType } from "../show-media-type";
 import { ToolbarMedia } from "../toolbar-media";
+import { EditionMode } from "../update-note-modal";
 import { useMediaLibrary } from "~/hooks/useMediaLibrary";
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps } from "~/models/notes";
@@ -43,18 +44,18 @@ export async function noteLoader({ params }: LoaderFunctionArgs) {
 export const ContentNote = ({
   setColorValue,
   setMedia,
+  editorRef,
   media,
+  editionMode,
   dataNote,
 }: {
   setColorValue: (value: string[]) => void;
   setMedia: (value: NoteMedia | null) => void;
+  editorRef: RefObject<EditorRef>;
   media: NoteMedia | null;
+  editionMode: EditionMode;
   dataNote?: NoteProps;
 }) => {
-  const [editorMode] = useState<"read" | "edit">("read");
-
-  const editorRef = useRef<EditorRef>(null);
-
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
 
@@ -85,7 +86,9 @@ export const ContentNote = ({
 
   return (
     <>
-      <ColorSelect dataNote={dataNote} setColorValue={setColorValue} />
+      {editionMode === "edit" && (
+        <ColorSelect dataNote={dataNote} setColorValue={setColorValue} />
+      )}
       <div className="multimedia-section my-24">
         {!media?.url ? (
           <div className="toolbar-media py-48 px-12">
@@ -93,7 +96,11 @@ export const ContentNote = ({
             {t("collaborativewall.add.media", { ns: appCode })}
           </div>
         ) : (
-          <ShowMediaType media={media} setMedia={setMedia} readonly={false} />
+          <ShowMediaType
+            media={media}
+            setMedia={setMedia}
+            readonly={editionMode === "edit" ? false : true}
+          />
         )}
       </div>
       <MediaLibrary
@@ -105,9 +112,8 @@ export const ContentNote = ({
       <Editor
         ref={editorRef}
         content={dataNote?.content || ""}
-        mode={editorMode}
+        mode={editionMode}
       />
-      <p>{dataNote?.content || ""}</p>{" "}
     </>
   );
 };

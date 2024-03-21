@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
+import { EditorRef } from "@edifice-ui/editor";
 import { Button, Modal, useOdeClient } from "@edifice-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { createPortal } from "react-dom";
@@ -8,6 +9,7 @@ import {
   LoaderFunctionArgs,
   useLoaderData,
   useNavigate,
+  useSearchParams,
 } from "react-router-dom";
 
 import { ContentNote } from "../content-note";
@@ -17,6 +19,8 @@ import { getNote } from "~/services/api";
 import { useUpdateNote } from "~/services/queries";
 import { updateData } from "~/services/queries/helpers";
 import { useHistoryStore } from "~/store";
+
+export type EditionMode = "read" | "edit";
 
 export async function noteLoader({ params }: LoaderFunctionArgs) {
   const { wallId, noteId } = params;
@@ -47,8 +51,13 @@ export const UpdateNoteModal = () => {
   const [colorValue, setColorValue] = useState<string[]>(data.color);
   const [media, setMedia] = useState<NoteMedia | null>(data.media);
 
+  const editorRef = useRef<EditorRef>(null);
+
   const updateNote = useUpdateNote();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const editionMode: EditionMode =
+    (searchParams.get("mode") as EditionMode) || "read";
 
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
@@ -57,7 +66,7 @@ export const UpdateNoteModal = () => {
 
   const handleSaveNote = async () => {
     const note: PickedNoteProps = {
-      content: data.content,
+      content: editorRef.current?.getContent("plain") as string,
       color: colorValue,
       idwall: data.idwall as string,
       media: media || null,
@@ -126,28 +135,32 @@ export const UpdateNoteModal = () => {
         <Modal.Subtitle>{data.owner?.displayName}</Modal.Subtitle>
         <Modal.Body>
           <ContentNote
+            editorRef={editorRef}
             dataNote={data}
             setColorValue={setColorValue}
             setMedia={setMedia}
             media={media}
+            editionMode={editionMode}
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            type="button"
-            color="tertiary"
-            variant="ghost"
-            onClick={handleNavigateBack}
-          >
-            {t("collaborativewall.modal.cancel", { ns: appCode })}
-          </Button>
+          {editionMode === "edit" && (
+            <Button
+              type="button"
+              color="tertiary"
+              variant="ghost"
+              onClick={handleNavigateBack}
+            >
+              {t("collaborativewall.modal.cancel", { ns: appCode })}
+            </Button>
+          )}
           <Button
             type="button"
             color="primary"
             variant="filled"
             onClick={handleSaveNote}
           >
-            {t("save")}
+            {editionMode === "edit" ? t("save") : t("close")}
           </Button>
         </Modal.Footer>
       </Modal>,
