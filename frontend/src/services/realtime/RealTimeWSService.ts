@@ -30,6 +30,7 @@ export class RealTimeWSService extends RealTimeService {
     });
     this.socket?.addEventListener("close", (event) => {
       if (!event.wasClean) {
+        this.pendingStarts.forEach((def) => def.reject());
         console.warn(
           "[collaborativewall][realtime] Server closed connection unilaterally. restarting...",
           event,
