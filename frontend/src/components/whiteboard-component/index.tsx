@@ -5,7 +5,12 @@ import { useParams } from "react-router-dom";
 import { TransformComponent } from "react-zoom-pan-pinch";
 import { useShallow } from "zustand/react/shallow";
 
-import { wallConfig, zoomConfig } from "~/config/init-config";
+import {
+  backgroundColors,
+  backgroundImages,
+  wallConfig,
+  zoomConfig,
+} from "~/config/init-config";
 import { wallQueryOptions } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 
@@ -109,12 +114,12 @@ export const WhiteboardComponent = ({
           style={{
             height: wallConfig.HEIGHT_WALL,
             width: wallConfig.WIDTH_WALL,
-            background: `linear-gradient(${data?.background.color})`,
+            background: `linear-gradient(${data?.background.color ?? backgroundColors[0]})`,
           }}
         >
           <div
             style={{
-              backgroundImage: `url(${import.meta.env.PROD ? `/collaborativewall/public/${data?.background.path}` : data?.background.path}`,
+              backgroundImage: `url(${import.meta.env.PROD ? `/collaborativewall/public/${data?.background.path ?? backgroundImages[0]}` : `/${data?.background.path ?? backgroundImages[0]}`}`,
               width: "100%",
               height: "100%",
             }}

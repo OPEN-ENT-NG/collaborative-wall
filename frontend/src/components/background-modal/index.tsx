@@ -77,7 +77,7 @@ export default function BackgroundModal({
                 src={
                   import.meta.env.PROD
                     ? `/collaborativewall/public/${backgroundImageValue}`
-                    : backgroundImageValue
+                    : `/${backgroundImageValue}`
                 }
                 className="py-16"
                 alt=""
@@ -108,7 +108,7 @@ export default function BackgroundModal({
                               src={
                                 import.meta.env.PROD
                                   ? `/collaborativewall/public/${image}`
-                                  : image
+                                  : `/${image}`
                               }
                               alt=""
                               ratio="4"
