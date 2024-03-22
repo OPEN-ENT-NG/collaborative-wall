@@ -62,7 +62,7 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
               color="secondary"
               variant="ghost"
               icon={<Options />}
-              className="card-actions-btn"
+              className="card-actions-btn bg-white"
             />
             <Dropdown.Menu>
               <Dropdown.Item icon={<Edit />} onClick={handleEdit}>
