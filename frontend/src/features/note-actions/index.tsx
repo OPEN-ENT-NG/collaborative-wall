@@ -20,7 +20,7 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
   const { t } = useTranslation();
 
   const handleEdit = () => {
-    navigate(`note/${note._id}`);
+    navigate(`note/${note._id}?mode=edit`);
   };
 
   const handleCopy = () => {
@@ -62,7 +62,7 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
               color="secondary"
               variant="ghost"
               icon={<Options />}
-              className="card-actions-btn"
+              className="card-actions-btn bg-white"
             />
             <Dropdown.Menu>
               <Dropdown.Item icon={<Edit />} onClick={handleEdit}>
