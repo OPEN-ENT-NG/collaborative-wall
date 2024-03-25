@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 
-import { EditorRef } from "@edifice-ui/editor";
 import { Button, Modal, useOdeClient } from "@edifice-ui/react";
+import { Editor } from "@tiptap/react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
@@ -16,7 +16,7 @@ import { useHistoryStore, useWhiteboard } from "~/store";
 export default function CreateNoteModal({ wallId }: { wallId: string }) {
   const createNote = useCreateNote();
 
-  const editorRef = useRef<EditorRef>(null);
+  const editorRef: React.MutableRefObject<Editor | null> = useRef(null);
 
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
@@ -39,7 +39,7 @@ export default function CreateNoteModal({ wallId }: { wallId: string }) {
 
   const handleCreateNote = async () => {
     const note: PickedNoteProps = {
-      content: editorRef.current?.getContent("plain") as string,
+      content: editorRef.current?.getText() || "",
       color: colorValue,
       idwall: wallId,
       media: media,

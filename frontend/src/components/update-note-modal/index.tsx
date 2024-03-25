@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 
-import { EditorRef } from "@edifice-ui/editor";
 import { Button, Modal, useOdeClient } from "@edifice-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { Editor } from "@tiptap/react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -51,7 +51,7 @@ export const UpdateNoteModal = () => {
   const [colorValue, setColorValue] = useState<string[]>(data.color);
   const [media, setMedia] = useState<NoteMedia | null>(data.media);
 
-  const editorRef = useRef<EditorRef>(null);
+  const editorRef: React.MutableRefObject<Editor | null> = useRef(null);
 
   const updateNote = useUpdateNote();
   const navigate = useNavigate();
@@ -66,7 +66,7 @@ export const UpdateNoteModal = () => {
 
   const handleSaveNote = async () => {
     const note: PickedNoteProps = {
-      content: editorRef.current?.getContent("plain") as string,
+      content: editorRef.current?.getText() || "",
       color: colorValue,
       idwall: data.idwall as string,
       media: media || null,

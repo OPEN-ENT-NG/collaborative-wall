@@ -1,11 +1,12 @@
-import { RefObject, useEffect } from "react";
+import { useEffect } from "react";
 
-import { Editor, EditorRef } from "@edifice-ui/editor";
 import {
   MediaLibrary,
   MediaLibraryType,
   useOdeClient,
 } from "@edifice-ui/react";
+import { Editor, EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import { WorkspaceElement } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs } from "react-router-dom";
@@ -51,7 +52,7 @@ export const ContentNote = ({
 }: {
   setColorValue: (value: string[]) => void;
   setMedia: (value: NoteMedia | null) => void;
-  editorRef: RefObject<EditorRef>;
+  editorRef: React.MutableRefObject<Editor | null>;
   media: NoteMedia | null;
   editionMode: EditionMode;
   dataNote?: NoteProps;
@@ -59,16 +60,17 @@ export const ContentNote = ({
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
 
+  const editor: Editor | null = useEditor({
+    extensions: [StarterKit],
+    content: dataNote?.content || "",
+    editable: editionMode === "edit" ? true : false,
+  });
+
   const {
     ref: mediaLibraryRef,
     libraryMedia,
     ...mediaLibraryModalHandlers
   } = useMediaLibrary();
-
-  const handleClickMedia = (type: MediaLibraryType) => {
-    setMedia({ ...(media as NoteMedia), type });
-    mediaLibraryRef.current?.show(type);
-  };
 
   useEffect(() => {
     if (libraryMedia) {
@@ -83,6 +85,14 @@ export const ContentNote = ({
       });
     }
   }, [libraryMedia]);
+
+  if (!editor) return null;
+  editorRef.current = editor;
+
+  const handleClickMedia = (type: MediaLibraryType) => {
+    setMedia({ ...(media as NoteMedia), type });
+    mediaLibraryRef.current?.show(type);
+  };
 
   return (
     <>
@@ -109,11 +119,7 @@ export const ContentNote = ({
         multiple={false}
         {...mediaLibraryModalHandlers}
       />
-      <Editor
-        ref={editorRef}
-        content={dataNote?.content || ""}
-        mode={editionMode}
-      />
+      <EditorContent editor={editor} />
     </>
   );
 };
