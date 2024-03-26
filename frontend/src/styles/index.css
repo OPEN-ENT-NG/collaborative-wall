@@ -23,6 +23,7 @@
   position: absolute;
   background-color: #fff;
   right: 0px;
+  z-index: 2;
   gap: 8px;
 }
 
@@ -30,6 +31,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+}
+
+.media-video {
+  border-radius: 8px;
+  max-height: 350px;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.media-audio {
+  max-width: 205px;
+  position: relative;
+  z-index: 1;
   width: 100%;
 }
 
