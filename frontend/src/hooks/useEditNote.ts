@@ -60,53 +60,55 @@ export const useEditNote = ({
 
     if (previous.x === position.x && previous.y === position.y) {
       onClick?.(findNote._id);
+    } else {
+      setUpdatedNote({
+        activeId: findNote._id,
+        x: position.x,
+        y: position.y,
+        zIndex: 2,
+      });
+
+      await updateNote.mutateAsync(
+        {
+          id: findNote._id,
+          note: {
+            content: findNote.content,
+            color: findNote.color,
+            idwall: findNote.idwall,
+            media: findNote.media,
+            modified: findNote.modified,
+            x: position.x,
+            y: position.y,
+          },
+        },
+        {
+          onSuccess: async (data, { id }) => {
+            const { status, wall: notes } = data;
+
+            if (status !== "ok") return;
+
+            const updatedNote = notes.find(
+              (note: NoteProps) => note._id === id,
+            );
+
+            updateData(queryClient, updatedNote);
+
+            setHistory({
+              type: "move",
+              item: updatedNote,
+              previous: {
+                x: previous.x,
+                y: previous.y,
+              },
+              next: {
+                x: position.x,
+                y: position.y,
+              },
+            });
+          },
+        },
+      );
     }
-
-    setUpdatedNote({
-      activeId: findNote._id,
-      x: position.x,
-      y: position.y,
-      zIndex: 2,
-    });
-
-    await updateNote.mutateAsync(
-      {
-        id: findNote._id,
-        note: {
-          content: findNote.content,
-          color: findNote.color,
-          idwall: findNote.idwall,
-          media: findNote.media,
-          modified: findNote.modified,
-          x: position.x,
-          y: position.y,
-        },
-      },
-      {
-        onSuccess: async (data, { id }) => {
-          const { status, wall: notes } = data;
-
-          if (status !== "ok") return;
-
-          const updatedNote = notes.find((note: NoteProps) => note._id === id);
-
-          updateData(queryClient, updatedNote);
-
-          setHistory({
-            type: "move",
-            item: updatedNote,
-            previous: {
-              x: previous.x,
-              y: previous.y,
-            },
-            next: {
-              x: position.x,
-              y: position.y,
-            },
-          });
-        },
-      },
-    );
   };
 
   return { handleOnDragEnd, handleOnDragStart };

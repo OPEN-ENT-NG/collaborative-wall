@@ -144,6 +144,11 @@ export const CollaborativeWall = () => {
 
   if (isWallError || isNotesError) return <EmptyScreenError />;
 
+  notes?.sort(
+    (a: NoteProps, b: NoteProps) =>
+      (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
+  );
+
   return (
     <>
       {!isMobile && (
@@ -168,7 +173,6 @@ export const CollaborativeWall = () => {
           >
             {notes?.map((note: NoteProps, i: number) => {
               const isUpdated = note._id === updatedNote?.activeId;
-
               return (
                 <Note
                   key={note._id}
@@ -176,8 +180,7 @@ export const CollaborativeWall = () => {
                     ...note,
                     x: isUpdated ? updatedNote.x : note.x,
                     y: isUpdated ? updatedNote.y : note.y,
-                    title: `title ${i}`,
-                    zIndex: isUpdated ? 2 : 1,
+                    zIndex: isUpdated ? notes.length : i,
                   }}
                   disabled={hasRightsToMoveNote(note)}
                 />
