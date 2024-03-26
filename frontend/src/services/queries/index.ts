@@ -103,9 +103,16 @@ export const useCreateNote = () => {
 };
 
 export const useUpdateNote = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async ({ id, note }: { id: ID; note: PickedNoteProps }) =>
       await updateNote(note.idwall, id, note),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({
+        queryKey: ["notes"],
+      });
+    },
   });
 };
 
