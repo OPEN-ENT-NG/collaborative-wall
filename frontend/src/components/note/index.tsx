@@ -87,7 +87,6 @@ export const Note = ({
             className={`text-truncate ${defaultImage ? "text-truncate-8" : "text-truncate-12"}`}
           >
             <EditorContent editor={editor} />
-            {note.content}
           </Card.Text>
         </Card.Body>
         <Card.Footer>
