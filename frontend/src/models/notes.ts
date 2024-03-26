@@ -2,7 +2,6 @@ import { NoteMedia } from "./noteMedia";
 
 export interface NoteProps {
   _id: string;
-  title?: string;
   content: string;
   x: number;
   y: number;
