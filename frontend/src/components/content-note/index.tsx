@@ -100,6 +100,7 @@ export const ContentNote = ({
         ) : (
           <ShowMediaType
             media={media}
+            modalNote={true}
             setMedia={setMedia}
             readonly={editionMode === "edit" ? false : true}
           />
