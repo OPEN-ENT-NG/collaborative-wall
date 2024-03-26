@@ -67,19 +67,34 @@ export const UpdateNoteModal = () => {
 
   const { setHistory } = useHistoryStore();
 
-  // There is a window event listener on Space key to move the whiteboard
-  // So we need to stop the Space key propagation in order to make the Space key work in Editor
+  // There is a window event listener on Space, "-", "=", "+" keys to move, unzoom, zoom the whiteboard respectively,
+  // So we need to stop these keys propagation in order to make these keys work in Editor.
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.code === "Space") {
+    const stopPropagation = (event: KeyboardEvent) => {
+      if (
+        event.code === "Space" ||
+        event.key === "-" ||
+        event.key === "=" ||
+        event.key === "+"
+      ) {
         event.stopPropagation();
       }
     };
 
+    const handleKeyDown = (event: KeyboardEvent) => {
+      stopPropagation(event);
+    };
+
+    const handleKeyUp = (event: KeyboardEvent) => {
+      stopPropagation(event);
+    };
+
     document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
