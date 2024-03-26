@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import { useDraggable } from "@dnd-kit/core";
 import { Card } from "@edifice-ui/react";
 import { Editor, EditorContent, useEditor } from "@tiptap/react";
@@ -35,6 +37,11 @@ export const Note = ({
     content: note.content,
     editable: false,
   });
+
+  useEffect(() => {
+    editor?.commands.setContent(note.content);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [note]);
 
   const style = {
     position: "absolute",
@@ -80,6 +87,7 @@ export const Note = ({
             className={`text-truncate ${defaultImage ? "text-truncate-8" : "text-truncate-12"}`}
           >
             <EditorContent editor={editor} />
+            {note.content}
           </Card.Text>
         </Card.Body>
         <Card.Footer>
