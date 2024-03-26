@@ -90,19 +90,20 @@ export const ContentNote = ({
         <ColorSelect dataNote={dataNote} setColorValue={setColorValue} />
       )}
       <div className="multimedia-section my-24">
-        {editionMode === "edit" &&
-          (!media?.url ? (
+        {!media?.url ? (
+          editionMode === "edit" && (
             <div className="toolbar-media py-48 px-12">
               <ToolbarMedia handleClickMedia={handleClickMedia} />
               {t("collaborativewall.add.media", { ns: appCode })}
             </div>
-          ) : (
-            <ShowMediaType
-              media={media}
-              setMedia={setMedia}
-              readonly={editionMode === "edit" ? false : true}
-            />
-          ))}
+          )
+        ) : (
+          <ShowMediaType
+            media={media}
+            setMedia={setMedia}
+            readonly={editionMode === "edit" ? false : true}
+          />
+        )}
       </div>
       <MediaLibrary
         appCode={appCode}
