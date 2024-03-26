@@ -2,8 +2,10 @@ import { Delete, Download } from "@edifice-ui/icons";
 import { Attachment, IconButton, Image } from "@edifice-ui/react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
+import { useShallow } from "zustand/react/shallow";
 
 import { NoteMedia } from "~/models/noteMedia";
+import { useWhiteboard } from "~/store";
 
 export interface ShowMediaTypeProps {
   media: NoteMedia;
@@ -19,6 +21,12 @@ export const ShowMediaType = ({
   readonly = true,
 }: ShowMediaTypeProps) => {
   const { t } = useTranslation();
+
+  const { canMoveNote } = useWhiteboard(
+    useShallow((state) => ({
+      canMoveNote: state.canMoveNote,
+    })),
+  );
 
   const mediaClasses = clsx({
     "media-center": !modalNote,
@@ -63,6 +71,7 @@ export const ShowMediaType = ({
             controls
             data-document-id={media.id}
             muted
+            style={{ zIndex: canMoveNote ? "1" : "0" }}
           >
             <track default kind="captions" srcLang="fr" src=""></track>
           </audio>
@@ -128,6 +137,7 @@ export const ShowMediaType = ({
               className="media-video"
               style={{
                 height: modalNote ? "350px" : "",
+                zIndex: canMoveNote ? "1" : "0",
               }}
             />
           ) : (
@@ -138,6 +148,7 @@ export const ShowMediaType = ({
               className="media-video"
               style={{
                 marginBottom: "-8px",
+                zIndex: canMoveNote ? "1" : "0",
               }}
             >
               <track default kind="captions" srcLang="fr" src=""></track>

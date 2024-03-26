@@ -86,7 +86,7 @@ export const Note = ({
           <Card.Text>{note.owner?.displayName}</Card.Text>
         </Card.Footer>
       </Card>
-      <NoteActions note={note}></NoteActions>
+      {canMoveNote && <NoteActions note={note}></NoteActions>}
     </div>
   );
 };
