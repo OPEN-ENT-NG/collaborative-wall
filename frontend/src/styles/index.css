@@ -38,14 +38,12 @@
   border-radius: 8px;
   max-height: 350px;
   position: relative;
-  z-index: 1;
   width: 100%;
 }
 
 .media-audio {
   max-width: 205px;
   position: relative;
-  z-index: 1;
   width: 100%;
 }
 
