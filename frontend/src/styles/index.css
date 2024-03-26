@@ -16,7 +16,6 @@
   min-height: 120px;
   border-radius: 16px;
   border: 1px solid #f2f2f2;
-  gap: 8px;
 }
 
 #NoteModal .delete-button {

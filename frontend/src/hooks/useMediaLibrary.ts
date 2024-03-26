@@ -10,9 +10,7 @@ import { WorkspaceElement } from "edifice-ts-client";
 
 export const useMediaLibrary = () => {
   const mediaLibraryRef = useRef<MediaLibraryRef>(null);
-  const [libraryMedia, setLibraryMedia] = useState<
-    WorkspaceElement | String | undefined
-  >();
+  const [libraryMedia, setLibraryMedia] = useState<MediaLibraryResult>();
   const { remove } = useWorkspaceFile();
 
   const onCancel = async (uploads?: WorkspaceElement[]) => {
@@ -23,7 +21,13 @@ export const useMediaLibrary = () => {
   };
   const onSuccess = (result: MediaLibraryResult) => {
     if (mediaLibraryRef.current?.type) {
-      if (result[result.length - 1]._id) {
+      if (result.url) {
+        mediaLibraryRef.current?.hide();
+        setLibraryMedia(result);
+      } else if (result.resources) {
+        mediaLibraryRef.current?.hide();
+        setLibraryMedia(result.resources[result.resources.length - 1]);
+      } else if (result[result.length - 1]._id) {
         mediaLibraryRef.current?.hide();
         setLibraryMedia(result[result.length - 1]);
       } else {
@@ -33,7 +37,7 @@ export const useMediaLibrary = () => {
 
         const href = element?.getAttribute("src");
         mediaLibraryRef.current?.hide();
-        setLibraryMedia(href ?? undefined);
+        setLibraryMedia(href);
       }
     }
   };

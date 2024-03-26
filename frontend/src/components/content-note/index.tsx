@@ -2,11 +2,12 @@ import { RefObject, useEffect } from "react";
 
 import { Editor, EditorRef } from "@edifice-ui/editor";
 import {
+  IExternalLink,
   MediaLibrary,
   MediaLibraryType,
   useOdeClient,
 } from "@edifice-ui/react";
-import { WorkspaceElement } from "edifice-ts-client";
+import { ILinkedResource, WorkspaceElement } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs } from "react-router-dom";
 
@@ -14,6 +15,7 @@ import { ColorSelect } from "../color-select";
 import { ShowMediaType } from "../show-media-type";
 import { ToolbarMedia } from "../toolbar-media";
 import { EditionMode } from "../update-note-modal";
+import { useLinkToolbar } from "~/hooks/useLinkToolbar";
 import { useMediaLibrary } from "~/hooks/useMediaLibrary";
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps } from "~/models/notes";
@@ -65,6 +67,8 @@ export const ContentNote = ({
     ...mediaLibraryModalHandlers
   } = useMediaLibrary();
 
+  const { onEdit, onOpen } = useLinkToolbar(null, mediaLibraryRef);
+
   const handleClickMedia = (type: MediaLibraryType) => {
     setMedia({ ...(media as NoteMedia), type });
     mediaLibraryRef.current?.show(type);
@@ -72,16 +76,38 @@ export const ContentNote = ({
 
   useEffect(() => {
     if (libraryMedia) {
-      const medialIb = libraryMedia as WorkspaceElement;
-      setMedia({
-        type: (media as NoteMedia).type,
-        id: medialIb?._id || "",
-        name: medialIb?.name || "",
-        url: medialIb?._id
-          ? `/workspace/document/${medialIb?._id}`
-          : (libraryMedia as string),
-      });
+      console.log(libraryMedia);
+      if (libraryMedia.url) {
+        const medialIb = libraryMedia as IExternalLink;
+        setMedia({
+          type: (media as NoteMedia).type,
+          id: "",
+          name: medialIb?.text || "",
+          url: medialIb?.url,
+        });
+      } else if (libraryMedia.assetId) {
+        const medialIb = libraryMedia as ILinkedResource;
+        setMedia({
+          type: (media as NoteMedia).type,
+          id: "",
+          name: medialIb?.application || "",
+          url:
+            medialIb.path ??
+            `/${medialIb.application}#/view/${medialIb.assetId}`,
+        });
+      } else {
+        const medialIb = libraryMedia as WorkspaceElement;
+        setMedia({
+          type: (media as NoteMedia).type,
+          id: medialIb?._id || "",
+          name: medialIb?.application || "",
+          url: medialIb?._id
+            ? `/workspace/document/${medialIb?._id}`
+            : (libraryMedia as string),
+        });
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [libraryMedia]);
 
   return (
@@ -100,6 +126,8 @@ export const ContentNote = ({
             media={media}
             setMedia={setMedia}
             readonly={editionMode === "edit" ? false : true}
+            onEdit={onEdit}
+            onOpen={onOpen}
           />
         )}
       </div>
