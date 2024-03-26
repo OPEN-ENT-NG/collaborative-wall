@@ -6,12 +6,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
+import { useAccess } from "~/hooks/useAccess";
 import { NoteProps } from "~/models/notes";
 import { notesQueryOptions, useDeleteNote } from "~/services/queries";
 import { useHistoryStore } from "~/store";
 
 export const NoteActions = ({ note }: { note: NoteProps }) => {
   const navigate = useNavigate();
+
+  const { hasRightsToUpdateNote } = useAccess();
 
   const queryClient = useQueryClient();
   const deleteNote = useDeleteNote();
@@ -65,15 +68,19 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
               className="card-actions-btn bg-white"
             />
             <Dropdown.Menu>
-              <Dropdown.Item icon={<Edit />} onClick={handleEdit}>
-                {t("edit")}
-              </Dropdown.Item>
+              {hasRightsToUpdateNote(note) && (
+                <Dropdown.Item icon={<Edit />} onClick={handleEdit}>
+                  {t("edit")}
+                </Dropdown.Item>
+              )}
               <Dropdown.Item icon={<Copy />} onClick={handleCopy}>
                 {t("duplicate")}
               </Dropdown.Item>
-              <Dropdown.Item icon={<Delete />} onClick={handleDelete}>
-                {t("remove")}
-              </Dropdown.Item>
+              {hasRightsToUpdateNote(note) && (
+                <Dropdown.Item icon={<Delete />} onClick={handleDelete}>
+                  {t("remove")}
+                </Dropdown.Item>
+              )}
             </Dropdown.Menu>
           </>
         )}

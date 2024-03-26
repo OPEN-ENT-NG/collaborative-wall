@@ -13,6 +13,7 @@ import {
 } from "react-router-dom";
 
 import { ContentNote } from "../content-note";
+import { useAccess } from "~/hooks/useAccess";
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
@@ -53,6 +54,8 @@ export const UpdateNoteModal = () => {
 
   const editorRef = useRef<EditorRef>(null);
 
+  const { hasRightsToUpdateNote } = useAccess();
+
   const updateNote = useUpdateNote();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -80,6 +83,12 @@ export const UpdateNoteModal = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleNavigateBack = () => navigate("..");
+
+  const handleNavigateToEditMode = () => {
+    navigate(`../note/${data._id}?mode=edit`);
+  };
 
   const handleSaveNote = async () => {
     const note: PickedNoteProps = {
@@ -131,10 +140,8 @@ export const UpdateNoteModal = () => {
       },
     );
 
-    navigate("..");
+    handleNavigateBack();
   };
-
-  const handleNavigateBack = () => navigate("..");
 
   return data ? (
     createPortal(
@@ -161,6 +168,16 @@ export const UpdateNoteModal = () => {
           />
         </Modal.Body>
         <Modal.Footer>
+          {editionMode === "read" && hasRightsToUpdateNote(data) && (
+            <Button
+              type="button"
+              color="primary"
+              variant="outline"
+              onClick={handleNavigateToEditMode}
+            >
+              {t("collaborativewall.modal.modify", { ns: appCode })}
+            </Button>
+          )}
           {editionMode === "edit" && (
             <Button
               type="button"
@@ -177,7 +194,9 @@ export const UpdateNoteModal = () => {
             variant="filled"
             onClick={handleSaveNote}
           >
-            {editionMode === "edit" ? t("save") : t("close")}
+            {editionMode === "edit"
+              ? t("collaborativewall.modal.modify")
+              : t("collaborativewall.modal.close")}
           </Button>
         </Modal.Footer>
       </Modal>,
