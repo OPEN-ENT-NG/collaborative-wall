@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { EditorRef } from "@edifice-ui/editor";
 import { Button, Modal, useOdeClient } from "@edifice-ui/react";
@@ -63,6 +63,23 @@ export const UpdateNoteModal = () => {
   const { appCode } = useOdeClient();
 
   const { setHistory } = useHistoryStore();
+
+  // There is a window event listener on Space key to move the whiteboard
+  // So we need to stop the Space key propagation in order to make the Space key work in Editor
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+        event.stopPropagation();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSaveNote = async () => {
     const note: PickedNoteProps = {
