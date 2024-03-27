@@ -6,6 +6,7 @@ import {
   Dropdown,
   IconButtonProps,
   IconButton,
+  useOdeClient,
 } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
@@ -15,6 +16,7 @@ import { useWhiteboard } from "~/store";
 
 export const AppActions = () => {
   const { isCreator, isManager } = useAccess();
+  const { appCode } = useOdeClient();
   const { t } = useTranslation();
 
   const { setOpenShareModal, setIsOpenBackgroundModal } = useWhiteboard(
@@ -58,7 +60,7 @@ export const AppActions = () => {
                   icon={<Landscape />}
                   onClick={() => setIsOpenBackgroundModal(true)}
                 >
-                  {t("collaborativewall.modal.background")}
+                  {t("collaborativewall.modal.background", { ns: appCode })}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </>

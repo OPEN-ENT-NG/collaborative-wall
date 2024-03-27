@@ -5,13 +5,13 @@
   transform: translateX(-50%);
 }
 
-#NoteModal .toolbar-media {
+.toolbar-media {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-#NoteModal .multimedia-section {
+.multimedia-section {
   width: 100%;
   min-height: 120px;
   border-radius: 16px;
@@ -19,7 +19,7 @@
   gap: 8px;
 }
 
-#NoteModal .delete-button {
+.delete-button {
   position: absolute;
   background-color: #fff;
   right: 0px;

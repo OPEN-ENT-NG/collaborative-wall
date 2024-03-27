@@ -44,7 +44,7 @@ export default function DescriptionModal({
               variant="filled"
               onClick={handleClose}
             >
-              {t("collaborativewall.modal.close", { ns: appCode })}
+              {t("close")}
             </Button>
           </Modal.Footer>
         </Modal>,

@@ -192,7 +192,7 @@ export const UpdateNoteModal = () => {
               variant="outline"
               onClick={handleNavigateToEditMode}
             >
-              {t("collaborativewall.modal.modify", { ns: appCode })}
+              {t("edit")}
             </Button>
           )}
           {editionMode === "edit" && (
@@ -202,7 +202,7 @@ export const UpdateNoteModal = () => {
               variant="ghost"
               onClick={handleNavigateBack}
             >
-              {t("collaborativewall.modal.cancel", { ns: appCode })}
+              {t("cancel")}
             </Button>
           )}
           <Button
@@ -211,9 +211,7 @@ export const UpdateNoteModal = () => {
             variant="filled"
             onClick={handleSaveNote}
           >
-            {editionMode === "edit"
-              ? t("collaborativewall.modal.modify")
-              : t("collaborativewall.modal.close")}
+            {editionMode === "edit" ? t("edit") : t("close")}
           </Button>
         </Modal.Footer>
       </Modal>,
