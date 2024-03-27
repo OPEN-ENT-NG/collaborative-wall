@@ -94,6 +94,8 @@ export const CollaborativeWall = () => {
     setIsMobile,
     setOpenShareModal,
     setIsOpenBackgroundModal,
+    setNumberOfNotes,
+    numberOfNotes,
   } = useWhiteboard(
     useShallow((state) => ({
       openShareModal: state.openShareModal,
@@ -103,6 +105,8 @@ export const CollaborativeWall = () => {
       setOpenShareModal: state.setOpenShareModal,
       setIsOpenBackgroundModal: state.setIsOpenBackgroundModal,
       setIsMobile: state.setIsMobile,
+      setNumberOfNotes: state.setNumberOfNotes,
+      numberOfNotes: state.numberOfNotes,
     })),
   );
 
@@ -144,6 +148,8 @@ export const CollaborativeWall = () => {
 
   if (isWallError || isNotesError) return <EmptyScreenError />;
 
+  if (notes) setNumberOfNotes(notes.length);
+
   notes?.sort(
     (a: NoteProps, b: NoteProps) =>
       (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
@@ -180,7 +186,7 @@ export const CollaborativeWall = () => {
                     ...note,
                     x: isUpdated ? updatedNote.x : note.x,
                     y: isUpdated ? updatedNote.y : note.y,
-                    zIndex: isUpdated ? notes.length : i,
+                    zIndex: isUpdated ? numberOfNotes + 1 : i,
                   }}
                   disabled={hasRightsToMoveNote(note)}
                 />

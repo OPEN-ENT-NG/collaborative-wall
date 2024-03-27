@@ -67,6 +67,7 @@ export type State = {
   openDescriptionModal: boolean;
   openBackgroundModal: boolean;
   positionViewport: Offset;
+  numberOfNotes: number;
 };
 
 export type Action = {
@@ -75,6 +76,7 @@ export type Action = {
   setCanMoveBoard: (value: boolean) => void;
   setCanMoveNote: (value: boolean) => void;
   setZoom: (value: number) => void;
+  setNumberOfNotes: (value: number) => void;
   setIsMobile: (query: string | null) => void;
   setOpenShareModal: (value: boolean) => void;
   setOpenCreateModal: (value: boolean) => void;

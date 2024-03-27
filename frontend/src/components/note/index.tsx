@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useDraggable } from "@dnd-kit/core";
 import { Card } from "@edifice-ui/react";
@@ -19,12 +19,15 @@ export const Note = ({
   note: NoteProps;
   disabled: boolean;
 }) => {
-  const { zoom, canMoveNote } = useWhiteboard(
+  const { zoom, canMoveNote, numberOfNotes } = useWhiteboard(
     useShallow((state) => ({
       zoom: state.zoom,
       canMoveNote: state.canMoveNote,
+      numberOfNotes: state.numberOfNotes,
     })),
   );
+
+  const [isopenDropdown, setIsOpenDropdown] = useState<boolean>(false);
 
   const { attributes, isDragging, listeners, setNodeRef, transform } =
     useDraggable({
@@ -46,7 +49,7 @@ export const Note = ({
   const style = {
     position: "absolute",
     borderRadius: "12px",
-    zIndex: isDragging ? 200 : note.zIndex,
+    zIndex: isDragging || isopenDropdown ? numberOfNotes + 2 : note.zIndex,
     userSelect: isDragging && "none",
     top: (transform?.y ?? 0) / zoom,
     left: (transform?.x ?? 0) / zoom,
@@ -91,7 +94,12 @@ export const Note = ({
           <Card.Text>{note.owner?.displayName}</Card.Text>
         </Card.Footer>
       </Card>
-      {canMoveNote && <NoteActions note={note}></NoteActions>}
+      {canMoveNote && (
+        <NoteActions
+          note={note}
+          setIsOpenDropdown={setIsOpenDropdown}
+        ></NoteActions>
+      )}
     </div>
   );
 };

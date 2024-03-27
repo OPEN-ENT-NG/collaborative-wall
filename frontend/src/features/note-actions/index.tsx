@@ -20,7 +20,13 @@ export type NoteDropdownMenuOptions = DropdownMenuOptions & {
   hidden?: boolean;
 };
 
-export const NoteActions = ({ note }: { note: NoteProps }) => {
+export const NoteActions = ({
+  note,
+  setIsOpenDropdown,
+}: {
+  note: NoteProps;
+  setIsOpenDropdown: (value: boolean) => void;
+}) => {
   const navigate = useNavigate();
 
   const { hasRightsToUpdateNote } = useAccess();
@@ -85,37 +91,40 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
           triggerProps: JSX.IntrinsicAttributes &
             Omit<IconButtonProps, "ref"> &
             RefAttributes<HTMLButtonElement>,
-        ) => (
-          <>
-            <IconButton
-              {...triggerProps}
-              type="button"
-              aria-label="label"
-              color="secondary"
-              variant="ghost"
-              icon={<Options />}
-              className="card-actions-btn bg-white"
-            />
-            <Dropdown.Menu>
-              {dropdownOptions.map((dropdownOption, index) => (
-                <Fragment key={index}>
-                  {dropdownOption.type === "divider" ? (
-                    <Dropdown.Separator />
-                  ) : (
-                    !dropdownOption.hidden && (
-                      <Dropdown.Item
-                        icon={dropdownOption.icon}
-                        onClick={() => dropdownOption.action(null)}
-                      >
-                        {dropdownOption.label}
-                      </Dropdown.Item>
-                    )
-                  )}
-                </Fragment>
-              ))}
-            </Dropdown.Menu>
-          </>
-        )}
+        ) => {
+          setIsOpenDropdown(triggerProps["aria-expanded"] as boolean);
+          return (
+            <>
+              <IconButton
+                {...triggerProps}
+                type="button"
+                aria-label="label"
+                color="secondary"
+                variant="ghost"
+                icon={<Options />}
+                className="card-actions-btn bg-white"
+              />
+              <Dropdown.Menu>
+                {dropdownOptions.map((dropdownOption, index) => (
+                  <Fragment key={index}>
+                    {dropdownOption.type === "divider" ? (
+                      <Dropdown.Separator />
+                    ) : (
+                      !dropdownOption.hidden && (
+                        <Dropdown.Item
+                          icon={dropdownOption.icon}
+                          onClick={() => dropdownOption.action(null)}
+                        >
+                          {dropdownOption.label}
+                        </Dropdown.Item>
+                      )
+                    )}
+                  </Fragment>
+                ))}
+              </Dropdown.Menu>
+            </>
+          );
+        }}
       </Dropdown>
     </div>
   );
