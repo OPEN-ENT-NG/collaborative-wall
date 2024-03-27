@@ -53,6 +53,7 @@ export default function BackgroundModal({
       icon: wall.icon,
     };
     updateWall.mutate({ wallId: wall._id, newWall });
+    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -90,7 +91,7 @@ export default function BackgroundModal({
               />
               <div className="my-8">
                 <Heading className="py-8" headingStyle="h5">
-                  {t("collaborativewall.images")}
+                  {t("collaborativewall.label.images", { ns: appCode })}
                 </Heading>
                 <Grid className="py-8">
                   {backgroundImages.map((image) => {
@@ -123,7 +124,7 @@ export default function BackgroundModal({
               </div>
               <div className="py-8">
                 <Heading className="py-8" headingStyle="h5">
-                  {t("collaborativewall.colors")}
+                  {t("collaborativewall.label.colors", { ns: appCode })}
                 </Heading>
                 <Grid className="my-8">
                   {backgroundColors.map((color) => {
@@ -161,7 +162,7 @@ export default function BackgroundModal({
               variant="ghost"
               onClick={handleClose}
             >
-              {t("collaborativewall.modal.cancel", { ns: appCode })}
+              {t("close")}
             </Button>
             <Button
               type="button"
@@ -169,7 +170,7 @@ export default function BackgroundModal({
               variant="filled"
               onClick={handleSaveWall}
             >
-              {t("collaborativewall.modal.modify", { ns: appCode })}
+              {t("edit")}
             </Button>
           </Modal.Footer>
         </Modal>,

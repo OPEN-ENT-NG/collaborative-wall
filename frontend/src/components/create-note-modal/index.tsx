@@ -78,7 +78,7 @@ export default function CreateNoteModal({ wallId }: { wallId: string }) {
           scrollable={true}
         >
           <Modal.Header onModalClose={() => setOpenCreateModal(false)}>
-            {t("collaborativewall.create.note")}
+            {t("collaborativewall.modal.create", { ns: appCode })}
           </Modal.Header>
           <Modal.Body>
             <ContentNote
@@ -96,7 +96,7 @@ export default function CreateNoteModal({ wallId }: { wallId: string }) {
               variant="ghost"
               onClick={() => setOpenCreateModal(false)}
             >
-              {t("collaborativewall.modal.cancel", { ns: appCode })}
+              {t("cancel")}
             </Button>
             <Button
               type="button"
@@ -104,7 +104,7 @@ export default function CreateNoteModal({ wallId }: { wallId: string }) {
               variant="filled"
               onClick={handleCreateNote}
             >
-              {t("collaborativewall.modal.add")}
+              {t("add")}
             </Button>
           </Modal.Footer>
         </Modal>,
