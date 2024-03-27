@@ -161,7 +161,7 @@ export const UpdateNoteModal = () => {
   return data ? (
     createPortal(
       <Modal
-        id="NoteModal"
+        id="UpdateNoteModal"
         onModalClose={handleNavigateBack}
         size="md"
         isOpen={true}
@@ -171,7 +171,9 @@ export const UpdateNoteModal = () => {
         <Modal.Header onModalClose={handleNavigateBack}>
           {t("Note")}
         </Modal.Header>
-        <Modal.Subtitle>{data.owner?.displayName}</Modal.Subtitle>
+        <Modal.Subtitle>
+          <span className="text-gray-700 small">{data.owner?.displayName}</span>
+        </Modal.Subtitle>
         <Modal.Body>
           <ContentNote
             editorRef={editorRef}
