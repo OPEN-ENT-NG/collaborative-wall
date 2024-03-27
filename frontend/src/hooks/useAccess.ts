@@ -50,12 +50,20 @@ export const useAccess = () => {
     return right;
   };
 
+  const hasRightsToUpdateNote = (note: NoteProps) => {
+    return (isCreator ||
+      isManager ||
+      (isContributor &&
+        note?.owner?.userId.includes(user?.userId as string))) as boolean;
+  };
+
   return {
     isCreator,
     isManager,
     isContributor,
     isReader,
     hasRightsToMoveNote,
+    hasRightsToUpdateNote,
     allRolesButRead,
   };
 };

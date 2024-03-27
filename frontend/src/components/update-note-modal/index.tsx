@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { EditorRef } from "@edifice-ui/editor";
 import { Button, Modal, useOdeClient } from "@edifice-ui/react";
@@ -13,6 +13,7 @@ import {
 } from "react-router-dom";
 
 import { ContentNote } from "../content-note";
+import { useAccess } from "~/hooks/useAccess";
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
@@ -53,6 +54,8 @@ export const UpdateNoteModal = () => {
 
   const editorRef = useRef<EditorRef>(null);
 
+  const { hasRightsToUpdateNote } = useAccess();
+
   const updateNote = useUpdateNote();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -63,6 +66,44 @@ export const UpdateNoteModal = () => {
   const { appCode } = useOdeClient();
 
   const { setHistory } = useHistoryStore();
+
+  // There is a window event listener on Space, "-", "=", "+" keys to move, unzoom, zoom the whiteboard respectively,
+  // So we need to stop these keys propagation in order to make these keys work in Editor.
+  useEffect(() => {
+    const stopPropagation = (event: KeyboardEvent) => {
+      if (
+        event.code === "Space" ||
+        event.key === "-" ||
+        event.key === "=" ||
+        event.key === "+"
+      ) {
+        event.stopPropagation();
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      stopPropagation(event);
+    };
+
+    const handleKeyUp = (event: KeyboardEvent) => {
+      stopPropagation(event);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keyup", handleKeyUp);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleNavigateBack = () => navigate("..");
+
+  const handleNavigateToEditMode = () => {
+    navigate(`../note/${data._id}?mode=edit`);
+  };
 
   const handleSaveNote = async () => {
     const note: PickedNoteProps = {
@@ -114,10 +155,8 @@ export const UpdateNoteModal = () => {
       },
     );
 
-    navigate("..");
+    handleNavigateBack();
   };
-
-  const handleNavigateBack = () => navigate("..");
 
   return data ? (
     createPortal(
@@ -144,6 +183,16 @@ export const UpdateNoteModal = () => {
           />
         </Modal.Body>
         <Modal.Footer>
+          {editionMode === "read" && hasRightsToUpdateNote(data) && (
+            <Button
+              type="button"
+              color="primary"
+              variant="outline"
+              onClick={handleNavigateToEditMode}
+            >
+              {t("collaborativewall.modal.modify", { ns: appCode })}
+            </Button>
+          )}
           {editionMode === "edit" && (
             <Button
               type="button"
@@ -160,7 +209,9 @@ export const UpdateNoteModal = () => {
             variant="filled"
             onClick={handleSaveNote}
           >
-            {editionMode === "edit" ? t("save") : t("close")}
+            {editionMode === "edit"
+              ? t("collaborativewall.modal.modify")
+              : t("collaborativewall.modal.close")}
           </Button>
         </Modal.Footer>
       </Modal>,
