@@ -64,14 +64,16 @@ export const ShowMediaType = ({
       );
     case "audio":
       return (
-        <div className={`${mediaClasses} media-center`}>
+        <div
+          className={`${mediaClasses} ${modalNote ? "" : "my-16"} media-center`}
+        >
           <audio
             src={media.url}
             className="media-audio"
             controls
             data-document-id={media.id}
             muted
-            style={{ zIndex: canMoveNote ? "1" : "0" }}
+            style={{ zIndex: canMoveNote ? "1" : "0", marginBottom: "-8px" }}
           >
             <track default kind="captions" srcLang="fr" src=""></track>
           </audio>
@@ -88,7 +90,7 @@ export const ShowMediaType = ({
       );
     case "attachment":
       return (
-        <div className={mediaClasses}>
+        <div className={`${mediaClasses} ${modalNote ? "" : "my-16"}`}>
           <Attachment
             name={media.name}
             options={
