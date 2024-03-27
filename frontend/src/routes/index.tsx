@@ -13,6 +13,12 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
     children: [
       {
         index: true,
+        async lazy() {
+          const { rootLoader } = await import("~/routes/root");
+          return {
+            loader: rootLoader,
+          };
+        },
         // @ts-ignore
         element: <Explorer config={explorerConfig} />,
       },
@@ -44,7 +50,9 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
   },
 ];
 
+export const basename = import.meta.env.PROD ? "/collaborativewall" : "/";
+
 export const router = (queryClient: QueryClient) =>
   createBrowserRouter(routes(queryClient), {
-    basename: import.meta.env.PROD ? "/collaborativewall" : "/",
+    basename,
   });
