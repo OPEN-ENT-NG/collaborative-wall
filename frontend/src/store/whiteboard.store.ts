@@ -20,6 +20,7 @@ const initialState = {
     x: 0,
     y: 0,
   },
+  numberOfNotes: 0,
 };
 
 export const useWhiteboard = create<State & Action>((set) => ({
@@ -38,6 +39,7 @@ export const useWhiteboard = create<State & Action>((set) => ({
   setZoom: (value: number) => set({ zoom: value }),
   setOpenShareModal: (value: boolean) => set({ openShareModal: value }),
   setOpenCreateModal: (value: boolean) => set({ openCreateModal: value }),
+  setNumberOfNotes: (value: number) => set({ numberOfNotes: value }),
   setOpenDescriptionModal: (value: boolean) =>
     set({ openDescriptionModal: value }),
   setIsOpenBackgroundModal: (value: boolean) =>
