@@ -48,8 +48,6 @@ export const Note = ({
       : "0 2px 6px 0px rgba(0, 0, 0, 0.15)",
   };
 
-  const defaultImage = "/img/cloud.png";
-
   const classes = clsx("note", {
     "is-dragging": isDragging,
     "is-grab": disabled && !isDragging && !canMoveNote,
@@ -77,7 +75,7 @@ export const Note = ({
         <Card.Body>
           {note.media && <ShowMediaType media={note.media}></ShowMediaType>}
           <Card.Text
-            className={`text-truncate ${defaultImage ? "text-truncate-8" : "text-truncate-12"}`}
+            className={`text-truncate ${note.media ? "text-truncate-8" : "text-truncate-12"}`}
           >
             <EditorContent editor={editor} />
           </Card.Text>
