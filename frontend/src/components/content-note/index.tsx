@@ -116,6 +116,8 @@ export const ContentNote = ({
         ref={editorRef}
         content={dataNote?.content || ""}
         mode={editionMode}
+        toolbar="none"
+        variant="ghost"
       />
     </>
   );
