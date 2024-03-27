@@ -74,17 +74,16 @@
 
 .note .card-body {
   padding-bottom: 8px !important;
-}
-
-.card-body {
   align-items: unset !important;
-  max-height: 334px;
-  flex-wrap: wrap;
+  flex-wrap: wrap !important;
+  flex-grow: 1 !important;
 }
 
 .card-footer {
   background-color: transparent !important;
   color: #909090 !important;
+  position: sticky !important;
+  bottom: 0 !important;
 }
 
 .note.is-dragging .card-header button {
