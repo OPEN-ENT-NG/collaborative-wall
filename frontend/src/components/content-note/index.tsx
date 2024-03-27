@@ -86,30 +86,32 @@ export const ContentNote = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [libraryMedia]);
 
+  const renderEdit = editionMode === "edit" && (
+    <div className="multimedia-section my-24">
+      <div className="toolbar-media py-48 px-12">
+        <ToolbarMedia handleClickMedia={handleClickMedia} />
+        {t("collaborativewall.add.media", { ns: appCode })}
+      </div>
+    </div>
+  );
+
+  const renderRead = (media: NoteMedia) => (
+    <div className="multimedia-section my-24">
+      <ShowMediaType
+        media={media}
+        modalNote={true}
+        setMedia={setMedia}
+        readonly={editionMode === "edit" ? false : true}
+      />
+    </div>
+  );
+
   return (
     <>
       {editionMode === "edit" && (
         <ColorSelect dataNote={dataNote} setColorValue={setColorValue} />
       )}
-      {!media?.url ? (
-        editionMode === "edit" && (
-          <div className="multimedia-section my-24">
-            <div className="toolbar-media py-48 px-12">
-              <ToolbarMedia handleClickMedia={handleClickMedia} />
-              {t("collaborativewall.add.media", { ns: appCode })}
-            </div>
-          </div>
-        )
-      ) : (
-        <div className="multimedia-section my-24">
-          <ShowMediaType
-            media={media}
-            modalNote={true}
-            setMedia={setMedia}
-            readonly={editionMode === "edit" ? false : true}
-          />
-        </div>
-      )}
+      {!media?.url ? renderEdit : renderRead(media)}
       <MediaLibrary
         appCode={appCode}
         ref={mediaLibraryRef}
