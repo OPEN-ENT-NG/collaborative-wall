@@ -91,23 +91,23 @@ export const ContentNote = ({
       {editionMode === "edit" && (
         <ColorSelect dataNote={dataNote} setColorValue={setColorValue} />
       )}
-      {editionMode !== "read" && (
+      {!media?.url ? (
+        editionMode === "edit" && (
+          <div className="multimedia-section my-24">
+            <div className="toolbar-media py-48 px-12">
+              <ToolbarMedia handleClickMedia={handleClickMedia} />
+              {t("collaborativewall.add.media", { ns: appCode })}
+            </div>
+          </div>
+        )
+      ) : (
         <div className="multimedia-section my-24">
-          {!media?.url ? (
-            editionMode === "edit" && (
-              <div className="toolbar-media py-48 px-12">
-                <ToolbarMedia handleClickMedia={handleClickMedia} />
-                {t("collaborativewall.add.media", { ns: appCode })}
-              </div>
-            )
-          ) : (
-            <ShowMediaType
-              media={media}
-              modalNote={true}
-              setMedia={setMedia}
-              readonly={editionMode === "edit" ? false : true}
-            />
-          )}
+          <ShowMediaType
+            media={media}
+            modalNote={true}
+            setMedia={setMedia}
+            readonly={editionMode === "edit" ? false : true}
+          />
         </div>
       )}
       <MediaLibrary
