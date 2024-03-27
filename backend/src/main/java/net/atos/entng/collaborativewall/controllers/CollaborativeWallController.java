@@ -347,7 +347,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                     JsonObject params = new JsonObject();
                     params.put("uri", "/userbook/annuaire#" + user.getUserId() + "#" + user.getType())
                     .put("username", user.getUsername())
-                    .put("cwallUri", "/collaborativewall#/view/" + id)
+                    .put("cwallUri", "/collaborativewall/view/" + id)
                     .put("resourceUri", params.getString("cwallUri"));
 
                     crudService.retrieve(id, event -> {
@@ -397,7 +397,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                     JsonObject params = new JsonObject();
                     params.put("uri", "/userbook/annuaire#" + user.getUserId() + "#" + user.getType())
                             .put("username", user.getUsername())
-                            .put("cwallUri", "/collaborativewall#/view/" + id)
+                            .put("cwallUri", "/collaborativewall/id/" + id)
                             .put("resourceUri", params.getString("cwallUri"));
 
                     shareResource(request, "collaborativewall.share", false, params, "name");

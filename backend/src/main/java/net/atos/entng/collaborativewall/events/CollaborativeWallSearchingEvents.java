@@ -84,7 +84,7 @@ public class CollaborativeWallSearchingEvents implements SearchingEvents {
 				jr.put(aHeader.get(2), j.getJsonObject("modified"));
 				jr.put(aHeader.get(3), j.getJsonObject("owner").getString("displayName"));
 				jr.put(aHeader.get(4), j.getJsonObject("owner").getString("userId"));
-				jr.put(aHeader.get(5), "/collaborativewall#/view/" + j.getString("_id"));
+				jr.put(aHeader.get(5), "/collaborativewall/id/" + j.getString("_id"));
 				traity.add(jr);
 			}
 		}
