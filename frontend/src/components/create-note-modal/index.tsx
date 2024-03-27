@@ -70,7 +70,7 @@ export default function CreateNoteModal({ wallId }: { wallId: string }) {
   return openCreateModal
     ? createPortal(
         <Modal
-          id="NoteModal"
+          id="CreateNoteModal"
           onModalClose={() => setOpenCreateModal(false)}
           size="md"
           isOpen={openCreateModal}
