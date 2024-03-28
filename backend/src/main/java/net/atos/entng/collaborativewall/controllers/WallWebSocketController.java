@@ -104,9 +104,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                                     } else {
                                         final String message = frame.textData();
                                         final CollaborativeWallUserAction action = Json.decodeValue(message, CollaborativeWallUserAction.class);
-                                        this.collaborativeWallRTService.onNewUserAction(action, wallId, wsId, session)
-                                                .onSuccess(messages -> this.broadcastMessagesToUsers(messages, true, false, wsId))
-                                                .onFailure(th -> this.sendError(th, ws));
+                                        this.pushEvent(wallId, wsId, session, action).onFailure(th -> this.sendError(th, ws));
                                     }
                                 } catch (Exception e) {
                                     log.error("An error occured while parsing message:", e);
@@ -125,6 +123,11 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                 }
             });
         }
+    }
+
+    public Future<List<CollaborativeWallMessage>> pushEvent(final String wallId,final String wsId, final UserInfos session, final CollaborativeWallUserAction action){
+        return this.collaborativeWallRTService.onNewUserAction(action, wallId, wsId, session)
+                .onSuccess(messages -> this.broadcastMessagesToUsers(messages, true, false, wsId));
     }
 
     private void sendError(Throwable th, ServerWebSocket ws) {

@@ -101,6 +101,7 @@ public class CollaborativeWall extends BaseServer {
             final int maxConnections = rtConfig.getInteger("max-connections", 0);
             this.collaborativeWallRTService = new DefaultCollaborativeWallRTService(vertx, rtConfig, collaborativeWallService);
             final WallWebSocketController rtController = new WallWebSocketController(vertx, maxConnections, collaborativeWallRTService, collaborativeWallService);
+            controller.setWebSocketController(rtController);
             final CollaborativeWallMetricsRecorder metricsRecorder = CollaborativeWallMetricsRecorderFactory.getRecorder(rtController, collaborativeWallRTService);
             final HttpServerOptions options = new HttpServerOptions().setMaxWebSocketFrameSize(1024 * 1024);
             vertx.createHttpServer(options)

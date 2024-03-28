@@ -24,6 +24,7 @@ import fr.wseduc.security.ActionType;
 import fr.wseduc.security.SecuredAction;
 import fr.wseduc.webutils.Either;
 import fr.wseduc.webutils.I18n;
+import fr.wseduc.webutils.Server;
 import fr.wseduc.webutils.http.Renders;
 import fr.wseduc.webutils.request.RequestUtils;
 import io.vertx.core.Handler;
@@ -33,8 +34,12 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import net.atos.entng.collaborativewall.CollaborativeWall;
 import net.atos.entng.collaborativewall.controllers.helpers.NotesHelper;
+import net.atos.entng.collaborativewall.events.CollaborativeWallUserAction;
 import net.atos.entng.collaborativewall.explorer.WallExplorerPlugin;
+import net.atos.entng.collaborativewall.service.CollaborativeWallService;
 import net.atos.entng.collaborativewall.service.NoteService;
+import net.atos.entng.collaborativewall.service.impl.MongoDbCollaborativeWallService;
+import net.atos.entng.collaborativewall.service.impl.MongoDbNoteService;
 import org.entcore.common.events.EventHelper;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
@@ -47,10 +52,7 @@ import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
 import org.vertx.java.core.http.RouteMatcher;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -64,6 +66,8 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
 
     private final NotesHelper notesHelper;
     private final WallExplorerPlugin plugin;
+    private final CollaborativeWallService collaborativeWallService;
+    private Optional<WallWebSocketController> webSocketController = Optional.empty();
 
 	@Override
 	public void init(Vertx vertx, JsonObject config, RouteMatcher rm,
@@ -89,6 +93,11 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         this.notesHelper = new NotesHelper(noteService);
         final EventStore eventStore = EventStoreFactory.getFactory().getEventStore(CollaborativeWall.class.getSimpleName());
         this.eventHelper = new EventHelper(eventStore);
+        this.collaborativeWallService =  new MongoDbCollaborativeWallService(this.getCrudService(), noteService, securedActions);
+    }
+
+    public void setWebSocketController(final WallWebSocketController webSocketController) {
+        this.webSocketController = Optional.ofNullable(webSocketController);
     }
 
     @Override
@@ -399,6 +408,50 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                     shareResource(request, "collaborativewall.share", false, params, "name");
                 }
             }
+        });
+    }
+
+    @Put("/:id/event")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    public void realtimeFallback(HttpServerRequest request) {
+        if(!this.webSocketController.isPresent()){
+            log.warn("Realtime fallback is disabled");
+            renderError(request, new JsonObject().put("error", "realtime.disabled"));
+            return;
+        }
+        // check param
+        final String id = request.params().get("id");
+        if (id == null || id.trim().isEmpty()) {
+            badRequest(request, "invalid.id");
+            return;
+        }
+        UserUtils.getUserInfos(this.eb, request, user -> {
+            if (user == null) {
+                unauthorized(request);
+                return;
+            }
+            // check access to this wall
+            this.collaborativeWallService.canAccess(id, user).onFailure(e -> {
+                log.error("An error occurred while checking access to wall", e);
+                renderError(request, new JsonObject().put("error", "unknown.error"));
+            }).onSuccess(canAccess -> {
+                if (!canAccess) {
+                    forbidden(request);
+                    return;
+                }
+                // get payload
+                RequestUtils.bodyToJson(request, payload -> {
+                    // push events to others users
+                    final String wsId = UUID.randomUUID().toString();
+                    final CollaborativeWallUserAction action = payload.mapTo(CollaborativeWallUserAction.class);
+                    this.webSocketController.get().pushEvent(id, wsId, user, action).onSuccess(e -> {
+                        noContent(request);
+                    }).onFailure(e -> {
+                        log.error("An error occurred while pushing event", e);
+                        renderError(request, new JsonObject().put("error", "unknown.error"));
+                    });
+                });
+            });
         });
     }
 

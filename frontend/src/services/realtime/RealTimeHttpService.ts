@@ -15,8 +15,8 @@ export class RealTimeHttpService extends RealTimeService {
   }
   public override async send(payload: EventPayload) {
     await this.ready
-    // TODO implement endpoints fallback that event push into websocket controller?
-    await fetch("/collaborativewall/realtime/fallback", {
+    // endpoint's fallback  that push event into websocket controller
+    await fetch(`/collaborativewall/${this.resourceId}/event`, {
       body: JSON.stringify(payload),
       method: "PUT",
     });
