@@ -46,6 +46,30 @@
   width: 100%;
 }
 
+.media-hyperlink {
+  background-color: #d9d9d9;
+  width: 100%;
+  border-radius: 16px;
+  position: relative;
+}
+
+.application-background {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  justify-content: center;
+}
+
+.url-placement {
+  bottom: 0;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 0px 16px;
+  padding: 4px 8px;
+  width: 100%;
+  max-width: 250px;
+}
+
 .btn.focus,
 .btn:focus {
   box-shadow: unset;

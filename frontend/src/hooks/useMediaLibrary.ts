@@ -20,6 +20,7 @@ export const useMediaLibrary = () => {
     mediaLibraryRef.current?.hide();
   };
   const onSuccess = (result: MediaLibraryResult) => {
+    console.log(result);
     if (mediaLibraryRef.current?.type) {
       if (result.url) {
         mediaLibraryRef.current?.hide();

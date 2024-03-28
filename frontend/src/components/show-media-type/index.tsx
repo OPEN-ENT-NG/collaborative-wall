@@ -54,16 +54,25 @@ export const ShowMediaType = ({
       name: "modify",
       props: {
         icon: <Edit />,
-        "aria-label": t("collaborativewall.toolbar.edit"),
+        "aria-label": t("edit"),
         color: "tertiary",
-        onClick: () =>
-          onEdit?.({
-            href: media.url,
-            target: "_blank",
-            name: media.name,
-          }),
+        onClick: () => {
+          if (media.application) {
+            onEdit?.({
+              target: "_blank",
+              "data-id": media.id,
+              "data-app-prefix": media.application,
+            });
+          } else {
+            onEdit?.({
+              href: media.url,
+              target: "_blank",
+              name: media.name,
+            });
+          }
+        },
       },
-      tooltip: t("collaborativewall.toolbar.edit", { ns: appCode }),
+      tooltip: t("edit"),
     },
     {
       type: "icon",
@@ -219,38 +228,20 @@ export const ShowMediaType = ({
     case "hyperlink":
       return (
         <div
+          className="media-hyperlink"
           style={{
-            backgroundColor: "#D9D9D9",
-            width: "100%",
-            height: readonly ? "120px" : "200px",
-            borderRadius: "16px",
-            position: "relative",
+            height: modalNote ? "200px" : "120px",
           }}
         >
           {!readonly && (
             <Toolbar className="delete-button mt-8 me-8" items={LinkItems} />
           )}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              height: "100%",
-              justifyContent: "center",
-            }}
-          >
-            <AppIcon app={media.name} size="48" />
+          <div className="application-background">
+            {media.application && (
+              <AppIcon app={media.application} size={modalNote ? "80" : "40"} />
+            )}
           </div>
-          <div
-            style={{
-              bottom: "0",
-              position: "absolute",
-              backgroundColor: "rgba(0, 0, 0, 0.70)",
-              borderRadius: "0px 16px",
-              padding: "4px 8px",
-              width: "100%",
-              maxWidth: "250px",
-            }}
-          >
+          <div className="url-placement" style={{}}>
             <a
               href={media.url}
               target="_blank"

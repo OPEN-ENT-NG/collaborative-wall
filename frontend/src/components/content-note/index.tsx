@@ -81,6 +81,7 @@ export const ContentNote = ({
         setMedia({
           type: (media as NoteMedia).type,
           id: "",
+          application: "",
           name: medialIb?.text || "",
           url: medialIb?.url,
         });
@@ -88,8 +89,9 @@ export const ContentNote = ({
         const medialIb = libraryMedia as ILinkedResource;
         setMedia({
           type: (media as NoteMedia).type,
-          id: "",
-          name: medialIb?.application || "",
+          id: medialIb?.assetId,
+          name: medialIb?.name || "",
+          application: medialIb?.application || "",
           url:
             medialIb.path ??
             `/${medialIb.application}#/view/${medialIb.assetId}`,
@@ -100,6 +102,7 @@ export const ContentNote = ({
           type: (media as NoteMedia).type,
           id: medialIb?._id || "",
           name: medialIb?.application || "",
+          application: "",
           url: medialIb?._id
             ? `/workspace/document/${medialIb?._id}`
             : (libraryMedia as string),
