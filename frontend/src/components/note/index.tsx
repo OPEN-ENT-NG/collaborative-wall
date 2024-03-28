@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import { useDraggable } from "@dnd-kit/core";
 import { Card } from "@edifice-ui/react";
 import { Editor, EditorContent, useEditor } from "@tiptap/react";
@@ -17,12 +19,15 @@ export const Note = ({
   note: NoteProps;
   disabled: boolean;
 }) => {
-  const { zoom, canMoveNote } = useWhiteboard(
+  const { zoom, canMoveNote, numberOfNotes } = useWhiteboard(
     useShallow((state) => ({
       zoom: state.zoom,
       canMoveNote: state.canMoveNote,
+      numberOfNotes: state.numberOfNotes,
     })),
   );
+
+  const [isopenDropdown, setIsOpenDropdown] = useState<boolean>(false);
 
   const { attributes, isDragging, listeners, setNodeRef, transform } =
     useDraggable({
@@ -36,10 +41,15 @@ export const Note = ({
     editable: false,
   });
 
+  useEffect(() => {
+    editor?.commands.setContent(note.content);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [note]);
+
   const style = {
     position: "absolute",
     borderRadius: "12px",
-    zIndex: isDragging ? 200 : note.zIndex,
+    zIndex: isDragging || isopenDropdown ? numberOfNotes + 2 : note.zIndex,
     userSelect: isDragging && "none",
     top: (transform?.y ?? 0) / zoom,
     left: (transform?.x ?? 0) / zoom,
@@ -47,8 +57,6 @@ export const Note = ({
       ? "-1px 0 15px 0 rgba(34, 33, 81, 0.01), 0px 15px 15px 0 rgba(34, 33, 81, 0.25)"
       : "0 2px 6px 0px rgba(0, 0, 0, 0.15)",
   };
-
-  const defaultImage = "/img/cloud.png";
 
   const classes = clsx("note", {
     "is-dragging": isDragging,
@@ -77,7 +85,7 @@ export const Note = ({
         <Card.Body>
           {note.media && <ShowMediaType media={note.media}></ShowMediaType>}
           <Card.Text
-            className={`text-truncate ${defaultImage ? "text-truncate-8" : "text-truncate-12"}`}
+            className={`text-truncate ${note.media ? "text-truncate-8" : "text-truncate-12"}`}
           >
             <EditorContent editor={editor} />
           </Card.Text>
@@ -86,7 +94,12 @@ export const Note = ({
           <Card.Text>{note.owner?.displayName}</Card.Text>
         </Card.Footer>
       </Card>
-      <NoteActions note={note}></NoteActions>
+      {canMoveNote && (
+        <NoteActions
+          note={note}
+          setIsOpenDropdown={setIsOpenDropdown}
+        ></NoteActions>
+      )}
     </div>
   );
 };

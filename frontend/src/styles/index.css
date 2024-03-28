@@ -5,23 +5,24 @@
   transform: translateX(-50%);
 }
 
-#NoteModal .toolbar-media {
+.toolbar-media {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-#NoteModal .multimedia-section {
+.multimedia-section {
   width: 100%;
   min-height: 120px;
   border-radius: 16px;
   border: 1px solid #f2f2f2;
 }
 
-#NoteModal .delete-button {
+.delete-button {
   position: absolute;
   background-color: #fff;
   right: 0px;
+  z-index: 2;
   gap: 8px;
 }
 
@@ -29,6 +30,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+}
+
+.media-video {
+  border-radius: 8px;
+  max-height: 350px;
+  position: relative;
+  width: 100%;
+}
+
+.media-audio {
+  max-width: 205px;
+  position: relative;
   width: 100%;
 }
 
@@ -59,17 +73,16 @@
 
 .note .card-body {
   padding-bottom: 8px !important;
-}
-
-.card-body {
   align-items: unset !important;
-  max-height: 334px;
-  flex-wrap: wrap;
+  flex-wrap: wrap !important;
+  flex-grow: 1 !important;
 }
 
 .card-footer {
   background-color: transparent !important;
   color: #909090 !important;
+  position: sticky !important;
+  bottom: 0 !important;
 }
 
 .note.is-dragging .card-header button {

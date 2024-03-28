@@ -1,17 +1,35 @@
-import { RefAttributes } from "react";
+import { Fragment, RefAttributes } from "react";
 
 import { Copy, Delete, Edit, Options } from "@edifice-ui/icons";
-import { Dropdown, IconButton, IconButtonProps } from "@edifice-ui/react";
+import {
+  Dropdown,
+  DropdownMenuOptions,
+  IconButton,
+  IconButtonProps,
+} from "@edifice-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
+import { useAccess } from "~/hooks/useAccess";
 import { NoteProps } from "~/models/notes";
 import { notesQueryOptions, useDeleteNote } from "~/services/queries";
 import { useHistoryStore } from "~/store";
 
-export const NoteActions = ({ note }: { note: NoteProps }) => {
+export type NoteDropdownMenuOptions = DropdownMenuOptions & {
+  hidden?: boolean;
+};
+
+export const NoteActions = ({
+  note,
+  setIsOpenDropdown,
+}: {
+  note: NoteProps;
+  setIsOpenDropdown: (value: boolean) => void;
+}) => {
   const navigate = useNavigate();
+
+  const { hasRightsToUpdateNote } = useAccess();
 
   const queryClient = useQueryClient();
   const deleteNote = useDeleteNote();
@@ -45,6 +63,26 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
     });
   };
 
+  const dropdownOptions: NoteDropdownMenuOptions[] = [
+    {
+      icon: <Edit />,
+      label: t("edit"),
+      action: handleEdit,
+      hidden: !hasRightsToUpdateNote(note),
+    },
+    {
+      icon: <Copy />,
+      label: t("duplicate"),
+      action: handleCopy,
+    },
+    {
+      icon: <Delete />,
+      label: t("remove"),
+      action: handleDelete,
+      hidden: !hasRightsToUpdateNote(note),
+    },
+  ];
+
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div onMouseDown={(event) => event.stopPropagation()}>
@@ -53,30 +91,40 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
           triggerProps: JSX.IntrinsicAttributes &
             Omit<IconButtonProps, "ref"> &
             RefAttributes<HTMLButtonElement>,
-        ) => (
-          <>
-            <IconButton
-              {...triggerProps}
-              type="button"
-              aria-label="label"
-              color="secondary"
-              variant="ghost"
-              icon={<Options />}
-              className="card-actions-btn bg-white"
-            />
-            <Dropdown.Menu>
-              <Dropdown.Item icon={<Edit />} onClick={handleEdit}>
-                {t("edit")}
-              </Dropdown.Item>
-              <Dropdown.Item icon={<Copy />} onClick={handleCopy}>
-                {t("duplicate")}
-              </Dropdown.Item>
-              <Dropdown.Item icon={<Delete />} onClick={handleDelete}>
-                {t("remove")}
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </>
-        )}
+        ) => {
+          setIsOpenDropdown(triggerProps["aria-expanded"] as boolean);
+          return (
+            <>
+              <IconButton
+                {...triggerProps}
+                type="button"
+                aria-label="label"
+                color="secondary"
+                variant="ghost"
+                icon={<Options />}
+                className="card-actions-btn bg-white"
+              />
+              <Dropdown.Menu>
+                {dropdownOptions.map((dropdownOption, index) => (
+                  <Fragment key={index}>
+                    {dropdownOption.type === "divider" ? (
+                      <Dropdown.Separator />
+                    ) : (
+                      !dropdownOption.hidden && (
+                        <Dropdown.Item
+                          icon={dropdownOption.icon}
+                          onClick={() => dropdownOption.action(null)}
+                        >
+                          {dropdownOption.label}
+                        </Dropdown.Item>
+                      )
+                    )}
+                  </Fragment>
+                ))}
+              </Dropdown.Menu>
+            </>
+          );
+        }}
       </Dropdown>
     </div>
   );

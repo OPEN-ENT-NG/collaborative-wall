@@ -10,11 +10,14 @@ import {
 } from "@edifice-ui/react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
+import { useShallow } from "zustand/react/shallow";
 
 import { NoteMedia } from "~/models/noteMedia";
+import { useWhiteboard } from "~/store";
 
 export interface ShowMediaTypeProps {
   media: NoteMedia;
+  modalNote?: boolean;
   setMedia?: (value: NoteMedia | null) => void;
   readonly?: boolean;
   onEdit?: (attrs: any) => void;
@@ -23,6 +26,7 @@ export interface ShowMediaTypeProps {
 
 export const ShowMediaType = ({
   media,
+  modalNote = false,
   setMedia,
   readonly = true,
   onEdit,
@@ -31,12 +35,17 @@ export const ShowMediaType = ({
   const { t } = useTranslation();
 
   const { appCode } = useOdeClient();
+  const { canMoveNote } = useWhiteboard(
+    useShallow((state) => ({
+      canMoveNote: state.canMoveNote,
+    })),
+  );
 
   const mediaClasses = clsx({
-    "media-center": readonly,
-    "d-block": readonly,
-    "px-64": !readonly,
-    "py-32": !readonly,
+    "media-center": !modalNote,
+    "d-block": !modalNote,
+    "px-64": modalNote,
+    "py-32": modalNote,
   });
 
   const LinkItems: ToolbarItem[] = [
@@ -102,7 +111,7 @@ export const ShowMediaType = ({
             src={media.url}
             alt={media.type}
             width="100%"
-            objectFit={readonly ? "cover" : "contain"}
+            objectFit={modalNote ? "contain" : "cover"}
             ratio="16"
             style={{
               borderRadius: "8px",
@@ -113,18 +122,16 @@ export const ShowMediaType = ({
       );
     case "audio":
       return (
-        <div className={`${mediaClasses} media-center`}>
+        <div
+          className={`${mediaClasses} ${modalNote ? "" : "my-16"} media-center`}
+        >
           <audio
             src={media.url}
+            className="media-audio"
             controls
             data-document-id={media.id}
             muted
-            style={{
-              width: "100%",
-              zIndex: "1",
-              position: "relative",
-              maxWidth: "206px",
-            }}
+            style={{ zIndex: canMoveNote ? "1" : "0", marginBottom: "-8px" }}
           >
             <track default kind="captions" srcLang="fr" src=""></track>
           </audio>
@@ -141,13 +148,13 @@ export const ShowMediaType = ({
       );
     case "attachment":
       return (
-        <div className={mediaClasses}>
+        <div className={`${mediaClasses} ${modalNote ? "" : "my-16"}`}>
           <Attachment
             name={media.name}
             options={
-              !readonly ? (
+              modalNote ? (
                 <>
-                  <a href={media.url} style={{ zIndex: "1" }} download>
+                  <a href={media.url} download>
                     <IconButton
                       icon={<Download />}
                       color="tertiary"
@@ -181,34 +188,27 @@ export const ShowMediaType = ({
               variant="outline"
               color="danger"
               onClick={() => setMedia?.(null)}
-              style={{ zIndex: "2" }}
             />
           )}
           {!media.id ? (
             <iframe
               src={media.url}
               title={media.name}
+              className="media-video"
               style={{
-                borderRadius: "8px",
-                maxHeight: "350px",
-                position: "relative",
-                zIndex: "1",
-                width: "100%",
-                height: readonly ? "" : "350px",
+                height: modalNote ? "350px" : "",
+                zIndex: canMoveNote ? "1" : "0",
               }}
-            ></iframe>
+            />
           ) : (
             <video
               src={media.url}
               data-document-id={media.id}
               controls
+              className="media-video"
               style={{
-                borderRadius: "8px",
-                maxHeight: "350px",
-                position: "relative",
-                zIndex: "1",
-                width: "100%",
                 marginBottom: "-8px",
+                zIndex: canMoveNote ? "1" : "0",
               }}
             >
               <track default kind="captions" srcLang="fr" src=""></track>

@@ -3,7 +3,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
-import { NoteProps } from "~/models/notes";
 import { notesQueryOptions, useUpdateNote } from "~/services/queries";
 import { updateData } from "~/services/queries/helpers";
 import { useHistoryStore, useWhiteboard } from "~/store";
@@ -60,53 +59,51 @@ export const useEditNote = ({
 
     if (previous.x === position.x && previous.y === position.y) {
       onClick?.(findNote._id);
+    } else {
+      setUpdatedNote({
+        activeId: findNote._id,
+        x: position.x,
+        y: position.y,
+        zIndex: 2,
+      });
+
+      await updateNote.mutateAsync(
+        {
+          id: findNote._id,
+          note: {
+            content: findNote.content,
+            color: findNote.color,
+            idwall: findNote.idwall,
+            media: findNote.media,
+            modified: findNote.modified,
+            x: position.x,
+            y: position.y,
+          },
+        },
+        {
+          onSuccess: async (data) => {
+            const { status, note: updatedNote } = data;
+
+            if (status !== "ok") return;
+
+            updateData(queryClient, updatedNote);
+
+            setHistory({
+              type: "move",
+              item: updatedNote,
+              previous: {
+                x: previous.x,
+                y: previous.y,
+              },
+              next: {
+                x: position.x,
+                y: position.y,
+              },
+            });
+          },
+        },
+      );
     }
-
-    setUpdatedNote({
-      activeId: findNote._id,
-      x: position.x,
-      y: position.y,
-      zIndex: 2,
-    });
-
-    await updateNote.mutateAsync(
-      {
-        id: findNote._id,
-        note: {
-          content: findNote.content,
-          color: findNote.color,
-          idwall: findNote.idwall,
-          media: findNote.media,
-          modified: findNote.modified,
-          x: position.x,
-          y: position.y,
-        },
-      },
-      {
-        onSuccess: async (data, { id }) => {
-          const { status, wall: notes } = data;
-
-          if (status !== "ok") return;
-
-          const updatedNote = notes.find((note: NoteProps) => note._id === id);
-
-          updateData(queryClient, updatedNote);
-
-          setHistory({
-            type: "move",
-            item: updatedNote,
-            previous: {
-              x: previous.x,
-              y: previous.y,
-            },
-            next: {
-              x: position.x,
-              y: position.y,
-            },
-          });
-        },
-      },
-    );
   };
 
   return { handleOnDragEnd, handleOnDragStart };

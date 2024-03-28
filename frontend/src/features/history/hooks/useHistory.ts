@@ -2,7 +2,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useShallow } from "zustand/react/shallow";
 
 import { updateState } from "~/features/history/utils/updateState";
-import { NoteProps } from "~/models/notes";
 import { NewState } from "~/models/store";
 import {
   useDeleteNote,
@@ -87,14 +86,10 @@ export const useHistory = () => {
           },
         },
         {
-          onSuccess: async (data, { id }) => {
-            const { status, wall: notes } = data;
+          onSuccess: async (data) => {
+            const { status, note: updatedNote } = data;
 
             if (status !== "ok") return;
-
-            const updatedNote = notes.find(
-              (note: NoteProps) => note._id === id,
-            );
 
             updateData(queryClient, updatedNote);
             updateState(action, updatedNote);
@@ -134,14 +129,10 @@ export const useHistory = () => {
           },
         },
         {
-          onSuccess: async (data, { id }) => {
-            const { status, wall: notes } = data;
+          onSuccess: async (data) => {
+            const { status, note: updatedNote } = data;
 
             if (status !== "ok") return;
-
-            const updatedNote = notes.find(
-              (note: NoteProps) => note._id === id,
-            );
 
             updateData(queryClient, updatedNote);
             updateState(action, updatedNote);
