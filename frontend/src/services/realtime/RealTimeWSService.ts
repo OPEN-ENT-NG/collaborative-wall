@@ -4,7 +4,7 @@ import { Defer, createDeferred } from "./utils";
 
 export class RealTimeWSService extends RealTimeService {
   private socket?: WebSocket;
-  private pendingStarts: Array<Defer<void>> = [];
+  private pendingStart?: Defer<void>;
   constructor(resourceId: string, start = false) {
     super(resourceId);
     if (start) {
@@ -13,9 +13,7 @@ export class RealTimeWSService extends RealTimeService {
   }
   private startListeners() {
     this.socket?.addEventListener("open", () => {
-      this.pendingStarts.forEach((def) => def.resolve());
-      // we can clean array for next awaiters
-      this.pendingStarts = [];
+      this.pendingStart?.resolve();
     });
     this.socket?.addEventListener("message", (event) => {
       try {
@@ -30,7 +28,7 @@ export class RealTimeWSService extends RealTimeService {
     });
     this.socket?.addEventListener("close", (event) => {
       if (!event.wasClean) {
-        this.pendingStarts.forEach((def) => def.reject());
+        this.pendingStart?.reject(event.reason);
         console.warn(
           "[collaborativewall][realtime] Server closed connection unilaterally. restarting...",
           event,
@@ -46,16 +44,17 @@ export class RealTimeWSService extends RealTimeService {
     });
   }
   override get ready() {
-    return Promise.all(this.pendingStarts.map((def) => def.promise)).then(
-      () => undefined,
-    );
+    return this.pendingStart?.promise ?? Promise.reject("not.initialized");
   }
   public override async send(payload: EventPayload) {
     await this.ready;
     this.socket?.send(JSON.stringify(payload));
   }
   public override doStart() {
-    this.pendingStarts.push(createDeferred());
+    if (this.pendingStart) {
+      return this.ready;
+    }
+    this.pendingStart = createDeferred();
     if (window.location.hostname === "localhost") {
       this.socket = new WebSocket(`ws://${window.location}:9091`);
     } else {
@@ -69,6 +68,7 @@ export class RealTimeWSService extends RealTimeService {
   public override doStop() {
     this.socket?.close();
     this.socket = undefined;
+    this.pendingStart = undefined
     return Promise.resolve();
   }
 }
