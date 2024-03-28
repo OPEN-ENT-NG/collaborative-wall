@@ -183,34 +183,58 @@ export const UpdateNoteModal = () => {
           />
         </Modal.Body>
         <Modal.Footer>
+          {editionMode === "read" && !hasRightsToUpdateNote(data) && (
+            <>
+              <Button
+                type="button"
+                color="primary"
+                variant="filled"
+                onClick={handleNavigateBack}
+              >
+                {t("collaborativewall.modal.close")}
+              </Button>
+            </>
+          )}
           {editionMode === "read" && hasRightsToUpdateNote(data) && (
-            <Button
-              type="button"
-              color="primary"
-              variant="outline"
-              onClick={handleNavigateToEditMode}
-            >
-              {t("edit")}
-            </Button>
+            <>
+              <Button
+                type="button"
+                color="tertiary"
+                variant="ghost"
+                onClick={handleNavigateBack}
+              >
+                {t("collaborativewall.modal.close")}
+              </Button>
+              <Button
+                type="button"
+                color="primary"
+                variant="filled"
+                onClick={handleNavigateToEditMode}
+              >
+                {t("collaborativewall.modal.modify")}
+              </Button>
+            </>
           )}
           {editionMode === "edit" && (
-            <Button
-              type="button"
-              color="tertiary"
-              variant="ghost"
-              onClick={handleNavigateBack}
-            >
-              {t("cancel")}
-            </Button>
+            <>
+              <Button
+                type="button"
+                color="tertiary"
+                variant="ghost"
+                onClick={handleNavigateBack}
+              >
+                {t("collaborativewall.modal.cancel")}
+              </Button>
+              <Button
+                type="button"
+                color="primary"
+                variant="filled"
+                onClick={handleSaveNote}
+              >
+                {t("collaborativewall.modal.save")}
+              </Button>
+            </>
           )}
-          <Button
-            type="button"
-            color="primary"
-            variant="filled"
-            onClick={handleSaveNote}
-          >
-            {editionMode === "edit" ? t("edit") : t("close")}
-          </Button>
         </Modal.Footer>
       </Modal>,
       document.getElementById("portal") as HTMLElement,
