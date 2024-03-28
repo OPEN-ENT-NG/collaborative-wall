@@ -1,5 +1,13 @@
-import { Delete, Download } from "@edifice-ui/icons";
-import { Attachment, IconButton, Image } from "@edifice-ui/react";
+import { Delete, Download, Edit, ExternalLink } from "@edifice-ui/icons";
+import {
+  AppIcon,
+  Attachment,
+  IconButton,
+  Image,
+  Toolbar,
+  ToolbarItem,
+  useOdeClient,
+} from "@edifice-ui/react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
@@ -12,6 +20,8 @@ export interface ShowMediaTypeProps {
   modalNote?: boolean;
   setMedia?: (value: NoteMedia | null) => void;
   readonly?: boolean;
+  onEdit?: (attrs: any) => void;
+  onOpen?: (attrs: any) => void;
 }
 
 export const ShowMediaType = ({
@@ -19,9 +29,12 @@ export const ShowMediaType = ({
   modalNote = false,
   setMedia,
   readonly = true,
+  onEdit,
+  onOpen,
 }: ShowMediaTypeProps) => {
   const { t } = useTranslation();
 
+  const { appCode } = useOdeClient();
   const { canMoveNote } = useWhiteboard(
     useShallow((state) => ({
       canMoveNote: state.canMoveNote,
@@ -34,6 +47,60 @@ export const ShowMediaType = ({
     "px-64": modalNote,
     "py-32": modalNote,
   });
+
+  const LinkItems: ToolbarItem[] = [
+    {
+      type: "icon",
+      name: "modify",
+      props: {
+        icon: <Edit />,
+        "aria-label": t("edit"),
+        color: "tertiary",
+        onClick: () => {
+          if (media.application) {
+            onEdit?.({
+              target: "_blank",
+              "data-id": media.id,
+              "data-app-prefix": media.application,
+            });
+          } else {
+            onEdit?.({
+              href: media.url,
+              target: "_blank",
+              name: media.name,
+            });
+          }
+        },
+      },
+      tooltip: t("edit"),
+    },
+    {
+      type: "icon",
+      name: "open",
+      props: {
+        icon: <ExternalLink />,
+        "aria-label": t("collaborativewall.toolbar.open"),
+        color: "tertiary",
+        onClick: () =>
+          onOpen?.({
+            href: media.url,
+            target: "_blank",
+          }),
+      },
+      tooltip: t("collaborativewall.toolbar.open", { ns: appCode }),
+    },
+    {
+      type: "icon",
+      name: "delete",
+      props: {
+        icon: <Delete />,
+        "aria-label": t("collaborativewall.toolbar.delete"),
+        color: "danger",
+        onClick: () => setMedia?.(null),
+      },
+      tooltip: t("collaborativewall.toolbar.delete", { ns: appCode }),
+    },
+  ];
 
   switch (media.type) {
     case "image":
@@ -156,6 +223,34 @@ export const ShowMediaType = ({
               <track default kind="captions" srcLang="fr" src=""></track>
             </video>
           )}
+        </div>
+      );
+    case "hyperlink":
+      return (
+        <div
+          className="media-hyperlink"
+          style={{
+            height: modalNote ? "200px" : "120px",
+          }}
+        >
+          {!readonly && (
+            <Toolbar className="delete-button mt-8 me-8" items={LinkItems} />
+          )}
+          <div className="application-background">
+            {media.application && (
+              <AppIcon app={media.application} size={modalNote ? "80" : "40"} />
+            )}
+          </div>
+          <div className="url-placement" style={{}}>
+            <a
+              href={media.url}
+              target="_blank"
+              style={{ color: "white", display: "block" }}
+              className="text-truncate"
+            >
+              {media.name ?? media.url}
+            </a>
+          </div>
         </div>
       );
     default:

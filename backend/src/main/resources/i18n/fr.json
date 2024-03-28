@@ -57,6 +57,8 @@
   "collaborativewall.toolbar.zoom": "Zoom",
   "collaborativewall.toolbar.zoomout": "Dézoomer",
   "collaborativewall.toolbar.create": "Nouvelle note",
+  "collaborativewall.toolbar.open": "Ouvrir",
+  "collaborativewall.toolbar.delete": "Supprimer",
   "collaborativewall.add.media": "Ajoutez une ressource pour donner vie à vos notes.",
   "group.HeadTeacher": "Professeurs principaux de {0}.",
   "group.Direction": "Directeurs de {0}.",
