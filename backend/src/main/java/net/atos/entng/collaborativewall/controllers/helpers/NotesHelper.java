@@ -116,7 +116,6 @@ public class NotesHelper extends ControllerHelper {
 
 
     public void update(final HttpServerRequest request) {
-
         final String id = extractParameter(request, NOTE_ID_PARAMETER);
         final String idWall = extractParameter(request, WALL_ID_PARAMETER);
 
@@ -125,46 +124,45 @@ public class NotesHelper extends ControllerHelper {
         }
 
         RequestUtils.bodyToJson(request, pathPrefix + "collaborativewallnote", new Handler<JsonObject>() {
-
             @Override
             public void handle(final JsonObject body) {
                 UserUtils.getUserInfos(eb, request, new Handler<UserInfos>() {
                     @Override
                     public void handle(UserInfos user) {
-
-                        noteService.update(id, body, user, updateHandler(idWall, id, body, request));
-
+                        noteService.update(id, body, user, updateHandler(id, body, request));
                     }
                 });
             }
         });
     }
 
-    private Handler<Either<String, JsonObject>> updateHandler(final String idWall, final String noteId,
+    private Handler<Either<String, JsonObject>> updateHandler(final String noteId,
                                                               final JsonObject body, final HttpServerRequest request) {
         return accessConcurrentResponse -> {
-            noteService.listAllNotes(idWall, allNotesResponse -> {
-                if (accessConcurrentResponse.isRight()) {
-                    //send back wall to front + status ok
-                    if (allNotesResponse.isRight()) {
-                        final JsonArray allNotes = allNotesResponse.right().getValue();
-                        for (int i = 0; i < allNotes.size(); i++) {
-                            final JsonObject note = allNotes.getJsonObject(i);
-                            // Update the note manually in case the change is not replicated yet on mongo slave
-                            if (noteId.equals(note.getString("_id"))) {
-                                for (String field : body.fieldNames()) {
-                                    note.put(field, body.getValue(field));
-                                    note.put("modified", accessConcurrentResponse.right().getValue());
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    renderJson(request, addStatus("ok", allNotesResponse));
-                } else {
-                    //send back wall and message to front
-                    renderJson(request, addStatus(accessConcurrentResponse.left().getValue(), allNotesResponse));
-                }
+            noteService.get(noteId, noteResponse -> {
+               if (accessConcurrentResponse.isRight()) {
+                   if (noteResponse.isRight()) {
+                       final JsonObject note = noteResponse.right().getValue();
+                       // Update the note manually in case the change is not replicated yet on mongo slave
+                       if (noteId.equals(note.getString("_id"))) {
+                           for (String field : body.fieldNames()) {
+                               note.put(field, body.getValue(field));
+                               note.put("modified", accessConcurrentResponse.right().getValue());
+                           }
+                       }
+                       // render Json response with status and note
+                       renderJson(request,  new JsonObject().put("status", "ok").put("note", noteResponse.right().getValue()));
+                   } else {
+                       renderJson(request, new JsonObject().put("status", noteResponse.left().getValue()).putNull("note"));
+                   }
+               } else {
+                   // render Json response with status and note
+                   if (noteResponse.isRight()) {
+                       renderJson(request, new JsonObject().put("status", accessConcurrentResponse.left().getValue()).put("note", noteResponse.right().getValue()));
+                   } else {
+                       renderJson(request, new JsonObject().put("status", noteResponse.left().getValue()).putNull("note"));
+                   }
+               }
             });
         };
     }

@@ -119,12 +119,10 @@ export const UpdateNoteModal = () => {
     await updateNote.mutateAsync(
       { id: data._id, note },
       {
-        onSuccess: async (responseData, { id }) => {
-          const { status, wall: notes } = responseData;
+        onSuccess: async (responseData) => {
+          const { status, note: updatedNote } = responseData;
 
           if (status !== "ok") return;
-
-          const updatedNote = notes.find((note: NoteProps) => note._id === id);
 
           updateData(queryClient, updatedNote);
 
