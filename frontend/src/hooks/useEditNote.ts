@@ -3,7 +3,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
-import { NoteProps } from "~/models/notes";
 import { notesQueryOptions, useUpdateNote } from "~/services/queries";
 import { updateData } from "~/services/queries/helpers";
 import { useHistoryStore, useWhiteboard } from "~/store";
@@ -82,14 +81,10 @@ export const useEditNote = ({
           },
         },
         {
-          onSuccess: async (data, { id }) => {
-            const { status, wall: notes } = data;
+          onSuccess: async (data) => {
+            const { status, note: updatedNote } = data;
 
             if (status !== "ok") return;
-
-            const updatedNote = notes.find(
-              (note: NoteProps) => note._id === id,
-            );
 
             updateData(queryClient, updatedNote);
 
