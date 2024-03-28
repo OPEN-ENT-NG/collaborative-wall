@@ -17,7 +17,7 @@ export const Note = ({
   disabled,
 }: {
   note: NoteProps;
-  disabled: boolean;
+  disabled?: boolean;
 }) => {
   const { zoom, canMoveNote, numberOfNotes } = useWhiteboard(
     useShallow((state) => ({
