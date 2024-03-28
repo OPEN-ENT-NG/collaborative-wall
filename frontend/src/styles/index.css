@@ -72,7 +72,7 @@
   border: unset;
 }
 
-.note .card-body {
+.card-body {
   padding-bottom: 8px !important;
   align-items: unset !important;
   flex-wrap: wrap !important;
@@ -121,4 +121,18 @@
   .zoom-in {
     display: none !important;
   }
+}
+
+@page {
+  size: landscape;
+  orientation: landscape;
+  margin: 2.5cm;
+  width: 100%;
+}
+body {
+  width: 100%;
+}
+svg {
+  max-height: 160mm;
+  max-width: 280mm;
 }
