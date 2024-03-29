@@ -9,6 +9,7 @@ import {
 } from "@edifice-ui/icons";
 import { Toolbar, ToolbarItem, useOdeClient } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
 import { wallConfig, zoomConfig } from "~/config/init-config";
@@ -25,17 +26,15 @@ export const ToolbarWrapper = ({
   zoomOut: (value: number) => void;
   setTransform: any;
 }) => {
-  const { zoom, setOpenCreateModal, canMoveNote, toggleCanMoveNote } =
-    useWhiteboard(
-      useShallow((state) => ({
-        canMoveBoard: state.canMoveBoard,
-        zoom: state.zoom,
-        setCanMoveNote: state.setCanMoveNote,
-        setOpenCreateModal: state.setOpenCreateModal,
-        canMoveNote: state.canMoveNote,
-        toggleCanMoveNote: state.toggleCanMoveNote,
-      })),
-    );
+  const { zoom, canMoveNote, toggleCanMoveNote } = useWhiteboard(
+    useShallow((state) => ({
+      canMoveBoard: state.canMoveBoard,
+      zoom: state.zoom,
+      setCanMoveNote: state.setCanMoveNote,
+      canMoveNote: state.canMoveNote,
+      toggleCanMoveNote: state.toggleCanMoveNote,
+    })),
+  );
 
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
@@ -47,7 +46,11 @@ export const ToolbarWrapper = ({
 
   const { allRolesButRead } = useAccess();
 
+  const navigate = useNavigate();
+
   const showIf = (truthy: boolean) => (truthy ? "show" : "hide");
+
+  const handleCreateClick = () => navigate("note");
 
   const WhiteboardItems: ToolbarItem[] = [
     {
@@ -160,7 +163,7 @@ export const ToolbarWrapper = ({
         icon: <Plus />,
         variant: "filled",
         color: "secondary",
-        onClick: () => setOpenCreateModal(true),
+        onClick: handleCreateClick,
       },
       tooltip: t("collaborativewall.toolbar.create", { ns: appCode }),
       visibility: showIf(allRolesButRead),
