@@ -1,4 +1,6 @@
+import { useOdeClient, useToast } from "@edifice-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
 import { updateState } from "~/features/history/utils/updateState";
@@ -24,9 +26,14 @@ export const useHistory = () => {
     })),
   );
 
+  const { t } = useTranslation();
+
+  const { appCode } = useOdeClient();
+
   const canUndo = past.length > 0 && past.length < MAX_HISTORY;
   const canRedo = future.length > 0 && future.length < MAX_HISTORY;
 
+  const toast = useToast();
   const deleteNote = useDeleteNote();
   const createNote = useCreateNote();
   const updateNote = useUpdateNote();
@@ -171,6 +178,7 @@ export const useHistory = () => {
     const lastAction = past[past.length - 1];
 
     executeAction(lastAction, true);
+    toast.success(t("collaborativewall.toast.undo", { ns: appCode }));
   };
 
   const handleRedo = async () => {
@@ -179,6 +187,7 @@ export const useHistory = () => {
     const nextAction = future[0];
 
     executeAction(nextAction, false);
+    toast.success(t("collaborativewall.toast.redo", { ns: appCode }));
   };
 
   return {

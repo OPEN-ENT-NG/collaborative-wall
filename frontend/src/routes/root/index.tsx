@@ -1,5 +1,5 @@
 import { Layout } from "@edifice-ui/react";
-import { Outlet, matchPath } from "react-router-dom";
+import { Outlet, matchPath, useLocation } from "react-router-dom";
 
 import { basename } from "..";
 
@@ -23,8 +23,10 @@ export const rootLoader = async () => {
 };
 
 function Root() {
+  const location = useLocation();
+
   return (
-    <Layout>
+    <Layout headless={location.pathname !== "/"}>
       <Outlet />
     </Layout>
   );
