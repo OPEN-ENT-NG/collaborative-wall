@@ -9,41 +9,17 @@ import {
 } from "@edifice-ui/react";
 import { ILinkedResource, WorkspaceElement } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
-import { LoaderFunctionArgs } from "react-router-dom";
 
-import { ColorSelect } from "../color-select";
-import { ShowMediaType } from "../show-media-type";
-import { ToolbarMedia } from "../toolbar-media";
-import { EditionMode } from "../update-note-modal";
+import { ColorSelect } from "./ColorSelect";
+import { EditionMode } from "../hooks/useNoteModal";
+import { ShowMediaType } from "~/components/show-media-type";
+import { ToolbarMedia } from "~/components/toolbar-media";
 import { useLinkToolbar } from "~/hooks/useLinkToolbar";
 import { useMediaLibrary } from "~/hooks/useMediaLibrary";
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps } from "~/models/notes";
-import { getNote } from "~/services/api";
 
-export async function noteLoader({ params }: LoaderFunctionArgs) {
-  const { wallId, noteId } = params;
-
-  if (!wallId || !noteId) {
-    throw new Response("", {
-      status: 404,
-      statusText: "Wall id or Note id is null",
-    });
-  }
-
-  const note = await getNote(wallId, noteId);
-
-  if (!note) {
-    throw new Response("", {
-      status: 404,
-      statusText: "Not Found",
-    });
-  }
-
-  return note;
-}
-
-export const ContentNote = ({
+export const NoteContent = ({
   setColorValue,
   setMedia,
   editorRef,
@@ -112,7 +88,7 @@ export const ContentNote = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [libraryMedia]);
 
-  const renderEdit = editionMode === "edit" && (
+  const renderEdit = editionMode !== "read" && (
     <div className="multimedia-section my-24">
       <div className="toolbar-media py-48 px-12">
         <ToolbarMedia handleClickMedia={handleClickMedia} />
@@ -127,7 +103,7 @@ export const ContentNote = ({
         media={media}
         modalNote={true}
         setMedia={setMedia}
-        readonly={editionMode === "edit" ? false : true}
+        readonly={editionMode === "read" ? true : false}
         onEdit={onEdit}
         onOpen={onOpen}
       />
@@ -136,7 +112,7 @@ export const ContentNote = ({
 
   return (
     <>
-      {editionMode === "edit" && (
+      {editionMode !== "read" && (
         <ColorSelect dataNote={dataNote} setColorValue={setColorValue} />
       )}
       {!media?.url ? renderEdit : renderRead(media)}
@@ -149,7 +125,7 @@ export const ContentNote = ({
       <Editor
         ref={editorRef}
         content={dataNote?.content || ""}
-        mode={editionMode}
+        mode={editionMode === "read" ? "read" : "edit"}
         toolbar="none"
         variant="ghost"
       />

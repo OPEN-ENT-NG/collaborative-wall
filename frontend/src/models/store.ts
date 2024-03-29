@@ -63,7 +63,6 @@ export type State = {
   offset: Offset;
   zoom: number;
   openShareModal: boolean;
-  openCreateModal: boolean;
   openDescriptionModal: boolean;
   openBackgroundModal: boolean;
   positionViewport: Offset;
@@ -79,7 +78,6 @@ export type Action = {
   setNumberOfNotes: (value: number) => void;
   setIsMobile: (query: string | null) => void;
   setOpenShareModal: (value: boolean) => void;
-  setOpenCreateModal: (value: boolean) => void;
   setOpenDescriptionModal: (value: boolean) => void;
   setIsOpenBackgroundModal: (value: boolean) => void;
   setPositionViewport: (value: { x: number; y: number }) => void;

@@ -13,7 +13,6 @@ const initialState = {
   offset: OFFSET,
   zoom: zoomConfig.DEFAULT_ZOOM,
   openShareModal: false,
-  openCreateModal: false,
   openDescriptionModal: false,
   openBackgroundModal: false,
   positionViewport: {
@@ -38,7 +37,6 @@ export const useWhiteboard = create<State & Action>((set) => ({
   setCanMoveNote: (value: boolean) => set({ canMoveNote: value }),
   setZoom: (value: number) => set({ zoom: value }),
   setOpenShareModal: (value: boolean) => set({ openShareModal: value }),
-  setOpenCreateModal: (value: boolean) => set({ openCreateModal: value }),
   setNumberOfNotes: (value: number) => set({ numberOfNotes: value }),
   setOpenDescriptionModal: (value: boolean) =>
     set({ openDescriptionModal: value }),

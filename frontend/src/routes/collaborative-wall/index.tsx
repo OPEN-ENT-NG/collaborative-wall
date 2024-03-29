@@ -40,9 +40,6 @@ const DescriptionModal = lazy(
   async () => await import("~/components/description-modal"),
 );
 const ShareModal = lazy(async () => await import("~/features/share-modal"));
-const CreateNoteModal = lazy(
-  async () => await import("~/components/create-note-modal"),
-);
 
 interface LoaderData {
   wall: CollaborativeWallProps;
@@ -89,7 +86,6 @@ export const CollaborativeWall = () => {
   const {
     openShareModal,
     isMobile,
-    openCreateModal,
     openBackgroundModal,
     setIsMobile,
     setOpenShareModal,
@@ -100,7 +96,6 @@ export const CollaborativeWall = () => {
     useShallow((state) => ({
       openShareModal: state.openShareModal,
       isMobile: state.isMobile,
-      openCreateModal: state.openCreateModal,
       openBackgroundModal: state.openBackgroundModal,
       setOpenShareModal: state.setOpenShareModal,
       setIsOpenBackgroundModal: state.setIsOpenBackgroundModal,
@@ -217,7 +212,6 @@ export const CollaborativeWall = () => {
             onSuccess={() => setOpenShareModal(false)}
           />
         )}
-        {openCreateModal && wall && <CreateNoteModal wallId={wall._id} />}
       </Suspense>
     </>
   );
