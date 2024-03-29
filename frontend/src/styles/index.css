@@ -123,16 +123,21 @@
   }
 }
 
+@media print {
+  body {
+    width: 100%;
+    zoom: 0.6;
+    margin: 1.5cm;
+  }
+}
+
 @page {
-  size: landscape;
   orientation: landscape;
-  margin: 2.5cm;
-  width: 100%;
+  size: 8.5in 13in;
 }
-body {
-  width: 100%;
-}
-svg {
-  max-height: 160mm;
-  max-width: 280mm;
+
+* {
+  -webkit-print-color-adjust: exact !important;
+  color-adjust: exact !important;
+  print-color-adjust: exact !important;
 }

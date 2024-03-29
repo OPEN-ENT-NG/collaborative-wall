@@ -69,43 +69,45 @@ export const CollaborativeWall = () => {
   }, []);
 
   return (
-    <TransformWrapper initialScale={calculateMinScale()}>
-      <TransformComponent
-        wrapperStyle={{
-          maxWidth: "100%",
-          maxHeight: "calc(100vh)",
-        }}
-      >
-        <div
-          style={{
-            height: wallConfig.HEIGHT_WALL,
-            width: wallConfig.WIDTH_WALL,
-            background: `linear-gradient(${wall?.background.color ?? backgroundColors[0]})`,
+    <div className="print-full-page">
+      <TransformWrapper initialScale={calculateMinScale()}>
+        <TransformComponent
+          wrapperStyle={{
+            maxWidth: "100%",
+            maxHeight: "calc(100vh)",
           }}
         >
           <div
             style={{
-              backgroundImage: `url(${import.meta.env.PROD ? `/collaborativewall/public/${wall?.background.path ?? backgroundImages[0]}` : `/${wall?.background.path ?? backgroundImages[0]}`}`,
-              width: "100%",
-              height: "100%",
+              height: wallConfig.HEIGHT_WALL,
+              width: wallConfig.WIDTH_WALL,
+              background: `linear-gradient(${wall?.background.color ?? backgroundColors[0]})`,
             }}
           >
-            {notes?.map((note: NoteProps, i: number) => {
-              return (
-                <Note
-                  key={note._id}
-                  note={{
-                    ...note,
-                    x: note.x,
-                    y: note.y,
-                    zIndex: i,
-                  }}
-                />
-              );
-            })}
+            <div
+              style={{
+                backgroundImage: `url(${import.meta.env.PROD ? `/collaborativewall/public/${wall?.background.path ?? backgroundImages[0]}` : `/${wall?.background.path ?? backgroundImages[0]}`}`,
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              {notes?.map((note: NoteProps, i: number) => {
+                return (
+                  <Note
+                    key={note._id}
+                    note={{
+                      ...note,
+                      x: note.x,
+                      y: note.y,
+                      zIndex: i,
+                    }}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
-      </TransformComponent>
-    </TransformWrapper>
+        </TransformComponent>
+      </TransformWrapper>
+    </div>
   );
 };
