@@ -191,7 +191,7 @@ export const UpdateNoteModal = () => {
                 variant="filled"
                 onClick={handleNavigateBack}
               >
-                {t("collaborativewall.modal.close")}
+                {t("collaborativewall.modal.close", { ns: appCode })}
               </Button>
             </>
           )}
@@ -203,7 +203,7 @@ export const UpdateNoteModal = () => {
                 variant="ghost"
                 onClick={handleNavigateBack}
               >
-                {t("collaborativewall.modal.close")}
+                {t("collaborativewall.modal.close", { ns: appCode })}
               </Button>
               <Button
                 type="button"
@@ -211,7 +211,7 @@ export const UpdateNoteModal = () => {
                 variant="filled"
                 onClick={handleNavigateToEditMode}
               >
-                {t("collaborativewall.modal.modify")}
+                {t("collaborativewall.modal.modify", { ns: appCode })}
               </Button>
             </>
           )}
@@ -223,7 +223,7 @@ export const UpdateNoteModal = () => {
                 variant="ghost"
                 onClick={handleNavigateBack}
               >
-                {t("collaborativewall.modal.cancel")}
+                {t("collaborativewall.modal.cancel", { ns: appCode })}
               </Button>
               <Button
                 type="button"
@@ -231,7 +231,7 @@ export const UpdateNoteModal = () => {
                 variant="filled"
                 onClick={handleSaveNote}
               >
-                {t("collaborativewall.modal.save")}
+                {t("collaborativewall.modal.save", { ns: appCode })}
               </Button>
             </>
           )}
