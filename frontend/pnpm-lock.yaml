@@ -19,13 +19,13 @@ dependencies:
     version: 3.2.2(react@18.2.0)
   '@edifice-ui/editor':
     specifier: develop-pedago
-    version: 1.4.6-develop-pedago.4(@edifice-ui/icons@1.4.6-develop-pedago.0)(@edifice-ui/react@1.4.6-develop-pedago.4)(@react-spring/web@9.7.3)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.0.1)(react@18.2.0)
+    version: 1.4.6-develop-pedago.6(@edifice-ui/icons@1.4.6-develop-pedago.6)(@edifice-ui/react@1.4.6-develop-pedago.6)(@react-spring/web@9.7.3)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.0.1)(react@18.2.0)
   '@edifice-ui/icons':
     specifier: develop-pedago
-    version: 1.4.6-develop-pedago.0(react-dom@18.2.0)(react@18.2.0)
+    version: 1.4.6-develop-pedago.6(react-dom@18.2.0)(react@18.2.0)
   '@edifice-ui/react':
     specifier: develop-pedago
-    version: 1.4.6-develop-pedago.4(@babel/runtime@7.24.1)(@edifice-ui/icons@1.4.6-develop-pedago.0)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.4)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)
+    version: 1.4.6-develop-pedago.6(@babel/runtime@7.24.1)(@edifice-ui/icons@1.4.6-develop-pedago.6)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.4)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)
   '@react-spring/web':
     specifier: 9.7.3
     version: 9.7.3(react-dom@18.2.0)(react@18.2.0)
@@ -52,7 +52,7 @@ dependencies:
     version: 2.4.2
   ode-explorer:
     specifier: develop-pedago
-    version: 1.4.2-develop-pedago.202403271650(@edifice-ui/icons@1.4.6-develop-pedago.0)(@edifice-ui/react@1.4.6-develop-pedago.4)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(clsx@2.1.0)(i18next-http-backend@2.4.2)(i18next@23.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)(zustand@4.5.0)
+    version: 1.4.2-develop-pedago.202403271650(@edifice-ui/icons@1.4.6-develop-pedago.6)(@edifice-ui/react@1.4.6-develop-pedago.6)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(clsx@2.1.0)(i18next-http-backend@2.4.2)(i18next@23.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)(zustand@4.5.0)
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -612,8 +612,8 @@ packages:
       '@tiptap/pm': 2.0.3(@tiptap/core@2.0.3)
     dev: false
 
-  /@edifice-ui/editor@1.4.6-develop-pedago.4(@edifice-ui/icons@1.4.6-develop-pedago.0)(@edifice-ui/react@1.4.6-develop-pedago.4)(@react-spring/web@9.7.3)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.0.1)(react@18.2.0):
-    resolution: {integrity: sha512-XI4M9+INKGQYUP4ktIHpA5f9tx2txAouAxk5j9AThP/A30HMI8Lxtu6INWneUcbytx7HBTMIPu10OC75Ww5Lxw==}
+  /@edifice-ui/editor@1.4.6-develop-pedago.6(@edifice-ui/icons@1.4.6-develop-pedago.6)(@edifice-ui/react@1.4.6-develop-pedago.6)(@react-spring/web@9.7.3)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.0.1)(react@18.2.0):
+    resolution: {integrity: sha512-nTyT8rCWCfOvwY7SLywIBSaO+Z4SruDZdwqEN2WwWrQsNty6zRyRnJOcRDg6ovak79Z1vVIH0k64P5yfOHAx0Q==}
     peerDependencies:
       '@edifice-ui/icons': '*'
       '@edifice-ui/react': '*'
@@ -637,8 +637,8 @@ packages:
       '@edifice-tiptap-extensions/extension-speechsynthesis': 1.0.4-develop-pedago.0(@tiptap/core@2.0.3)(@tiptap/pm@2.0.3)
       '@edifice-tiptap-extensions/extension-table-cell': 1.0.4-develop-pedago.0(@tiptap/core@2.0.3)(@tiptap/pm@2.0.3)
       '@edifice-tiptap-extensions/extension-video': 1.0.4-develop-pedago.0(@tiptap/core@2.0.3)(@tiptap/pm@2.0.3)
-      '@edifice-ui/icons': 1.4.6-develop-pedago.0(react-dom@18.2.0)(react@18.2.0)
-      '@edifice-ui/react': 1.4.6-develop-pedago.4(@babel/runtime@7.24.1)(@edifice-ui/icons@1.4.6-develop-pedago.0)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.4)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)
+      '@edifice-ui/icons': 1.4.6-develop-pedago.6(react-dom@18.2.0)(react@18.2.0)
+      '@edifice-ui/react': 1.4.6-develop-pedago.6(@babel/runtime@7.24.1)(@edifice-ui/icons@1.4.6-develop-pedago.6)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.4)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)
       '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
       '@tiptap-pro/extension-mathematics': 2.2.1(@tiptap/core@2.0.3)(@tiptap/pm@2.0.3)(katex@0.16.8)
       '@tiptap/core': 2.0.3(@tiptap/pm@2.0.3)
@@ -671,8 +671,8 @@ packages:
       react-i18next: 14.0.1(i18next@23.8.1)(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
-  /@edifice-ui/icons@1.4.6-develop-pedago.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-O+dTN47OPm7pzApLiq2l9p4nbvgCGjdMmXPV3VF+1EwQrN5r/30hFsM4FV8MecafpeAlSmamxAfW6fc/taIZPw==}
+  /@edifice-ui/icons@1.4.6-develop-pedago.6(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-/CmR3/Wzrjjfbm0fPBk681SM1q/AzNWmRCWow1qz2xJWh4PYegdgtS83J9x/ZBKEGRhhsyODhRD6IHuvx1EQAA==}
     peerDependencies:
       react: 18.2.0
       react-dom: 18.2.0
@@ -681,8 +681,8 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@edifice-ui/react@1.4.6-develop-pedago.4(@babel/runtime@7.24.1)(@edifice-ui/icons@1.4.6-develop-pedago.0)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.4)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0):
-    resolution: {integrity: sha512-JedFXFXi+WbCW3Ge4n7zfBXM/5Hz0ru0rDn1PU59iTMNGPJrrvstHjro3GvBii4nRq5zSbGR1usGbxGEgncjQQ==}
+  /@edifice-ui/react@1.4.6-develop-pedago.6(@babel/runtime@7.24.1)(@edifice-ui/icons@1.4.6-develop-pedago.6)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.4)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0):
+    resolution: {integrity: sha512-QNj9uyf1A3gFb7igZpgzMDY3NP7Zk30OaBZ3ioKvWWxRhOLLG9jiSgkyLIPl+o9g/PUzB7iFVrlsYm5cAbTDVg==}
     peerDependencies:
       '@edifice-ui/icons': '*'
       '@react-spring/web': 9.7.3
@@ -693,7 +693,7 @@ packages:
       react-hook-form: 7.49.2
       react-i18next: 13.5.0
     dependencies:
-      '@edifice-ui/icons': 1.4.6-develop-pedago.0(react-dom@18.2.0)(react@18.2.0)
+      '@edifice-ui/icons': 1.4.6-develop-pedago.6(react-dom@18.2.0)(react@18.2.0)
       '@floating-ui/react': 0.26.0(react-dom@18.2.0)(react@18.2.0)
       '@pixi/react': 7.1.1(@babel/runtime@7.24.1)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@popperjs/core': 2.11.8
@@ -4591,7 +4591,7 @@ packages:
       es-object-atoms: 1.0.0
     dev: true
 
-  /ode-explorer@1.4.2-develop-pedago.202403271650(@edifice-ui/icons@1.4.6-develop-pedago.0)(@edifice-ui/react@1.4.6-develop-pedago.4)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(clsx@2.1.0)(i18next-http-backend@2.4.2)(i18next@23.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)(zustand@4.5.0):
+  /ode-explorer@1.4.2-develop-pedago.202403271650(@edifice-ui/icons@1.4.6-develop-pedago.6)(@edifice-ui/react@1.4.6-develop-pedago.6)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(clsx@2.1.0)(i18next-http-backend@2.4.2)(i18next@23.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)(zustand@4.5.0):
     resolution: {integrity: sha512-e8+0DwAZInvnBANXyqN4PYgk7/OuasI6oc4v22w5NyG7AnDKyM8oEhrwbwP2Q3BQgVyUx9FwbM+kZ7UxgMzSNQ==}
     engines: {node: 18 || 20}
     requiresBuild: true
@@ -4609,8 +4609,8 @@ packages:
       react-i18next: 14.0.1
       zustand: 4.5.0
     dependencies:
-      '@edifice-ui/icons': 1.4.6-develop-pedago.0(react-dom@18.2.0)(react@18.2.0)
-      '@edifice-ui/react': 1.4.6-develop-pedago.4(@babel/runtime@7.24.1)(@edifice-ui/icons@1.4.6-develop-pedago.0)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.4)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)
+      '@edifice-ui/icons': 1.4.6-develop-pedago.6(react-dom@18.2.0)(react@18.2.0)
+      '@edifice-ui/react': 1.4.6-develop-pedago.6(@babel/runtime@7.24.1)(@edifice-ui/icons@1.4.6-develop-pedago.6)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@pixi/utils@7.3.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(@tiptap/core@2.2.4)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)
       '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-query': 5.18.0(react@18.2.0)
       clsx: 2.1.0
