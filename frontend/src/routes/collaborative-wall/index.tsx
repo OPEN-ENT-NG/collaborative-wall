@@ -9,7 +9,7 @@ import {
   useOdeClient,
   useTrashedResource,
 } from "@edifice-ui/react";
-import { QueryClient, useQueries } from "@tanstack/react-query";
+import { QueryClient, useQueries, useQueryClient } from "@tanstack/react-query";
 import { IWebApp } from "edifice-ts-client";
 import {
   LoaderFunctionArgs,
@@ -39,6 +39,7 @@ import "~/styles/index.css";
 const DescriptionModal = lazy(
   async () => await import("~/components/description-modal"),
 );
+const UpdateModal = lazy(async () => await import("~/features/resource-modal"));
 const ShareModal = lazy(async () => await import("~/features/share-modal"));
 
 interface LoaderData {
@@ -78,6 +79,7 @@ export const wallLoader =
 export const CollaborativeWall = () => {
   const params = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { query } = useLoaderData() as LoaderData;
 
@@ -85,19 +87,23 @@ export const CollaborativeWall = () => {
 
   const {
     openShareModal,
+    openUpdateModal,
     isMobile,
     openBackgroundModal,
     setIsMobile,
     setOpenShareModal,
+    setOpenUpdateModal,
     setIsOpenBackgroundModal,
     setNumberOfNotes,
     numberOfNotes,
   } = useWhiteboard(
     useShallow((state) => ({
       openShareModal: state.openShareModal,
+      openUpdateModal: state.openUpdateModal,
       isMobile: state.isMobile,
       openBackgroundModal: state.openBackgroundModal,
       setOpenShareModal: state.setOpenShareModal,
+      setOpenUpdateModal: state.setOpenUpdateModal,
       setIsOpenBackgroundModal: state.setIsOpenBackgroundModal,
       setIsMobile: state.setIsMobile,
       setNumberOfNotes: state.setNumberOfNotes,
@@ -145,10 +151,12 @@ export const CollaborativeWall = () => {
 
   if (notes) setNumberOfNotes(notes.length);
 
-  notes?.sort(
-    (a: NoteProps, b: NoteProps) =>
-      (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
-  );
+  const handleOnUpdateSuccess = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: wallQueryOptions(params.wallId as string).queryKey,
+    });
+    setOpenUpdateModal(false);
+  };
 
   return (
     <>
@@ -172,21 +180,26 @@ export const CollaborativeWall = () => {
             onDragStart={handleOnDragStart}
             modifiers={[restrictToParentElement]}
           >
-            {notes?.map((note: NoteProps, i: number) => {
-              const isUpdated = note._id === updatedNote?.activeId;
-              return (
-                <Note
-                  key={note._id}
-                  note={{
-                    ...note,
-                    x: isUpdated ? updatedNote.x : note.x,
-                    y: isUpdated ? updatedNote.y : note.y,
-                    zIndex: isUpdated ? numberOfNotes + 1 : i,
-                  }}
-                  disabled={hasRightsToMoveNote(note)}
-                />
-              );
-            })}
+            {notes
+              ?.sort(
+                (a: NoteProps, b: NoteProps) =>
+                  (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
+              )
+              .map((note: NoteProps, i: number) => {
+                const isUpdated = note._id === updatedNote?.activeId;
+                return (
+                  <Note
+                    key={note._id}
+                    note={{
+                      ...note,
+                      x: isUpdated ? updatedNote.x : note.x,
+                      y: isUpdated ? updatedNote.y : note.y,
+                      zIndex: isUpdated ? numberOfNotes + 1 : i,
+                    }}
+                    disabled={hasRightsToMoveNote(note)}
+                  />
+                );
+              })}
           </DndContext>
         </WhiteboardWrapper>
 
@@ -204,6 +217,15 @@ export const CollaborativeWall = () => {
         )}
       </div>
       <Suspense fallback={<LoadingScreen />}>
+        {openUpdateModal && wall && (
+          <UpdateModal
+            mode="update"
+            isOpen={openUpdateModal}
+            resourceId={wall._id}
+            onCancel={() => setOpenUpdateModal(false)}
+            onSuccess={handleOnUpdateSuccess}
+          />
+        )}
         {openShareModal && wall && (
           <ShareModal
             isOpen={openShareModal}
