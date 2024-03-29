@@ -60,6 +60,8 @@
   "collaborativewall.toolbar.open": "Ouvrir",
   "collaborativewall.toolbar.delete": "Supprimer",
   "collaborativewall.add.media": "Ajoutez une ressource pour donner vie à vos notes.",
+  "collaborativewall.toast.undo": "Dernière action annulée",
+  "collaborativewall.toast.redo": "Dernière action rétablie",
   "group.HeadTeacher": "Professeurs principaux de {0}.",
   "group.Direction": "Directeurs de {0}.",
   "group.Func": "Personnels de fonction {0}.",
