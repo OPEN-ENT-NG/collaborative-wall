@@ -164,7 +164,7 @@ export const CollaborativeWall = () => {
         <AppHeader
           isFullscreen
           style={{ position: "sticky" }}
-          render={() => <AppActions />}
+          render={() => <AppActions idWall={wall?._id} />}
         >
           <Breadcrumb app={currentApp as IWebApp} name={wall?.name} />
         </AppHeader>

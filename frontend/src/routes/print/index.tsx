@@ -91,19 +91,24 @@ export const CollaborativeWall = () => {
                 height: "100%",
               }}
             >
-              {notes?.map((note: NoteProps, i: number) => {
-                return (
-                  <Note
-                    key={note._id}
-                    note={{
-                      ...note,
-                      x: note.x,
-                      y: note.y,
-                      zIndex: i,
-                    }}
-                  />
-                );
-              })}
+              {notes
+                ?.sort(
+                  (a: NoteProps, b: NoteProps) =>
+                    (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
+                )
+                .map((note: NoteProps, i: number) => {
+                  return (
+                    <Note
+                      key={note._id}
+                      note={{
+                        ...note,
+                        x: note.x,
+                        y: note.y,
+                        zIndex: i,
+                      }}
+                    />
+                  );
+                })}
             </div>
           </div>
         </TransformComponent>

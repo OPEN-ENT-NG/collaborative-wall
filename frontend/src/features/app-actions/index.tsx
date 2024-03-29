@@ -15,6 +15,7 @@ import {
   DropdownMenuOptions,
 } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
 import { useAccess } from "~/hooks/useAccess";
@@ -25,9 +26,10 @@ export type ActionDropdownMenuOptions = DropdownMenuOptions & {
   visibility?: boolean;
 };
 
-export const AppActions = () => {
+export const AppActions = ({ idWall }: { idWall: string | undefined }) => {
   const { isCreator, isManager } = useAccess();
   const { appCode } = useOdeClient();
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const { setOpenShareModal, setOpenUpdateModal, setIsOpenBackgroundModal } =
@@ -65,7 +67,7 @@ export const AppActions = () => {
       id: "print",
       label: t("print"),
       icon: <Print />,
-      action: () => console.log("print"),
+      action: () => navigate(`/print/id/${idWall}`),
       visibility: true,
     },
   ];
