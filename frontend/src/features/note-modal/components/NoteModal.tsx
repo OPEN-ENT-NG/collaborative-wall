@@ -30,10 +30,6 @@ export async function noteLoader({ request, params }: LoaderFunctionArgs) {
     });
   }
 
-  if (mode === "create") {
-    return {} as NoteProps;
-  }
-
   const { wallId, noteId } = params;
 
   if (!wallId || !noteId) {
@@ -56,12 +52,12 @@ export async function noteLoader({ request, params }: LoaderFunctionArgs) {
 }
 
 export const NoteModal = () => {
-  const data = useLoaderData() as NoteProps;
+  const data: NoteProps | undefined = useLoaderData() as NoteProps;
 
   const [colorValue, setColorValue] = useState<string[]>(
-    data.color || [noteColors.yellow.background],
+    data?.color || [noteColors.yellow.background],
   );
-  const [media, setMedia] = useState<NoteMedia | null>(data.media);
+  const [media, setMedia] = useState<NoteMedia | null>(data?.media);
 
   const editorRef = useRef<EditorRef>(null);
 
@@ -81,105 +77,101 @@ export const NoteModal = () => {
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
 
-  return data ? (
-    createPortal(
-      <Modal
-        id="UpdateNoteModal"
-        onModalClose={handleNavigateBack}
-        size="md"
-        isOpen={true}
-        focusId=""
-        scrollable={true}
-      >
-        <Modal.Header onModalClose={handleNavigateBack}>
-          {isReadMode() &&
-            t("collaborativewall.modal.title.read", { ns: appCode })}
-          {isEditMode() &&
-            t("collaborativewall.modal.title.edit", { ns: appCode })}
-          {isCreateMode() &&
-            t("collaborativewall.modal.title.create", { ns: appCode })}
-        </Modal.Header>
-        <Modal.Subtitle>
-          <span className="text-gray-700 small">{data.owner?.displayName}</span>
-        </Modal.Subtitle>
-        <Modal.Body>
-          <NoteContent
-            editorRef={editorRef}
-            dataNote={data}
-            setColorValue={setColorValue}
-            setMedia={setMedia}
-            media={media}
-            editionMode={editionMode}
-          />
-        </Modal.Body>
-        <Modal.Footer>
-          {isReadMode() && !hasRightsToUpdateNote(data) && (
-            <>
-              <Button
-                type="button"
-                color="primary"
-                variant="filled"
-                onClick={handleNavigateBack}
-              >
-                {t("collaborativewall.modal.close", { ns: appCode })}
-              </Button>
-            </>
-          )}
-          {isReadMode() && hasRightsToUpdateNote(data) && (
-            <>
-              <Button
-                type="button"
-                color="tertiary"
-                variant="ghost"
-                onClick={handleNavigateBack}
-              >
-                {t("collaborativewall.modal.close", { ns: appCode })}
-              </Button>
-              <Button
-                type="button"
-                color="primary"
-                variant="filled"
-                onClick={handleNavigateToEditMode}
-              >
-                {t("collaborativewall.modal.modify", { ns: appCode })}
-              </Button>
-            </>
-          )}
-          {(isEditMode() || isCreateMode()) && (
+  return createPortal(
+    <Modal
+      id="UpdateNoteModal"
+      onModalClose={handleNavigateBack}
+      size="md"
+      isOpen={true}
+      focusId=""
+      scrollable={true}
+    >
+      <Modal.Header onModalClose={handleNavigateBack}>
+        {isReadMode() &&
+          t("collaborativewall.modal.title.read", { ns: appCode })}
+        {isEditMode() &&
+          t("collaborativewall.modal.title.edit", { ns: appCode })}
+        {isCreateMode() &&
+          t("collaborativewall.modal.title.create", { ns: appCode })}
+      </Modal.Header>
+      <Modal.Subtitle>
+        <span className="text-gray-700 small">{data?.owner?.displayName}</span>
+      </Modal.Subtitle>
+      <Modal.Body>
+        <NoteContent
+          editorRef={editorRef}
+          dataNote={data}
+          setColorValue={setColorValue}
+          setMedia={setMedia}
+          media={media}
+          editionMode={editionMode}
+        />
+      </Modal.Body>
+      <Modal.Footer>
+        {isReadMode() && !hasRightsToUpdateNote(data) && (
+          <>
+            <Button
+              type="button"
+              color="primary"
+              variant="filled"
+              onClick={handleNavigateBack}
+            >
+              {t("collaborativewall.modal.close", { ns: appCode })}
+            </Button>
+          </>
+        )}
+        {isReadMode() && hasRightsToUpdateNote(data) && (
+          <>
             <Button
               type="button"
               color="tertiary"
               variant="ghost"
               onClick={handleNavigateBack}
             >
-              {t("collaborativewall.modal.cancel", { ns: appCode })}
+              {t("collaborativewall.modal.close", { ns: appCode })}
             </Button>
-          )}
-          {isEditMode() && (
             <Button
               type="button"
               color="primary"
               variant="filled"
-              onClick={handleSaveNote}
+              onClick={handleNavigateToEditMode}
             >
-              {t("collaborativewall.modal.save", { ns: appCode })}
+              {t("collaborativewall.modal.modify", { ns: appCode })}
             </Button>
-          )}
-          {isCreateMode() && (
-            <Button
-              type="button"
-              color="primary"
-              variant="filled"
-              onClick={handleCreateNote}
-            >
-              {t("collaborativewall.modal.add", { ns: appCode })}
-            </Button>
-          )}
-        </Modal.Footer>
-      </Modal>,
-      document.getElementById("portal") as HTMLElement,
-    )
-  ) : (
-    <p>{t("collaborativewall.note.notfound", { ns: appCode })}</p>
+          </>
+        )}
+        {(isEditMode() || isCreateMode()) && (
+          <Button
+            type="button"
+            color="tertiary"
+            variant="ghost"
+            onClick={handleNavigateBack}
+          >
+            {t("collaborativewall.modal.cancel", { ns: appCode })}
+          </Button>
+        )}
+        {isEditMode() && (
+          <Button
+            type="button"
+            color="primary"
+            variant="filled"
+            onClick={handleSaveNote}
+          >
+            {t("collaborativewall.modal.save", { ns: appCode })}
+          </Button>
+        )}
+        {isCreateMode() && (
+          <Button
+            type="button"
+            color="primary"
+            variant="filled"
+            onClick={handleCreateNote}
+          >
+            {t("collaborativewall.modal.add", { ns: appCode })}
+          </Button>
+        )}
+      </Modal.Footer>
+    </Modal>,
+    document.getElementById("portal") as HTMLElement,
   );
 };

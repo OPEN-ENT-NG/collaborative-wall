@@ -50,7 +50,7 @@ export const ToolbarWrapper = ({
 
   const showIf = (truthy: boolean) => (truthy ? "show" : "hide");
 
-  const handleCreateClick = () => navigate("note/0?mode=create");
+  const handleCreateClick = () => navigate("note");
 
   const WhiteboardItems: ToolbarItem[] = [
     {

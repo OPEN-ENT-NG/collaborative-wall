@@ -31,7 +31,7 @@ export const useNoteModal = (
   const { wallId } = useParams();
   const [searchParams] = useSearchParams();
   const editionMode: EditionMode =
-    (searchParams.get("mode") as EditionMode) || "read";
+    (searchParams.get("mode") as EditionMode) || "create";
 
   const { positionViewport, zoom } = useWhiteboard(
     useShallow((state) => ({
