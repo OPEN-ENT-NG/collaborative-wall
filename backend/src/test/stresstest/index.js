@@ -22,15 +22,15 @@ import {
 } from "./messages.js";
 import { createReport } from "./report.js";
 
-const rootUrl = __ENV.ROOT_URL;
+const rootUrl = __ENV.ROOT_URL || "http://localhost:8090";
 const maxDuration = __ENV.MAX_DURATION || "1m";
 const delayBeforeSend = parseInt(__ENV.DELAY_BEFORE_SEND || "3000");
 const nbUsers = parseInt(__ENV.NB_USERS || "10");
 const schoolName = __ENV.DATA_SCHOOL_NAME || "Tests Collaborative Wall 3";
-const dataRootPath = __ENV.DATA_ROOT_PATH;
+const dataRootPath = __ENV.DATA_ROOT_PATH || "../resources/data/";
 const NB_MESSAGES = parseInt(__ENV.NB_MESSAGES || "10");
 const gracefulStop = parseInt(__ENV.GRACEFUL_STOP || "2s");
-const userTimeToLiveInMs = parseInt(__ENV.USER_TTL);
+const userTimeToLiveInMs = parseInt(__ENV.USER_TTL || "20000");
 const checkNumberOfMessages = "false" !== __ENV.CHECK_NB_MESSAGES_RCV;
 
 //const nbExpectedMEssages = 2 * nbUsers + NB_MESSAGES * (nbUsers - 1)
@@ -205,8 +205,6 @@ function createWall(structure, adminSession) {
     icon: "",
   });
   res = http.post(`${rootUrl}/collaborativewall`, payload, { headers });
-
-  console.log(`${rootUrl}/collaborativewall`, { res }, res.status);
   check(res, {
     "create collaborative wall": (r) => r.status === 200,
   });

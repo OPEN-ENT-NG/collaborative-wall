@@ -134,7 +134,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
         this.metricsRecorder.onError();
         log.warn("An error occurred while treating a user action", th);
         try {
-            ws.writeTextMessage(Json.encode(new JsonObject().put("error", th.getCause()).put("status", 500)));
+            ws.writeTextMessage(Json.encode(new JsonObject().put("error", th.getMessage()).put("status", 500)));
         } catch (Exception e) {
             log.warn("Cannot send message to this websocket", e);
             closeWithError("write.error", (short) 500, ws);
