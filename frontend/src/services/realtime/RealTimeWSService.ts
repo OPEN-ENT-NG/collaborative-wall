@@ -63,13 +63,12 @@ export class RealTimeWSService extends RealTimeService {
     this.pendingStart = createDeferred();
 
     if (window.location.hostname === "localhost") {
-      console.log("if");
       this.socket = new WebSocket(
         `ws://${window.location.hostname}:9091/collaborativewall/${this.resourceId}`,
       );
     } else {
       this.socket = new WebSocket(
-        `ws://${window.location.hostname}/collaborativewall/realtime`,
+        `ws://${window.location.host}/collaborativewall/realtime/${this.resourceId}`,
       );
     }
     this.startListeners();
