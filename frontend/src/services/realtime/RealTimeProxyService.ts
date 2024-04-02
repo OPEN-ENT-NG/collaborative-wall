@@ -23,7 +23,7 @@ export class RealTimeProxyService extends RealTimeService {
     }
   }
   protected override async send(payload: EventPayload) {
-    await this.ready
+    await this.ready;
     if (this.mode === "http") {
       return this.httpService.send(payload);
     } else {

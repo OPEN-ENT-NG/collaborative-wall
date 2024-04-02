@@ -68,7 +68,7 @@ export class RealTimeWSService extends RealTimeService {
   public override doStop() {
     this.socket?.close();
     this.socket = undefined;
-    this.pendingStart = undefined
+    this.pendingStart = undefined;
     return Promise.resolve();
   }
 }
