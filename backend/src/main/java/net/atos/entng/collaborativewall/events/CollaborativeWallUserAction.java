@@ -81,9 +81,6 @@ public class CollaborativeWallUserAction {
         break;
       }
       case cursorMove: {
-        if(StringUtils.isBlank(this.noteId)){
-          throw new ValidationException("wall.action.noteId.missing");
-        }
         if(CollectionUtils.isEmpty(this.move)){
           throw new ValidationException("wall.action.move.missing");
         }

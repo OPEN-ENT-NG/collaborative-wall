@@ -14,6 +14,7 @@ export type CollaborativeWallNotePayload = Pick<
 export type MetadataPayload = {
   wallId: string;
   type: "metadata";
+  editing: Array<{userId:string; noteId:string; since:number}>
 };
 
 export type PingPayload = {
