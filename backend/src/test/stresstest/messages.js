@@ -31,7 +31,9 @@ function createNotePayload(user, wallId, noteId) {
     y: 33,
     color: ["#F5F6CE", "#F2F5A9"],
     lastEdit: new Date().toISOString(),
-    media: "https://example.com/image",
+    media: {
+      url: "https://example.com/image",
+    },
     idwall: wallId,
   };
 }
@@ -41,7 +43,10 @@ function createWallPayload(user, wallId) {
     _id: wallId,
     name: "Stress Test - Mur Collab - " + Date.now(),
     description: "Description du mur collab",
-    background: "/collaborativewall/public/img/default.jpg",
+    background: {
+      path: "img/orange-hill.png",
+      color: "116.76deg, #FFEFE3 0.32%, #FF8D2E 99.93%",
+    },
     icon: "",
   };
 }

@@ -198,10 +198,15 @@ function createWall(structure, adminSession) {
   const payload = JSON.stringify({
     name: "Stress Test - Mur Collab - " + Date.now(),
     description: "Description du mur collab",
-    background: "/collaborativewall/public/img/default.jpg",
+    background: {
+      path: "img/orange-hill.png",
+      color: "116.76deg, #FFEFE3 0.32%, #FF8D2E 99.93%",
+    },
     icon: "",
   });
   res = http.post(`${rootUrl}/collaborativewall`, payload, { headers });
+
+  console.log(`${rootUrl}/collaborativewall`, { res }, res.status);
   check(res, {
     "create collaborative wall": (r) => r.status === 200,
   });
