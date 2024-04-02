@@ -27,7 +27,7 @@ export const Note = ({
     })),
   );
 
-  const [isopenDropdown, setIsOpenDropdown] = useState<boolean>(false);
+  const [isopenDropdown /* setIsOpenDropdown */] = useState<boolean>(false);
 
   const { attributes, isDragging, listeners, setNodeRef, transform } =
     useDraggable({
@@ -97,7 +97,7 @@ export const Note = ({
       {canMoveNote && (
         <NoteActions
           note={note}
-          setIsOpenDropdown={setIsOpenDropdown}
+          // setIsOpenDropdown={setIsOpenDropdown}
         ></NoteActions>
       )}
     </div>

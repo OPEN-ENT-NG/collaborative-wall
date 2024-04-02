@@ -47,6 +47,12 @@ export default ({ mode }: { mode: string }) => {
     "/xiti": proxyObj,
     "/analyticsConf": proxyObj,
     "/video": proxyObj,
+    /* "/collaborativewall/realtime": {
+      target: "ws://localhost:9091",
+      changeOrigin: true,
+      secure: false,
+      ws: true,
+    }, */
   };
 
   const base = mode === "production" ? "/collaborativewall" : "";
@@ -68,6 +74,10 @@ export default ({ mode }: { mode: string }) => {
 
   const server = {
     proxy,
+    /* hmr: {
+      host: "localhost",
+      protocol: "ws",
+    }, */
     host: "0.0.0.0",
     port: 3000,
     headers: resHeaders,

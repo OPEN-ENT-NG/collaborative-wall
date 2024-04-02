@@ -45,7 +45,6 @@ export type MoveList = Array<{ x: number; y: number }>;
 export type CursorMovedPayload = {
   wallId: string;
   type: "cursorMove";
-  noteId: string;
   move: MoveList;
 };
 export type NoteEditionStartedPayload = {

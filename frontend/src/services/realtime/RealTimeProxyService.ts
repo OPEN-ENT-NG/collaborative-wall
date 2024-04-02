@@ -2,7 +2,9 @@ import { RealTimeHttpService } from "./RealTimeHttpService";
 import { RealTimeService } from "./RealTimeService";
 import { RealTimeWSService } from "./RealTimeWSService";
 import { EventPayload } from "./types";
+
 const RETRY_COUNTER = 5;
+
 export class RealTimeProxyService extends RealTimeService {
   private mode: "http" | "ws" = "ws";
   private httpService: RealTimeHttpService;
@@ -17,8 +19,10 @@ export class RealTimeProxyService extends RealTimeService {
   }
   override get ready() {
     if (this.mode === "http") {
+      console.log("http");
       return this.httpService.ready;
     } else {
+      console.log("mode:ws");
       return this.wsService.ready;
     }
   }

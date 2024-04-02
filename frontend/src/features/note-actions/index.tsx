@@ -22,10 +22,10 @@ export type NoteDropdownMenuOptions = DropdownMenuOptions & {
 
 export const NoteActions = ({
   note,
-  setIsOpenDropdown,
+  // setIsOpenDropdown,
 }: {
   note: NoteProps;
-  setIsOpenDropdown: (value: boolean) => void;
+  // setIsOpenDropdown: (value: boolean) => void;
 }) => {
   const navigate = useNavigate();
 
@@ -92,7 +92,7 @@ export const NoteActions = ({
             Omit<IconButtonProps, "ref"> &
             RefAttributes<HTMLButtonElement>,
         ) => {
-          setIsOpenDropdown(triggerProps["aria-expanded"] as boolean);
+          // setIsOpenDropdown(triggerProps["aria-expanded"] as boolean);
           return (
             <>
               <IconButton

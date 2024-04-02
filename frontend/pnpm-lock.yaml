@@ -52,7 +52,7 @@ dependencies:
     version: 2.4.2
   ode-explorer:
     specifier: develop-pedago
-    version: 1.4.2-develop-pedago.202403271650(@edifice-ui/icons@1.4.6-develop-pedago.6)(@edifice-ui/react@1.4.6-develop-pedago.6)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(clsx@2.1.0)(i18next-http-backend@2.4.2)(i18next@23.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)(zustand@4.5.0)
+    version: 1.4.2-develop-pedago.202403291703(@edifice-ui/icons@1.4.6-develop-pedago.6)(@edifice-ui/react@1.4.6-develop-pedago.6)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(clsx@2.1.0)(i18next-http-backend@2.4.2)(i18next@23.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)(zustand@4.5.0)
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -4588,8 +4588,8 @@ packages:
       es-object-atoms: 1.0.0
     dev: true
 
-  /ode-explorer@1.4.2-develop-pedago.202403271650(@edifice-ui/icons@1.4.6-develop-pedago.6)(@edifice-ui/react@1.4.6-develop-pedago.6)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(clsx@2.1.0)(i18next-http-backend@2.4.2)(i18next@23.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)(zustand@4.5.0):
-    resolution: {integrity: sha512-e8+0DwAZInvnBANXyqN4PYgk7/OuasI6oc4v22w5NyG7AnDKyM8oEhrwbwP2Q3BQgVyUx9FwbM+kZ7UxgMzSNQ==}
+  /ode-explorer@1.4.2-develop-pedago.202403291703(@edifice-ui/icons@1.4.6-develop-pedago.6)(@edifice-ui/react@1.4.6-develop-pedago.6)(@react-spring/web@9.7.3)(@tanstack/react-query@5.18.0)(clsx@2.1.0)(i18next-http-backend@2.4.2)(i18next@23.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.0.1)(react@18.2.0)(zustand@4.5.0):
+    resolution: {integrity: sha512-cosJlliI6ARVbQo5jpHUoL7smEiEVVYfVNOaiNFHjmmVfLn7yQ2kdpWgWhLYqORBlsfC0nxtf2+p9LD1DiuVnA==}
     engines: {node: 18 || 20}
     requiresBuild: true
     peerDependencies:

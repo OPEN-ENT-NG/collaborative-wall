@@ -13,10 +13,13 @@ export class RealTimeWSService extends RealTimeService {
   }
   private startListeners() {
     this.socket?.addEventListener("open", () => {
+      console.log("open");
+      this.queryForMetadata();
       this.pendingStart?.resolve();
     });
     this.socket?.addEventListener("message", (event) => {
       try {
+        console.log("message");
         const data = JSON.parse(event.data);
         this.subscribers.forEach((sub) => sub(data));
       } catch (error) {
@@ -47,19 +50,26 @@ export class RealTimeWSService extends RealTimeService {
     return this.pendingStart?.promise ?? Promise.reject("not.initialized");
   }
   public override async send(payload: EventPayload) {
+    console.log("before ready", { payload });
     await this.ready;
+    console.log("after ready", { payload });
     this.socket?.send(JSON.stringify(payload));
   }
   public override doStart() {
+    console.log("doStart");
     if (this.pendingStart) {
       return this.ready;
     }
     this.pendingStart = createDeferred();
+
     if (window.location.hostname === "localhost") {
-      this.socket = new WebSocket(`ws://${window.location.hostname}:9091`);
+      console.log("if");
+      this.socket = new WebSocket(
+        `ws://${window.location.hostname}:9091/collaborativewall/${this.resourceId}`,
+      );
     } else {
       this.socket = new WebSocket(
-        `ws://${window.location.host}/collaborativewall/realtime`,
+        `ws://${window.location.hostname}/collaborativewall/realtime`,
       );
     }
     this.startListeners();

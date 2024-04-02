@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Suspense, lazy, useEffect } from "react";
 
 import { DndContext } from "@dnd-kit/core";
@@ -32,10 +33,10 @@ import { useEditNote } from "~/hooks/useEditNote";
 import { NoteProps } from "~/models/notes";
 import { CollaborativeWallProps } from "~/models/wall";
 import { notesQueryOptions, wallQueryOptions } from "~/services/queries";
+import { useRealTimeService } from "~/services/realtime";
 import { useHistoryStore, useWhiteboard } from "~/store";
 
 import "~/styles/index.css";
-
 const DescriptionModal = lazy(
   async () => await import("~/components/description-modal"),
 );
@@ -94,7 +95,7 @@ export const CollaborativeWall = () => {
     setOpenShareModal,
     setOpenUpdateModal,
     setIsOpenBackgroundModal,
-    setNumberOfNotes,
+    // setNumberOfNotes,
     numberOfNotes,
   } = useWhiteboard(
     useShallow((state) => ({
@@ -106,7 +107,7 @@ export const CollaborativeWall = () => {
       setOpenUpdateModal: state.setOpenUpdateModal,
       setIsOpenBackgroundModal: state.setIsOpenBackgroundModal,
       setIsMobile: state.setIsMobile,
-      setNumberOfNotes: state.setNumberOfNotes,
+      // setNumberOfNotes: state.setNumberOfNotes,
       numberOfNotes: state.numberOfNotes,
     })),
   );
@@ -140,21 +141,33 @@ export const CollaborativeWall = () => {
 
   const { hasRightsToMoveNote } = useAccess();
 
+  const service = useRealTimeService(wall?._id as string, true);
+
+  console.log({ service });
+
   useEffect(() => {
     if (query) setIsMobile(query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
+  useEffect(() => {
+    service.sendPing();
+  }, []);
+
   if (isWallLoading && isNotesLoading) return <LoadingScreen />;
 
   if (isWallError || isNotesError) return <EmptyScreenError />;
 
-  if (notes) setNumberOfNotes(notes.length);
+  // if (notes) setNumberOfNotes(notes.length);
 
   const handleOnUpdateSuccess = async () => {
     await queryClient.invalidateQueries({
       queryKey: wallQueryOptions(params.wallId as string).queryKey,
     });
+    // "_id" | "name" | "description" | "background" | "icon"
+
+    if (!wall) return;
+
     setOpenUpdateModal(false);
   };
 
@@ -169,6 +182,21 @@ export const CollaborativeWall = () => {
           <Breadcrumb app={currentApp as IWebApp} name={wall?.name} />
         </AppHeader>
       )}
+      <button
+        onClick={() => {
+          if (!wall) return;
+
+          service.sendWallUpdateEvent({
+            _id: wall?._id,
+            name: "test temps réel",
+            description: "desc temps réel",
+            background: wall?.background,
+            icon: wall.icon,
+          });
+        }}
+      >
+        test send updated wall
+      </button>
       <div className="collaborativewall-container">
         {wall?.description && !isMobile && (
           <DescriptionWall description={wall?.description} />
