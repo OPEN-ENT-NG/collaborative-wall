@@ -145,11 +145,14 @@ export const CollaborativeWall = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
+  useEffect(() => {
+    if (notes) setNumberOfNotes(notes.length);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [notes]);
+
   if (isWallLoading && isNotesLoading) return <LoadingScreen />;
 
   if (isWallError || isNotesError) return <EmptyScreenError />;
-
-  if (notes) setNumberOfNotes(notes.length);
 
   const handleOnUpdateSuccess = async () => {
     await queryClient.invalidateQueries({

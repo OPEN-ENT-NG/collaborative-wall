@@ -1,16 +1,16 @@
-import { Fragment, RefAttributes } from "react";
+import { RefAttributes } from "react";
 
-import { Copy, Delete, Edit, Options } from "@edifice-ui/icons";
+import { Copy, Delete, Edit } from "@edifice-ui/icons";
 import {
   Dropdown,
   DropdownMenuOptions,
-  IconButton,
   IconButtonProps,
 } from "@edifice-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
+import { ActionList } from "../note-modal/components/ActionList";
 import { useAccess } from "~/hooks/useAccess";
 import { NoteProps } from "~/models/notes";
 import { notesQueryOptions, useDeleteNote } from "~/services/queries";
@@ -91,40 +91,13 @@ export const NoteActions = ({
           triggerProps: JSX.IntrinsicAttributes &
             Omit<IconButtonProps, "ref"> &
             RefAttributes<HTMLButtonElement>,
-        ) => {
-          setIsOpenDropdown(triggerProps["aria-expanded"] as boolean);
-          return (
-            <>
-              <IconButton
-                {...triggerProps}
-                type="button"
-                aria-label="label"
-                color="secondary"
-                variant="ghost"
-                icon={<Options />}
-                className="card-actions-btn bg-white"
-              />
-              <Dropdown.Menu>
-                {dropdownOptions.map((dropdownOption, index) => (
-                  <Fragment key={index}>
-                    {dropdownOption.type === "divider" ? (
-                      <Dropdown.Separator />
-                    ) : (
-                      !dropdownOption.hidden && (
-                        <Dropdown.Item
-                          icon={dropdownOption.icon}
-                          onClick={() => dropdownOption.action(null)}
-                        >
-                          {dropdownOption.label}
-                        </Dropdown.Item>
-                      )
-                    )}
-                  </Fragment>
-                ))}
-              </Dropdown.Menu>
-            </>
-          );
-        }}
+        ) => (
+          <ActionList
+            triggerProps={triggerProps}
+            setIsOpenDropdown={setIsOpenDropdown}
+            dropdownOptions={dropdownOptions}
+          />
+        )}
       </Dropdown>
     </div>
   );
