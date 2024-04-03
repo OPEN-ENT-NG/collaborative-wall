@@ -145,22 +145,3 @@
     display: none !important;
   }
 }
-
-@media print {
-  body {
-    width: 100%;
-    zoom: 0.6;
-    margin: 1.5cm;
-  }
-}
-
-@page {
-  orientation: landscape;
-  size: 8.5in 13in;
-}
-
-* {
-  -webkit-print-color-adjust: exact !important;
-  color-adjust: exact !important;
-  print-color-adjust: exact !important;
-}

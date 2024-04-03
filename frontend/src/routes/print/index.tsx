@@ -12,9 +12,9 @@ import {
 } from "~/config/init-config";
 import { NoteProps } from "~/models/notes";
 import { notesQueryOptions, wallQueryOptions } from "~/services/queries";
-import { calculateMinScale } from "~/utils/calculMinScale";
 
 import "~/styles/index.css";
+import "./index.css";
 
 export const wallLoader =
   (queryClient: QueryClient) =>
@@ -70,10 +70,13 @@ export const CollaborativeWall = () => {
 
   return (
     <div className="print-full-page">
-      <TransformWrapper initialScale={calculateMinScale()}>
+      <TransformWrapper
+        initialScale={1000 / wallConfig.WIDTH_WALL}
+        disabled={true}
+      >
         <TransformComponent
           wrapperStyle={{
-            maxWidth: "100%",
+            maxWidth: "1000px",
             maxHeight: "calc(100vh)",
           }}
         >
