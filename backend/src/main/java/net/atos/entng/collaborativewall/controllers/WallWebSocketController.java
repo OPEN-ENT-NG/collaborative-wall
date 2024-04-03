@@ -47,8 +47,8 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
             }
         });
         this.collaborativeWallRTService.subscribeToNewMessagesToSend(messages -> {
-            if (CollectionUtils.isNotEmpty(messages)) {
-                this.broadcastMessagesToUsers(messages, false, true, null);
+            if (messages.isNotEmpty()) {
+                this.broadcastMessagesToUsers(messages.getMessages(), messages.isAllowInternal(), messages.isAllowExternal(), messages.getExceptWSId());
             }
         });
         this.maxConnections = maxConnections;
@@ -94,7 +94,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                         }
                         final String userId = session.getUserId();
                         ws.closeHandler(e -> onCloseWSConnection(wallId, userId, wsId));
-                        onConnect(userId, wallId, wsId, ws).onSuccess(onSuccess -> {
+                        onConnect(session, wallId, wsId, ws).onSuccess(onSuccess -> {
                             ws.resume();
                             ws.frameHandler(frame -> {
                                 try {
@@ -104,7 +104,7 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                                     } else {
                                         final String message = frame.textData();
                                         final CollaborativeWallUserAction action = Json.decodeValue(message, CollaborativeWallUserAction.class);
-                                        this.pushEvent(wallId, wsId, session, action).onFailure(th -> this.sendError(th, ws));
+                                        this.collaborativeWallRTService.pushEvent(wallId, session, action, wsId, false).onFailure(th -> this.sendError(th, ws));
                                     }
                                 } catch (Exception e) {
                                     log.error("An error occured while parsing message:", e);
@@ -123,11 +123,6 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                 }
             });
         }
-    }
-
-    public Future<List<CollaborativeWallMessage>> pushEvent(final String wallId,final String wsId, final UserInfos session, final CollaborativeWallUserAction action){
-        return this.collaborativeWallRTService.onNewUserAction(action, wallId, wsId, session)
-                .onSuccess(messages -> this.broadcastMessagesToUsers(messages, true, false, wsId));
     }
 
     private void sendError(Throwable th, ServerWebSocket ws) {
@@ -159,9 +154,9 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
                     final Map<String, ServerWebSocket> wss = wallIdToWSIdToWS.get(wallId);
                     if (wss != null) {
                         if (wss.remove(wsId) == null) {
-                            log.warn("No ws removed");
+                            log.debug("No ws removed");
                         } else {
-                            log.info("WS correctly removed");
+                            log.debug("WS correctly removed");
                         }
                     }
                 });
@@ -172,16 +167,16 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
      * Triggered when a new user just connected to a wall.
      * We have to fetch the wall, send it back to the user and update the maps of connected users
      *
-     * @param userId Id of the user that just connected
+     * @param user the user that just connected
      * @param wallId Id of the wall to fetch
      * @param wsId   Unique id of the socket
      * @param ws     actual websocket
      */
-    private Future<Void> onConnect(final String userId, final String wallId, final String wsId, final ServerWebSocket ws) {
+    private Future<Void> onConnect(final UserInfos user, final String wallId, final String wsId, final ServerWebSocket ws) {
         final Map<String, ServerWebSocket> wsIdToWs = wallIdToWSIdToWS.computeIfAbsent(wallId, k -> new HashMap<>());
         wsIdToWs.put(wsId, ws);
         final Promise<Void> promise = Promise.promise();
-        this.collaborativeWallRTService.onNewConnection(wallId, userId, wsId)
+        this.collaborativeWallRTService.onNewConnection(wallId, user, wsId)
                 .compose(messages -> broadcastMessagesToUsers(messages, true, false, null))
                 .onComplete(promise);
         return promise.future();

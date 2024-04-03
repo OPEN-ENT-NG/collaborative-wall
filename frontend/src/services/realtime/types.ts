@@ -14,7 +14,8 @@ export type CollaborativeWallNotePayload = Pick<
 export type MetadataPayload = {
   wallId: string;
   type: "metadata";
-  editing: Array<{userId:string; noteId:string; since:number}>
+  editing: Array<{ userId: string; noteId: string; since: number }>;
+  connectedUsers: Array<{ id: string; name: string }>;
 };
 
 export type PingPayload = {
@@ -101,6 +102,21 @@ export type NoteDeletedPayload = {
 
 export type EventPayload =
   | MetadataPayload
+  | PingPayload
+  | WallUpdatedPayload
+  | WallDeletedPayload
+  | NoteAddedPayload
+  | CursorMovedPayload
+  | NoteEditionStartedPayload
+  | NoteEditionFinishedPayload
+  | NoteMovedPayload
+  | NoteTextUpdatedPayload
+  | NoteImageUpdatedPayload
+  | NoteSelectedPayload
+  | NoteDeletedPayload;
+
+export type ActionPayload =
+  | Pick<MetadataPayload, "type" | "wallId">
   | PingPayload
   | WallUpdatedPayload
   | WallDeletedPayload

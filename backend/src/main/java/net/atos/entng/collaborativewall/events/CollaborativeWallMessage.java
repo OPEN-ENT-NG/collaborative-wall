@@ -8,6 +8,7 @@ import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 
 import java.util.List;
+import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,6 +29,7 @@ public class CollaborativeWallMessage {
   private final List<CollaborativeWallNote> notes;
   private final List<NoteMove> move;
   private final List<CollaborativeWallEditingInformation> editing;
+  private final Set<CollaborativeWallUser> connectedUsers;
 
   @JsonCreator
   public CollaborativeWallMessage(@JsonProperty("wallId") final String wallId,
@@ -43,7 +45,8 @@ public class CollaborativeWallMessage {
                                   @JsonProperty("note") final CollaborativeWallNote note,
                                   @JsonProperty("notes") List<CollaborativeWallNote> notes,
                                   @JsonProperty("move") final List<NoteMove> move,
-                                  @JsonProperty("editing") final List<CollaborativeWallEditingInformation> editing) {
+                                  @JsonProperty("editing") final List<CollaborativeWallEditingInformation> editing,
+                                  @JsonProperty("connectedUsers") final Set<CollaborativeWallUser> connectedUsers) {
     this.wallId = wallId;
     this.emittedAt = emittedAt;
     this.emittedBy = emittedBy;
@@ -58,6 +61,11 @@ public class CollaborativeWallMessage {
     this.notes = notes;
     this.move = move;
     this.editing = editing;
+    this.connectedUsers = connectedUsers;
+  }
+
+  public Set<CollaborativeWallUser> getConnectedUsers() {
+    return connectedUsers;
   }
 
   public String getWallId() {

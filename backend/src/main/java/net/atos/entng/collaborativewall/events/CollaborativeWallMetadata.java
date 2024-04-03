@@ -19,13 +19,13 @@ public class CollaborativeWallMetadata {
   /** List of users who are currently editing a note.*/
   private final List<CollaborativeWallEditingInformation> editing;
   /** Ids of the users connected to the wall.*/
-  private final Set<String> connectedUsers;
+  private final Set<CollaborativeWallUser> connectedUsers;
 
   @JsonCreator
   public CollaborativeWallMetadata(@JsonProperty("wall") final CollaborativeWallDetails wall,
                                    @JsonProperty("notes") final List<CollaborativeWallNote> notes,
                                    @JsonProperty("editing") final List<CollaborativeWallEditingInformation> editing,
-                                   @JsonProperty("connectedUsers") final Set<String> connectedUsers) {
+                                   @JsonProperty("connectedUsers") final Set<CollaborativeWallUser> connectedUsers) {
     this.wall = wall;
     this.notes = notes;
     this.editing = editing;
@@ -34,7 +34,7 @@ public class CollaborativeWallMetadata {
   public CollaborativeWallMetadata(final JsonObject wall,
                                    final List<JsonObject> notes,
                                    final List<CollaborativeWallEditingInformation> editing,
-                                   final Set<String> connectedUsers) {
+                                   final Set<CollaborativeWallUser> connectedUsers) {
     this(CollaborativeWallDetails.fromJson(wall), notes.stream().map(note -> CollaborativeWallNote.fromJson(note)).collect(Collectors.toList()), editing, connectedUsers);
   }
 
@@ -50,7 +50,7 @@ public class CollaborativeWallMetadata {
     return editing;
   }
 
-  public Set<String> getConnectedUsers() {
+  public Set<CollaborativeWallUser> getConnectedUsers() {
     return connectedUsers;
   }
 }

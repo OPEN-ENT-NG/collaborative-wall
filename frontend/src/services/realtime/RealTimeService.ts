@@ -1,7 +1,7 @@
 import {
+  ActionPayload,
   CollaborativeWallNotePayload,
   CollaborativeWallPayload,
-  EventPayload,
   MoveList,
   PickedNoteContent,
   PickedNoteImage,
@@ -20,7 +20,7 @@ export abstract class RealTimeService {
   abstract readonly ready: Promise<void>;
   protected abstract doStart(): Promise<void>;
   protected abstract doStop(): Promise<void>;
-  protected abstract send(payload: EventPayload): Promise<void>;
+  protected abstract send(payload: ActionPayload): Promise<void>;
   //
   // IMPLEMENTATION
   //

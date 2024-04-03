@@ -36,6 +36,7 @@ import net.atos.entng.collaborativewall.CollaborativeWall;
 import net.atos.entng.collaborativewall.controllers.helpers.NotesHelper;
 import net.atos.entng.collaborativewall.events.CollaborativeWallUserAction;
 import net.atos.entng.collaborativewall.explorer.WallExplorerPlugin;
+import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
 import net.atos.entng.collaborativewall.service.CollaborativeWallService;
 import net.atos.entng.collaborativewall.service.NoteService;
 import net.atos.entng.collaborativewall.service.impl.MongoDbCollaborativeWallService;
@@ -67,7 +68,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     private final NotesHelper notesHelper;
     private final WallExplorerPlugin plugin;
     private final CollaborativeWallService collaborativeWallService;
-    private Optional<WallWebSocketController> webSocketController = Optional.empty();
+    private Optional<CollaborativeWallRTService> wallRTService = Optional.empty();
 
 	@Override
 	public void init(Vertx vertx, JsonObject config, RouteMatcher rm,
@@ -96,8 +97,8 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         this.collaborativeWallService =  new MongoDbCollaborativeWallService(this.getCrudService(), noteService, securedActions);
     }
 
-    public void setWebSocketController(final WallWebSocketController webSocketController) {
-        this.webSocketController = Optional.ofNullable(webSocketController);
+    public void setWallRTService(final CollaborativeWallRTService wallRTService) {
+        this.wallRTService = Optional.ofNullable(wallRTService);
     }
 
     @Override
@@ -424,22 +425,19 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @Put("/:id/event")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void realtimeFallback(HttpServerRequest request) {
-        if(!this.webSocketController.isPresent()){
+        if(!this.wallRTService.isPresent()){
             log.warn("Realtime fallback is disabled");
             renderError(request, new JsonObject().put("error", "realtime.disabled"));
             return;
         }
+        final CollaborativeWallRTService service = this.wallRTService.get();
         // check param
         final String id = request.params().get("id");
         if (id == null || id.trim().isEmpty()) {
             badRequest(request, "invalid.id");
             return;
         }
-        UserUtils.getUserInfos(this.eb, request, user -> {
-            if (user == null) {
-                unauthorized(request);
-                return;
-            }
+        UserUtils.getAuthenticatedUserInfos(this.eb, request).onFailure(e -> unauthorized(request)).onSuccess(user -> {
             // check access to this wall
             this.collaborativeWallService.canAccess(id, user).onFailure(e -> {
                 log.error("An error occurred while checking access to wall", e);
@@ -450,11 +448,9 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                     return;
                 }
                 // get payload
-                RequestUtils.bodyToJson(request, payload -> {
+                RequestUtils.bodyToClass(request,CollaborativeWallUserAction.class).onFailure(e -> badRequest(request, e.getMessage())).onSuccess(action -> {
                     // push events to others users
-                    final String wsId = UUID.randomUUID().toString();
-                    final CollaborativeWallUserAction action = payload.mapTo(CollaborativeWallUserAction.class);
-                    this.webSocketController.get().pushEvent(id, wsId, user, action).onSuccess(e -> {
+                    service.pushEventToAllUsers(id, user, action, true).onSuccess(e -> {
                         noContent(request);
                     }).onFailure(e -> {
                         log.error("An error occurred while pushing event", e);

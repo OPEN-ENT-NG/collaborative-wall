@@ -86,7 +86,7 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
   }
 
   @Override
-  public Future<CollaborativeWallNote> upsertNote(final String wallId, final CollaborativeWallNote note, final UserInfos user) {
+  public Future<CollaborativeWallNote> upsertNote(final String wallId, final CollaborativeWallNote note, final UserInfos user, final boolean checkConcurency) {
     final Promise<CollaborativeWallNote> promise = Promise.promise();
     final String id = note.getId();
     if(StringUtils.isBlank(id)){
@@ -100,7 +100,7 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
       });
     }else{
       // update note
-      this.noteService.update(id, note.toJson(), user, result ->{
+      this.noteService.update(id, note.toJson(), user, checkConcurency, result ->{
         if(result.isRight()){
           promise.complete(note);
         }else{
@@ -112,7 +112,7 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
   }
 
   @Override
-  public Future<CollaborativeWallNote> patchNote(final String wallId, final PatchKind kind, final CollaborativeWallNote note, final UserInfos user) {
+  public Future<CollaborativeWallNote> patchNote(final String wallId, final PatchKind kind, final CollaborativeWallNote note, final UserInfos user, final boolean checkConcurency) {
     final Promise<CollaborativeWallNote> promise = Promise.promise();
     // get and check id
     final String id = note.getId();
@@ -143,7 +143,7 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
           }
         }
         // upsert patched note
-        this.noteService.update(id, patched, user, resUpdate -> {
+        this.noteService.update(id, patched, user, checkConcurency, resUpdate -> {
           if(resUpdate.isLeft()){
             promise.fail(resUpdate.left().getValue());
           }else{
@@ -156,7 +156,7 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
   }
 
   @Override
-  public Future<Void> deleteNote(final String wallId, final String noteId, final UserInfos user) {
+  public Future<Void> deleteNote(final String wallId, final String noteId, final UserInfos user, final boolean checkConcurency) {
     final Promise<Void> promise = Promise.promise();
     // get last version of the note
     this.noteService.get(noteId, resGet ->{
@@ -166,7 +166,7 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
         // skip concurrency
         final Long modified = resGet.right().getValue().getJsonObject(MongoDbNoteService.NOTES_FIELD_MODIFIED, new JsonObject()).getLong(MongoDbNoteService.NOTES_MODIFIED_ATTR_DATE, 0l);
         // delete note
-        this.noteService.delete(noteId, modified, user, result ->{
+        this.noteService.delete(noteId, modified, user, checkConcurency, result ->{
           if(result.isRight()){
             promise.complete();
           }else{
@@ -187,6 +187,10 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
       final JsonArray shared = wall.getJsonArray("shared", new JsonArray());
       return new ShareModel(shared, this.securedActions, ownerId);
     }).map(shared -> {
+      // check creator right
+      if(shared.getCreatorId().isPresent() && shared.getCreatorId().get().equals(user.getUserId())){
+        return true;
+      }
       // check user rights
       final Set<ShareRoles> userRights = shared.getNormalizedRightsByUser().getOrDefault(user.getUserId(), Collections.EMPTY_SET);
       if(!userRights.isEmpty()){

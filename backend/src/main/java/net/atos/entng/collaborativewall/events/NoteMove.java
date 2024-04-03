@@ -8,20 +8,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NoteMove {
-    private final Long x;
-    private final Long y;
+    private final long x;
+    private final long y;
 
     @JsonCreator
-    public NoteMove(@JsonProperty("x") Long x, @JsonProperty("y") Long y) {
+    public NoteMove(@JsonProperty("x") long x, @JsonProperty("y") long y) {
         this.x = x;
         this.y = y;
     }
 
-    public Long getX() {
+    public long getX() {
         return x;
     }
 
-    public Long getY() {
+    public long getY() {
         return y;
     }
 }

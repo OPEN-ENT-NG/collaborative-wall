@@ -3,6 +3,7 @@ package net.atos.entng.collaborativewall.events;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.entcore.common.user.UserInfos;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,7 +18,7 @@ public class CollaborativeWallUsersMetadata {
   /** Users currently editing notes.*/
   private final List<CollaborativeWallEditingInformation> editing;
   /** Connected users*/
-  private final Set<String> connectedUsers;
+  private final Set<CollaborativeWallUser> connectedUsers;
 
   public CollaborativeWallUsersMetadata() {
     this.editing = new ArrayList<>();
@@ -26,7 +27,7 @@ public class CollaborativeWallUsersMetadata {
 
   @JsonCreator
   public CollaborativeWallUsersMetadata(@JsonProperty("editing") final List<CollaborativeWallEditingInformation> editing,
-                                        @JsonProperty("connectedUsers") final Set<String> connectedUsers) {
+                                        @JsonProperty("connectedUsers") final Set<CollaborativeWallUser> connectedUsers) {
     this.editing = editing;
     this.connectedUsers = connectedUsers;
   }
@@ -35,8 +36,17 @@ public class CollaborativeWallUsersMetadata {
     return editing;
   }
 
-  public Set<String> getConnectedUsers() {
+  public Set<CollaborativeWallUser> getConnectedUsers() {
     return connectedUsers;
+  }
+
+  public void addConnectedUser(final UserInfos user){
+    this.connectedUsers.add(new CollaborativeWallUser(user.getUserId(), user.getUsername()));
+  }
+
+  public void removeConnectedUser(final String userId){
+    this.connectedUsers.removeIf(user -> user.getId().equals(userId));
+    this.getEditing().removeIf(info -> info.getUserId().equals(userId));
   }
 
   public static CollaborativeWallUsersMetadata merge(final CollaborativeWallUsersMetadata context1,
@@ -44,7 +54,7 @@ public class CollaborativeWallUsersMetadata {
     final List<CollaborativeWallEditingInformation> concatEditing = new ArrayList<>();
     concatEditing.addAll(context1.getEditing());
     concatEditing.addAll(context2.getEditing());
-    final Set<String> concatUsers = new HashSet<>();
+    final Set<CollaborativeWallUser> concatUsers = new HashSet<>();
     concatUsers.addAll(context1.getConnectedUsers());
     concatUsers.addAll(context2.getConnectedUsers());
     return new CollaborativeWallUsersMetadata(concatEditing, concatUsers);

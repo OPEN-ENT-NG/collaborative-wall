@@ -84,22 +84,24 @@ public class MongoDbNoteService implements NoteService {
         crudService.create(note, user, handler);
     }
 
+    @Override
     @ApiDoc("Allows to delete a collaborative wall associated to the given identifier")
-    public void update(String id, JsonObject note, UserInfos user, Handler<Either<String, JsonObject>> handler) {
+    public void update(String id, JsonObject note, UserInfos user, boolean checkConcurency, Handler<Either<String, JsonObject>> handler) {
         if (note == null) {
             handler.handle(new Either.Left<String, JsonObject>("KO"));
             return;
         }
-        updateDBWithConncurrentAccessControl(id, note.getJsonObject(NOTES_FIELD_MODIFIED).getLong(NOTES_MODIFIED_ATTR_DATE), user, handler, note);
+        updateDBWithConncurrentAccessControl(id, note.getJsonObject(NOTES_FIELD_MODIFIED).getLong(NOTES_MODIFIED_ATTR_DATE), user, handler, note, checkConcurency);
 
     }
 
-    public void delete(String id, Long lastEdit, UserInfos user, Handler<Either<String, JsonObject>> handler) {
-        updateDBWithConncurrentAccessControl(id, lastEdit, user, handler, null);
+    @Override
+    public void delete(String id, Long lastEdit, UserInfos user, boolean checkConcurency, Handler<Either<String, JsonObject>> handler) {
+        updateDBWithConncurrentAccessControl(id, lastEdit, user, handler, null, checkConcurency);
     }
 
 
-    private void updateDBWithConncurrentAccessControl(final String id, final Long lastEdit, final UserInfos user, final Handler<Either<String, JsonObject>> handler, final JsonObject note) {
+    private void updateDBWithConncurrentAccessControl(final String id, final Long lastEdit, final UserInfos user, final Handler<Either<String, JsonObject>> handler, final JsonObject note, final boolean checkConcurrency) {
         //Check if delete is allowed : lastEdit dates from front and in db must matched
         crudService.retrieve(id, user, new Handler<Either<String, JsonObject>>() {
             @Override
@@ -115,7 +117,7 @@ public class MongoDbNoteService implements NoteService {
 
                     Long lastEditDB = noteDB.getJsonObject(NOTES_FIELD_MODIFIED).getLong(NOTES_MODIFIED_ATTR_DATE);
 
-                    if (lastEditDB != null && !lastEditDB.equals(lastEdit)) {
+                    if (lastEditDB != null && !lastEditDB.equals(lastEdit) && checkConcurrency) {
                         //Concurrent access
                         handler.handle(new Either.Left<String, JsonObject>(ERROR_CODE_ACCESS_CONCURRENT));
                     } else {

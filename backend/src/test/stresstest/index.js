@@ -111,9 +111,6 @@ function startWSSession(wallId, user) {
         report.onSentMessage(newPayload);
       }
       report.onReceivedMessage(payload);
-      if (report.countReceivedMessages === nbExpectedMEssages) {
-        ws.close();
-      }
     });
     ws.addEventListener("error", (data) => {
       console.error(data);

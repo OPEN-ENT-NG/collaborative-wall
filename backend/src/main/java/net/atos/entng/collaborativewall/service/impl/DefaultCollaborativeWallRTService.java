@@ -41,7 +41,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     private final long reConnectionDelay;
     private long restartAttempt = 0;
     private final List<Handler<RealTimeStatus>> statusSubscribers;
-    private final List<Handler<List<CollaborativeWallMessage>>> messagesSubscribers;
+    private final List<Handler<CollaborativeWallMessageWrapper>> messagesSubscribers;
 
     private final Map<String, CollaborativeWallUsersMetadata> metadataByWallId;
 
@@ -114,6 +114,29 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             }
         }
         return future;
+    }
+    @Override
+    public Future<List<CollaborativeWallMessage>> pushEventToAllUsers(final String wallId,final UserInfos session, final CollaborativeWallUserAction action, final boolean checkConcurency) {
+        return pushEvent(wallId, session, action, "", checkConcurency);
+    }
+
+    @Override
+    public Future<List<CollaborativeWallMessage>> pushEvent(final String wallId,final UserInfos session, final CollaborativeWallUserAction action, final String wsId, final boolean checkConcurency){
+        return this.onNewUserAction(action, wallId, wsId, session, checkConcurency)
+                .onSuccess(messages -> this.broadcastMessagesToUsers(messages, true, false, wsId));
+    }
+
+    private void broadcastMessagesToUsers(final List<CollaborativeWallMessage> messages,
+                                                  final boolean allowInternalMessages,
+                                                  final boolean allowExternalMessages,
+                                                  final String exceptWsId) {
+        for (final Handler<CollaborativeWallMessageWrapper> messagesSubscriber : this.messagesSubscribers) {
+            try {
+                messagesSubscriber.handle(new CollaborativeWallMessageWrapper(messages, allowInternalMessages, allowExternalMessages, exceptWsId));
+            } catch (Exception e) {
+                log.error("An error occurred while sending a message to users", e);
+            }
+        }
     }
 
     private Future<Void> publishContextLoop() {
@@ -219,13 +242,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             log.debug("WebSocketHandler: message skipped because it was emitted by this server");
         } else {
             final List<CollaborativeWallMessage> messages = newArrayList(message);
-            for (Handler<List<CollaborativeWallMessage>> messagesSubscriber : this.messagesSubscribers) {
-                try {
-                    messagesSubscriber.handle(messages);
-                } catch (Exception e) {
-                    log.error("An error occurred while receiving a message from Redis", e);
-                }
-            }
+            this.broadcastMessagesToUsers(messages, false, true, null);
         }
     }
 
@@ -269,19 +286,19 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     }
 
     @Override
-    public Future<List<CollaborativeWallMessage>> onNewConnection(String wallId, String userId, final String wsId) {
+    public Future<List<CollaborativeWallMessage>> onNewConnection(String wallId, UserInfos user, final String wsId) {
         // Create a message for the user new connection
         // Update this server context for the wall
         // Publish the context
         // Get the context of other servers
         // Create a message with the wall context
-        final CollaborativeWallMessage newUserMessage = this.messageFactory.connection(wallId, wsId, userId);
+        final CollaborativeWallMessage newUserMessage = this.messageFactory.connection(wallId, wsId, user.getUserId());
         return CompositeFuture.all(
                         this.collaborativeWallService.getWall(wallId),
                         this.collaborativeWallService.getNotesOfWall(wallId)
                 ).flatMap(wall -> {
                     final CollaborativeWallUsersMetadata context = metadataByWallId.computeIfAbsent(wallId, k -> new CollaborativeWallUsersMetadata());
-                    context.getConnectedUsers().add(userId);
+                    context.addConnectedUser(user);
                     publishMetadata();
                     return this.getUsersContext(wallId).map(userContext -> Pair.of(wall, userContext));
                 })
@@ -289,7 +306,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
                     final JsonObject wall = context.getKey().resultAt(0);
                     final List<JsonObject> notes = context.getKey().resultAt(1);
                     final CollaborativeWallUsersMetadata userContext = context.getRight();
-                    return this.messageFactory.metadata(wallId, wsId, userId,
+                    return this.messageFactory.metadata(wallId, wsId, user.getUserId(),
                             new CollaborativeWallMetadata(wall, notes, userContext.getEditing(), userContext.getConnectedUsers()));
                 })
                 .map(contextMessage -> newArrayList(newUserMessage, contextMessage))
@@ -353,8 +370,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
         final CollaborativeWallMessage disconnectedUserMessage = this.messageFactory.disconnection(wallId, wsId, userId);
         final CollaborativeWallUsersMetadata context = this.metadataByWallId.get(wallId);
         if (context != null) {
-            context.getConnectedUsers().remove(userId);
-            context.getEditing().removeIf(info -> info.getUserId().equals(userId));
+            context.removeConnectedUser(userId);
             publishMetadata();
         }
         final List<CollaborativeWallMessage> messages = newArrayList(disconnectedUserMessage);
@@ -362,7 +378,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     }
 
     @Override
-    public Future<List<CollaborativeWallMessage>> onNewUserAction(final CollaborativeWallUserAction action, String wallId, String wsId, final UserInfos user) {
+    public Future<List<CollaborativeWallMessage>> onNewUserAction(final CollaborativeWallUserAction action, String wallId, String wsId, final UserInfos user, final boolean checkConcurency) {
         // Register (if need be) the data in the message
         // Notify other apps via Redis
         // Send back the same messages to be handled internally
@@ -372,7 +388,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
         } else {
             try {
                 if (action.isValid()) {
-                    return executeAction(action, wallId, wsId, user)
+                    return executeAction(action, wallId, wsId, user, checkConcurency)
                             .compose(messagesToBroadcast -> publishMessagesOnRedis(messagesToBroadcast).map(messagesToBroadcast));
                 } else {
                     return Future.failedFuture("wall.action.invalid");
@@ -383,7 +399,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
         }
     }
 
-    private Future<List<CollaborativeWallMessage>> executeAction(final CollaborativeWallUserAction action, String wallId, String wsId, final UserInfos user) {
+    private Future<List<CollaborativeWallMessage>> executeAction(final CollaborativeWallUserAction action, String wallId, String wsId, final UserInfos user, final boolean checkConcurency) {
         final CollaborativeWallUsersMetadata context = metadataByWallId.computeIfAbsent(wallId, k -> new CollaborativeWallUsersMetadata());
         switch (action.getType()) {
             // a new client has been dis/connected => message already broadcasted in onNewConnection() / onUserDisconnection()
@@ -417,12 +433,12 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             }
             case noteAdded: {
                 // client has added a note => upsert then broadcast to other users
-                return this.collaborativeWallService.upsertNote(wallId, action.getNote(), user)
+                return this.collaborativeWallService.upsertNote(wallId, action.getNote(), user, checkConcurency)
                         .map(saved -> newArrayList(this.messageFactory.noteAdded(wallId, wsId, user.getUserId(), saved)));
             }
             case noteDeleted: {
                 // client has added a note => delete then broadcast to other users
-                return this.collaborativeWallService.deleteNote(wallId, action.getNoteId(), user)
+                return this.collaborativeWallService.deleteNote(wallId, action.getNoteId(), user, checkConcurency)
                         .map(deleted -> newArrayList(this.messageFactory.noteDeleted(wallId, wsId, user.getUserId(), action.getNoteId())));
             }
             case noteEditionEnded: {
@@ -439,17 +455,17 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             }
             case noteImageUpdated: {
                 // client has updated the image's note => upsert then broadcast to other users
-                return this.collaborativeWallService.patchNote(wallId, PatchKind.Image, action.getNote(), user)
+                return this.collaborativeWallService.patchNote(wallId, PatchKind.Image, action.getNote(), user, checkConcurency)
                         .map(saved -> newArrayList(this.messageFactory.noteImageUpdated(wallId, wsId, user.getUserId(), saved)));
             }
             case noteMoved: {
-                // client has updated the image's note => upsert then broadcast to other users
-                return this.collaborativeWallService.patchNote(wallId, PatchKind.Position, action.getNote(), user)
+                // client has moved the note => patch then broadcast to other users
+                return this.collaborativeWallService.patchNote(wallId, PatchKind.Position, action.getNote(), user, checkConcurency)
                         .map(saved -> newArrayList(this.messageFactory.noteMoved(wallId, wsId, user.getUserId(), saved)));
             }
             case noteTextUpdated: {
                 // client has updated the image's note => upsert then broadcast to other users
-                return this.collaborativeWallService.patchNote(wallId, PatchKind.Text, action.getNote(), user)
+                return this.collaborativeWallService.patchNote(wallId, PatchKind.Text, action.getNote(), user, checkConcurency)
                         .map(saved -> newArrayList(this.messageFactory.noteTextUpdated(wallId, wsId, user.getUserId(), saved)));
             }
             case noteSelected: {
@@ -517,7 +533,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     }
 
     @Override
-    public void subscribeToNewMessagesToSend(Handler<List<CollaborativeWallMessage>> messagesHandler) {
+    public void subscribeToNewMessagesToSend(Handler<CollaborativeWallMessageWrapper> messagesHandler) {
         this.messagesSubscribers.add(messagesHandler);
     }
 
