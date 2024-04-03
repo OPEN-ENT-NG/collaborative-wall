@@ -2,7 +2,6 @@ import { useEffect } from "react";
 
 import { QueryClient, useQueries } from "@tanstack/react-query";
 import { LoaderFunctionArgs, useParams } from "react-router-dom";
-import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 
 import { Note } from "~/components/note";
 import {
@@ -70,14 +69,11 @@ export const CollaborativeWall = () => {
 
   return (
     <div className="print-full-page">
-      <TransformWrapper
-        initialScale={1000 / wallConfig.WIDTH_WALL}
-        disabled={true}
-      >
-        <TransformComponent
-          wrapperStyle={{
-            maxWidth: "1000px",
-            maxHeight: "calc(100vh)",
+      <div className="transform-wrapper-print">
+        <div
+          className="transform-component-print"
+          style={{
+            transform: `scale(${1000 / wallConfig.WIDTH_WALL}) translate(0px, 0px)`,
           }}
         >
           <div
@@ -114,8 +110,8 @@ export const CollaborativeWall = () => {
                 })}
             </div>
           </div>
-        </TransformComponent>
-      </TransformWrapper>
+        </div>
+      </div>
     </div>
   );
 };
