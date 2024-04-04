@@ -83,7 +83,7 @@ export const Note = ({
     >
       <Card className={classes} isSelectable={false}>
         <Card.Body>
-          {note.media && <ShowMediaType media={note.media}></ShowMediaType>}
+          {note.media?.url && <ShowMediaType media={note.media} />}
           <Card.Text
             className={`text-truncate ${note.media ? "text-truncate-8" : "text-truncate-12"}`}
           >
