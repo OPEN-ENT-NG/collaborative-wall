@@ -1,5 +1,6 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 
+import { useHotkeys } from "@mantine/hooks";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { TransformComponent } from "react-zoom-pan-pinch";
@@ -46,59 +47,27 @@ export const WhiteboardComponent = ({
     })),
   );
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    /* This is just a test but create a note with cmd + k */
-    if (event.metaKey && event.key === "k") {
-      //createNote();
-    }
-
-    /* Enable moveboard when space is pressed */
-    if (event.code === "Space") {
-      event.preventDefault();
-      setCanMoveNote(false);
-    }
-  };
-
-  /* Disable moveboard when space is released */
-  const handleKeyUp = (event: KeyboardEvent) => {
-    if (event.code === "Space") {
-      event.preventDefault();
-      setCanMoveNote(true);
-    }
-    if (canMoveNote && event.key === "v") {
-      setCanMoveNote(true);
-      setCanMoveBoard(false);
-    }
-    if (event.key === "h") {
-      setCanMoveBoard(true);
-      setCanMoveNote(false);
-    }
-
-    if (event.key === "-") {
-      zoomOut(zoomConfig.SCALE_ZOOM);
-    }
-    if (event.key === "=" || event.key === "+") {
-      zoomIn(zoomConfig.SCALE_ZOOM);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("keyup", handleKeyUp);
-
-    return () => {
-      window.removeEventListener("keyup", handleKeyUp);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // hot keys for moving and zooming board
+  useHotkeys([
+    ["Space", () => setCanMoveNote(!canMoveNote)],
+    [
+      "V",
+      () => {
+        setCanMoveNote(true);
+        setCanMoveBoard(false);
+      },
+    ],
+    [
+      "H",
+      () => {
+        setCanMoveNote(false);
+        setCanMoveBoard(true);
+      },
+    ],
+    ["-", () => zoomOut(zoomConfig.SCALE_ZOOM)],
+    ["+", () => zoomIn(zoomConfig.SCALE_ZOOM)],
+    ["=", () => zoomIn(zoomConfig.SCALE_ZOOM)],
+  ]);
 
   return (
     <>
