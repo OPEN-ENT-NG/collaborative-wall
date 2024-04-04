@@ -1,5 +1,5 @@
 #!/bin/bash
-
+GIT_BRANCH=develop
 # Options
 NO_DOCKER=""
 for i in "$@"
@@ -61,6 +61,7 @@ doInit () {
     echo "[init] Get branch name from git..."
     BRANCH_NAME=`git branch | sed -n -e "s/^\* \(.*\)/\1/p"`
   fi
+  echo "BRANCH_NAME = $BRANCH_NAME"
 
   echo "[init] Generate package.json from package.json.template..."
   NPM_VERSION_SUFFIX=`date +"%Y%m%d%H%M"`
