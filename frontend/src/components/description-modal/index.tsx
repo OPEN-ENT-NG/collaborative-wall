@@ -1,17 +1,22 @@
 import { Modal, Button, useOdeClient } from "@edifice-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
+import { wallQueryOptions } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 
-export default function DescriptionModal({
-  description,
-}: {
-  description: string;
-}): JSX.Element | null {
+export default function DescriptionModal(): JSX.Element | null {
   const { appCode } = useOdeClient();
   const { t } = useTranslation();
+  const params = useParams();
+
+  const { data: wall } = useQuery({
+    queryKey: wallQueryOptions(params.wallId as string).queryKey,
+    queryFn: wallQueryOptions(params.wallId as string).queryFn,
+  });
 
   const { openDescriptionModal, seOpenDescriptionModal } = useWhiteboard(
     useShallow((state) => ({
@@ -35,7 +40,7 @@ export default function DescriptionModal({
             {t("collaborativewall.modal.description", { ns: appCode })}
           </Modal.Header>
           <Modal.Body>
-            <p>{description}</p>
+            <p>{wall?.description}</p>
           </Modal.Body>
           <Modal.Footer>
             <Button

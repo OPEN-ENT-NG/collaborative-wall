@@ -167,15 +167,13 @@ export const CollaborativeWall = () => {
         <AppHeader
           isFullscreen
           style={{ position: "sticky" }}
-          render={() => <AppActions idWall={wall?._id} />}
+          render={() => <AppActions />}
         >
           <Breadcrumb app={currentApp as IWebApp} name={wall?.name} />
         </AppHeader>
       )}
       <div className="collaborativewall-container">
-        {wall?.description && !isMobile && (
-          <DescriptionWall description={wall?.description} />
-        )}
+        {wall?.description && !isMobile && <DescriptionWall />}
         <WhiteboardWrapper>
           <DndContext
             sensors={sensors}
@@ -208,9 +206,7 @@ export const CollaborativeWall = () => {
 
         <Outlet />
 
-        {wall?.description && (
-          <DescriptionModal description={wall.description} />
-        )}
+        {wall?.description && <DescriptionModal />}
         {wall && (
           <BackgroundModal
             setIsOpen={setIsOpenBackgroundModal}

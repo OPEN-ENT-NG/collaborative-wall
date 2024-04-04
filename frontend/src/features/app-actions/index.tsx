@@ -14,11 +14,13 @@ import {
   useOdeClient,
   DropdownMenuOptions,
 } from "@edifice-ui/react";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
 import { useAccess } from "~/hooks/useAccess";
+import { wallQueryOptions } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 
 export type ActionDropdownMenuOptions = DropdownMenuOptions & {
@@ -26,11 +28,17 @@ export type ActionDropdownMenuOptions = DropdownMenuOptions & {
   visibility?: boolean;
 };
 
-export const AppActions = ({ idWall }: { idWall: string | undefined }) => {
+export const AppActions = () => {
   const { isCreator, isManager } = useAccess();
   const { appCode } = useOdeClient();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const params = useParams();
+
+  const { data: wall } = useQuery({
+    queryKey: wallQueryOptions(params.wallId as string).queryKey,
+    queryFn: wallQueryOptions(params.wallId as string).queryFn,
+  });
 
   const { setOpenShareModal, setOpenUpdateModal, setIsOpenBackgroundModal } =
     useWhiteboard(
@@ -67,7 +75,7 @@ export const AppActions = ({ idWall }: { idWall: string | undefined }) => {
       id: "print",
       label: t("print"),
       icon: <Print />,
-      action: () => navigate(`/print/id/${idWall}`),
+      action: () => navigate(`/print/id/${wall?._id}`),
       visibility: true,
     },
   ];
