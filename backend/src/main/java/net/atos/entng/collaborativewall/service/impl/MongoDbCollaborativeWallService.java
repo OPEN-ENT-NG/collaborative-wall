@@ -133,7 +133,7 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
             break;
           }
           case Image:{
-            patched.put("media", note.getMedia());
+            patched.put("media", note.getMedia().toJson());
             break;
           }
           case Position:{

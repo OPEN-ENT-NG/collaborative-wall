@@ -437,7 +437,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
             badRequest(request, "invalid.id");
             return;
         }
-        UserUtils.getAuthenticatedUserInfos(this.eb, request).onFailure(e -> unauthorized(request)).onSuccess(user -> {
+        UserUtils.getAuthenticatedUserInfos(this.eb, request).onSuccess(user -> {
             // check access to this wall
             this.collaborativeWallService.canAccess(id, user).onFailure(e -> {
                 log.error("An error occurred while checking access to wall", e);
@@ -448,7 +448,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                     return;
                 }
                 // get payload
-                RequestUtils.bodyToClass(request,CollaborativeWallUserAction.class).onFailure(e -> badRequest(request, e.getMessage())).onSuccess(action -> {
+                RequestUtils.bodyToClass(request,CollaborativeWallUserAction.class).onSuccess(action -> {
                     // push events to others users
                     service.pushEventToAllUsers(id, user, action, true).onSuccess(e -> {
                         noContent(request);

@@ -20,7 +20,7 @@ public class CollaborativeWallNote {
   private final Long y;
   private final List<String> color;
   private final String lastEdit;
-  private final JsonObject media;
+  private final CollaborativeWallNoteMedia media;
   private final String idwall;
 
   @JsonCreator
@@ -31,7 +31,7 @@ public class CollaborativeWallNote {
                                @JsonProperty("y") final Long y,
                                @JsonProperty("color") final List<String> color,
                                @JsonProperty("lastEdit") final String lastEdit,
-                               @JsonProperty("media") final Map<String, Object> media,
+                               @JsonProperty("media") final CollaborativeWallNoteMedia media,
                                @JsonProperty("idwall") final String idwall) {
     this.id = id;
     this.content = content;
@@ -40,12 +40,12 @@ public class CollaborativeWallNote {
     this.y = y;
     this.color = color;
     this.lastEdit = lastEdit;
-    this.media = new JsonObject(media);
+    this.media = media;
     this.idwall = idwall;
   }
 
   public CollaborativeWallNote(final String id, final CollaborativeWallNote other) {
-    this(id, other.content, new HashMap<>(other.owner.getMap()), other.x, other.y, new ArrayList<>(other.color), other.lastEdit, new HashMap<>(other.media.getMap()), other.idwall);
+    this(id, other.content, new HashMap<>(other.owner.getMap()), other.x, other.y, new ArrayList<>(other.color), other.lastEdit, new CollaborativeWallNoteMedia(other.media), other.idwall);
   }
 
   public String getId() {
@@ -81,7 +81,7 @@ public class CollaborativeWallNote {
     return lastEdit;
   }
 
-  public JsonObject getMedia() {
+  public CollaborativeWallNoteMedia getMedia() {
     return media;
   }
 

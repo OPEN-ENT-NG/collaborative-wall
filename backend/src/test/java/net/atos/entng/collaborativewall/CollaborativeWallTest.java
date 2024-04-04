@@ -3,8 +3,10 @@ package net.atos.entng.collaborativewall;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
+import net.atos.entng.collaborativewall.events.CollaborativeWallBackground;
 import net.atos.entng.collaborativewall.events.CollaborativeWallDetails;
 import net.atos.entng.collaborativewall.events.CollaborativeWallNote;
+import net.atos.entng.collaborativewall.events.CollaborativeWallNoteMedia;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -15,7 +17,7 @@ public class CollaborativeWallTest {
 
     @Test
     public void shouldSerializeNote(TestContext context) {
-        final CollaborativeWallNote note = new CollaborativeWallNote("ID", "CONTANT", new JsonObject().put("_id", "ID").getMap(), 10l, 10l, new ArrayList<>(), "LAS", new JsonObject().put("url", "URL").getMap(), "WALLID");
+        final CollaborativeWallNote note = new CollaborativeWallNote("ID", "CONTANT", new JsonObject().put("_id", "ID").getMap(), 10l, 10l, new ArrayList<>(), "LAS", new CollaborativeWallNoteMedia("ID", "NAME", "APP", "TYPE", "URL"), "WALLID");
         // parse
         final String toJson1 = note.toJson().toString();
         // parse then serialize
@@ -25,7 +27,7 @@ public class CollaborativeWallTest {
 
     @Test
     public void shouldSerializeWall(TestContext context) {
-        final CollaborativeWallDetails note = new CollaborativeWallDetails("ID", "NAME", "DESCRIPTION", new JsonObject().put("color", "RED").getMap(), "ICON");
+        final CollaborativeWallDetails note = new CollaborativeWallDetails("ID", "NAME", "DESCRIPTION", new CollaborativeWallBackground("path/to/image", "RED"), "ICON");
         // parse
         final String toJson1 = note.toJson().toString();
         // parse then serialize

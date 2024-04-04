@@ -17,23 +17,23 @@ public class CollaborativeWallDetails {
   private final String id;
   private final String name;
   private final String description;
-  private final JsonObject background;
+  private final CollaborativeWallBackground background;
   private final String icon;
 
   @JsonCreator
   public CollaborativeWallDetails(@JsonProperty("_id") final String id,
                                   @JsonProperty("name") final String name,
                                   @JsonProperty("description") final String description,
-                                  @JsonProperty("background") final Map<String, Object> background,
+                                  @JsonProperty("background") final CollaborativeWallBackground background,
                                   @JsonProperty("icon") final String icon) {
     this.id = id;
     this.name = name;
     this.description = description;
-    this.background = new JsonObject(background);
+    this.background = background;
     this.icon = icon;
   }
   public CollaborativeWallDetails(final String id, final CollaborativeWallDetails other) {
-    this(id, other.name, other.description, new HashMap<>(other.background.getMap()), other.icon);
+    this(id, other.name, other.description, other.background, other.icon);
   }
 
 
@@ -49,7 +49,7 @@ public class CollaborativeWallDetails {
     return description;
   }
 
-  public JsonObject getBackground() {
+  public CollaborativeWallBackground getBackground() {
     return background;
   }
 
