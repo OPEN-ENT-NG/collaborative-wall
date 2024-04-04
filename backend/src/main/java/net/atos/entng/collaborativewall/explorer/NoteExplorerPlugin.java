@@ -1,6 +1,5 @@
 package net.atos.entng.collaborativewall.explorer;
 
-import com.mongodb.QueryBuilder;
 import fr.wseduc.mongodb.MongoQueryBuilder;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -16,6 +15,8 @@ import org.entcore.common.user.UserInfos;
 
 import java.util.Collection;
 import java.util.Optional;
+
+import static com.mongodb.client.model.Filters.in;
 
 public class NoteExplorerPlugin extends ExplorerSubResourceMongo {
     public static final String COLLECTION = CollaborativeWall.COLLABORATIVE_WALL_NOTES_COLLECTION;
@@ -43,7 +44,7 @@ public class NoteExplorerPlugin extends ExplorerSubResourceMongo {
             return Future.succeededFuture();
         }
         final MongoClient mongo = ((WallExplorerPlugin)super.parent).getMongoClient();
-        final JsonObject filter = MongoQueryBuilder.build(QueryBuilder.start("idwall").in(ids));
+        final JsonObject filter = MongoQueryBuilder.build(in("idwall", ids));
         final Promise<MongoClientDeleteResult> promise = Promise.promise();
         log.info("Deleting notes related to deleted wall. Number of walls="+ids.size());
         mongo.removeDocuments(COLLECTION, filter, promise);

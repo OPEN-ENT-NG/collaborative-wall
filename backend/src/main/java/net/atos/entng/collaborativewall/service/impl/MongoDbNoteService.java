@@ -18,7 +18,6 @@
  */
 package net.atos.entng.collaborativewall.service.impl;
 
-import com.mongodb.QueryBuilder;
 import fr.wseduc.mongodb.MongoDb;
 import fr.wseduc.mongodb.MongoQueryBuilder;
 import fr.wseduc.mongodb.MongoUpdateBuilder;
@@ -28,12 +27,16 @@ import io.vertx.core.Handler;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import net.atos.entng.collaborativewall.service.NoteService;
+import org.bson.conversions.Bson;
 import org.entcore.common.mongodb.MongoDbResult;
 import org.entcore.common.service.CrudService;
 import org.entcore.common.service.impl.MongoDbCrudService;
 import org.entcore.common.user.UserInfos;
 
 import java.util.Iterator;
+
+import static com.mongodb.client.model.Filters.*;
+
 
 public class MongoDbNoteService implements NoteService {
 
@@ -65,7 +68,7 @@ public class MongoDbNoteService implements NoteService {
     }
 
     public void listAllNotes(String idWall, Handler<Either<String, JsonArray>> callback) {
-        QueryBuilder query = QueryBuilder.start(NOTES_FIELD_IDWALL).is(idWall);
+        Bson query = eq(NOTES_FIELD_IDWALL, idWall);
 
         JsonObject sort = new JsonObject().put(NOTES_FIELD_LAST_EDIT, 1);
 
@@ -76,7 +79,7 @@ public class MongoDbNoteService implements NoteService {
     @Override
     @ApiDoc("Retrieve note by id")
     public void get(String id, Handler<Either<String, JsonObject>> callback) {
-        QueryBuilder query = QueryBuilder.start(NOTES_FIELD_ID).is(id);
+        final Bson query = eq(NOTES_FIELD_ID, id);
         mongo.findOne(COLLABORATIVEWALL_NOTES, MongoQueryBuilder.build(query), MongoDbResult.validResultHandler(callback));
     }
 
@@ -154,7 +157,7 @@ public class MongoDbNoteService implements NoteService {
     }
 
     private void update(String id, JsonObject data, Handler<Either<String, JsonObject>> handler) {
-        QueryBuilder query = QueryBuilder.start("_id").is(id);
+        Bson query = eq("_id", id);
         MongoUpdateBuilder modifier = new MongoUpdateBuilder();
         Iterator var7 = data.fieldNames().iterator();
 

@@ -19,6 +19,7 @@
 
 package net.atos.entng.collaborativewall;
 
+import io.vertx.core.Promise;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
 import net.atos.entng.collaborativewall.controllers.CollaborativeWallController;
@@ -60,9 +61,8 @@ public class CollaborativeWall extends BaseServer {
     /**
      * Entry point of the Vert.x module
      */
-    @Override
-    public void start() throws Exception {
-        super.start();
+    public void start(Promise<Void> startPromise) throws Exception {
+        super.start(startPromise);
         // wrap repository event
         final IExplorerPluginClient mainClient = IExplorerPluginClient.withBus(vertx, APPLICATION, TYPE);
         final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();
@@ -129,6 +129,7 @@ public class CollaborativeWall extends BaseServer {
                 });
         }
         this.plugin.start();
+        startPromise.tryComplete();
     }
 
     @Override

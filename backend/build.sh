@@ -14,6 +14,13 @@ case $i in
 esac
 done
 
+MVN_OPTS="-Duser.home=/var/maven"
+
+if [ ! -e node_modules ]
+then
+  mkdir node_modules
+fi
+
 case `uname -s` in
   MINGW* | Darwin*)
     USER_UID=1000
@@ -27,52 +34,91 @@ case `uname -s` in
     fi
 esac
 
-# Nettoyage du dossier `backend`
-function clean() {
+# options
+SPRINGBOARD="recette"
+for i in "$@"
+do
+case $i in
+    -s=*|--springboard=*)
+    SPRINGBOARD="${i#*=}"
+    shift
+    ;;
+    *)
+    ;;
+esac
+done
+
+init() {
+  me=`id -u`:`id -g`
+  echo "DEFAULT_DOCKER_USER=$me" > .env
+}
+
+clean () {
   echo "Cleaning..."
   if [ "$NO_DOCKER" = "true" ] ; then
-    gradle clean
+    mvn clean
   else
-    docker-compose run --rm -u "$USER_UID:$GROUP_GID" gradle gradle clean
+    docker compose run --rm maven mvn $MVN_OPTS clean
   fi
   echo "Clean done!"
 }
 
-function build() {
-  echo "Building..."
+build () {
   if [ "$NO_DOCKER" = "true" ] ; then
-    gradle shadowJar install publishToMavenLocal
+    mvn install -DskipTests
   else
-    docker-compose run --rm -u "$USER_UID:$GROUP_GID" gradle gradle shadowJar install publishToMavenLocal
+    docker compose run --rm maven mvn $MVN_OPTS install -DskipTests
   fi
-  echo "Build done!"
 }
 
-function publish() {
-  echo "Publishing..."
-  if [ -e "?/.gradle" ] && [ ! -e "?/.gradle/gradle.properties" ]
-  then
-    echo "odeUsername=$NEXUS_ODE_USERNAME" > "?/.gradle/gradle.properties"
-    echo "odePassword=$NEXUS_ODE_PASSWORD" >> "?/.gradle/gradle.properties"
-    echo "sonatypeUsername=$NEXUS_SONATYPE_USERNAME" >> "?/.gradle/gradle.properties"
-    echo "sonatypePassword=$NEXUS_SONATYPE_PASSWORD" >> "?/.gradle/gradle.properties"
-  fi
+test () {
   if [ "$NO_DOCKER" = "true" ] ; then
-    gradle publish
+    mvn test
   else
-    docker-compose run --rm -u "$USER_UID:$GROUP_GID" gradle gradle publish
+    docker compose run --rm maven mvn $MVN_OPTS test
   fi
-  echo "Publish done!"
+}
+
+publish() {
+  echo "Publishing..."
+  if [ "$NO_DOCKER" = "true" ] ; then
+    version=`mvn help:evaluate -Dexpression=project.version -q -DforceStdout`
+    level=`echo $version | cut -d'-' -f3`
+    case "$level" in
+      *SNAPSHOT) export nexusRepository='snapshots' ;;
+      *)         export nexusRepository='releases' ;;
+    esac
+    mvn -DrepositoryId=ode-$nexusRepository -DskipTests --settings /var/maven/.m2/settings.xml deploy
+  else
+    version=`docker compose run --rm maven mvn $MVN_OPTS help:evaluate -Dexpression=project.version -q -DforceStdout`
+    level=`echo $version | cut -d'-' -f3`
+    case "$level" in
+      *SNAPSHOT) export nexusRepository='snapshots' ;;
+      *)         export nexusRepository='releases' ;;
+    esac
+
+    docker compose run --rm  maven mvn -DrepositoryId=ode-$nexusRepository -DskipTests --settings /var/maven/.m2/settings.xml deploy
+  fi
+}
+
+watch () {
+  docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "node_modules/gulp/bin/gulp.js watch --springboard=/home/node/$SPRINGBOARD"
 }
 
 for param in "$@"
 do
   case $param in
+    init)
+      init
+      ;;
     clean)
       clean
       ;;
     build)
       build
+      ;;
+    test)
+      test
       ;;
     publish)
       publish

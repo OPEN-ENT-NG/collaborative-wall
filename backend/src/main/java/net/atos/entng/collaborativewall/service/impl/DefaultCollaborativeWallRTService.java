@@ -7,10 +7,7 @@ import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import io.vertx.redis.client.Redis;
-import io.vertx.redis.client.RedisAPI;
-import io.vertx.redis.client.RedisOptions;
-import io.vertx.redis.client.Response;
+import io.vertx.redis.client.*;
 import net.atos.entng.collaborativewall.events.*;
 import net.atos.entng.collaborativewall.service.CollaborativeWallMetricsRecorder;
 import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
@@ -25,16 +22,15 @@ import static com.google.common.collect.Lists.newArrayList;
 
 public class DefaultCollaborativeWallRTService implements CollaborativeWallRTService {
 
+    private static final Logger log = LoggerFactory.getLogger(DefaultCollaborativeWallRTService.class);
+
     private final Vertx vertx;
     private final CollaborativeWallService collaborativeWallService;
     private final JsonObject config;
-    private RedisAPI redisSubscriber;
     private RedisAPI redisPublisher;
     private final String serverId;
     private RealTimeStatus realTimeStatus;
     private final CollaborativeMessageFactory messageFactory;
-    private static final Logger log = LoggerFactory.getLogger(DefaultCollaborativeWallRTService.class);
-    private MessageConsumer<Object> ebConsumer;
     private final long reConnectionDelay;
     private long restartAttempt = 0;
     private final List<Handler<RealTimeStatus>> statusSubscribers;
@@ -52,6 +48,9 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
 
     private CollaborativeWallMetricsRecorder metricsRecorder;
     private final long maxConnectedUser;
+
+
+    private final RedisConnectionWrapper subscriberConnection = new RedisConnectionWrapper();
 
     public DefaultCollaborativeWallRTService(Vertx vertx, final JsonObject config,
                                              final CollaborativeWallService collaborativeWallService) {
@@ -80,39 +79,57 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             changeRealTimeStatus(RealTimeStatus.STARTING);
             try {
                 final RedisOptions redisOptions = getRedisOptions(vertx, config);
-                final Redis subscriberClient = Redis.createClient(vertx, redisOptions);
-                redisSubscriber = RedisAPI.api(subscriberClient);
                 final Redis publisherClient = Redis.createClient(vertx, redisOptions);
                 redisPublisher = RedisAPI.api(publisherClient);
-
-                if (this.ebConsumer == null) {
-                    this.ebConsumer = vertx.eventBus().consumer("io.vertx.redis." + channelName);
-                    this.ebConsumer
-                            .handler(m -> this.onNewRedisMessage(((JsonObject) m.body()).getJsonObject("value").getString("message")))
-                            .exceptionHandler(e -> log.error("Uncaught exception while listening to Redis", e));
-                } else {
-                    log.debug("Already listening for collaborative wall redis messages");
-                }
-                final Promise<Void> promise = Promise.promise();
-                log.info("Connecting to Redis....");
-                redisSubscriber.subscribe(newArrayList(channelName), asyncResult -> {
-                            if (asyncResult.succeeded()) {
-                                log.info("Connection to redis established");
-                                changeRealTimeStatus(RealTimeStatus.STARTED);
-                                this.restartAttempt = 0;
-                                promise.complete();
-                            } else {
-                                this.onRedisConnectionStopped(asyncResult.cause()).onComplete(promise);
-                            }
-                        }
-                );
-                future = promise.future();
+                future = listenToRedis();
                 future.onSuccess(e -> publishContextLoop());
             } catch (Exception e) {
                 future = Future.failedFuture(e);
             }
         }
         return future;
+    }
+
+    private Future<Void> listenToRedis() {
+        final Promise<Void> promise = Promise.promise();
+        if(subscriberConnection.alreadyConnected()) {
+            promise.complete();
+        } else {
+            log.info("Connecting to Redis....");
+            Redis.createClient(vertx, getRedisOptions(vertx, config))
+              .connect(onConnect -> {
+                  if (onConnect.succeeded()) {
+                      log.info(".... connection to redis established");
+                      changeRealTimeStatus(RealTimeStatus.STARTED);
+                      this.restartAttempt = 0;
+                      promise.complete();
+                      RedisConnection client = onConnect.result();
+                      subscriberConnection.connection = client;
+                      client.handler(message -> {
+                          try {
+                              if ("message".equals(message.get(0).toString())) {
+                                  String receivedMessage = message.get(2).toString();
+                                  this.onNewRedisMessage(receivedMessage);
+                              }
+                          } catch (Exception e) {
+                              log.error("Cannot treat Redis message " + message, e);
+                          }
+                      }).exceptionHandler(t -> {
+                          log.error("Lost connection to redis", t);
+                          this.listenToRedis();
+                      }).send(Request.cmd(Command.SUBSCRIBE).arg(channelName), subscribeResult -> {
+                          if (subscribeResult.succeeded()) {
+                              log.equals("Subscribed to channel " + channelName + " successfully!");
+                          } else {
+                              log.error("Failed to subscribe: " + subscribeResult.cause());
+                          }
+                      });
+                  } else {
+                      this.onRedisConnectionStopped(onConnect.cause()).onComplete(promise);
+                  }
+              });
+        }
+        return promise.future();
     }
 
     @Override
@@ -233,7 +250,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
 
     private Future<Void> closeAndClean() {
         try {
-            redisSubscriber.close();
+            subscriberConnection.close();
         } catch (Exception e) {
             log.error("Cannot close redis subscriber", e);
         }
@@ -258,6 +275,8 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
 
     private RedisOptions getRedisOptions(Vertx vertx, JsonObject conf) {
         JsonObject redisConfig = conf.getJsonObject("redisConfig");
+
+
         if (redisConfig == null) {
             final String redisConf = (String) vertx.sharedData().getLocalMap("server").get("redisConfig");
             if (redisConf == null) {
@@ -547,4 +566,15 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
         return this.realTimeStatus;
     }
 
+    private class RedisConnectionWrapper {
+        RedisConnection connection;
+
+        public Future<Void> close() {
+            return connection == null ? Future.succeededFuture() : connection.close().onComplete(e -> this.connection = null);
+        }
+
+        public boolean alreadyConnected() {
+            return connection != null;
+        }
+    }
 }
