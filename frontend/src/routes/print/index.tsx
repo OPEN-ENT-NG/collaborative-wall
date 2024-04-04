@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 
+import { Heading } from "@edifice-ui/react";
 import { QueryClient, useQueries } from "@tanstack/react-query";
 import { LoaderFunctionArgs, useParams } from "react-router-dom";
 
@@ -45,6 +46,7 @@ export const wallLoader =
 
 export const CollaborativeWall = () => {
   const params = useParams();
+
   const [{ data: wall }, { data: notes }] = useQueries({
     queries: [
       {
@@ -111,6 +113,11 @@ export const CollaborativeWall = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div>
+        <Heading className="my-16">{wall?.name}</Heading>
+        {wall?.description}
       </div>
     </div>
   );
