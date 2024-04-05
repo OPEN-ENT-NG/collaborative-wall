@@ -129,6 +129,7 @@ export const NoteContent = ({
         toolbar="none"
         variant="ghost"
         focus={editionMode === "read" ? null : "end"}
+        placeholder={t("collaborativewall.modal.note.content.placeholder")}
       />
     </>
   );
