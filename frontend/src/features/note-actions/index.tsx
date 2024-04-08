@@ -1,6 +1,6 @@
 import { Fragment, RefAttributes } from "react";
 
-import { Copy, Delete, Edit, Options } from "@edifice-ui/icons";
+import { Delete, Edit, Options } from "@edifice-ui/icons";
 import {
   Dropdown,
   DropdownMenuOptions,
@@ -41,9 +41,9 @@ export const NoteActions = ({
     navigate(`note/${note._id}?mode=edit`);
   };
 
-  const handleCopy = () => {
-    // TODO
-  };
+  /* const handleCopy = () => {
+    TODO
+  }; */
 
   const handleDelete = async () => {
     await deleteNote.mutateAsync(note);
@@ -69,11 +69,6 @@ export const NoteActions = ({
       label: t("edit"),
       action: handleEdit,
       hidden: !hasRightsToUpdateNote(note),
-    },
-    {
-      icon: <Copy />,
-      label: t("duplicate"),
-      action: handleCopy,
     },
     {
       icon: <Delete />,
