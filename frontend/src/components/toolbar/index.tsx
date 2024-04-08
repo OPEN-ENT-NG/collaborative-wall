@@ -8,6 +8,7 @@ import {
   ZoomOut,
 } from "@edifice-ui/icons";
 import { Toolbar, ToolbarItem, useOdeClient } from "@edifice-ui/react";
+import { useHotkeys } from "@mantine/hooks";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
@@ -43,6 +44,12 @@ export const ToolbarWrapper = ({
   const offsetY = (window.innerHeight - wallConfig.HEIGHT_WALL) / 2;
 
   const { canUndo, canRedo, handleUndo, handleRedo } = useHistory();
+
+  // feat/WB2-1584: hot keys for undo/redo
+  useHotkeys([
+    ["mod+Z", () => canUndo && handleUndo()],
+    ["mod+shift+Z", () => canRedo && handleRedo()],
+  ]);
 
   const { allRolesButRead } = useAccess();
 

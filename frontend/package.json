@@ -51,6 +51,7 @@
     "@edifice-ui/editor": "develop-pedago",
     "@edifice-ui/icons": "develop-pedago",
     "@edifice-ui/react": "develop-pedago",
+    "@mantine/hooks": "7.7.1",
     "@react-spring/web": "9.7.3",
     "@tanstack/react-query": "5.18.0",
     "@tiptap/pm": "2.0.3",

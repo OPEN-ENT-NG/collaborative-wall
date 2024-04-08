@@ -140,6 +140,15 @@
   opacity: 1;
 }
 
+p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  font-style: italic;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
 @media (max-width: 440px) {
   .toolbar {
     bottom: 0px !important;
