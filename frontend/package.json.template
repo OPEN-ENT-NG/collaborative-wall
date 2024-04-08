@@ -51,6 +51,7 @@
     "@edifice-ui/editor": "%packageVersion%",
     "@edifice-ui/icons": "%packageVersion%",
     "@edifice-ui/react": "%packageVersion%",
+    "@mantine/hooks": "7.7.1",
     "@react-spring/web": "9.7.3",
     "@tanstack/react-query": "5.18.0",
     "@tiptap/pm": "2.0.3",
