@@ -11,13 +11,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @RunWith(VertxUnitRunner.class)
 public class CollaborativeWallTest {
 
     @Test
     public void shouldSerializeNote(TestContext context) {
-        final CollaborativeWallNote note = new CollaborativeWallNote("ID", "CONTANT", new JsonObject().put("_id", "ID").getMap(), 10l, 10l, new ArrayList<>(), "LAS", new CollaborativeWallNoteMedia("ID", "NAME", "APP", "TYPE", "URL"), "WALLID");
+        final CollaborativeWallNote note = new CollaborativeWallNote("ID", "CONTANT", new JsonObject().put("_id", "ID").getMap(), 10l, 10l, new ArrayList<>(), "LAS", new CollaborativeWallNoteMedia("ID", "NAME", "APP", "TYPE", "URL"), "WALLID", new HashMap<>());
         // parse
         final String toJson1 = note.toJson().toString();
         // parse then serialize

@@ -110,9 +110,15 @@ public class MongoDbNoteService implements NoteService {
                     JsonObject noteDB = retrieveResponse.right().getValue();
 
                     if(noteDB.size()==0){
-                        //Note doesn't exist any more
-                        handler.handle(new Either.Left<String, JsonObject>(ERROR_CODE_NOTE_NOT_EXISTS));
-                        return;
+                        if (note == null) {
+                            // already deleted
+                            handler.handle(new Either.Right<String, JsonObject>(new JsonObject()));
+                            return;
+                        } else {
+                            //Note doesn't exist any more
+                            handler.handle(new Either.Left<String, JsonObject>(ERROR_CODE_NOTE_NOT_EXISTS));
+                            return;
+                        }
                     }
 
                     Long lastEditDB = noteDB.getJsonObject(NOTES_FIELD_MODIFIED).getLong(NOTES_MODIFIED_ATTR_DATE);

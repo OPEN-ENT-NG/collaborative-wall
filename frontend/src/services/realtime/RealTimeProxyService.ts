@@ -1,7 +1,7 @@
 import { RealTimeHttpService } from "./RealTimeHttpService";
 import { RealTimeService } from "./RealTimeService";
 import { RealTimeWSService } from "./RealTimeWSService";
-import { EventPayload } from "./types";
+import { EventPayload, Subscriber, Subscription } from "./types";
 
 const RETRY_COUNTER = 5;
 
@@ -17,12 +17,17 @@ export class RealTimeProxyService extends RealTimeService {
       this.start();
     }
   }
+  override subscribe(callback: Subscriber): Subscription {
+    if (this.mode === "http") {
+      return this.httpService.subscribe(callback);
+    } else {
+      return this.wsService.subscribe(callback);
+    }
+  }
   override get ready() {
     if (this.mode === "http") {
-      console.log("http");
       return this.httpService.ready;
     } else {
-      console.log("mode:ws");
       return this.wsService.ready;
     }
   }

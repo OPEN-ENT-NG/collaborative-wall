@@ -16,6 +16,7 @@ public class CollaborativeWallNote {
   private final String id;
   private final String content;
   private final JsonObject owner;
+  private final JsonObject modified;
   private final Long x;
   private final Long y;
   private final List<String> color;
@@ -32,10 +33,12 @@ public class CollaborativeWallNote {
                                @JsonProperty("color") final List<String> color,
                                @JsonProperty("lastEdit") final String lastEdit,
                                @JsonProperty("media") final CollaborativeWallNoteMedia media,
-                               @JsonProperty("idwall") final String idwall) {
+                               @JsonProperty("idwall") final String idwall,
+                               @JsonProperty("modified") final Map<String, Object> modified) {
     this.id = id;
     this.content = content;
     this.owner = new JsonObject(owner);
+    this.modified = new JsonObject(modified);
     this.x = x;
     this.y = y;
     this.color = color;
@@ -45,7 +48,7 @@ public class CollaborativeWallNote {
   }
 
   public CollaborativeWallNote(final String id, final CollaborativeWallNote other) {
-    this(id, other.content, new HashMap<>(other.owner.getMap()), other.x, other.y, new ArrayList<>(other.color), other.lastEdit, new CollaborativeWallNoteMedia(other.media), other.idwall);
+    this(id, other.content, new HashMap<>(other.owner.getMap()), other.x, other.y, new ArrayList<>(other.color), other.lastEdit, new CollaborativeWallNoteMedia(other.media), other.idwall, new HashMap<>(other.modified.getMap()));
   }
 
   public String getId() {
@@ -83,6 +86,10 @@ public class CollaborativeWallNote {
 
   public CollaborativeWallNoteMedia getMedia() {
     return media;
+  }
+
+  public JsonObject getModified() {
+    return modified;
   }
 
   public String getIdwall() {

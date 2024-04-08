@@ -9,11 +9,12 @@ import {
 } from "@edifice-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { useAccess } from "~/hooks/useAccess";
+import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteProps } from "~/models/notes";
-import { notesQueryOptions, useDeleteNote } from "~/services/queries";
+import { notesQueryOptions } from "~/services/queries";
 import { useHistoryStore } from "~/store";
 
 export type NoteDropdownMenuOptions = DropdownMenuOptions & {
@@ -31,8 +32,9 @@ export const NoteActions = ({
 
   const { hasRightsToUpdateNote } = useAccess();
 
+  const params = useParams();
   const queryClient = useQueryClient();
-  const deleteNote = useDeleteNote();
+  const { deleteNote } = useRealTimeService(params.wallId!);
   const { setHistory } = useHistoryStore();
 
   const { t } = useTranslation();
@@ -46,7 +48,7 @@ export const NoteActions = ({
   };
 
   const handleDelete = async () => {
-    await deleteNote.mutateAsync(note);
+    await deleteNote(note);
 
     queryClient.setQueryData(
       notesQueryOptions(note.idwall).queryKey,

@@ -5,9 +5,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
+import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
-import { useCreateNote, useUpdateNote } from "~/services/queries";
 import { updateData } from "~/services/queries/helpers";
 import { useHistoryStore, useWhiteboard } from "~/store";
 
@@ -21,14 +21,13 @@ export const useNoteModal = (
   media: NoteMedia | null,
 ) => {
   const navigate = useNavigate();
+  const { wallId } = useParams();
 
-  const createNote = useCreateNote();
-  const updateNote = useUpdateNote();
+  const { createNote, updateNote } = useRealTimeService(wallId!);
 
   const queryClient = useQueryClient();
   const { setHistory } = useHistoryStore();
 
-  const { wallId } = useParams();
   const [searchParams] = useSearchParams();
   const editionMode: EditionMode =
     (searchParams.get("mode") as EditionMode) || "create";
@@ -91,7 +90,7 @@ export const useNoteModal = (
     };
 
     try {
-      const response = await createNote.mutateAsync(note);
+      const response = await createNote(note);
 
       const { status, wall } = response;
 
@@ -122,7 +121,7 @@ export const useNoteModal = (
       y: loadedData.y,
     };
 
-    await updateNote.mutateAsync(
+    await updateNote(
       { id: loadedData._id, note },
       {
         onSuccess: async (responseData) => {

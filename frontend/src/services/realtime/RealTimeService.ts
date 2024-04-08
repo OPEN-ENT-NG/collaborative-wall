@@ -27,7 +27,6 @@ export abstract class RealTimeService {
   start(): Promise<void> {
     const promise = this.doStart();
     this.status = "started";
-    console.log(this.status);
     return promise;
   }
   stop() {
@@ -56,7 +55,6 @@ export abstract class RealTimeService {
   }
 
   sendWallUpdateEvent(wall: CollaborativeWallPayload) {
-    console.log("send updatewall", this.resourceId);
     return this.send({
       wallId: this.resourceId,
       type: "wallUpdate",

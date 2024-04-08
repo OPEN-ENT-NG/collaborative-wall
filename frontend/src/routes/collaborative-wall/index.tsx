@@ -10,7 +10,7 @@ import {
   useOdeClient,
   useTrashedResource,
 } from "@edifice-ui/react";
-import { QueryClient, useQueries, useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import { IWebApp } from "edifice-ts-client";
 import {
   LoaderFunctionArgs,
@@ -30,10 +30,14 @@ import { AppActions } from "~/features/app-actions";
 import { useAccess } from "~/hooks/useAccess";
 import { useDndKit } from "~/hooks/useDndKit";
 import { useEditNote } from "~/hooks/useEditNote";
+import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteProps } from "~/models/notes";
 import { CollaborativeWallProps } from "~/models/wall";
-import { notesQueryOptions, wallQueryOptions } from "~/services/queries";
-import { useRealTimeService } from "~/services/realtime";
+import {
+  notesQueryOptions,
+  useWallWithNotes,
+  wallQueryOptions,
+} from "~/services/queries";
 import { useHistoryStore, useWhiteboard } from "~/store";
 
 import "~/styles/index.css";
@@ -111,7 +115,8 @@ export const CollaborativeWall = () => {
       numberOfNotes: state.numberOfNotes,
     })),
   );
-
+  const { listen } = useRealTimeService(params.wallId!);
+  listen("noteAdded", "noteDeleted");
   useTrashedResource(params?.wallId);
 
   const { currentApp } = useOdeClient();
@@ -119,18 +124,7 @@ export const CollaborativeWall = () => {
   const [
     { data: wall, isPending: isWallLoading, isError: isWallError },
     { data: notes, isPending: isNotesLoading, isError: isNotesError },
-  ] = useQueries({
-    queries: [
-      {
-        queryKey: wallQueryOptions(params.wallId as string).queryKey,
-        queryFn: wallQueryOptions(params.wallId as string).queryFn,
-      },
-      {
-        queryKey: notesQueryOptions(params.wallId as string).queryKey,
-        queryFn: notesQueryOptions(params.wallId as string).queryFn,
-      },
-    ],
-  });
+  ] = useWallWithNotes(params.wallId!);
 
   const { handleOnDragEnd, handleOnDragStart } = useEditNote({
     onClick: !isMobile
@@ -141,18 +135,10 @@ export const CollaborativeWall = () => {
 
   const { hasRightsToMoveNote } = useAccess();
 
-  const service = useRealTimeService(wall?._id as string, true);
-
-  console.log({ service });
-
   useEffect(() => {
     if (query) setIsMobile(query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
-
-  useEffect(() => {
-    service.sendPing();
-  }, []);
 
   if (isWallLoading && isNotesLoading) return <LoadingScreen />;
 
@@ -182,21 +168,6 @@ export const CollaborativeWall = () => {
           <Breadcrumb app={currentApp as IWebApp} name={wall?.name} />
         </AppHeader>
       )}
-      <button
-        onClick={() => {
-          if (!wall) return;
-
-          service.sendWallUpdateEvent({
-            _id: wall?._id,
-            name: "test temps réel",
-            description: "desc temps réel",
-            background: wall?.background,
-            icon: wall.icon,
-          });
-        }}
-      >
-        test send updated wall
-      </button>
       <div className="collaborativewall-container">
         {wall?.description && !isMobile && (
           <DescriptionWall description={wall?.description} />
