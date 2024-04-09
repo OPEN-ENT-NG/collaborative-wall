@@ -8,7 +8,7 @@ import { useShallow } from "zustand/react/shallow";
 // import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
-import { useCreateNote, useUpdateNote } from "~/services/queries";
+import { useUpdateNote } from "~/services/queries";
 import { updateData } from "~/services/queries/helpers";
 import { useHistoryStore, useWebsocketStore, useWhiteboard } from "~/store";
 

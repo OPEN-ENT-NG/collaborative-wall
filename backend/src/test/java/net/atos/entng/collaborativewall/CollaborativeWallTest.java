@@ -18,7 +18,7 @@ public class CollaborativeWallTest {
 
     @Test
     public void shouldSerializeNote(TestContext context) {
-        final CollaborativeWallNote note = new CollaborativeWallNote("ID", "CONTANT", new JsonObject().put("_id", "ID").getMap(), 10l, 10l, new ArrayList<>(), "LAS", new CollaborativeWallNoteMedia("ID", "NAME", "APP", "TYPE", "URL"), "WALLID", new HashMap<>());
+        final CollaborativeWallNote note = new CollaborativeWallNote("ID", "CONTANT", new JsonObject().put("_id", "ID").getMap(), 10l, 10l, new ArrayList<>(), "LAS", new CollaborativeWallNoteMedia("ID", "NAME", "APP", "TYPE", "URL"), "WALLID", new HashMap<>(), new HashMap<>());
         // parse
         final String toJson1 = note.toJson().toString();
         // parse then serialize

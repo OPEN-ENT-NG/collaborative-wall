@@ -123,7 +123,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     @Override
     public Future<List<CollaborativeWallMessage>> pushEvent(final String wallId,final UserInfos session, final CollaborativeWallUserAction action, final String wsId, final boolean checkConcurency){
         return this.onNewUserAction(action, wallId, wsId, session, checkConcurency)
-                .onSuccess(messages -> this.broadcastMessagesToUsers(messages, true, false, wsId));
+                .onSuccess(messages -> this.broadcastMessagesToUsers(messages, true, false, null));
     }
 
     private void broadcastMessagesToUsers(final List<CollaborativeWallMessage> messages,

@@ -76,6 +76,7 @@ export abstract class RealTimeService {
       note: {
         ...note,
         idwall: this.resourceId,
+        media: null,
       },
     });
   }
