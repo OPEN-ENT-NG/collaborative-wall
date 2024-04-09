@@ -1,4 +1,4 @@
-import { RefObject } from "react";
+import { RefObject, useState } from "react";
 
 import { EditorRef } from "@edifice-ui/editor";
 import { useQueryClient } from "@tanstack/react-query";
@@ -20,6 +20,8 @@ export const useNoteModal = (
   loadedData: NoteProps,
   media: NoteMedia | null,
 ) => {
+  const [cancelConfirmModal, setCancelConfirmModal] = useState(false);
+
   const navigate = useNavigate();
 
   const createNote = useCreateNote();
@@ -43,6 +45,8 @@ export const useNoteModal = (
   const isReadMode = editionMode === "read";
   const isEditMode = editionMode === "edit";
   const isCreateMode = editionMode === "create";
+
+  const navigateBack = () => navigate("..");
 
   const handleCreateNote = async () => {
     if (!wallId) {
@@ -73,7 +77,7 @@ export const useNoteModal = (
         });
       }
 
-      handleNavigateBack();
+      navigateBack();
     } catch (error) {
       console.error(error);
     }
@@ -127,23 +131,43 @@ export const useNoteModal = (
       },
     );
 
-    handleNavigateBack();
+    navigateBack();
   };
-
-  const handleNavigateBack = () => navigate("..");
 
   const handleNavigateToEditMode = () => {
     navigate(`../note/${loadedData._id}?mode=edit`);
   };
 
+  const handleModalClose = () => {
+    // TODO check if note has changed
+    const changes = true;
+
+    if (!isReadMode() && changes) {
+      setCancelConfirmModal(true);
+    } else {
+      navigateBack();
+    }
+  };
+
+  const handleCancelModalClose = () => {
+    setCancelConfirmModal(false);
+  };
+
+  const handleCancelModalConfirm = () => {
+    navigateBack();
+  };
+
   return {
+    cancelConfirmModal,
     editionMode,
     isReadMode,
     isEditMode,
     isCreateMode,
-    handleNavigateBack,
     handleNavigateToEditMode,
     handleCreateNote,
     handleSaveNote,
+    handleModalClose,
+    handleCancelModalClose,
+    handleCancelModalConfirm,
   };
 };

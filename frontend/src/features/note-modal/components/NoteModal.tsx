@@ -66,10 +66,10 @@ export const NoteModal = () => {
     isReadMode,
     isEditMode,
     isCreateMode,
-    handleNavigateBack,
-    handleNavigateToEditMode,
     handleSaveNote,
     handleCreateNote,
+    handleModalClose,
+    handleNavigateToEditMode,
   } = useNoteModal(editorRef, colorValue, data, media);
 
   const { hasRightsToUpdateNote } = useAccess();
@@ -80,13 +80,13 @@ export const NoteModal = () => {
   return createPortal(
     <Modal
       id="UpdateNoteModal"
-      onModalClose={handleNavigateBack}
+      onModalClose={handleModalClose}
       size="md"
       isOpen={true}
       focusId=""
       scrollable={true}
     >
-      <Modal.Header onModalClose={handleNavigateBack}>
+      <Modal.Header onModalClose={handleModalClose}>
         {isReadMode && t("collaborativewall.modal.title.read", { ns: appCode })}
         {isEditMode && t("collaborativewall.modal.title.edit", { ns: appCode })}
         {isCreateMode &&
@@ -112,7 +112,7 @@ export const NoteModal = () => {
               type="button"
               color="primary"
               variant="filled"
-              onClick={handleNavigateBack}
+              onClick={handleModalClose}
             >
               {t("collaborativewall.modal.close", { ns: appCode })}
             </Button>
@@ -124,7 +124,7 @@ export const NoteModal = () => {
               type="button"
               color="tertiary"
               variant="ghost"
-              onClick={handleNavigateBack}
+              onClick={handleModalClose}
             >
               {t("collaborativewall.modal.close", { ns: appCode })}
             </Button>
@@ -143,7 +143,7 @@ export const NoteModal = () => {
             type="button"
             color="tertiary"
             variant="ghost"
-            onClick={handleNavigateBack}
+            onClick={handleModalClose}
           >
             {t("collaborativewall.modal.cancel", { ns: appCode })}
           </Button>

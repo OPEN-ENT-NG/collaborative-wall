@@ -42,6 +42,8 @@
   "collaborativewall.modal.title.edit": "Modification",
   "collaborativewall.modal.title.create": "Nouvelle Note",
   "collaborativewall.modal.note.content.placeholder": "Écrivez ici ce que vous voulez partager dans cette note.",
+  "collaborativewall.modal.note.cancel.title": "Annuler les modifications",
+  "collaborativewall.modal.note.cancel.body": "Les modifications que vous avez apportées ne seront pas enregistrées. Êtes-vous sur de vouloir continuer ?",
   "collaborativewall.note.notfound": "Note introuvable.",
   "collaborativewall.color.white": "Blanc",
   "collaborativewall.color.yellow": "Jaune",
