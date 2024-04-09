@@ -145,11 +145,14 @@ export const CollaborativeWall = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
+  useEffect(() => {
+    if (notes) setNumberOfNotes(notes.length);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [notes]);
+
   if (isWallLoading && isNotesLoading) return <LoadingScreen />;
 
   if (isWallError || isNotesError) return <EmptyScreenError />;
-
-  if (notes) setNumberOfNotes(notes.length);
 
   const handleOnUpdateSuccess = async () => {
     await queryClient.invalidateQueries({
@@ -170,9 +173,7 @@ export const CollaborativeWall = () => {
         </AppHeader>
       )}
       <div className="collaborativewall-container">
-        {wall?.description && !isMobile && (
-          <DescriptionWall description={wall?.description} />
-        )}
+        {wall?.description && !isMobile && <DescriptionWall />}
         <WhiteboardWrapper>
           <DndContext
             sensors={sensors}
@@ -205,9 +206,7 @@ export const CollaborativeWall = () => {
 
         <Outlet />
 
-        {wall?.description && (
-          <DescriptionModal description={wall.description} />
-        )}
+        {wall?.description && <DescriptionModal />}
         {wall && (
           <BackgroundModal
             setIsOpen={setIsOpenBackgroundModal}

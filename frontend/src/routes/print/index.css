@@ -1,0 +1,23 @@
+@page {
+  size: landscape;
+  orientation: landscape;
+  margin: 2.5cm;
+}
+
+.transform-wrapper-print {
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+  overflow: hidden;
+}
+
+.transform-component-print {
+  transform-origin: 0% 0%;
+  max-width: 1000px;
+  max-height: calc(100vh);
+}
+
+* {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
