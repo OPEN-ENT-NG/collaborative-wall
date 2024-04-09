@@ -40,6 +40,7 @@ import {
   useWallWithNotes,
   wallQueryOptions,
 } from "~/services/queries";
+import { updateData } from "~/services/queries/helpers";
 import { useHistoryStore, useWebsocketStore, useWhiteboard } from "~/store";
 
 import "~/styles/index.css";
@@ -171,10 +172,38 @@ export const CollaborativeWall = () => {
           updateNoteQueryData({ ...event.note, wallid: event.wallId });
           break;
         }
-        case "noteTextUpdated":
-        case "noteImageUpdated":
         case "noteSelected":
         case "noteUnselected": {
+          break;
+        }
+        case "noteUpdated": {
+          // todo : avoir un previousNote ?
+          updateData(queryClient, event.note);
+
+          // todo exemple :
+          /* setHistory({
+            type: "edit",
+            item: {
+              ...event.note,
+              content: event.previousNote.content,
+              color: event.previousNote.color,
+              media: event.previousNote.media,
+            },
+            previous: {
+              x: event.previousNote.x,
+              y: event.previousNote.y,
+              color: event.previousNote.color,
+              content: event.previousNote.content,
+              media: event.previousNote.media || null,
+            },
+            next: {
+              x: event.note.x,
+              y: event.note.y,
+              color: event.note.color,
+              content: event.note.content,
+              media: event.note.media || null,
+            },
+          }); */
           break;
         }
         case "noteDeleted": {

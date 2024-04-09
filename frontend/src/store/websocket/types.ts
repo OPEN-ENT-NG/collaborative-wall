@@ -44,9 +44,9 @@ export type WebsocketAction = {
     noteId: string,
     note: PickedNotePosition,
   ) => Promise<void>;
-  sendNoteTextUpdatedEvent: (note: PickedNoteContent) => Promise<void>;
+  sendNoteUpdated: (note: PickedNoteUpdate) => Promise<void>;
   sendNoteEditionStartedEvent: (noteId: string) => Promise<void>;
-  sendNoteImageUpdatedEvent: (note: PickedNoteImage) => Promise<void>;
+  // sendNoteImageUpdatedEvent: (note: PickedNoteImage) => Promise<void>;
   sendNoteSeletedEvent: (noteId: string, selected: boolean) => Promise<void>;
   sendNoteDeletedEvent: (noteId: string) => Promise<void>;
   setOpenSocketModal: (value: boolean) => void;
@@ -120,23 +120,25 @@ export type NoteMovedPayload = {
   note: PickedNotePosition;
 };
 
-export type PickedNoteContent = Pick<NoteProps, "_id" | "content">;
+// TODO
+export type PickedNoteUpdate = Pick<NoteProps, "_id" | "content" | "media">;
 
-export type NoteTextUpdatedPayload = {
+export type NoteUpdatedPayloadEvent = {
   wallId: string;
-  type: "noteTextUpdated";
+  type: "noteUpdated";
   noteId: string;
-  note: PickedNoteContent;
+  // previousNote
+  note: NoteProps;
 };
 
-export type PickedNoteImage = Pick<NoteProps, "_id" | "media">;
-
-export type NoteImageUpdatedPayload = {
+export type NoteUpdatedPayloadAction = {
   wallId: string;
-  type: "noteImageUpdated";
+  type: "noteUpdated";
   noteId: string;
-  note: PickedNoteImage;
+  note: PickedNoteUpdate;
 };
+
+// TODO fin
 
 export type NoteSelectedPayload = {
   wallId: string;
@@ -173,8 +175,7 @@ export type EventPayload =
   | NoteEditionStartedPayload
   | NoteEditionFinishedPayload
   | NoteMovedPayload
-  | NoteTextUpdatedPayload
-  | NoteImageUpdatedPayload
+  | NoteUpdatedPayloadEvent
   | NoteSelectedPayload
   | NoteDeletedPayloadEvent;
 
@@ -188,8 +189,7 @@ export type ActionPayload =
   | NoteEditionStartedPayload
   | NoteEditionFinishedPayload
   | NoteMovedPayload
-  | NoteTextUpdatedPayload
-  | NoteImageUpdatedPayload
+  | NoteUpdatedPayloadAction
   | NoteSelectedPayload
   | NoteDeletedPayloadAction;
 

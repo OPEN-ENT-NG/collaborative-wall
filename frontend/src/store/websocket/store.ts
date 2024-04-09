@@ -1,12 +1,12 @@
 import { create } from "zustand";
 
-import { EventPayload } from "~/services/realtime/types";
 import {
   WebsocketState,
   WebsocketAction,
   WebSocketMode,
   WebsocketStatus,
   Subscriber,
+  EventPayload,
 } from "~/store/websocket/types";
 
 const websocketState = {
@@ -260,17 +260,17 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           note,
         });
       },
-      sendNoteTextUpdatedEvent(note) {
+      sendNoteUpdated(note) {
         const { send, resourceId: wallId } = get();
 
         return send({
           wallId,
-          type: "noteTextUpdated",
+          type: "noteUpdated",
           noteId: note._id,
           note,
         });
       },
-      sendNoteImageUpdatedEvent(note) {
+      /* sendNoteImageUpdatedEvent(note) {
         const { send, resourceId: wallId } = get();
 
         return send({
@@ -279,7 +279,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           noteId: note._id,
           note,
         });
-      },
+      }, */
       sendNoteSeletedEvent(noteId, selected) {
         const { send, resourceId: wallId } = get();
 

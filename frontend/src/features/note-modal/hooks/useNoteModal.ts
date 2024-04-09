@@ -1,16 +1,13 @@
 import { RefObject, useEffect } from "react";
 
 import { EditorRef } from "@edifice-ui/editor";
-import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
 // import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
-import { useUpdateNote } from "~/services/queries";
-import { updateData } from "~/services/queries/helpers";
-import { useHistoryStore, useWebsocketStore, useWhiteboard } from "~/store";
+import { useWebsocketStore, useWhiteboard } from "~/store";
 
 export type EditionMode = "read" | "edit" | "create";
 export const authorizedModes: EditionMode[] = ["read", "edit", "create"];
@@ -22,10 +19,8 @@ export const useNoteModal = (
   media: NoteMedia | null,
 ) => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const { wallId } = useParams();
-  const { setHistory } = useHistoryStore();
   const { positionViewport, zoom } = useWhiteboard(
     useShallow((state) => ({
       positionViewport: state.positionViewport,
@@ -33,21 +28,12 @@ export const useNoteModal = (
     })),
   );
 
-  const {
-    sendNoteAddedEvent,
-    sendNoteTextUpdatedEvent,
-    sendNoteImageUpdatedEvent,
-  } = useWebsocketStore(
+  const { sendNoteAddedEvent, sendNoteUpdated } = useWebsocketStore(
     useShallow((state) => ({
       sendNoteAddedEvent: state.sendNoteAddedEvent,
-      sendNoteTextUpdatedEvent: state.sendNoteTextUpdatedEvent,
-      sendNoteImageUpdatedEvent: state.sendNoteImageUpdatedEvent,
+      sendNoteUpdated: state.sendNoteUpdated,
     })),
   );
-
-  const updateNote = useUpdateNote();
-  /* const { createNote, updateNote } = useRealTimeService(wallId!);
-   */
 
   const [searchParams] = useSearchParams();
 
@@ -123,47 +109,11 @@ export const useNoteModal = (
       y: loadedData.y,
     };
 
-    await updateNote.mutateAsync(
-      { id: loadedData._id, note },
-      {
-        onSuccess: async (responseData) => {
-          const { status, note: updatedNote } = responseData;
-
-          if (status !== "ok") return;
-
-          await Promise.all([
-            sendNoteTextUpdatedEvent({ ...note, _id: loadedData._id }),
-            sendNoteImageUpdatedEvent({ ...note, _id: loadedData._id }),
-          ]);
-
-          updateData(queryClient, updatedNote);
-
-          setHistory({
-            type: "edit",
-            item: {
-              ...updatedNote,
-              content: loadedData.content,
-              color: loadedData.color,
-              media: loadedData.media,
-            },
-            previous: {
-              x: loadedData.x,
-              y: loadedData.y,
-              color: loadedData.color,
-              content: loadedData.content,
-              media: loadedData.media || null,
-            },
-            next: {
-              x: updatedNote.x,
-              y: updatedNote.y,
-              color: updatedNote.color,
-              content: updatedNote.content,
-              media: updatedNote.media || null,
-            },
-          });
-        },
-      },
-    );
+    await sendNoteUpdated({
+      _id: loadedData._id,
+      content: note.content,
+      media: note.media,
+    });
 
     handleNavigateBack();
   };
