@@ -213,7 +213,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           type: "noteAdded",
           note: {
             ...note,
-            idwall: this.resourceId,
+            idwall: wallId,
           },
         });
       },

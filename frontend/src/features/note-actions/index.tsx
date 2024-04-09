@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { useAccess } from "~/hooks/useAccess";
-import { useRealTimeService } from "~/hooks/useRealTimeService";
+// import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteProps } from "~/models/notes";
 import { notesQueryOptions } from "~/services/queries";
 import { useHistoryStore } from "~/store";
@@ -34,7 +34,7 @@ export const NoteActions = ({
 
   const params = useParams();
   const queryClient = useQueryClient();
-  const { deleteNote } = useRealTimeService(params.wallId!);
+  // const { deleteNote } = useRealTimeService(params.wallId!);
   const { setHistory } = useHistoryStore();
 
   const { t } = useTranslation();

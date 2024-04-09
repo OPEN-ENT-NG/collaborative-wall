@@ -1,4 +1,4 @@
-import { NoteProps } from "~/models/notes";
+import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { CollaborativeWallProps } from "~/models/wall";
 
 export type CollaborativeWallPayload = Pick<
@@ -37,7 +37,7 @@ export type WallDeletedPayload = {
 export type NoteAddedPayload = {
   wallId: string;
   type: "noteAdded";
-  note: CollaborativeWallNotePayload & {
+  note: PickedNoteProps & {
     idwall: string;
   };
 };

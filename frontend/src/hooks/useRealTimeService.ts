@@ -7,7 +7,7 @@ import {
   useInvalidateNotesFactory,
   useUpdateNote,
 } from "~/services/queries";
-import { RealTimeProxyService } from "~/services/realtime/index";
+import { RealTimeProxyService } from "~/services/realtime/RealTimeProxyService";
 import { EventPayload } from "~/services/realtime/types";
 
 const instances = new Map<string, RealTimeProxyService>();

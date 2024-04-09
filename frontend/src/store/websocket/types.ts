@@ -1,4 +1,4 @@
-import { NoteProps } from "~/models/notes";
+import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { CollaborativeWallProps } from "~/models/wall";
 // import { RealTimeProxyService } from "~/services/realtime/RealTimeProxyService";
 
@@ -37,7 +37,7 @@ export type WebsocketAction = {
   sendPing: () => Promise<void>;
   sendWallDeletedEvent: () => Promise<void>;
   sendWallUpdateEvent: (wall: CollaborativeWallPayload) => Promise<void>;
-  sendNoteAddedEvent: (note: CollaborativeWallNotePayload) => Promise<void>;
+  sendNoteAddedEvent: (note: PickedNoteProps) => Promise<void>;
   sendNoteCursorMovedEvent: (move: MoveList) => Promise<void>;
   sendNoteEditionEndedEvent: (noteId: string) => Promise<void>;
   sendNoteMovedEvent: (
@@ -86,7 +86,7 @@ export type WallDeletedPayload = {
 export type NoteAddedPayload = {
   wallId: string;
   type: "noteAdded";
-  note: CollaborativeWallNotePayload & {
+  note: PickedNoteProps & {
     idwall: string;
   };
 };

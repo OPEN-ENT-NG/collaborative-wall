@@ -5,11 +5,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
-import { useRealTimeService } from "~/hooks/useRealTimeService";
+// import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
+import { useCreateNote, useUpdateNote } from "~/services/queries";
 import { updateData } from "~/services/queries/helpers";
-import { useHistoryStore, useWhiteboard } from "~/store";
+import { useHistoryStore, useWebsocketStore, useWhiteboard } from "~/store";
 
 export type EditionMode = "read" | "edit" | "create";
 export const authorizedModes: EditionMode[] = ["read", "edit", "create"];
@@ -21,23 +22,38 @@ export const useNoteModal = (
   media: NoteMedia | null,
 ) => {
   const navigate = useNavigate();
-  const { wallId } = useParams();
-
-  const { createNote, updateNote } = useRealTimeService(wallId!);
-
   const queryClient = useQueryClient();
+
+  const { wallId } = useParams();
   const { setHistory } = useHistoryStore();
-
-  const [searchParams] = useSearchParams();
-  const editionMode: EditionMode =
-    (searchParams.get("mode") as EditionMode) || "create";
-
   const { positionViewport, zoom } = useWhiteboard(
     useShallow((state) => ({
       positionViewport: state.positionViewport,
       zoom: state.zoom,
     })),
   );
+
+  const {
+    sendNoteAddedEvent,
+    sendNoteTextUpdatedEvent,
+    sendNoteImageUpdatedEvent,
+  } = useWebsocketStore(
+    useShallow((state) => ({
+      sendNoteAddedEvent: state.sendNoteAddedEvent,
+      sendNoteTextUpdatedEvent: state.sendNoteTextUpdatedEvent,
+      sendNoteImageUpdatedEvent: state.sendNoteImageUpdatedEvent,
+    })),
+  );
+
+  // const createNote = useCreateNote();
+  const updateNote = useUpdateNote();
+  /* const { createNote, updateNote } = useRealTimeService(wallId!);
+   */
+
+  const [searchParams] = useSearchParams();
+
+  const editionMode: EditionMode =
+    (searchParams.get("mode") as EditionMode) || "create";
 
   // There is a window event listener on Space, "-", "=", "+" keys to move, unzoom, zoom the whiteboard respectively,
   // So we need to stop these keys propagation in order to make these keys work in Editor.
@@ -90,19 +106,29 @@ export const useNoteModal = (
     };
 
     try {
-      const response = await createNote(note);
+      const test = await sendNoteAddedEvent(note);
 
-      const { status, wall } = response;
+      console.log({ test });
 
-      if (status === "ok") {
-        const size = wall.length;
-        const note = wall[size - 1];
+      /* setHistory({
+        type: "create",
+        item: note,
+      }); */
+      // const response = await createNote.mutateAsync(note);
 
-        setHistory({
-          type: "create",
-          item: note,
-        });
-      }
+      // const { status, wall } = response;
+
+      // if (status === "ok") {
+      //   const size = wall.length;
+      //   const note = wall[size - 1];
+
+      //   await sendNoteAddedEvent(note);
+
+      //   setHistory({
+      //     type: "create",
+      //     item: note,
+      //   });
+      // }
 
       handleNavigateBack();
     } catch (error) {
@@ -121,13 +147,18 @@ export const useNoteModal = (
       y: loadedData.y,
     };
 
-    await updateNote(
+    await updateNote.mutateAsync(
       { id: loadedData._id, note },
       {
         onSuccess: async (responseData) => {
           const { status, note: updatedNote } = responseData;
 
           if (status !== "ok") return;
+
+          await Promise.all([
+            sendNoteTextUpdatedEvent({ ...note, _id: loadedData._id }),
+            sendNoteImageUpdatedEvent({ ...note, _id: loadedData._id }),
+          ]);
 
           updateData(queryClient, updatedNote);
 
