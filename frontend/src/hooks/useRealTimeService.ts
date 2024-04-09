@@ -93,6 +93,7 @@ export function useRealTimeService(resourceId: string) {
       }
     });
     return unsubscribe;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resourceId]);
   // stop
   const stop = () => {

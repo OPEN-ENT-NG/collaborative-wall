@@ -47,12 +47,6 @@ export default ({ mode }: { mode: string }) => {
     "/xiti": proxyObj,
     "/analyticsConf": proxyObj,
     "/video": proxyObj,
-    /* "/collaborativewall/realtime": {
-      target: "ws://localhost:9091",
-      changeOrigin: true,
-      secure: false,
-      ws: true,
-    }, */
   };
 
   const base = mode === "production" ? "/collaborativewall" : "";

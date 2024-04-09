@@ -30,7 +30,6 @@ import { AppActions } from "~/features/app-actions";
 import { useAccess } from "~/hooks/useAccess";
 import { useDndKit } from "~/hooks/useDndKit";
 import { useEditNote } from "~/hooks/useEditNote";
-import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteProps } from "~/models/notes";
 import { CollaborativeWallProps } from "~/models/wall";
 import {
@@ -38,7 +37,7 @@ import {
   useWallWithNotes,
   wallQueryOptions,
 } from "~/services/queries";
-import { useHistoryStore, useWhiteboard } from "~/store";
+import { useHistoryStore, useWebsocketStore, useWhiteboard } from "~/store";
 
 import "~/styles/index.css";
 const DescriptionModal = lazy(
@@ -46,6 +45,7 @@ const DescriptionModal = lazy(
 );
 const UpdateModal = lazy(async () => await import("~/features/resource-modal"));
 const ShareModal = lazy(async () => await import("~/features/share-modal"));
+const WebsocketModal = lazy(async () => await import("~/features/websocket"));
 
 interface LoaderData {
   wall: CollaborativeWallProps;
@@ -115,8 +115,45 @@ export const CollaborativeWall = () => {
       numberOfNotes: state.numberOfNotes,
     })),
   );
-  const { listen } = useRealTimeService(params.wallId!);
-  listen("noteAdded", "noteDeleted");
+  /* const { listen } = useRealTimeService(params.wallId!);
+  listen("noteAdded", "noteDeleted"); */
+
+  const {
+    isOpened,
+    openSocketModal,
+    startRealTime,
+    stopRealTime,
+    sendPing,
+    setOpenSocketModal,
+  } = useWebsocketStore(
+    useShallow((state) => ({
+      ready: state.ready,
+      status: state.status,
+      mode: state.mode,
+      isOpened: state.isOpened,
+      openSocketModal: state.openSocketModal,
+      startRealTime: state.startRealTime,
+      stopRealTime: state.stopRealTime,
+      sendPing: state.sendPing,
+      setOpenSocketModal: state.setOpenSocketModal,
+    })),
+  );
+
+  useEffect(() => {
+    startRealTime(wall?._id as string, true);
+    return () => {
+      stopRealTime();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    console.log({ isOpened });
+    if (isOpened) {
+      sendPing();
+    }
+  }, [isOpened]);
+
   useTrashedResource(params?.wallId);
 
   const { currentApp } = useOdeClient();
@@ -231,6 +268,12 @@ export const CollaborativeWall = () => {
             resourceId={wall._id}
             onCancel={() => setOpenShareModal(false)}
             onSuccess={() => setOpenShareModal(false)}
+          />
+        )}
+        {openSocketModal && (
+          <WebsocketModal
+            isOpen={openSocketModal}
+            onClose={() => setOpenSocketModal(false)}
           />
         )}
       </Suspense>

@@ -1,6 +1,8 @@
 import { RealTimeService } from "./RealTimeService";
 import { EventPayload } from "./types";
+
 const DELAY = 20000;
+
 export class RealTimeHttpService extends RealTimeService {
   private interval?: number;
   constructor(resourceId: string, start = false) {

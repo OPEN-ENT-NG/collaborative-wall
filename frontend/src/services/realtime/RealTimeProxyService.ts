@@ -9,10 +9,13 @@ export class RealTimeProxyService extends RealTimeService {
   private mode: "http" | "ws" = "ws";
   private httpService: RealTimeHttpService;
   private wsService: RealTimeWSService;
+
   constructor(resourceId: string, start = false) {
     super(resourceId);
+
     this.httpService = new RealTimeHttpService(resourceId, false);
     this.wsService = new RealTimeWSService(resourceId, false);
+
     if (start) {
       this.start();
     }
@@ -24,6 +27,11 @@ export class RealTimeProxyService extends RealTimeService {
       return this.wsService.subscribe(callback);
     }
   }
+
+  getMode() {
+    return this.mode;
+  }
+
   override get ready() {
     if (this.mode === "http") {
       return this.httpService.ready;
@@ -41,6 +49,7 @@ export class RealTimeProxyService extends RealTimeService {
   }
   protected override async doStart() {
     if (this.mode === "http") {
+      this.mode = "http";
       return this.httpService.doStart();
     } else {
       // try start ws multiple times
