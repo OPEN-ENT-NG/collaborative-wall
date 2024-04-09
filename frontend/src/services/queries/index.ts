@@ -140,3 +140,35 @@ export const useDeleteNote = () => {
     },
   });
 };
+
+export const useUpdateNoteQueryData = () => {
+  const queryClient = useQueryClient();
+  return (note: Partial<NoteProps> & { wallid: string }) => {
+    queryClient.setQueryData(
+      notesQueryOptions(note.wallid).queryKey,
+      (previousNotes) => {
+        return previousNotes?.map((previousNote) => {
+          if (previousNote._id === note._id) {
+            return { ...previousNote, ...note };
+          } else {
+            return previousNote;
+          }
+        });
+      },
+    );
+  };
+};
+
+export const useDeleteNoteQueryData = () => {
+  const queryClient = useQueryClient();
+  return (note: NoteProps) => {
+    queryClient.setQueryData(
+      notesQueryOptions(note.idwall).queryKey,
+      (previousNotes) => {
+        return previousNotes?.filter(
+          (previousNote) => previousNote._id !== note._id,
+        );
+      },
+    );
+  };
+};

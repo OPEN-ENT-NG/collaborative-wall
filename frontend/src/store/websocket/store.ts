@@ -94,7 +94,6 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           set({ isOpened: socket?.readyState === 1 ? true : false });
         });
         socket?.addEventListener("message", (event) => {
-          console.log("on message");
           try {
             const { subscribers } = get();
             const data = JSON.parse(event.data) as EventPayload;

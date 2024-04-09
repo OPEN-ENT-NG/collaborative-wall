@@ -7,7 +7,6 @@ import {
   IconButton,
   IconButtonProps,
 } from "@edifice-ui/react";
-import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
@@ -15,8 +14,7 @@ import { useShallow } from "zustand/react/shallow";
 import { useAccess } from "~/hooks/useAccess";
 // import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteProps } from "~/models/notes";
-import { notesQueryOptions } from "~/services/queries";
-import { useHistoryStore, useWebsocketStore } from "~/store";
+import { useWebsocketStore } from "~/store";
 
 export type NoteDropdownMenuOptions = DropdownMenuOptions & {
   hidden?: boolean;
@@ -32,9 +30,6 @@ export const NoteActions = ({
   const navigate = useNavigate();
 
   const { hasRightsToUpdateNote } = useAccess();
-
-  const queryClient = useQueryClient();
-  const { setHistory } = useHistoryStore();
 
   const { sendNoteDeletedEvent } = useWebsocketStore(
     useShallow((state) => ({
@@ -54,20 +49,6 @@ export const NoteActions = ({
 
   const handleDelete = async () => {
     await sendNoteDeletedEvent(note._id);
-
-    queryClient.setQueryData(
-      notesQueryOptions(note.idwall).queryKey,
-      (previousNotes) => {
-        return previousNotes?.filter(
-          (previousNote) => previousNote._id !== note._id,
-        );
-      },
-    );
-
-    setHistory({
-      type: "delete",
-      item: note,
-    });
   };
 
   const dropdownOptions: NoteDropdownMenuOptions[] = [

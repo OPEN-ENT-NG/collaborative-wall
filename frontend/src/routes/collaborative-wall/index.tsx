@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Suspense, lazy, useEffect } from "react";
 
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, DragMoveEvent } from "@dnd-kit/core";
 import { restrictToParentElement } from "@dnd-kit/modifiers";
 import {
   AppHeader,
@@ -35,6 +35,8 @@ import { CollaborativeWallProps } from "~/models/wall";
 import {
   noteQueryKey,
   notesQueryOptions,
+  useDeleteNoteQueryData,
+  useUpdateNoteQueryData,
   useWallWithNotes,
   wallQueryOptions,
 } from "~/services/queries";
@@ -127,6 +129,7 @@ export const CollaborativeWall = () => {
     startRealTime,
     stopRealTime,
     setOpenSocketModal,
+    sendNoteMovedEvent,
     listen,
   } = useWebsocketStore(
     useShallow((state) => ({
@@ -135,10 +138,12 @@ export const CollaborativeWall = () => {
       startRealTime: state.startRealTime,
       stopRealTime: state.stopRealTime,
       setOpenSocketModal: state.setOpenSocketModal,
+      sendNoteMovedEvent: state.sendNoteMovedEvent,
       listen: state.listen,
     })),
   );
-
+  const updateNoteQueryData = useUpdateNoteQueryData();
+  const deleteNoteQueryData = useDeleteNoteQueryData();
   useEffect(() => {
     startRealTime(wall?._id as string, true);
     const unsubscribe = listen((event) => {
@@ -159,8 +164,13 @@ export const CollaborativeWall = () => {
         }
         case "cursorMove":
         case "noteEditionStarted":
-        case "noteEditionEnded":
-        case "noteMoved":
+        case "noteEditionEnded": {
+          break;
+        }
+        case "noteMoved": {
+          updateNoteQueryData({ ...event.note, wallid: event.wallId });
+          break;
+        }
         case "noteTextUpdated":
         case "noteImageUpdated":
         case "noteSelected":
@@ -172,7 +182,7 @@ export const CollaborativeWall = () => {
             type: "delete",
             item: event.note,
           });
-          queryClient.invalidateQueries({ queryKey: [noteQueryKey()] });
+          deleteNoteQueryData(event.note);
           break;
         }
       }
@@ -183,7 +193,6 @@ export const CollaborativeWall = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   useTrashedResource(params?.wallId);
 
   const { currentApp } = useOdeClient();
@@ -221,6 +230,18 @@ export const CollaborativeWall = () => {
     setOpenUpdateModal(false);
   };
 
+  const handleDragMove = (event: DragMoveEvent) => {
+    const _id = event.active.id.toString();
+    const coordinates = event.active.rect.current.translated;
+    if (coordinates) {
+      sendNoteMovedEvent(_id, {
+        _id,
+        x: coordinates.left,
+        y: coordinates.top,
+      });
+    }
+  };
+
   return (
     <>
       {!isMobile && (
@@ -239,6 +260,7 @@ export const CollaborativeWall = () => {
         <WhiteboardWrapper>
           <DndContext
             sensors={sensors}
+            onDragMove={handleDragMove}
             onDragEnd={handleOnDragEnd}
             onDragStart={handleOnDragStart}
             modifiers={[restrictToParentElement]}
