@@ -87,9 +87,8 @@ public class CollaborativeWallUserAction {
         break;
       }
       case noteAdded:
-      case noteImageUpdated:
       case noteMoved:
-      case noteTextUpdated: {
+      case noteUpdated: {
         if(this.note == null){
           throw new ValidationException("wall.action.note.missing");
         }

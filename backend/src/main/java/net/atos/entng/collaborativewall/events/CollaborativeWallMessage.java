@@ -25,6 +25,7 @@ public class CollaborativeWallMessage {
   private final CollaborativeWallDetails wall;
   private final String noteId;
   private final CollaborativeWallNote note;
+  private final CollaborativeWallNote oldNote;
 
   private final List<CollaborativeWallNote> notes;
   private final List<NoteMove> move;
@@ -46,7 +47,8 @@ public class CollaborativeWallMessage {
                                   @JsonProperty("notes") List<CollaborativeWallNote> notes,
                                   @JsonProperty("move") final List<NoteMove> move,
                                   @JsonProperty("editing") final List<CollaborativeWallEditingInformation> editing,
-                                  @JsonProperty("connectedUsers") final Set<CollaborativeWallUser> connectedUsers) {
+                                  @JsonProperty("connectedUsers") final Set<CollaborativeWallUser> connectedUsers,
+                                  @JsonProperty("note") final CollaborativeWallNote oldNote) {
     this.wallId = wallId;
     this.emittedAt = emittedAt;
     this.emittedBy = emittedBy;
@@ -58,6 +60,7 @@ public class CollaborativeWallMessage {
     this.wall = wall;
     this.noteId = noteId;
     this.note = note;
+    this.oldNote = oldNote;
     this.notes = notes;
     this.move = move;
     this.editing = editing;
@@ -122,5 +125,9 @@ public class CollaborativeWallMessage {
 
   public List<CollaborativeWallNote> getNotes() {
     return notes;
+  }
+
+  public CollaborativeWallNote getOldNote() {
+    return oldNote;
   }
 }

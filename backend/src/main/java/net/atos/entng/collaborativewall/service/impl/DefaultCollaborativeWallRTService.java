@@ -453,20 +453,15 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
                 // client has start editing => broadcast to other users
                 return publishMetadata().map(published -> newArrayList(this.messageFactory.noteEditionStarted(wallId, wsId, user.getUserId(), action.getNoteId())));
             }
-            case noteImageUpdated: {
+            case noteUpdated: {
                 // client has updated the image's note => upsert then broadcast to other users
                 return this.collaborativeWallService.patchNote(wallId, PatchKind.Image, action.getNote(), user, checkConcurency)
-                        .map(saved -> newArrayList(this.messageFactory.noteImageUpdated(wallId, wsId, user.getUserId(), saved)));
+                        .map(saved -> newArrayList(this.messageFactory.noteUpdated(wallId, wsId, user.getUserId(), action.getNote(), saved)));
             }
             case noteMoved: {
                 // client has moved the note => patch then broadcast to other users
-                return this.collaborativeWallService.patchNote(wallId, PatchKind.Position, action.getNote(), user, checkConcurency)
+                return this.collaborativeWallService.upsertNote(wallId, action.getNote(), user, checkConcurency)
                         .map(saved -> newArrayList(this.messageFactory.noteMoved(wallId, wsId, user.getUserId(), saved)));
-            }
-            case noteTextUpdated: {
-                // client has updated the image's note => upsert then broadcast to other users
-                return this.collaborativeWallService.patchNote(wallId, PatchKind.Text, action.getNote(), user, checkConcurency)
-                        .map(saved -> newArrayList(this.messageFactory.noteTextUpdated(wallId, wsId, user.getUserId(), saved)));
             }
             case noteSelected: {
                 // add to editing
