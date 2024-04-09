@@ -1,6 +1,6 @@
 import { RefAttributes } from "react";
 
-import { Copy, Delete, Edit } from "@edifice-ui/icons";
+import { Delete, Edit } from "@edifice-ui/icons";
 import {
   Dropdown,
   DropdownMenuOptions,
@@ -41,9 +41,9 @@ export const NoteActions = ({
     navigate(`note/${note._id}?mode=edit`);
   };
 
-  const handleCopy = () => {
-    // TODO
-  };
+  /* const handleCopy = () => {
+    TODO
+  }; */
 
   const handleDelete = async () => {
     await deleteNote.mutateAsync(note);
@@ -71,11 +71,6 @@ export const NoteActions = ({
       hidden: !hasRightsToUpdateNote(note),
     },
     {
-      icon: <Copy />,
-      label: t("duplicate"),
-      action: handleCopy,
-    },
-    {
       icon: <Delete />,
       label: t("remove"),
       action: handleDelete,
@@ -85,7 +80,7 @@ export const NoteActions = ({
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div onMouseDown={(event) => event.stopPropagation()}>
+    <div onMouseDown={(event) => event.preventDefault()}>
       <Dropdown placement="right-start">
         {(
           triggerProps: JSX.IntrinsicAttributes &
