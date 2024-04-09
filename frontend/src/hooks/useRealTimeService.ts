@@ -4,7 +4,6 @@ import { NoteProps, PickedNoteProps } from "~/models/notes";
 import {
   useCreateNote,
   useDeleteNote,
-  useInvalidateNotesFactory,
   useUpdateNote,
 } from "~/services/queries";
 import { RealTimeProxyService } from "~/services/realtime/RealTimeProxyService";
@@ -64,7 +63,7 @@ export function useRealTimeService(resourceId: string) {
       setFilterEvent((old) => [...old, ...keys]);
     }
   };
-  const invalidateNote = useInvalidateNotesFactory();
+  //const invalidateNote = useInvalidateNotesFactory();
   useEffect(() => {
     const unsubscribe = instance.subscribe((event) => {
       if (filterEvent.includes(event.type)) {
@@ -85,7 +84,7 @@ export function useRealTimeService(resourceId: string) {
         case "noteImageUpdated":
         case "noteAdded":
         case "noteDeleted": {
-          invalidateNote();
+          //invalidateNote();
           break;
         }
         case "noteSelected":

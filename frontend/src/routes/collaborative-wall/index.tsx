@@ -33,6 +33,7 @@ import { useEditNote } from "~/hooks/useEditNote";
 import { NoteProps } from "~/models/notes";
 import { CollaborativeWallProps } from "~/models/wall";
 import {
+  noteQueryKey,
   notesQueryOptions,
   useWallWithNotes,
   wallQueryOptions,
@@ -91,6 +92,7 @@ export const CollaborativeWall = () => {
   const { query } = useLoaderData() as LoaderData;
 
   const sensors = useDndKit();
+  const { setHistory } = useHistoryStore();
 
   const {
     openShareModal,
@@ -120,20 +122,60 @@ export const CollaborativeWall = () => {
   /* const { listen } = useRealTimeService(params.wallId!);
   listen("noteAdded", "noteDeleted"); */
 
-  const { openSocketModal, startRealTime, stopRealTime, setOpenSocketModal } =
-    useWebsocketStore(
-      useShallow((state) => ({
-        mode: state.mode,
-        openSocketModal: state.openSocketModal,
-        startRealTime: state.startRealTime,
-        stopRealTime: state.stopRealTime,
-        setOpenSocketModal: state.setOpenSocketModal,
-      })),
-    );
+  const {
+    openSocketModal,
+    startRealTime,
+    stopRealTime,
+    setOpenSocketModal,
+    listen,
+  } = useWebsocketStore(
+    useShallow((state) => ({
+      mode: state.mode,
+      openSocketModal: state.openSocketModal,
+      startRealTime: state.startRealTime,
+      stopRealTime: state.stopRealTime,
+      setOpenSocketModal: state.setOpenSocketModal,
+      listen: state.listen,
+    })),
+  );
 
   useEffect(() => {
     startRealTime(wall?._id as string, true);
+    console.log("LISTENING.....");
+    const unsubscribe = listen((event) => {
+      switch (event.type) {
+        case "metadata":
+        case "ping":
+        case "wallUpdate":
+        case "wallDeleted": {
+          break;
+        }
+        case "noteAdded": {
+          setHistory({
+            type: "create",
+            item: event.note,
+          });
+          queryClient.invalidateQueries({ queryKey: [noteQueryKey()] });
+          break;
+        }
+        case "cursorMove":
+        case "noteEditionStarted":
+        case "noteEditionEnded":
+        case "noteMoved":
+        case "noteTextUpdated":
+        case "noteImageUpdated":
+        case "noteSelected":
+        case "noteUnselected": {
+          break;
+        }
+        case "noteDeleted": {
+          queryClient.invalidateQueries({ queryKey: [noteQueryKey()] });
+          break;
+        }
+      }
+    });
     return () => {
+      unsubscribe();
       stopRealTime();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

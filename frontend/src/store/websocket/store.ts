@@ -1,5 +1,6 @@
 import { create } from "zustand";
 
+import { EventPayload } from "~/services/realtime/types";
 import {
   WebsocketState,
   WebsocketAction,
@@ -85,7 +86,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         };
       },
       startListeners: () => {
-        const { subscribers, start } = get();
+        const { start } = get();
 
         socket?.addEventListener("open", () => {
           console.log("on open");
@@ -95,7 +96,8 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         socket?.addEventListener("message", (event) => {
           console.log("on message");
           try {
-            const data = JSON.parse(event.data);
+            const { subscribers } = get();
+            const data = JSON.parse(event.data) as EventPayload;
             subscribers.forEach((sub) => sub(data));
             // get().subscribe(event.data);
             // set({ lastEvent: event.data });
@@ -298,6 +300,13 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         });
       },
       setOpenSocketModal: (openSocketModal) => set({ openSocketModal }),
+      listen: (cb: Subscriber) => {
+        const { subscribers } = get();
+        set({ subscribers: [...subscribers, cb] });
+        return () => {
+          set({ subscribers: subscribers.filter((c) => c !== cb) });
+        };
+      },
     };
   },
 );

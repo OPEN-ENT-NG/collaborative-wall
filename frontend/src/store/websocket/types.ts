@@ -32,7 +32,7 @@ export type WebsocketAction = {
   stopRealTime: () => void;
   subscribe(callback: Subscriber): Subscription;
   queryForMetadata: () => Promise<void>;
-  send: (payload: EventPayload) => Promise<void>;
+  send: (payload: ActionPayload) => Promise<void>;
   startListeners: () => void;
   sendPing: () => Promise<void>;
   sendWallDeletedEvent: () => Promise<void>;
@@ -50,6 +50,7 @@ export type WebsocketAction = {
   sendNoteSeletedEvent: (noteId: string, selected: boolean) => Promise<void>;
   sendNoteDeletedEvent: (noteId: string) => Promise<void>;
   setOpenSocketModal: (value: boolean) => void;
+  listen: (cb: Subscriber) => Subscription;
 };
 
 export type CollaborativeWallPayload = Pick<
@@ -83,7 +84,7 @@ export type WallDeletedPayload = {
   type: "wallDeleted";
 };
 
-export type NoteAddedPayload = {
+export type NoteAddedPayloadAction = {
   wallId: string;
   type: "noteAdded";
   note: PickedNoteProps & {
@@ -149,12 +150,34 @@ export type NoteDeletedPayload = {
   noteId: string;
 };
 
+export type NoteAddedPayloadEvent = {
+  wallId: string;
+  type: "noteAdded";
+  note: NoteProps & {
+    idwall: string;
+  };
+};
 export type EventPayload =
   | MetadataPayload
   | PingPayload
   | WallUpdatedPayload
   | WallDeletedPayload
-  | NoteAddedPayload
+  | NoteAddedPayloadEvent
+  | CursorMovedPayload
+  | NoteEditionStartedPayload
+  | NoteEditionFinishedPayload
+  | NoteMovedPayload
+  | NoteTextUpdatedPayload
+  | NoteImageUpdatedPayload
+  | NoteSelectedPayload
+  | NoteDeletedPayload;
+
+export type ActionPayload =
+  | MetadataPayload
+  | PingPayload
+  | WallUpdatedPayload
+  | WallDeletedPayload
+  | NoteAddedPayloadAction
   | CursorMovedPayload
   | NoteEditionStartedPayload
   | NoteEditionFinishedPayload

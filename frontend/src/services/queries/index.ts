@@ -103,11 +103,8 @@ export const useCreateNote = () => {
   });
 };
 
-export const useInvalidateNotesFactory = () => {
-  const queryClient = useQueryClient();
-  return () => {
-    queryClient.invalidateQueries({ queryKey: ["notes"] });
-  };
+export const noteQueryKey = () => {
+  return "notes";
 };
 
 export const useWallWithNotes = (wallId: string) => {
