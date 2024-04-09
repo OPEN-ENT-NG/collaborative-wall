@@ -10,12 +10,13 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { useShallow } from "zustand/react/shallow";
 
 import { useAccess } from "~/hooks/useAccess";
 // import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteProps } from "~/models/notes";
 import { notesQueryOptions } from "~/services/queries";
-import { useHistoryStore } from "~/store";
+import { useHistoryStore, useWebsocketStore } from "~/store";
 
 export type NoteDropdownMenuOptions = DropdownMenuOptions & {
   hidden?: boolean;
@@ -33,8 +34,13 @@ export const NoteActions = ({
   const { hasRightsToUpdateNote } = useAccess();
 
   const queryClient = useQueryClient();
-  // const { deleteNote } = useRealTimeService(params.wallId!);
   const { setHistory } = useHistoryStore();
+
+  const { sendNoteDeletedEvent } = useWebsocketStore(
+    useShallow((state) => ({
+      sendNoteDeletedEvent: state.sendNoteDeletedEvent,
+    })),
+  );
 
   const { t } = useTranslation();
 
@@ -47,7 +53,7 @@ export const NoteActions = ({
   };
 
   const handleDelete = async () => {
-    //await deleteNote(note);
+    await sendNoteDeletedEvent(note._id);
 
     queryClient.setQueryData(
       notesQueryOptions(note.idwall).queryKey,

@@ -120,26 +120,16 @@ export const CollaborativeWall = () => {
   /* const { listen } = useRealTimeService(params.wallId!);
   listen("noteAdded", "noteDeleted"); */
 
-  const {
-    isOpened,
-    openSocketModal,
-    startRealTime,
-    stopRealTime,
-    sendPing,
-    setOpenSocketModal,
-  } = useWebsocketStore(
-    useShallow((state) => ({
-      ready: state.ready,
-      status: state.status,
-      mode: state.mode,
-      isOpened: state.isOpened,
-      openSocketModal: state.openSocketModal,
-      startRealTime: state.startRealTime,
-      stopRealTime: state.stopRealTime,
-      sendPing: state.sendPing,
-      setOpenSocketModal: state.setOpenSocketModal,
-    })),
-  );
+  const { openSocketModal, startRealTime, stopRealTime, setOpenSocketModal } =
+    useWebsocketStore(
+      useShallow((state) => ({
+        mode: state.mode,
+        openSocketModal: state.openSocketModal,
+        startRealTime: state.startRealTime,
+        stopRealTime: state.stopRealTime,
+        setOpenSocketModal: state.setOpenSocketModal,
+      })),
+    );
 
   useEffect(() => {
     startRealTime(wall?._id as string, true);
@@ -148,13 +138,6 @@ export const CollaborativeWall = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    if (isOpened) {
-      console.log({ isOpened });
-      sendPing();
-    }
-  }, [isOpened]);
 
   useTrashedResource(params?.wallId);
 
@@ -183,13 +166,10 @@ export const CollaborativeWall = () => {
 
   if (isWallError || isNotesError) return <EmptyScreenError />;
 
-  // if (notes) setNumberOfNotes(notes.length);
-
   const handleOnUpdateSuccess = async () => {
     await queryClient.invalidateQueries({
       queryKey: wallQueryOptions(params.wallId as string).queryKey,
     });
-    // "_id" | "name" | "description" | "background" | "icon"
 
     if (!wall) return;
 

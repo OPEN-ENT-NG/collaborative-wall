@@ -16,6 +16,7 @@ const websocketState = {
   resourceId: "",
   subscribers: [],
   openSocketModal: false,
+  lastEvent: null,
 };
 
 const DELAY = 20000;
@@ -87,13 +88,17 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         const { subscribers, start } = get();
 
         socket?.addEventListener("open", () => {
+          console.log("on open");
           get().queryForMetadata();
           set({ isOpened: socket?.readyState === 1 ? true : false });
         });
         socket?.addEventListener("message", (event) => {
+          console.log("on message");
           try {
             const data = JSON.parse(event.data);
             subscribers.forEach((sub) => sub(data));
+            // get().subscribe(event.data);
+            // set({ lastEvent: event.data });
           } catch (error) {
             console.error(
               "[collaborativewall][realtime] Could not parse message:",

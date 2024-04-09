@@ -8,7 +8,7 @@ import { useShallow } from "zustand/react/shallow";
 // import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
-import { useUpdateNote } from "~/services/queries";
+import { useCreateNote, useUpdateNote } from "~/services/queries";
 import { updateData } from "~/services/queries/helpers";
 import { useHistoryStore, useWebsocketStore, useWhiteboard } from "~/store";
 
@@ -45,7 +45,7 @@ export const useNoteModal = (
     })),
   );
 
-  // const createNote = useCreateNote();
+  const createNote = useCreateNote();
   const updateNote = useUpdateNote();
   /* const { createNote, updateNote } = useRealTimeService(wallId!);
    */
@@ -106,29 +106,21 @@ export const useNoteModal = (
     };
 
     try {
-      const test = await sendNoteAddedEvent(note);
+      const response = await createNote.mutateAsync(note);
 
-      console.log({ test });
+      const { status, wall } = response;
 
-      /* setHistory({
-        type: "create",
-        item: note,
-      }); */
-      // const response = await createNote.mutateAsync(note);
+      if (status === "ok") {
+        const size = wall.length;
+        const note = wall[size - 1];
 
-      // const { status, wall } = response;
+        await sendNoteAddedEvent(note);
 
-      // if (status === "ok") {
-      //   const size = wall.length;
-      //   const note = wall[size - 1];
-
-      //   await sendNoteAddedEvent(note);
-
-      //   setHistory({
-      //     type: "create",
-      //     item: note,
-      //   });
-      // }
+        setHistory({
+          type: "create",
+          item: note,
+        });
+      }
 
       handleNavigateBack();
     } catch (error) {
