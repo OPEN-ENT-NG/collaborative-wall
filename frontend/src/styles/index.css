@@ -103,7 +103,7 @@
   border: unset;
 }
 
-.note .card-body {
+.card-body {
   padding-bottom: 8px !important;
   align-items: unset !important;
   flex-wrap: wrap !important;
