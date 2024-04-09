@@ -113,10 +113,10 @@ public class CollaborativeMessageFactory {
             null, null);
   }
 
-  public CollaborativeWallMessage noteDeleted(final String wallId, final String wsId, final String userId, final String noteId) {
+  public CollaborativeWallMessage noteDeleted(final String wallId, final String wsId, final String userId, final String noteId, final CollaborativeWallNote note) {
     return new CollaborativeWallMessage(wallId, System.currentTimeMillis(), serverId, wsId,
             CollaborativeWallMessageType.noteDeleted, null, null,
-            userId, null, noteId, null, null, null,
+            userId, null, noteId, note, null, null,
             null, null);
   }
 

@@ -170,8 +170,8 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
     }
 
     @Override
-    public Future<Void> deleteNote(final String wallId, final String noteId, final UserInfos user, final boolean checkConcurency) {
-        final Promise<Void> promise = Promise.promise();
+    public Future<CollaborativeWallNote> deleteNote(final String wallId, final String noteId, final UserInfos user, final boolean checkConcurency) {
+        final Promise<CollaborativeWallNote> promise = Promise.promise();
         // get last version of the note
         this.noteService.get(noteId, resGet -> {
             if (resGet.isLeft()) {
@@ -182,7 +182,7 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
                 // delete note
                 this.noteService.delete(noteId, modified, user, checkConcurency, result -> {
                     if (result.isRight()) {
-                        promise.complete();
+                        promise.complete(CollaborativeWallNote.fromJson(resGet.right().getValue()));
                     } else {
                         promise.fail(result.left().getValue());
                     }

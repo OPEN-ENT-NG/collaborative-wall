@@ -439,7 +439,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             case noteDeleted: {
                 // client has added a note => delete then broadcast to other users
                 return this.collaborativeWallService.deleteNote(wallId, action.getNoteId(), user, checkConcurency)
-                        .map(deleted -> newArrayList(this.messageFactory.noteDeleted(wallId, wsId, user.getUserId(), action.getNoteId())));
+                        .map(deleted -> newArrayList(this.messageFactory.noteDeleted(wallId, wsId, user.getUserId(), action.getNoteId(), deleted)));
             }
             case noteEditionEnded: {
                 // remove from editing

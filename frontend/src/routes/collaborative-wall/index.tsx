@@ -141,7 +141,6 @@ export const CollaborativeWall = () => {
 
   useEffect(() => {
     startRealTime(wall?._id as string, true);
-    console.log("LISTENING.....");
     const unsubscribe = listen((event) => {
       switch (event.type) {
         case "metadata":
@@ -169,6 +168,10 @@ export const CollaborativeWall = () => {
           break;
         }
         case "noteDeleted": {
+          setHistory({
+            type: "delete",
+            item: event.note,
+          });
           queryClient.invalidateQueries({ queryKey: [noteQueryKey()] });
           break;
         }

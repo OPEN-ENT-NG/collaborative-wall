@@ -144,10 +144,16 @@ export type NoteSelectedPayload = {
   noteId: string;
 };
 
-export type NoteDeletedPayload = {
+export type NoteDeletedPayloadAction = {
   wallId: string;
   type: "noteDeleted";
   noteId: string;
+};
+export type NoteDeletedPayloadEvent = {
+  wallId: string;
+  type: "noteDeleted";
+  noteId: string;
+  note: NoteProps;
 };
 
 export type NoteAddedPayloadEvent = {
@@ -170,7 +176,7 @@ export type EventPayload =
   | NoteTextUpdatedPayload
   | NoteImageUpdatedPayload
   | NoteSelectedPayload
-  | NoteDeletedPayload;
+  | NoteDeletedPayloadEvent;
 
 export type ActionPayload =
   | MetadataPayload
@@ -185,7 +191,7 @@ export type ActionPayload =
   | NoteTextUpdatedPayload
   | NoteImageUpdatedPayload
   | NoteSelectedPayload
-  | NoteDeletedPayload;
+  | NoteDeletedPayloadAction;
 
 export type Subscriber = (event: EventPayload) => void;
 export type Subscription = () => void;
