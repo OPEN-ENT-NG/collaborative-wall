@@ -26,9 +26,29 @@ export type WebsocketState = {
 export type WebsocketAction = {
   start: () => void;
   stop: () => void;
+  doStart: () => void;
+  doStop: () => void;
   startRealTime: (resourceId: string, start: boolean) => void;
   stopRealTime: () => void;
   subscribe(callback: Subscriber): Subscription;
+  queryForMetadata: () => Promise<void>;
+  send: (payload: EventPayload) => Promise<void>;
+  startListeners: () => void;
+  sendPing: () => Promise<void>;
+  sendWallDeletedEvent: () => Promise<void>;
+  sendWallUpdateEvent: (wall: CollaborativeWallPayload) => Promise<void>;
+  sendNoteAddedEvent: (note: CollaborativeWallNotePayload) => Promise<void>;
+  sendNoteCursorMovedEvent: (move: MoveList) => Promise<void>;
+  sendNoteEditionEndedEvent: (noteId: string) => Promise<void>;
+  sendNoteMovedEvent: (
+    noteId: string,
+    note: PickedNotePosition,
+  ) => Promise<void>;
+  sendNoteTextUpdatedEvent: (note: PickedNoteContent) => Promise<void>;
+  sendNoteEditionStartedEvent: (noteId: string) => Promise<void>;
+  sendNoteImageUpdatedEvent: (note: PickedNoteImage) => Promise<void>;
+  sendNoteSeletedEvent: (noteId: string, selected: boolean) => Promise<void>;
+  sendNoteDeletedEvent: (noteId: string) => Promise<void>;
   setOpenSocketModal: (value: boolean) => void;
 };
 

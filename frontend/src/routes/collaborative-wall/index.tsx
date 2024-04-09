@@ -40,9 +40,11 @@ import {
 import { useHistoryStore, useWebsocketStore, useWhiteboard } from "~/store";
 
 import "~/styles/index.css";
+
 const DescriptionModal = lazy(
   async () => await import("~/components/description-modal"),
 );
+
 const UpdateModal = lazy(async () => await import("~/features/resource-modal"));
 const ShareModal = lazy(async () => await import("~/features/share-modal"));
 const WebsocketModal = lazy(async () => await import("~/features/websocket"));
@@ -148,8 +150,8 @@ export const CollaborativeWall = () => {
   }, []);
 
   useEffect(() => {
-    console.log({ isOpened });
     if (isOpened) {
+      console.log({ isOpened });
       sendPing();
     }
   }, [isOpened]);

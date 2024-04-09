@@ -5,13 +5,7 @@ import {
   WebsocketAction,
   WebSocketMode,
   WebsocketStatus,
-  EventPayload,
-  CollaborativeWallPayload,
-  CollaborativeWallNotePayload,
-  PickedNotePosition,
-  PickedNoteContent,
-  PickedNoteImage,
-  MoveList,
+  Subscriber,
 } from "~/store/websocket/types";
 
 const websocketState = {
@@ -27,17 +21,41 @@ const websocketState = {
 const DELAY = 20000;
 const RETRY_COUNTER = 5;
 
+const startHttpListener = (
+  resourceId: string,
+  subscribers: Subscriber[],
+  DELAY: number,
+) => {
+  return setInterval(async () => {
+    const [wall, notes] = await Promise.all([
+      fetch(`/collaborativewall/${resourceId}`),
+      fetch(`/collaborativewall/${resourceId}/notes`),
+    ]);
+    for (const sub of subscribers) {
+      sub({
+        type: "wallUpdate",
+        wallId: (wall as any)._id,
+        wall: wall as any,
+      });
+      for (const note of notes as any) {
+        sub({
+          type: "noteAdded",
+          wallId: (wall as any)._id,
+          note: note,
+        });
+      }
+    }
+  }, DELAY) as unknown as number;
+};
+
 export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
   (set, get) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let socket: WebSocket | undefined;
     let interval: number | undefined;
 
     return {
       ...websocketState,
       startRealTime: (resourceId, start) => {
-        console.log({ resourceId, start });
-
         set({ resourceId });
 
         if (start) {
@@ -50,15 +68,12 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         stop();
       },
       start: async () => {
-        console.log("start");
         await get().doStart();
         set({ status: WebsocketStatus.STARTED });
-        return true;
       },
       stop: async () => {
         await get().doStop();
         set({ status: WebsocketStatus.STOPPED });
-        return false;
       },
       subscribe: (callback) => {
         set((state) => ({ subscribers: [...state.subscribers, callback] }));
@@ -72,13 +87,10 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         const { subscribers, start } = get();
 
         socket?.addEventListener("open", () => {
-          console.log("open");
           get().queryForMetadata();
           set({ isOpened: socket?.readyState === 1 ? true : false });
-          console.log(socket?.readyState);
         });
         socket?.addEventListener("message", (event) => {
-          console.log(socket?.readyState);
           try {
             const data = JSON.parse(event.data);
             subscribers.forEach((sub) => sub(data));
@@ -107,33 +119,12 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         });
       },
       doStart: async () => {
-        console.log("do start");
         const { mode, subscribers, resourceId, startListeners } = get();
 
         if (mode === WebSocketMode.HTTP) {
-          interval = setInterval(async () => {
-            const [wall, notes] = await Promise.all([
-              fetch(`/collaborativewall/${resourceId}`),
-              fetch(`/collaborativewall/${resourceId}/notes`),
-            ]);
-            for (const sub of subscribers) {
-              sub({
-                type: "wallUpdate",
-                wallId: (wall as any)._id,
-                wall: wall as any,
-              });
-              for (const note of notes as any) {
-                sub({
-                  type: "noteAdded",
-                  wallId: (wall as any)._id,
-                  note: note as any,
-                });
-              }
-            }
-          }, DELAY) as unknown as number;
+          interval = startHttpListener(resourceId, subscribers, DELAY);
           set({ ready: true });
         } else {
-          // try start ws multiple times
           for (let i = 0; i < RETRY_COUNTER; i++) {
             try {
               if (window.location.hostname === "localhost") {
@@ -155,26 +146,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
 
           // websocket has not started => http mode
           set({ mode: WebSocketMode.HTTP });
-          return (interval = setInterval(async () => {
-            const [wall, notes] = await Promise.all([
-              fetch(`/collaborativewall/${resourceId}`),
-              fetch(`/collaborativewall/${resourceId}/notes`),
-            ]);
-            for (const sub of subscribers) {
-              sub({
-                type: "wallUpdate",
-                wallId: (wall as any)._id,
-                wall: wall as any,
-              });
-              for (const note of notes as any) {
-                sub({
-                  type: "noteAdded",
-                  wallId: (wall as any)._id,
-                  note: note as any,
-                });
-              }
-            }
-          }, DELAY) as unknown as number);
+          interval = startHttpListener(resourceId, subscribers, DELAY);
         }
       },
       doStop: () => {
@@ -186,10 +158,9 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         } else {
           socket?.close();
           socket = undefined;
-          // this.pendingStart = undefined;
         }
       },
-      send: async (payload: EventPayload) => {
+      send: async (payload) => {
         const { mode, resourceId } = get();
 
         if (mode === WebSocketMode.HTTP) {
@@ -212,14 +183,12 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
       sendPing() {
         const { send, resourceId: wallId } = get();
 
-        console.log("send ping");
-
         return send({
           wallId,
           type: "ping",
         });
       },
-      sendWallUpdateEvent(wall: CollaborativeWallPayload) {
+      sendWallUpdateEvent(wall) {
         const { send, resourceId: wallId } = get();
 
         return send({
@@ -236,7 +205,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           type: "wallDeleted",
         });
       },
-      sendNoteAddedEvent(note: CollaborativeWallNotePayload) {
+      sendNoteAddedEvent(note) {
         const { send, resourceId: wallId } = get();
 
         return send({
@@ -248,7 +217,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           },
         });
       },
-      sendNoteCursorMovedEvent(move: MoveList) {
+      sendNoteCursorMovedEvent(move) {
         const { send, resourceId: wallId } = get();
 
         return send({
@@ -257,14 +226,16 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           move,
         });
       },
-      sendNoteEditionStartedEvent(noteId: string) {
-        return get().send({
+      sendNoteEditionStartedEvent(noteId) {
+        const { send, resourceId: wallId } = get();
+
+        return send({
           wallId,
           type: "noteEditionStarted",
           noteId,
         });
       },
-      sendNoteEditionEndedEvent(noteId: string) {
+      sendNoteEditionEndedEvent(noteId) {
         const { send, resourceId: wallId } = get();
 
         return send({
@@ -273,7 +244,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           noteId,
         });
       },
-      sendNoteMovedEvent(noteId: string, note: PickedNotePosition) {
+      sendNoteMovedEvent(noteId, note) {
         const { send, resourceId: wallId } = get();
 
         return send({
@@ -283,7 +254,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           note,
         });
       },
-      sendNoteTextUpdatedEvent(note: PickedNoteContent) {
+      sendNoteTextUpdatedEvent(note) {
         const { send, resourceId: wallId } = get();
 
         return send({
@@ -293,7 +264,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           note,
         });
       },
-      sendNoteImageUpdatedEvent(note: PickedNoteImage) {
+      sendNoteImageUpdatedEvent(note) {
         const { send, resourceId: wallId } = get();
 
         return send({
@@ -303,7 +274,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           note,
         });
       },
-      sendNoteSeletedEvent(noteId: string, selected: boolean) {
+      sendNoteSeletedEvent(noteId, selected) {
         const { send, resourceId: wallId } = get();
 
         return send({
@@ -312,7 +283,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           noteId,
         });
       },
-      sendNoteDeletedEvent(noteId: string) {
+      sendNoteDeletedEvent(noteId) {
         const { send, resourceId: wallId } = get();
 
         return send({
