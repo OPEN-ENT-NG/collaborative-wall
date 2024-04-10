@@ -108,6 +108,7 @@ export const ToolbarMedia = ({
         tooltip: t("tiptap.toolbar.linker"),
       },
     ];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

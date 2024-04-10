@@ -87,12 +87,10 @@ export const NoteModal = () => {
       scrollable={true}
     >
       <Modal.Header onModalClose={handleNavigateBack}>
-        {isReadMode &&
-          t("collaborativewall.modal.title.read", { ns: "appCode" })}
-        {isEditMode &&
-          t("collaborativewall.modal.title.edit", { ns: "appCode" })}
+        {isReadMode && t("collaborativewall.modal.title.read", { ns: appCode })}
+        {isEditMode && t("collaborativewall.modal.title.edit", { ns: appCode })}
         {isCreateMode &&
-          t("collaborativewall.modal.title.create", { ns: "appCode" })}
+          t("collaborativewall.modal.title.create", { ns: appCode })}
       </Modal.Header>
       <Modal.Subtitle>
         <span className="text-gray-700 small">{data?.owner?.displayName}</span>
