@@ -19,7 +19,7 @@ dependencies:
     version: 3.2.2(react@18.2.0)
   '@edifice-ui/editor':
     specifier: develop-pedago
-    version: 1.4.6-develop-pedago.11(@edifice-ui/icons@1.4.6-develop-pedago.6)(@edifice-ui/react@1.4.6-develop-pedago.11)(@react-spring/web@9.7.3)(@tiptap/extension-heading@2.3.0)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.0.1)(react@18.2.0)
+    version: 1.4.6-develop-pedago.12(@edifice-ui/icons@1.4.6-develop-pedago.6)(@edifice-ui/react@1.4.6-develop-pedago.11)(@react-spring/web@9.7.3)(@tiptap/extension-heading@2.3.0)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.0.1)(react@18.2.0)
   '@edifice-ui/icons':
     specifier: develop-pedago
     version: 1.4.6-develop-pedago.6(react-dom@18.2.0)(react@18.2.0)
@@ -615,8 +615,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-ui/editor@1.4.6-develop-pedago.11(@edifice-ui/icons@1.4.6-develop-pedago.6)(@edifice-ui/react@1.4.6-develop-pedago.11)(@react-spring/web@9.7.3)(@tiptap/extension-heading@2.3.0)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.0.1)(react@18.2.0):
-    resolution: {integrity: sha512-crn/6c9oII3oaHLVkiU22XNuTmvJToeTO/zBUq54LjwyPNofAcOJfvEJ+M3w9evVWmvVsTCbHZYgxpcTj09RJg==}
+  /@edifice-ui/editor@1.4.6-develop-pedago.12(@edifice-ui/icons@1.4.6-develop-pedago.6)(@edifice-ui/react@1.4.6-develop-pedago.11)(@react-spring/web@9.7.3)(@tiptap/extension-heading@2.3.0)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.0.1)(react@18.2.0):
+    resolution: {integrity: sha512-AjQjFg0FfwFq7GduGzI+7WFtvn4JcVR/CWJRk0dYMCmX9si60kppcwa62rdBhXNz9n8wttvSr1p+zfebz76VOA==}
     peerDependencies:
       '@edifice-ui/icons': '*'
       '@edifice-ui/react': '*'
