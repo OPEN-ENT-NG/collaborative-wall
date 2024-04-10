@@ -22,14 +22,12 @@ import { NoteProps } from "~/models/notes";
 export const NoteContent = forwardRef(
   (
     {
-      // editorRef,
       media,
       editionMode,
       dataNote,
       setColorValue,
       setMedia,
     }: {
-      // editorRef: RefObject<EditorRef>;
       media: NoteMedia | null;
       editionMode: EditionMode;
       dataNote?: NoteProps;
@@ -127,10 +125,10 @@ export const NoteContent = forwardRef(
         <Editor
           ref={ref}
           content={dataNote?.content || ""}
-          mode={editionMode === "read" ? "read" : "edit"}
+          mode={isReadMode ? "read" : "edit"}
           toolbar="none"
           variant="ghost"
-          focus={editionMode === "read" ? null : "end"}
+          focus={isReadMode ? null : "end"}
           placeholder={t("collaborativewall.modal.note.content.placeholder", {
             ns: appCode,
           })}
