@@ -1,9 +1,10 @@
 import { QueryClient } from "@tanstack/react-query";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { notesQueryOptions } from ".";
+import { notesQueryOptions, wallQueryOptions } from ".";
 import { NoteProps } from "~/models/notes";
 import { NewState } from "~/models/store";
+import { CollaborativeWallProps } from "~/models/wall";
 
 export const filterData = (queryClient: QueryClient, action: NewState) => {
   return queryClient.setQueryData(
@@ -56,6 +57,15 @@ export const useDeleteNoteQueryData = () => {
           (previousNote) => previousNote._id !== note._id,
         );
       },
+    );
+  };
+};
+export const useUpdateWallQueryData = () => {
+  const queryClient = useQueryClient();
+  return (wall: Partial<CollaborativeWallProps> & { _id: string }) => {
+    queryClient.setQueryData(
+      wallQueryOptions(wall._id).queryKey,
+      (previous) => ({ ...previous, ...wall }) as CollaborativeWallProps,
     );
   };
 };

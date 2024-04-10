@@ -32,13 +32,17 @@ import { useDndKit } from "~/hooks/useDndKit";
 import { useEditNote } from "~/hooks/useEditNote";
 import { NoteProps } from "~/models/notes";
 import { CollaborativeWallProps } from "~/models/wall";
+import { getWall } from "~/services/api";
 import {
   noteQueryKey,
   notesQueryOptions,
   useWallWithNotes,
   wallQueryOptions,
 } from "~/services/queries";
-import { useDeleteNoteQueryData } from "~/services/queries/helpers";
+import {
+  useDeleteNoteQueryData,
+  useUpdateWallQueryData,
+} from "~/services/queries/helpers";
 import { useUpdateNoteQueryData } from "~/services/queries/helpers";
 import { updateData } from "~/services/queries/helpers";
 import { useHistoryStore, useWebsocketStore, useWhiteboard } from "~/store";
@@ -129,6 +133,7 @@ export const CollaborativeWall = () => {
     stopRealTime,
     setOpenSocketModal,
     sendNoteMovedEvent,
+    sendWallUpdateEvent,
     listen,
   } = useWebsocketStore(
     useShallow((state) => ({
@@ -138,19 +143,27 @@ export const CollaborativeWall = () => {
       stopRealTime: state.stopRealTime,
       setOpenSocketModal: state.setOpenSocketModal,
       sendNoteMovedEvent: state.sendNoteMovedEvent,
+      sendWallUpdateEvent: state.sendWallUpdateEvent,
       listen: state.listen,
     })),
   );
   const updateNoteQueryData = useUpdateNoteQueryData();
   const deleteNoteQueryData = useDeleteNoteQueryData();
+  const updateWallQueryData = useUpdateWallQueryData();
   useEffect(() => {
     startRealTime(wall?._id as string, true);
     const unsubscribe = listen((event) => {
       switch (event.type) {
         case "metadata":
         case "ping":
-        case "wallUpdate":
-        case "wallDeleted": {
+        case "wallDeleted":
+        case "noteSelected":
+        case "noteUnselected": {
+          // not used
+          break;
+        }
+        case "wallUpdate": {
+          updateWallQueryData(event.wall);
           break;
         }
         case "noteAdded": {
@@ -164,14 +177,11 @@ export const CollaborativeWall = () => {
         case "cursorMove":
         case "noteEditionStarted":
         case "noteEditionEnded": {
+          //TODO
           break;
         }
         case "noteMoved": {
           updateNoteQueryData({ ...event.note, wallid: event.wallId });
-          break;
-        }
-        case "noteSelected":
-        case "noteUnselected": {
           break;
         }
         case "noteUpdated": {
@@ -250,6 +260,8 @@ export const CollaborativeWall = () => {
     });
 
     if (!wall) return;
+    const newWall = await getWall(wall._id);
+    sendWallUpdateEvent(newWall);
 
     setOpenUpdateModal(false);
   };
