@@ -35,15 +35,15 @@ import { CollaborativeWallProps } from "~/models/wall";
 import {
   noteQueryKey,
   notesQueryOptions,
-  useDeleteNoteQueryData,
-  useUpdateNoteQueryData,
   useWallWithNotes,
   wallQueryOptions,
 } from "~/services/queries";
+import { useDeleteNoteQueryData } from "~/services/queries/helpers";
+import { useUpdateNoteQueryData } from "~/services/queries/helpers";
 import { updateData } from "~/services/queries/helpers";
 import { useHistoryStore, useWebsocketStore, useWhiteboard } from "~/store";
-
 import "~/styles/index.css";
+import { throttle } from "~/utils/throttle";
 
 const DescriptionModal = lazy(
   async () => await import("~/components/description-modal"),
@@ -122,8 +122,6 @@ export const CollaborativeWall = () => {
       numberOfNotes: state.numberOfNotes,
     })),
   );
-  /* const { listen } = useRealTimeService(params.wallId!);
-  listen("noteAdded", "noteDeleted"); */
 
   const {
     openSocketModal,
@@ -177,24 +175,21 @@ export const CollaborativeWall = () => {
           break;
         }
         case "noteUpdated": {
-          // todo : avoir un previousNote ?
-          updateData(queryClient, event.note);
-
-          // todo exemple :
-          /* setHistory({
+          updateData(queryClient, { ...event.note, idwall: event.wallId });
+          setHistory({
             type: "edit",
             item: {
               ...event.note,
-              content: event.previousNote.content,
-              color: event.previousNote.color,
-              media: event.previousNote.media,
+              content: event.note.content,
+              color: event.note.color,
+              media: event.note.media,
             },
             previous: {
-              x: event.previousNote.x,
-              y: event.previousNote.y,
-              color: event.previousNote.color,
-              content: event.previousNote.content,
-              media: event.previousNote.media || null,
+              x: event.oldNote.x,
+              y: event.oldNote.y,
+              color: event.oldNote.color,
+              content: event.oldNote.content,
+              media: event.oldNote.media || null,
             },
             next: {
               x: event.note.x,
@@ -203,7 +198,7 @@ export const CollaborativeWall = () => {
               content: event.note.content,
               media: event.note.media || null,
             },
-          }); */
+          });
           break;
         }
         case "noteDeleted": {
@@ -258,16 +253,22 @@ export const CollaborativeWall = () => {
 
     setOpenUpdateModal(false);
   };
-
+  // throttle drag and drop
+  const throlledDrag = throttle<{ _id: string; left: number; top: number }>(
+    ({ _id, left, top }) => {
+      sendNoteMovedEvent(_id, {
+        _id,
+        x: left,
+        y: top,
+      });
+    },
+    100,
+  );
   const handleDragMove = (event: DragMoveEvent) => {
     const _id = event.active.id.toString();
     const coordinates = event.active.rect.current.translated;
     if (coordinates) {
-      sendNoteMovedEvent(_id, {
-        _id,
-        x: coordinates.left,
-        y: coordinates.top,
-      });
+      throlledDrag({ _id, ...coordinates });
     }
   };
 

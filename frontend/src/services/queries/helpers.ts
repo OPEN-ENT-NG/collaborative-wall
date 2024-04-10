@@ -1,4 +1,5 @@
 import { QueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { notesQueryOptions } from ".";
 import { NoteProps } from "~/models/notes";
@@ -27,4 +28,34 @@ export const updateData = (queryClient: QueryClient, note: NoteProps) => {
       });
     },
   );
+};
+export const useUpdateNoteQueryData = () => {
+  const queryClient = useQueryClient();
+  return (note: Partial<NoteProps> & { wallid: string }) => {
+    queryClient.setQueryData(
+      notesQueryOptions(note.wallid).queryKey,
+      (previousNotes) => {
+        return previousNotes?.map((previousNote) => {
+          if (previousNote._id === note._id) {
+            return { ...previousNote, ...note };
+          } else {
+            return previousNote;
+          }
+        });
+      },
+    );
+  };
+};
+export const useDeleteNoteQueryData = () => {
+  const queryClient = useQueryClient();
+  return (note: NoteProps) => {
+    queryClient.setQueryData(
+      notesQueryOptions(note.idwall).queryKey,
+      (previousNotes) => {
+        return previousNotes?.filter(
+          (previousNote) => previousNote._id !== note._id,
+        );
+      },
+    );
+  };
 };

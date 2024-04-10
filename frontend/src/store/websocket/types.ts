@@ -121,13 +121,16 @@ export type NoteMovedPayload = {
 };
 
 // TODO
-export type PickedNoteUpdate = Pick<NoteProps, "_id" | "content" | "media">;
+export type PickedNoteUpdate = Pick<
+  NoteProps,
+  "_id" | "content" | "media" | "color"
+>;
 
 export type NoteUpdatedPayloadEvent = {
   wallId: string;
   type: "noteUpdated";
   noteId: string;
-  // previousNote
+  oldNote: NoteProps;
   note: NoteProps;
 };
 

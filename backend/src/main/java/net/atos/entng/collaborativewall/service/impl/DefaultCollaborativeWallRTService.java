@@ -123,7 +123,17 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     @Override
     public Future<List<CollaborativeWallMessage>> pushEvent(final String wallId,final UserInfos session, final CollaborativeWallUserAction action, final String wsId, final boolean checkConcurency){
         return this.onNewUserAction(action, wallId, wsId, session, checkConcurency)
-                .onSuccess(messages -> this.broadcastMessagesToUsers(messages, true, false, null));
+                .onSuccess(messages -> {
+                    switch(action.getType()){
+                        case cursorMove:
+                        case noteMoved:
+                            this.broadcastMessagesToUsers(messages, true, false, wsId);
+                            return ;
+                        default:
+                            this.broadcastMessagesToUsers(messages, true, false, null);
+                            return;
+                    }
+                });
     }
 
     private void broadcastMessagesToUsers(final List<CollaborativeWallMessage> messages,
@@ -455,12 +465,12 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             }
             case noteUpdated: {
                 // client has updated the image's note => upsert then broadcast to other users
-                return this.collaborativeWallService.patchNote(wallId, PatchKind.Image, action.getNote(), user, checkConcurency)
+                return this.collaborativeWallService.upsertNote(wallId, action.getNote(), user, checkConcurency)
                         .map(saved -> newArrayList(this.messageFactory.noteUpdated(wallId, wsId, user.getUserId(), action.getNote(), saved)));
             }
             case noteMoved: {
                 // client has moved the note => patch then broadcast to other users
-                return this.collaborativeWallService.upsertNote(wallId, action.getNote(), user, checkConcurency)
+                return this.collaborativeWallService.patchNote(wallId, PatchKind.Position, action.getNote(), user, checkConcurency)
                         .map(saved -> newArrayList(this.messageFactory.noteMoved(wallId, wsId, user.getUserId(), saved)));
             }
             case noteSelected: {

@@ -113,6 +113,7 @@ export const useNoteModal = (
       _id: loadedData._id,
       content: note.content,
       media: note.media,
+      color: note.color,
     });
 
     handleNavigateBack();
