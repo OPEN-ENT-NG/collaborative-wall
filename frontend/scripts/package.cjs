@@ -44,6 +44,7 @@ function generatePackage(content) {
 function generateDeps(content) {
   return {
     ...content.dependencies,
+    "@edifice-ui/editor": BRANCH,
     "@edifice-ui/icons": BRANCH,
     "@edifice-ui/react": BRANCH,
     "ode-explorer": BRANCH,

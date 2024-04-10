@@ -1,9 +1,10 @@
 import { Button, Heading, Layout } from "@edifice-ui/react";
 import { t } from "i18next";
-import { useRouteError } from "react-router-dom";
+import { useNavigate, useRouteError } from "react-router-dom";
 
 export const PageError = () => {
   const error = useRouteError();
+  const navigate = useNavigate();
   console.error(error);
 
   return (
@@ -17,12 +18,7 @@ export const PageError = () => {
             ns: "collaborativewall",
           })}
         </div>
-        <Button
-          color="primary"
-          onClick={() => {
-            window.location.href = "/collaborativewall";
-          }}
-        >
+        <Button color="primary" onClick={() => navigate(-1)}>
           {t("back")}
         </Button>
       </div>

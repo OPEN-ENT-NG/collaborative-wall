@@ -41,7 +41,15 @@ export const Note = ({
     });
 
   const editor: Editor | null = useEditor({
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit.configure({
+        paragraph: {
+          HTMLAttributes: {
+            class: `card-text small text-break text-truncate ${note.media ? "text-truncate-8" : "text-truncate-12"}`,
+          },
+        },
+      }),
+    ],
     content: note.content,
     editable: false,
   });
@@ -95,11 +103,7 @@ export const Note = ({
       <Card className={classes} isSelectable={false} onClick={handleClick}>
         <Card.Body>
           {note.media?.url && <ShowMediaType media={note.media} />}
-          <Card.Text
-            className={`text-truncate ${note.media ? "text-truncate-8" : "text-truncate-12"}`}
-          >
-            <EditorContent editor={editor} />
-          </Card.Text>
+          <EditorContent editor={editor} />
         </Card.Body>
         <Card.Footer>
           <Card.Text>{note.owner?.displayName}</Card.Text>
