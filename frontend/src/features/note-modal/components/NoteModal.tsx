@@ -87,28 +87,28 @@ export const NoteModal = () => {
       scrollable={true}
     >
       <Modal.Header onModalClose={handleNavigateBack}>
-        {isReadMode() &&
-          t("collaborativewall.modal.title.read", { ns: appCode })}
-        {isEditMode() &&
-          t("collaborativewall.modal.title.edit", { ns: appCode })}
-        {isCreateMode() &&
-          t("collaborativewall.modal.title.create", { ns: appCode })}
+        {isReadMode &&
+          t("collaborativewall.modal.title.read", { ns: "appCode" })}
+        {isEditMode &&
+          t("collaborativewall.modal.title.edit", { ns: "appCode" })}
+        {isCreateMode &&
+          t("collaborativewall.modal.title.create", { ns: "appCode" })}
       </Modal.Header>
       <Modal.Subtitle>
         <span className="text-gray-700 small">{data?.owner?.displayName}</span>
       </Modal.Subtitle>
       <Modal.Body>
         <NoteContent
-          editorRef={editorRef}
+          ref={editorRef}
           dataNote={data}
+          editionMode={editionMode}
+          media={media}
           setColorValue={setColorValue}
           setMedia={setMedia}
-          media={media}
-          editionMode={editionMode}
         />
       </Modal.Body>
       <Modal.Footer>
-        {isReadMode() && !hasRightsToUpdateNote(data) && (
+        {isReadMode && !hasRightsToUpdateNote(data) && (
           <>
             <Button
               type="button"
@@ -120,7 +120,7 @@ export const NoteModal = () => {
             </Button>
           </>
         )}
-        {isReadMode() && hasRightsToUpdateNote(data) && (
+        {isReadMode && hasRightsToUpdateNote(data) && (
           <>
             <Button
               type="button"
@@ -140,7 +140,7 @@ export const NoteModal = () => {
             </Button>
           </>
         )}
-        {(isEditMode() || isCreateMode()) && (
+        {(isEditMode || isCreateMode) && (
           <Button
             type="button"
             color="tertiary"
@@ -150,7 +150,7 @@ export const NoteModal = () => {
             {t("collaborativewall.modal.cancel", { ns: appCode })}
           </Button>
         )}
-        {isEditMode() && (
+        {isEditMode && (
           <Button
             type="button"
             color="primary"
@@ -160,7 +160,7 @@ export const NoteModal = () => {
             {t("collaborativewall.modal.save", { ns: appCode })}
           </Button>
         )}
-        {isCreateMode() && (
+        {isCreateMode && (
           <Button
             type="button"
             color="primary"

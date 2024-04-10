@@ -40,9 +40,9 @@ export const useNoteModal = (
     })),
   );
 
-  const isReadMode = () => editionMode === "read";
-  const isEditMode = () => editionMode === "edit";
-  const isCreateMode = () => editionMode === "create";
+  const isReadMode = editionMode === "read";
+  const isEditMode = editionMode === "edit";
+  const isCreateMode = editionMode === "create";
 
   const handleCreateNote = async () => {
     if (!wallId) {
