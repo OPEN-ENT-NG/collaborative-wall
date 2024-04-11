@@ -318,7 +318,7 @@ export const CollaborativeWall = () => {
   }, []);
 
   useTrashedResource(params?.wallId);
-  const mousePos = useMousePosition();
+  useMousePosition();
 
   const { handleOnDragEnd, handleOnDragStart } = useEditNote({
     onClick: !isMobile
@@ -404,12 +404,6 @@ export const CollaborativeWall = () => {
 
   return (
     <>
-      <Cursor
-        key={user?.userId}
-        username={user?.username}
-        point={[mousePos.x, mousePos.y]}
-      />
-
       {COUNT_CONNECTED_USERS &&
         renderCursors(filteredConnectedUsers, moveUsers)}
 
