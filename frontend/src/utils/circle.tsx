@@ -1,4 +1,4 @@
-export const Square = ({
+export const Circle = ({
   borderColor,
   className,
 }: {
