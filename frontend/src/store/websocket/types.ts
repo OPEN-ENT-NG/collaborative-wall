@@ -143,7 +143,7 @@ export type NoteMovedPayload = {
 // TODO
 export type PickedNoteUpdate = Pick<
   NoteProps,
-  "_id" | "content" | "media" | "color"
+  "_id" | "content" | "media" | "color" | "x" | "y"
 >;
 
 export type NoteUpdatedPayloadEvent = {

@@ -3,9 +3,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
-import { notesQueryOptions, useUpdateNote } from "~/services/queries";
-import { updateData } from "~/services/queries/helpers";
-import { useHistoryStore, useWhiteboard } from "~/store";
+import { notesQueryOptions } from "~/services/queries";
+import { useHistoryStore, useWebsocketStore, useWhiteboard } from "~/store";
 
 export const useEditNote = ({
   onClick,
@@ -13,8 +12,12 @@ export const useEditNote = ({
   onClick?: (id: string) => void;
 }) => {
   const { wallId } = useParams();
-  const { setUpdatedNote, setHistory } = useHistoryStore();
-
+  const { setUpdatedNote } = useHistoryStore();
+  const { sendNoteUpdated } = useWebsocketStore(
+    useShallow((state) => ({
+      sendNoteUpdated: state.sendNoteUpdated,
+    })),
+  );
   const queryClient = useQueryClient();
   const { zoom, toggleCanMoveBoard } = useWhiteboard(
     useShallow((state) => ({
@@ -22,7 +25,6 @@ export const useEditNote = ({
       toggleCanMoveBoard: state.toggleCanMoveBoard,
     })),
   );
-  const updateNote = useUpdateNote();
 
   const handleOnDragStart = () => {
     toggleCanMoveBoard();
@@ -66,43 +68,10 @@ export const useEditNote = ({
         y: position.y,
         zIndex: 2,
       });
-
-      await updateNote.mutateAsync(
-        {
-          id: findNote._id,
-          note: {
-            content: findNote.content,
-            color: findNote.color,
-            idwall: findNote.idwall,
-            media: findNote.media,
-            modified: findNote.modified,
-            x: position.x,
-            y: position.y,
-          },
-        },
-        {
-          onSuccess: async (data) => {
-            const { status, note: updatedNote } = data;
-
-            if (status !== "ok") return;
-
-            updateData(queryClient, updatedNote);
-
-            setHistory({
-              type: "move",
-              item: updatedNote,
-              previous: {
-                x: previous.x,
-                y: previous.y,
-              },
-              next: {
-                x: position.x,
-                y: position.y,
-              },
-            });
-          },
-        },
-      );
+      sendNoteUpdated({
+        ...findNote,
+        ...position,
+      });
     }
   };
 

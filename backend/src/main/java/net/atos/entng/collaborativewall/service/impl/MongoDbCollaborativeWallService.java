@@ -86,15 +86,17 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
     }
 
     @Override
-    public Future<CollaborativeWallNote> upsertNote(final String wallId, final CollaborativeWallNote note, final UserInfos user, final boolean checkConcurency) {
-        final Promise<CollaborativeWallNote> promise = Promise.promise();
+    public Future<CollaborativeNoteDiff> upsertNote(final String wallId, final CollaborativeWallNote note, final UserInfos user, final boolean checkConcurency) {
+        final Promise<CollaborativeNoteDiff> promise = Promise.promise();
         final String id = note.getId();
         if (StringUtils.isBlank(id)) {
             // create note
             final CollaborativeWallNote safeNote = new CollaborativeWallNote(note, user, System.currentTimeMillis());
             this.noteService.create(safeNote.toJson(), user, result -> {
                 if (result.isRight()) {
-                    promise.complete(new CollaborativeWallNote(result.right().getValue().getString("_id"), safeNote));
+                    final CollaborativeWallNote newNote = new CollaborativeWallNote(result.right().getValue().getString("_id"), safeNote);
+                    final CollaborativeNoteDiff diff = new CollaborativeNoteDiff(null, newNote);
+                    promise.complete(diff);
                 } else {
                     promise.fail(result.left().getValue());
                 }
@@ -107,7 +109,8 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
                     final CollaborativeWallNote safeNote = new CollaborativeWallNote(previousNote, note, System.currentTimeMillis());
                     this.noteService.update(id, safeNote.toJson(), user, checkConcurency, result -> {
                         if (result.isRight()) {
-                            promise.complete(safeNote);
+                            final CollaborativeNoteDiff diff = new CollaborativeNoteDiff(previousNote, safeNote);
+                            promise.complete(diff);
                         } else {
                             promise.fail(result.left().getValue());
                         }

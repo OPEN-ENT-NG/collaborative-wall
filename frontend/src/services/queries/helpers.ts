@@ -23,6 +23,14 @@ export const updateData = (queryClient: QueryClient, note: NoteProps) => {
     (previousNotes: NoteProps[] | undefined) => {
       return previousNotes?.map((prevNote) => {
         if (prevNote._id === note._id) {
+          console.log(
+            "PREVIOUS:",
+            prevNote.x,
+            prevNote.y,
+            "NEW:",
+            note.x,
+            note.y,
+          );
           return { ...prevNote, ...note, zIndex: 2 };
         }
         return { ...prevNote, zIndex: 1 };

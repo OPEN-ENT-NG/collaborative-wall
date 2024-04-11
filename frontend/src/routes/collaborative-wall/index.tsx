@@ -233,34 +233,66 @@ export const CollaborativeWall = () => {
           break;
         }
         case "noteMoved": {
+          setUpdatedNote({
+            activeId: event.note._id,
+            x: event.note.x,
+            y: event.note.y,
+            zIndex: 2,
+          });
           updateNoteQueryData({ ...event.note, wallid: event.wallId });
           break;
         }
         case "noteUpdated": {
           updateData(queryClient, { ...event.note, idwall: event.wallId });
-          setHistory({
-            type: "edit",
-            item: {
-              ...event.note,
-              content: event.note.content,
-              color: event.note.color,
-              media: event.note.media,
-            },
-            previous: {
-              x: event.oldNote.x,
-              y: event.oldNote.y,
-              color: event.oldNote.color,
-              content: event.oldNote.content,
-              media: event.oldNote.media || null,
-            },
-            next: {
+          if (
+            event.oldNote.x !== event.note.x ||
+            event.oldNote.y !== event.note.y
+          ) {
+            // note has been moved
+            setHistory({
+              type: "move",
+              item: event.note,
+              previous: {
+                x: event.oldNote.x,
+                y: event.oldNote.y,
+              },
+              next: {
+                x: event.note.x,
+                y: event.note.y,
+              },
+            });
+            setUpdatedNote({
+              activeId: event.note._id,
               x: event.note.x,
               y: event.note.y,
-              color: event.note.color,
-              content: event.note.content,
-              media: event.note.media || null,
-            },
-          });
+              zIndex: 2,
+            });
+          } else {
+            // note has been updated
+            setHistory({
+              type: "edit",
+              item: {
+                ...event.note,
+                content: event.note.content,
+                color: event.note.color,
+                media: event.note.media,
+              },
+              previous: {
+                x: event.oldNote.x,
+                y: event.oldNote.y,
+                color: event.oldNote.color,
+                content: event.oldNote.content,
+                media: event.oldNote.media || null,
+              },
+              next: {
+                x: event.note.x,
+                y: event.note.y,
+                color: event.note.color,
+                content: event.note.content,
+                media: event.note.media || null,
+              },
+            });
+          }
           break;
         }
         case "noteDeleted": {

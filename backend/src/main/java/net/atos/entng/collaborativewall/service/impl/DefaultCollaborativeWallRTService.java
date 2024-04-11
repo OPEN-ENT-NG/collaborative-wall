@@ -444,7 +444,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             case noteAdded: {
                 // client has added a note => upsert then broadcast to other users
                 return this.collaborativeWallService.upsertNote(wallId, action.getNote(), user, checkConcurency)
-                        .map(saved -> newArrayList(this.messageFactory.noteAdded(wallId, wsId, user.getUserId(), saved)));
+                        .map(saved -> newArrayList(this.messageFactory.noteAdded(wallId, wsId, user.getUserId(), saved.newNote)));
             }
             case noteDeleted: {
                 // client has added a note => delete then broadcast to other users
@@ -466,12 +466,11 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             case noteUpdated: {
                 // client has updated the image's note => upsert then broadcast to other users
                 return this.collaborativeWallService.upsertNote(wallId, action.getNote(), user, checkConcurency)
-                        .map(saved -> newArrayList(this.messageFactory.noteUpdated(wallId, wsId, user.getUserId(), action.getNote(), saved)));
+                        .map(saved -> newArrayList(this.messageFactory.noteUpdated(wallId, wsId, user.getUserId(), saved.oldNote, saved.newNote)));
             }
             case noteMoved: {
-                // client has moved the note => patch then broadcast to other users
-                return this.collaborativeWallService.patchNote(wallId, PatchKind.Position, action.getNote(), user, checkConcurency)
-                        .map(saved -> newArrayList(this.messageFactory.noteMoved(wallId, wsId, user.getUserId(), saved)));
+                // client has moved the note => DONT patch now => broadcast to other users
+                return Future.succeededFuture(newArrayList(this.messageFactory.noteMoved(wallId, wsId, user.getUserId(), action.getNote())));
             }
             case noteSelected: {
                 // add to editing

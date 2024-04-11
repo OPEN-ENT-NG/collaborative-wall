@@ -114,6 +114,8 @@ export const useNoteModal = (
       content: note.content,
       media: note.media,
       color: note.color,
+      x: note.x,
+      y: note.y,
     });
 
     handleNavigateBack();
