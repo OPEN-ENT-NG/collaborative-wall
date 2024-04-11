@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { Suspense, lazy, useEffect } from "react";
+import { Suspense, lazy, useCallback, useEffect } from "react";
 
 import { DndContext, DragMoveEvent } from "@dnd-kit/core";
 import { restrictToParentElement } from "@dnd-kit/modifiers";
@@ -9,6 +8,7 @@ import {
   LoadingScreen,
   useOdeClient,
   useTrashedResource,
+  useUser,
 } from "@edifice-ui/react";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import { IWebApp } from "edifice-ts-client";
@@ -21,7 +21,7 @@ import {
 } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
-import BackgroundModal from "~/components/background-modal";
+import { Cursor } from "~/components/cursor";
 import { DescriptionWall } from "~/components/description-wall";
 import { EmptyScreenError } from "~/components/emptyscreen-error";
 import { Note } from "~/components/note";
@@ -30,7 +30,10 @@ import { AppActions } from "~/features/app-actions";
 import { useAccess } from "~/hooks/useAccess";
 import { useDndKit } from "~/hooks/useDndKit";
 import { useEditNote } from "~/hooks/useEditNote";
+import { useMousePosition } from "~/hooks/useMousePosition";
+import { useThrottledFunction } from "~/hooks/useThrottledFunction";
 import { NoteProps } from "~/models/notes";
+import { MoveUser } from "~/models/types";
 import { CollaborativeWallProps } from "~/models/wall";
 import { getWall } from "~/services/api";
 import {
@@ -46,22 +49,42 @@ import {
 import { useUpdateNoteQueryData } from "~/services/queries/helpers";
 import { updateData } from "~/services/queries/helpers";
 import { useHistoryStore, useWebsocketStore, useWhiteboard } from "~/store";
-import "~/styles/index.css";
-import { throttle } from "~/utils/throttle";
+import { ConnectedUsers } from "~/store/websocket/types";
 
+import "~/styles/index.css";
 const DescriptionModal = lazy(
   async () => await import("~/components/description-modal"),
 );
-
 const UpdateModal = lazy(async () => await import("~/features/resource-modal"));
 const ShareModal = lazy(async () => await import("~/features/share-modal"));
 const WebsocketModal = lazy(async () => await import("~/features/websocket"));
+const BackgroundModal = lazy(
+  async () => await import("~/components/background-modal"),
+);
 
 interface LoaderData {
   wall: CollaborativeWallProps;
   notes: NoteProps[];
   query: string | null;
 }
+
+const MAX_USERS_CONNECTED = 5;
+
+const renderCursors = (coUsers: ConnectedUsers[], moveUsers: MoveUser[]) => {
+  if (!coUsers) return null;
+
+  return moveUsers.map((moveUser) => {
+    const user = coUsers.find((user) => user.id === moveUser.id);
+
+    return (
+      <Cursor
+        key={moveUser.id}
+        username={user?.name}
+        point={[moveUser.x, moveUser.y]}
+      />
+    );
+  });
+};
 
 export const wallLoader =
   (queryClient: QueryClient) =>
@@ -95,11 +118,22 @@ export const CollaborativeWall = () => {
   const params = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const sensors = useDndKit();
+
+  const updateNoteQueryData = useUpdateNoteQueryData();
+  const deleteNoteQueryData = useDeleteNoteQueryData();
+  const updateWallQueryData = useUpdateWallQueryData();
 
   const { query } = useLoaderData() as LoaderData;
+  const { updatedNote, setHistory } = useHistoryStore();
+  const { currentApp } = useOdeClient();
+  const { user } = useUser();
+  const { hasRightsToMoveNote } = useAccess();
 
-  const sensors = useDndKit();
-  const { setHistory } = useHistoryStore();
+  const [
+    { data: wall, isPending: isWallLoading, isError: isWallError },
+    { data: notes, isPending: isNotesLoading, isError: isNotesError },
+  ] = useWallWithNotes(params.wallId!);
 
   const {
     openShareModal,
@@ -135,9 +169,17 @@ export const CollaborativeWall = () => {
     sendNoteMovedEvent,
     sendWallUpdateEvent,
     listen,
+    connectedUsers,
+    setConnectedUsers,
+    moveUsers,
+    setMoveUsers,
   } = useWebsocketStore(
     useShallow((state) => ({
       mode: state.mode,
+      connectedUsers: state.connectedUsers,
+      setConnectedUsers: state.setConnectedUsers,
+      moveUsers: state.moveUsers,
+      setMoveUsers: state.setMoveUsers,
       openSocketModal: state.openSocketModal,
       startRealTime: state.startRealTime,
       stopRealTime: state.stopRealTime,
@@ -147,14 +189,15 @@ export const CollaborativeWall = () => {
       listen: state.listen,
     })),
   );
-  const updateNoteQueryData = useUpdateNoteQueryData();
-  const deleteNoteQueryData = useDeleteNoteQueryData();
-  const updateWallQueryData = useUpdateWallQueryData();
+
   useEffect(() => {
     startRealTime(wall?._id as string, true);
     const unsubscribe = listen((event) => {
       switch (event.type) {
-        case "metadata":
+        case "metadata": {
+          setConnectedUsers(event.connectedUsers);
+          break;
+        }
         case "ping":
         case "wallDeleted":
         case "noteSelected":
@@ -174,7 +217,16 @@ export const CollaborativeWall = () => {
           queryClient.invalidateQueries({ queryKey: [noteQueryKey()] });
           break;
         }
-        case "cursorMove":
+        case "cursorMove": {
+          // if (user?.userId === event.userId) return;
+
+          setMoveUsers({
+            id: event.userId,
+            x: event.move[0].x,
+            y: event.move[0].y,
+          });
+          break;
+        }
         case "noteEditionStarted":
         case "noteEditionEnded": {
           //TODO
@@ -227,32 +279,39 @@ export const CollaborativeWall = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   useTrashedResource(params?.wallId);
-
-  const { currentApp } = useOdeClient();
-
-  const [
-    { data: wall, isPending: isWallLoading, isError: isWallError },
-    { data: notes, isPending: isNotesLoading, isError: isNotesError },
-  ] = useWallWithNotes(params.wallId!);
+  useMousePosition();
 
   const { handleOnDragEnd, handleOnDragStart } = useEditNote({
     onClick: !isMobile
       ? (id: any) => navigate(`note/${id}?mode=read`)
       : undefined,
   });
-  const { updatedNote } = useHistoryStore();
-
-  const { hasRightsToMoveNote } = useAccess();
 
   useEffect(() => {
     if (query) setIsMobile(query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
-  if (isWallLoading && isNotesLoading) return <LoadingScreen />;
+  const callbackFnToThrottle = useCallback(
+    ({ _id, left, top }: { _id: string; left: number; top: number }) => {
+      sendNoteMovedEvent(_id, {
+        _id,
+        x: left,
+        y: top,
+      });
+    },
+    [sendNoteMovedEvent],
+  );
 
-  if (isWallError || isNotesError) return <EmptyScreenError />;
+  const { throttledFn: throttledOnMove } = useThrottledFunction<{
+    _id: string;
+    left: number;
+    top: number;
+  }>({
+    callbackFn: callbackFnToThrottle,
+  });
 
   const handleOnUpdateSuccess = async () => {
     await queryClient.invalidateQueries({
@@ -265,27 +324,52 @@ export const CollaborativeWall = () => {
 
     setOpenUpdateModal(false);
   };
-  // throttle drag and drop
-  const throlledDrag = throttle<{ _id: string; left: number; top: number }>(
-    ({ _id, left, top }) => {
-      sendNoteMovedEvent(_id, {
-        _id,
-        x: left,
-        y: top,
-      });
-    },
-    100,
-  );
+
   const handleDragMove = (event: DragMoveEvent) => {
     const _id = event.active.id.toString();
     const coordinates = event.active.rect.current.translated;
     if (coordinates) {
-      throlledDrag({ _id, ...coordinates });
+      throttledOnMove({ _id, ...coordinates });
     }
   };
 
+  const filteredConnectedUsers = connectedUsers.filter(
+    (connectedUser: { id: string | undefined }) =>
+      connectedUser.id !== user?.userId,
+  );
+
+  const renderNotes = notes
+    ?.sort(
+      (a: NoteProps, b: NoteProps) =>
+        (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
+    )
+    .map((note: NoteProps, i: number) => {
+      const isUpdated = note._id === updatedNote?.activeId;
+      return (
+        <Note
+          key={note._id}
+          note={{
+            ...note,
+            x: isUpdated ? updatedNote.x : note.x,
+            y: isUpdated ? updatedNote.y : note.y,
+            zIndex: isUpdated ? numberOfNotes + 1 : i,
+          }}
+          disabled={hasRightsToMoveNote(note)}
+        />
+      );
+    });
+
+  const COUNT_CONNECTED_USERS = connectedUsers.length <= MAX_USERS_CONNECTED;
+
+  if (isWallLoading && isNotesLoading) return <LoadingScreen />;
+
+  if (isWallError || isNotesError) return <EmptyScreenError />;
+
   return (
     <>
+      {COUNT_CONNECTED_USERS &&
+        renderCursors(filteredConnectedUsers, moveUsers)}
+
       {!isMobile && (
         <AppHeader
           isFullscreen
@@ -295,10 +379,12 @@ export const CollaborativeWall = () => {
           <Breadcrumb app={currentApp as IWebApp} name={wall?.name} />
         </AppHeader>
       )}
+
       <div className="collaborativewall-container">
         {wall?.description && !isMobile && (
           <DescriptionWall description={wall?.description} />
         )}
+
         <WhiteboardWrapper>
           <DndContext
             sensors={sensors}
@@ -307,31 +393,14 @@ export const CollaborativeWall = () => {
             onDragStart={handleOnDragStart}
             modifiers={[restrictToParentElement]}
           >
-            {notes
-              ?.sort(
-                (a: NoteProps, b: NoteProps) =>
-                  (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
-              )
-              .map((note: NoteProps, i: number) => {
-                const isUpdated = note._id === updatedNote?.activeId;
-                return (
-                  <Note
-                    key={note._id}
-                    note={{
-                      ...note,
-                      x: isUpdated ? updatedNote.x : note.x,
-                      y: isUpdated ? updatedNote.y : note.y,
-                      zIndex: isUpdated ? numberOfNotes + 1 : i,
-                    }}
-                    disabled={hasRightsToMoveNote(note)}
-                  />
-                );
-              })}
+            {renderNotes}
           </DndContext>
         </WhiteboardWrapper>
 
         <Outlet />
+      </div>
 
+      <Suspense fallback={<LoadingScreen />}>
         {wall?.description && (
           <DescriptionModal description={wall.description} />
         )}
@@ -342,8 +411,6 @@ export const CollaborativeWall = () => {
             wall={wall}
           />
         )}
-      </div>
-      <Suspense fallback={<LoadingScreen />}>
         {openUpdateModal && wall && (
           <UpdateModal
             mode="update"

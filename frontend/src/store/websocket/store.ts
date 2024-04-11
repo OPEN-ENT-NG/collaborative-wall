@@ -11,6 +11,8 @@ import {
 
 const websocketState = {
   ready: false,
+  connectedUsers: [],
+  moveUsers: [],
   mode: WebSocketMode.WS,
   isOpened: false,
   status: WebsocketStatus.IDLE,
@@ -77,6 +79,25 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         await get().doStop();
         set({ status: WebsocketStatus.STOPPED });
       },
+      setConnectedUsers: (connectedUsers) => set({ connectedUsers }),
+      setMoveUsers: (moveUser) =>
+        set((state) => {
+          const existingUserIndex = state.moveUsers.findIndex(
+            (user) => user.id === moveUser.id,
+          );
+
+          if (existingUserIndex !== -1) {
+            return {
+              moveUsers: state.moveUsers.map((user, index) =>
+                index === existingUserIndex
+                  ? { ...user, x: moveUser.x, y: moveUser.y }
+                  : user,
+              ),
+            };
+          } else {
+            return { moveUsers: [...state.moveUsers, moveUser] };
+          }
+        }),
       subscribe: (callback) => {
         set((state) => ({ subscribers: [...state.subscribers, callback] }));
         return () => {
@@ -89,7 +110,6 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         const { start } = get();
 
         socket?.addEventListener("open", () => {
-          console.log("on open");
           get().queryForMetadata();
           set({ isOpened: socket?.readyState === 1 ? true : false });
         });
@@ -98,8 +118,6 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
             const { subscribers } = get();
             const data = JSON.parse(event.data) as EventPayload;
             subscribers.forEach((sub) => sub(data));
-            // get().subscribe(event.data);
-            // set({ lastEvent: event.data });
           } catch (error) {
             console.error(
               "[collaborativewall][realtime] Could not parse message:",
@@ -109,7 +127,6 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         });
         socket?.addEventListener("close", (event) => {
           if (!event.wasClean) {
-            // this.pendingStart?.reject(event.reason);
             console.warn(
               "[collaborativewall][realtime] Server closed connection unilaterally. restarting...",
               event,

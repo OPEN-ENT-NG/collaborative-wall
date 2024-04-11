@@ -1,4 +1,5 @@
 import { NoteProps, PickedNoteProps } from "~/models/notes";
+import { MoveUser } from "~/models/types";
 import { CollaborativeWallProps } from "~/models/wall";
 // import { RealTimeProxyService } from "~/services/realtime/RealTimeProxyService";
 
@@ -16,6 +17,8 @@ export enum WebsocketStatus {
 export type WebsocketState = {
   ready: boolean;
   isOpened: boolean;
+  connectedUsers: ConnectedUsers[];
+  moveUsers: MoveUser[];
   mode: WebSocketMode;
   resourceId: string;
   subscribers: Array<Subscriber>;
@@ -46,7 +49,8 @@ export type WebsocketAction = {
   ) => Promise<void>;
   sendNoteUpdated: (note: PickedNoteUpdate) => Promise<void>;
   sendNoteEditionStartedEvent: (noteId: string) => Promise<void>;
-  // sendNoteImageUpdatedEvent: (note: PickedNoteImage) => Promise<void>;
+  setConnectedUsers: (connectedUsers: ConnectedUsers[]) => void;
+  setMoveUsers: (moveUser: MoveUser) => void;
   sendNoteSeletedEvent: (noteId: string, selected: boolean) => Promise<void>;
   sendNoteDeletedEvent: (noteId: string) => Promise<void>;
   setOpenSocketModal: (value: boolean) => void;
@@ -63,9 +67,20 @@ export type CollaborativeWallNotePayload = Pick<
   "_id" | "content" | "owner" | "x" | "y" | "color" | "zIndex"
 >;
 
+export type ConnectedUsers = {
+  id: string;
+  name: string;
+};
+
 export type MetadataPayload = {
   wallId: string;
   type: "metadata";
+};
+
+export type MetadataEvent = {
+  wallId: string;
+  type: "metadata";
+  connectedUsers: ConnectedUsers[];
 };
 
 export type PingPayload = {
@@ -99,6 +114,11 @@ export type CursorMovedPayload = {
   type: "cursorMove";
   move: MoveList;
 };
+
+export type CursorMovedEvent = {
+  userId: string;
+} & CursorMovedPayload;
+
 export type NoteEditionStartedPayload = {
   wallId: string;
   type: "noteEditionStarted";
@@ -169,12 +189,12 @@ export type NoteAddedPayloadEvent = {
   };
 };
 export type EventPayload =
-  | MetadataPayload
+  | MetadataEvent
   | PingPayload
   | WallUpdatedPayload
   | WallDeletedPayload
   | NoteAddedPayloadEvent
-  | CursorMovedPayload
+  | CursorMovedEvent
   | NoteEditionStartedPayload
   | NoteEditionFinishedPayload
   | NoteMovedPayload
