@@ -1,3 +1,4 @@
+import { v4 as uuid } from "uuid";
 import { create } from "zustand";
 
 import { NoteProps } from "~/models/notes";
@@ -10,7 +11,6 @@ import {
   Subscriber,
   EventPayload,
 } from "~/store/websocket/types";
-import { uuid } from "~/utils/uuid";
 
 const websocketState = {
   ready: false,

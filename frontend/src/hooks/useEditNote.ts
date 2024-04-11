@@ -1,11 +1,11 @@
 import { Active } from "@dnd-kit/core";
 import { useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { v4 as uuid } from "uuid";
 import { useShallow } from "zustand/react/shallow";
 
 import { notesQueryOptions } from "~/services/queries";
 import { useHistoryStore, useWebsocketStore, useWhiteboard } from "~/store";
-import { uuid } from "~/utils/uuid";
 
 export const useEditNote = ({
   onClick,

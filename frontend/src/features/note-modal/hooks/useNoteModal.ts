@@ -2,13 +2,13 @@ import { RefObject, useEffect } from "react";
 
 import { EditorRef } from "@edifice-ui/editor";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { v4 as uuid } from "uuid";
 import { useShallow } from "zustand/react/shallow";
 
 // import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { useWebsocketStore, useWhiteboard } from "~/store";
-import { uuid } from "~/utils/uuid";
 
 export type EditionMode = "read" | "edit" | "create";
 export const authorizedModes: EditionMode[] = ["read", "edit", "create"];

@@ -9,13 +9,13 @@ import {
 } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuid } from "uuid";
 import { useShallow } from "zustand/react/shallow";
 
 import { useAccess } from "~/hooks/useAccess";
 // import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteProps } from "~/models/notes";
 import { useWebsocketStore } from "~/store";
-import { uuid } from "~/utils/uuid";
 
 export type NoteDropdownMenuOptions = DropdownMenuOptions & {
   hidden?: boolean;
