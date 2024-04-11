@@ -103,7 +103,14 @@ export const Note = ({
       <Card className={classes} isSelectable={false} onClick={handleClick}>
         <Card.Body>
           {note.media?.url && <ShowMediaType media={note.media} />}
-          <EditorContent editor={editor} />
+          <div
+            style={{
+              maxHeight: note.media?.url ? "302px" : "264px",
+              overflow: "hidden",
+            }}
+          >
+            <EditorContent editor={editor} />
+          </div>
         </Card.Body>
         <Card.Footer>
           <Card.Text>{note.owner?.displayName}</Card.Text>
