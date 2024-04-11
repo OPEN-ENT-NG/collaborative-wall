@@ -220,7 +220,7 @@ export const CollaborativeWall = () => {
           break;
         }
         case "cursorMove": {
-          // if (user?.userId === event.userId) return;
+          if (user?.userId === event.userId) return;
 
           setMoveUsers({
             id: event.userId,
@@ -318,7 +318,7 @@ export const CollaborativeWall = () => {
   }, []);
 
   useTrashedResource(params?.wallId);
-  useMousePosition();
+  const mousePos = useMousePosition();
 
   const { handleOnDragEnd, handleOnDragStart } = useEditNote({
     onClick: !isMobile
@@ -404,6 +404,12 @@ export const CollaborativeWall = () => {
 
   return (
     <>
+      <Cursor
+        key={user?.userId}
+        username={user?.username}
+        point={[mousePos.x, mousePos.y]}
+      />
+
       {COUNT_CONNECTED_USERS &&
         renderCursors(filteredConnectedUsers, moveUsers)}
 
