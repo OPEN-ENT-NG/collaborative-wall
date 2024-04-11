@@ -31,6 +31,7 @@ public class CollaborativeWallMessage {
   private final Set<CollaborativeWallUser> connectedUsers;
   private final CollaborativeWallUserAction.ActionType actionType;
   private final String actionId;
+  private final Long maxConnectedUsers;
 
   @JsonCreator
   public CollaborativeWallMessage(@JsonProperty("wallId") final String wallId,
@@ -50,7 +51,8 @@ public class CollaborativeWallMessage {
                                   @JsonProperty("connectedUsers") final Set<CollaborativeWallUser> connectedUsers,
                                   @JsonProperty("note") final CollaborativeWallNote oldNote,
                                   @JsonProperty("actionType") final CollaborativeWallUserAction.ActionType actionType,
-                                  @JsonProperty("actionId") final String actionId) {
+                                  @JsonProperty("actionId") final String actionId,
+                                  @JsonProperty("maxConnectedUsers") final Long maxConnectedUsers) {
     this.wallId = wallId;
     this.emittedAt = emittedAt;
     this.emittedBy = emittedBy;
@@ -69,6 +71,11 @@ public class CollaborativeWallMessage {
     this.connectedUsers = connectedUsers;
     this.actionType = actionType;
     this.actionId = actionId;
+    this.maxConnectedUsers = maxConnectedUsers;
+  }
+
+  public Long getMaxConnectedUsers() {
+    return maxConnectedUsers;
   }
 
   public CollaborativeWallUserAction.ActionType getActionType() {

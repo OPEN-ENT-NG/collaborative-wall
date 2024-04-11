@@ -82,6 +82,7 @@ export type MetadataEvent = {
   wallId: string;
   type: "metadata";
   connectedUsers: ConnectedUsers[];
+  maxConnectedUsers: number;
 };
 
 export type PingPayload = {

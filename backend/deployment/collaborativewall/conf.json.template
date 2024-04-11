@@ -15,7 +15,8 @@
         "mode" : "${mode}",
         "entcore.port" : 8009,
         "real-time": {
-             "port": 9091
+             "port": 9091,
+             "max-connected-user": 5
         },
         "publicConf": {
           <% if ("true".equals(xitiSwitch)) { %>
