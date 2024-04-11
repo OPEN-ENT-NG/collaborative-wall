@@ -1,6 +1,5 @@
 package net.atos.entng.collaborativewall.controllers.helpers;
 
-import fr.wseduc.mongodb.MongoDb;
 import fr.wseduc.rs.ApiDoc;
 import fr.wseduc.webutils.Either;
 import fr.wseduc.webutils.http.Renders;

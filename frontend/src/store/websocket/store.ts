@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+import { NoteProps } from "~/models/notes";
+import { CollaborativeWallProps } from "~/models/wall";
 import {
   WebsocketState,
   WebsocketAction,
@@ -8,6 +10,7 @@ import {
   Subscriber,
   EventPayload,
 } from "~/store/websocket/types";
+import { uuid } from "~/utils/uuid";
 
 const websocketState = {
   ready: false,
@@ -32,20 +35,24 @@ const startHttpListener = (
 ) => {
   return setInterval(async () => {
     const [wall, notes] = await Promise.all([
-      fetch(`/collaborativewall/${resourceId}`),
-      fetch(`/collaborativewall/${resourceId}/notes`),
+      fetch(`/collaborativewall/${resourceId}`).then((j) => j.json()),
+      fetch(`/collaborativewall/${resourceId}/notes`).then((j) => j.json()),
     ]);
     for (const sub of subscribers) {
       sub({
         type: "wallUpdate",
-        wallId: (wall as any)._id,
-        wall: wall as any,
+        wallId: (wall as CollaborativeWallProps)._id,
+        wall: wall as CollaborativeWallProps,
+        actionType: "Do",
+        actionId: uuid(),
       });
-      for (const note of notes as any) {
+      for (const note of notes as NoteProps[]) {
         sub({
           type: "noteAdded",
-          wallId: (wall as any)._id,
+          wallId: (wall as CollaborativeWallProps)._id,
           note: note,
+          actionType: "Do",
+          actionId: uuid(),
         });
       }
     }
@@ -201,6 +208,8 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         return send({
           wallId,
           type: "metadata",
+          actionType: "Do",
+          actionId: uuid(),
         });
       },
       sendPing() {
@@ -209,6 +218,8 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         return send({
           wallId,
           type: "ping",
+          actionType: "Do",
+          actionId: uuid(),
         });
       },
       sendWallUpdateEvent(wall) {
@@ -218,6 +229,8 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           wallId,
           type: "wallUpdate",
           wall,
+          actionType: "Do",
+          actionId: uuid(),
         });
       },
       sendWallDeletedEvent() {
@@ -226,18 +239,26 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         return send({
           wallId,
           type: "wallDeleted",
+          actionType: "Do",
+          actionId: uuid(),
         });
       },
       sendNoteAddedEvent(note) {
         const { send, resourceId: wallId } = get();
-
+        const { color, content, media, x, y, modified, ...other } = note;
         return send({
           wallId,
           type: "noteAdded",
           note: {
-            ...note,
+            color,
+            content,
+            media,
+            x,
+            y,
+            modified,
             idwall: wallId,
           },
+          ...other,
         });
       },
       sendNoteCursorMovedEvent(move) {
@@ -247,6 +268,8 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           wallId,
           type: "cursorMove",
           move,
+          actionType: "Do",
+          actionId: uuid(),
         });
       },
       sendNoteEditionStartedEvent(noteId) {
@@ -256,6 +279,8 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           wallId,
           type: "noteEditionStarted",
           noteId,
+          actionType: "Do",
+          actionId: uuid(),
         });
       },
       sendNoteEditionEndedEvent(noteId) {
@@ -265,6 +290,8 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           wallId,
           type: "noteEditionEnded",
           noteId,
+          actionType: "Do",
+          actionId: uuid(),
         });
       },
       sendNoteMovedEvent(noteId, note) {
@@ -275,16 +302,26 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           type: "noteMoved",
           noteId,
           note,
+          actionType: "Do",
+          actionId: uuid(),
         });
       },
       sendNoteUpdated(note) {
         const { send, resourceId: wallId } = get();
-
+        const { _id, color, content, media, x, y, ...other } = note;
         return send({
           wallId,
           type: "noteUpdated",
           noteId: note._id,
-          note,
+          note: {
+            _id,
+            color,
+            content,
+            media,
+            x,
+            y,
+          },
+          ...other,
         });
       },
       /* sendNoteImageUpdatedEvent(note) {
@@ -304,15 +341,18 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           wallId,
           type: selected ? "noteSelected" : "noteUnselected",
           noteId,
+          actionType: "Do",
+          actionId: uuid(),
         });
       },
-      sendNoteDeletedEvent(noteId) {
+      sendNoteDeletedEvent({ _id, ...actionData }) {
         const { send, resourceId: wallId } = get();
 
         return send({
           wallId,
           type: "noteDeleted",
-          noteId,
+          noteId: _id,
+          ...actionData,
         });
       },
       setOpenSocketModal: (openSocketModal) => set({ openSocketModal }),

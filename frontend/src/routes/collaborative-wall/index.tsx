@@ -125,7 +125,7 @@ export const CollaborativeWall = () => {
   const updateWallQueryData = useUpdateWallQueryData();
 
   const { query } = useLoaderData() as LoaderData;
-  const { updatedNote, setHistory } = useHistoryStore();
+  const { updatedNote, setHistory, setUpdatedNote } = useHistoryStore();
   const { currentApp } = useOdeClient();
   const { user } = useUser();
   const { hasRightsToMoveNote } = useAccess();
@@ -193,7 +193,8 @@ export const CollaborativeWall = () => {
   useEffect(() => {
     startRealTime(wall?._id as string, true);
     const unsubscribe = listen((event) => {
-      switch (event.type) {
+      const { type, ...otherProps } = event;
+      switch (type) {
         case "metadata": {
           setConnectedUsers(event.connectedUsers);
           break;
@@ -213,6 +214,7 @@ export const CollaborativeWall = () => {
           setHistory({
             type: "create",
             item: event.note,
+            ...otherProps,
           });
           queryClient.invalidateQueries({ queryKey: [noteQueryKey()] });
           break;
@@ -260,6 +262,7 @@ export const CollaborativeWall = () => {
                 x: event.note.x,
                 y: event.note.y,
               },
+              ...otherProps,
             });
             setUpdatedNote({
               activeId: event.note._id,
@@ -291,6 +294,7 @@ export const CollaborativeWall = () => {
                 content: event.note.content,
                 media: event.note.media || null,
               },
+              ...otherProps,
             });
           }
           break;
@@ -299,6 +303,7 @@ export const CollaborativeWall = () => {
           setHistory({
             type: "delete",
             item: event.note,
+            ...otherProps,
           });
           deleteNoteQueryData(event.note);
           break;

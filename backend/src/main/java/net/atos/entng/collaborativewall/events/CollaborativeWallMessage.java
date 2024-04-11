@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 
 import java.util.List;
 import java.util.Set;
@@ -31,6 +29,8 @@ public class CollaborativeWallMessage {
   private final List<NoteMove> move;
   private final List<CollaborativeWallEditingInformation> editing;
   private final Set<CollaborativeWallUser> connectedUsers;
+  private final CollaborativeWallUserAction.ActionType actionType;
+  private final String actionId;
 
   @JsonCreator
   public CollaborativeWallMessage(@JsonProperty("wallId") final String wallId,
@@ -48,7 +48,9 @@ public class CollaborativeWallMessage {
                                   @JsonProperty("move") final List<NoteMove> move,
                                   @JsonProperty("editing") final List<CollaborativeWallEditingInformation> editing,
                                   @JsonProperty("connectedUsers") final Set<CollaborativeWallUser> connectedUsers,
-                                  @JsonProperty("note") final CollaborativeWallNote oldNote) {
+                                  @JsonProperty("note") final CollaborativeWallNote oldNote,
+                                  @JsonProperty("actionType") final CollaborativeWallUserAction.ActionType actionType,
+                                  @JsonProperty("actionId") final String actionId) {
     this.wallId = wallId;
     this.emittedAt = emittedAt;
     this.emittedBy = emittedBy;
@@ -65,6 +67,16 @@ public class CollaborativeWallMessage {
     this.move = move;
     this.editing = editing;
     this.connectedUsers = connectedUsers;
+    this.actionType = actionType;
+    this.actionId = actionId;
+  }
+
+  public CollaborativeWallUserAction.ActionType getActionType() {
+    return actionType;
+  }
+
+  public String getActionId() {
+    return actionId;
   }
 
   public Set<CollaborativeWallUser> getConnectedUsers() {

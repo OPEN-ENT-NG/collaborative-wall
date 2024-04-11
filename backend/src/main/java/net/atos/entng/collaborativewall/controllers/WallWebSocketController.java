@@ -15,7 +15,6 @@ import net.atos.entng.collaborativewall.events.RealTimeStatus;
 import net.atos.entng.collaborativewall.service.CollaborativeWallMetricsRecorder;
 import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
 import net.atos.entng.collaborativewall.service.CollaborativeWallService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
 

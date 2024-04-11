@@ -1,6 +1,6 @@
 {
   "name": "collaborative-wall",
-  "version": "1.0.0-develop-pedago.202404111211",
+  "version": "1.0.0-develop-pedago.202404111616",
   "description": "Collaborative editor for ENT Core.",
   "homepage": "https://github.com/OPEN-ENT-NG/collaborative-wall#readme",
   "bugs": {
@@ -56,7 +56,6 @@
     "@tiptap/pm": "2.0.3",
     "@tiptap/react": "2.0.3",
     "@tiptap/starter-kit": "2.0.3",
-    "@uidotdev/usehooks": "2.4.1",
     "dayjs": "1.11.10",
     "i18next": "23.8.1",
     "i18next-http-backend": "2.4.2",

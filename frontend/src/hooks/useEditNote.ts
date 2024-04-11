@@ -5,6 +5,7 @@ import { useShallow } from "zustand/react/shallow";
 
 import { notesQueryOptions } from "~/services/queries";
 import { useHistoryStore, useWebsocketStore, useWhiteboard } from "~/store";
+import { uuid } from "~/utils/uuid";
 
 export const useEditNote = ({
   onClick,
@@ -71,6 +72,8 @@ export const useEditNote = ({
       sendNoteUpdated({
         ...findNote,
         ...position,
+        actionType: "Do",
+        actionId: uuid(),
       });
     }
   };

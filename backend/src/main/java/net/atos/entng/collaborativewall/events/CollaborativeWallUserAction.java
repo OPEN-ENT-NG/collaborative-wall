@@ -4,19 +4,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
-import io.vertx.core.json.JsonObject;
-import net.atos.entng.collaborativewall.service.CollaborativeWallService;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.entcore.common.validation.ValidationException;
 
-import java.util.Collections;
 import java.util.List;
-
-import static com.google.common.collect.Lists.newArrayList;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -27,6 +18,12 @@ public class CollaborativeWallUserAction {
   private final String noteId;
   private final CollaborativeWallNote note;
   private final CollaborativeWallDetails wall;
+  private final ActionType actionType;
+  private final String actionId;
+
+  public enum ActionType{
+    Do, Undo, Redo
+  }
 
   @JsonCreator
   public CollaborativeWallUserAction(@JsonProperty("type") final CollaborativeWallMessageType type,
@@ -34,13 +31,25 @@ public class CollaborativeWallUserAction {
                                      @JsonProperty("move") final List<NoteMove> move,
                                      @JsonProperty("noteId") final String noteId,
                                      @JsonProperty("note") final CollaborativeWallNote note,
-                                     @JsonProperty("wall") final CollaborativeWallDetails wall) {
+                                     @JsonProperty("wall") final CollaborativeWallDetails wall,
+                                     @JsonProperty("actionType") final ActionType actionType,
+                                     @JsonProperty("actionId") final String actionId) {
     this.type = type;
     this.notes = notes;
     this.move = move;
     this.noteId = noteId;
     this.note = note;
     this.wall = wall;
+    this.actionType = actionType;
+    this.actionId = actionId;
+  }
+
+  public ActionType getActionType() {
+    return actionType;
+  }
+
+  public String getActionId() {
+    return actionId;
   }
 
   public CollaborativeWallMessageType getType() {

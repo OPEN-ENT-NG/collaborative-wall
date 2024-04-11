@@ -22,6 +22,7 @@ package net.atos.entng.collaborativewall;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
 import net.atos.entng.collaborativewall.controllers.CollaborativeWallController;
+import net.atos.entng.collaborativewall.controllers.WallWebSocketController;
 import net.atos.entng.collaborativewall.events.CollaborativeWallSearchingEvents;
 import net.atos.entng.collaborativewall.explorer.WallExplorerPlugin;
 import net.atos.entng.collaborativewall.service.*;
@@ -29,7 +30,6 @@ import net.atos.entng.collaborativewall.service.impl.CollaborativeWallMetricsRec
 import net.atos.entng.collaborativewall.service.impl.DefaultCollaborativeWallRTService;
 import net.atos.entng.collaborativewall.service.impl.MongoDbCollaborativeWallService;
 import net.atos.entng.collaborativewall.service.impl.MongoDbNoteService;
-import net.atos.entng.collaborativewall.controllers.WallWebSocketController;
 import org.entcore.common.explorer.IExplorerPluginClient;
 import org.entcore.common.explorer.impl.ExplorerRepositoryEvents;
 import org.entcore.common.http.BaseServer;

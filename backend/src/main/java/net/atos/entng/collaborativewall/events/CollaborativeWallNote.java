@@ -1,7 +1,6 @@
 package net.atos.entng.collaborativewall.events;
 
 import com.fasterxml.jackson.annotation.*;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.vertx.core.json.JsonObject;
 import org.entcore.common.user.UserInfos;
 

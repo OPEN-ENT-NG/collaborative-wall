@@ -60,6 +60,7 @@
     "i18next": "23.8.1",
     "i18next-http-backend": "2.4.2",
     "ode-explorer": "%packageVersion%",
+    "perfect-cursors": "1.0.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-error-boundary": "4.0.12",

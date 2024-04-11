@@ -38,13 +38,19 @@ export const useHistory = () => {
 
   const queryClient = useQueryClient();
 
-  const deleteAction = async (action: NewState) => {
-    sendNoteDeletedEvent(action.item._id);
+  const deleteAction = async (action: NewState, isUndo: boolean) => {
+    sendNoteDeletedEvent({
+      _id: action.item._id,
+      actionId: action.id,
+      actionType: isUndo ? "Undo" : "Redo",
+    });
     filterData(queryClient, action);
   };
 
-  const createAction = async (action: NewState) => {
+  const createAction = async (action: NewState, isUndo: boolean) => {
     sendNoteAddedEvent({
+      actionId: action.id,
+      actionType: isUndo ? "Undo" : "Redo",
       color: action.item.color,
       content: action.item.content,
       idwall: action.item.idwall,
@@ -62,6 +68,8 @@ export const useHistory = () => {
 
     try {
       await sendNoteUpdated({
+        actionId: action.id,
+        actionType: isUndo ? "Undo" : "Redo",
         _id: item._id,
         content: item.content,
         color: item.color,
@@ -89,6 +97,8 @@ export const useHistory = () => {
 
     try {
       sendNoteUpdated({
+        actionId: action.id,
+        actionType: isUndo ? "Undo" : "Redo",
         _id: item._id,
         content,
         color,
@@ -104,10 +114,14 @@ export const useHistory = () => {
   const executeAction = async (action: NewState, isUndo: boolean) => {
     switch (action.type) {
       case "create":
-        isUndo ? await deleteAction(action) : await createAction(action);
+        isUndo
+          ? await deleteAction(action, isUndo)
+          : await createAction(action, isUndo);
         break;
       case "delete":
-        isUndo ? await createAction(action) : await deleteAction(action);
+        isUndo
+          ? await createAction(action, isUndo)
+          : await deleteAction(action, isUndo);
         break;
       case "move": {
         await moveAction(action, isUndo);

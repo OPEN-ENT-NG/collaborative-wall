@@ -15,9 +15,6 @@ import net.atos.entng.collaborativewall.events.*;
 import net.atos.entng.collaborativewall.service.CollaborativeWallMetricsRecorder;
 import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
 import net.atos.entng.collaborativewall.service.CollaborativeWallService;
-
-import static net.atos.entng.collaborativewall.service.CollaborativeWallService.PatchKind;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.entcore.common.user.UserInfos;
 
@@ -115,20 +112,21 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
         }
         return future;
     }
+
     @Override
-    public Future<List<CollaborativeWallMessage>> pushEventToAllUsers(final String wallId,final UserInfos session, final CollaborativeWallUserAction action, final boolean checkConcurency) {
+    public Future<List<CollaborativeWallMessage>> pushEventToAllUsers(final String wallId, final UserInfos session, final CollaborativeWallUserAction action, final boolean checkConcurency) {
         return pushEvent(wallId, session, action, "", checkConcurency);
     }
 
     @Override
-    public Future<List<CollaborativeWallMessage>> pushEvent(final String wallId,final UserInfos session, final CollaborativeWallUserAction action, final String wsId, final boolean checkConcurency){
+    public Future<List<CollaborativeWallMessage>> pushEvent(final String wallId, final UserInfos session, final CollaborativeWallUserAction action, final String wsId, final boolean checkConcurency) {
         return this.onNewUserAction(action, wallId, wsId, session, checkConcurency)
                 .onSuccess(messages -> {
-                    switch(action.getType()){
+                    switch (action.getType()) {
                         case cursorMove:
                         case noteMoved:
                             this.broadcastMessagesToUsers(messages, true, false, wsId);
-                            return ;
+                            return;
                         default:
                             this.broadcastMessagesToUsers(messages, true, false, null);
                             return;
@@ -137,9 +135,9 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     }
 
     private void broadcastMessagesToUsers(final List<CollaborativeWallMessage> messages,
-                                                  final boolean allowInternalMessages,
-                                                  final boolean allowExternalMessages,
-                                                  final String exceptWsId) {
+                                          final boolean allowInternalMessages,
+                                          final boolean allowExternalMessages,
+                                          final String exceptWsId) {
         for (final Handler<CollaborativeWallMessageWrapper> messagesSubscriber : this.messagesSubscribers) {
             try {
                 messagesSubscriber.handle(new CollaborativeWallMessageWrapper(messages, allowInternalMessages, allowExternalMessages, exceptWsId));
@@ -439,60 +437,60 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             }
             case cursorMove: {
                 // client is sending cursor move => broadcast to other users
-                return Future.succeededFuture(newArrayList(this.messageFactory.cursorMove(wallId, wsId, user.getUserId(), action.getNoteId(), action.getMove())));
+                return Future.succeededFuture(newArrayList(this.messageFactory.cursorMove(wallId, wsId, user.getUserId(), action.getNoteId(), action.getMove(), action.getActionType(), action.getActionId())));
             }
             case noteAdded: {
                 // client has added a note => upsert then broadcast to other users
                 return this.collaborativeWallService.upsertNote(wallId, action.getNote(), user, checkConcurency)
-                        .map(saved -> newArrayList(this.messageFactory.noteAdded(wallId, wsId, user.getUserId(), saved.newNote)));
+                        .map(saved -> newArrayList(this.messageFactory.noteAdded(wallId, wsId, user.getUserId(), saved.newNote, action.getActionType(), action.getActionId())));
             }
             case noteDeleted: {
                 // client has added a note => delete then broadcast to other users
                 return this.collaborativeWallService.deleteNote(wallId, action.getNoteId(), user, checkConcurency)
-                        .map(deleted -> newArrayList(this.messageFactory.noteDeleted(wallId, wsId, user.getUserId(), action.getNoteId(), deleted)));
+                        .map(deleted -> newArrayList(this.messageFactory.noteDeleted(wallId, wsId, user.getUserId(), action.getNoteId(), deleted, action.getActionType(), action.getActionId())));
             }
             case noteEditionEnded: {
                 // remove from editing
                 context.getEditing().removeIf(info -> info.getUserId().equals(user.getUserId()));
                 // publish meta
-                return publishMetadata().map(published -> newArrayList(this.messageFactory.noteEditionEnded(wallId, wsId, user.getUserId(), action.getNoteId())));
+                return publishMetadata().map(published -> newArrayList(this.messageFactory.noteEditionEnded(wallId, wsId, user.getUserId(), action.getNoteId(), action.getActionType(), action.getActionId())));
             }
             case noteEditionStarted: {
                 // add to editing
                 context.getEditing().add(new CollaborativeWallEditingInformation(user.getUserId(), action.getNoteId(), System.currentTimeMillis()));
                 // client has start editing => broadcast to other users
-                return publishMetadata().map(published -> newArrayList(this.messageFactory.noteEditionStarted(wallId, wsId, user.getUserId(), action.getNoteId())));
+                return publishMetadata().map(published -> newArrayList(this.messageFactory.noteEditionStarted(wallId, wsId, user.getUserId(), action.getNoteId(), action.getActionType(), action.getActionId())));
             }
             case noteUpdated: {
                 // client has updated the image's note => upsert then broadcast to other users
                 return this.collaborativeWallService.upsertNote(wallId, action.getNote(), user, checkConcurency)
-                        .map(saved -> newArrayList(this.messageFactory.noteUpdated(wallId, wsId, user.getUserId(), saved.oldNote, saved.newNote)));
+                        .map(saved -> newArrayList(this.messageFactory.noteUpdated(wallId, wsId, user.getUserId(), saved.oldNote, saved.newNote, action.getActionType(), action.getActionId())));
             }
             case noteMoved: {
                 // client has moved the note => DONT patch now => broadcast to other users
-                return Future.succeededFuture(newArrayList(this.messageFactory.noteMoved(wallId, wsId, user.getUserId(), action.getNote())));
+                return Future.succeededFuture(newArrayList(this.messageFactory.noteMoved(wallId, wsId, user.getUserId(), action.getNote(), action.getActionType(), action.getActionId())));
             }
             case noteSelected: {
                 // add to editing
                 context.getEditing().add(new CollaborativeWallEditingInformation(user.getUserId(), action.getNoteId(), System.currentTimeMillis()));
                 // client has selected note => broadcast to other users
-                return publishMetadata().map(published -> newArrayList(this.messageFactory.noteSelected(wallId, wsId, user.getUserId(), action.getNoteId())));
+                return publishMetadata().map(published -> newArrayList(this.messageFactory.noteSelected(wallId, wsId, user.getUserId(), action.getNoteId(), action.getActionType(), action.getActionId())));
             }
             case noteUnselected: {
                 // remove from editing
                 context.getEditing().removeIf(info -> info.getUserId().equals(user.getUserId()));
                 // client has unselected note => broadcast to other users
-                return publishMetadata().map(published -> newArrayList(this.messageFactory.noteUnselected(wallId, wsId, user.getUserId(), action.getNoteId())));
+                return publishMetadata().map(published -> newArrayList(this.messageFactory.noteUnselected(wallId, wsId, user.getUserId(), action.getNoteId(), action.getActionType(), action.getActionId())));
             }
             case wallUpdate: {
                 // client has updated the wall => upsert then broadcast to other users
                 return this.collaborativeWallService.updateWall(wallId, action.getWall(), user)
-                        .map(saved -> newArrayList(this.messageFactory.wallUpdate(wallId, wsId, user.getUserId(), saved)));
+                        .map(saved -> newArrayList(this.messageFactory.wallUpdate(wallId, wsId, user.getUserId(), saved, action.getActionType(), action.getActionId())));
             }
             case wallDeleted: {
                 // client has deleted the wall => delete then broadcast to other users
                 return this.collaborativeWallService.deleteWall(wallId, user)
-                        .map(saved -> newArrayList(this.messageFactory.wallDeleted(wallId, wsId, user.getUserId())));
+                        .map(saved -> newArrayList(this.messageFactory.wallDeleted(wallId, wsId, user.getUserId(), action.getActionType(), action.getActionId())));
             }
         }
         return Future.succeededFuture(Collections.emptyList());

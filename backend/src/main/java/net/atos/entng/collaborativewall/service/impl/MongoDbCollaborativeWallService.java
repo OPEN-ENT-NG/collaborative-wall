@@ -12,7 +12,6 @@ import net.atos.entng.collaborativewall.service.NoteService;
 import org.apache.commons.lang3.StringUtils;
 import org.entcore.common.service.CrudService;
 import org.entcore.common.share.ShareModel;
-import org.entcore.common.share.ShareNormalizer;
 import org.entcore.common.share.ShareRoles;
 import org.entcore.common.user.UserInfos;
 

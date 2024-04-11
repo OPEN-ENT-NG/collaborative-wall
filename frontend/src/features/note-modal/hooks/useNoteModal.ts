@@ -8,6 +8,7 @@ import { useShallow } from "zustand/react/shallow";
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { useWebsocketStore, useWhiteboard } from "~/store";
+import { uuid } from "~/utils/uuid";
 
 export type EditionMode = "read" | "edit" | "create";
 export const authorizedModes: EditionMode[] = ["read", "edit", "create"];
@@ -91,7 +92,11 @@ export const useNoteModal = (
     };
 
     try {
-      await sendNoteAddedEvent(note);
+      await sendNoteAddedEvent({
+        ...note,
+        actionType: "Do",
+        actionId: uuid(),
+      });
       handleNavigateBack();
     } catch (error) {
       console.error(error);
@@ -116,6 +121,8 @@ export const useNoteModal = (
       color: note.color,
       x: note.x,
       y: note.y,
+      actionType: "Do",
+      actionId: uuid(),
     });
 
     handleNavigateBack();

@@ -15,6 +15,7 @@ import { useAccess } from "~/hooks/useAccess";
 // import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteProps } from "~/models/notes";
 import { useWebsocketStore } from "~/store";
+import { uuid } from "~/utils/uuid";
 
 export type NoteDropdownMenuOptions = DropdownMenuOptions & {
   hidden?: boolean;
@@ -48,7 +49,11 @@ export const NoteActions = ({
   };
 
   const handleDelete = async () => {
-    await sendNoteDeletedEvent(note._id);
+    await sendNoteDeletedEvent({
+      _id: note._id,
+      actionType: "Do",
+      actionId: uuid(),
+    });
   };
 
   const dropdownOptions: NoteDropdownMenuOptions[] = [

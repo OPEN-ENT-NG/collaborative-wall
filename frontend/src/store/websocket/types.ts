@@ -25,7 +25,8 @@ export type WebsocketState = {
   status: WebsocketStatus;
   openSocketModal: boolean;
 };
-
+export type ActionType = "Undo" | "Redo" | "Do";
+export type ActionData = { actionType: ActionType; actionId: string };
 export type WebsocketAction = {
   start: () => void;
   stop: () => void;
@@ -40,19 +41,19 @@ export type WebsocketAction = {
   sendPing: () => Promise<void>;
   sendWallDeletedEvent: () => Promise<void>;
   sendWallUpdateEvent: (wall: CollaborativeWallPayload) => Promise<void>;
-  sendNoteAddedEvent: (note: PickedNoteProps) => Promise<void>;
+  sendNoteAddedEvent: (note: PickedNoteProps & ActionData) => Promise<void>;
   sendNoteCursorMovedEvent: (move: MoveList) => Promise<void>;
   sendNoteEditionEndedEvent: (noteId: string) => Promise<void>;
   sendNoteMovedEvent: (
     noteId: string,
     note: PickedNotePosition,
   ) => Promise<void>;
-  sendNoteUpdated: (note: PickedNoteUpdate) => Promise<void>;
+  sendNoteUpdated: (note: PickedNoteUpdate & ActionData) => Promise<void>;
   sendNoteEditionStartedEvent: (noteId: string) => Promise<void>;
   setConnectedUsers: (connectedUsers: ConnectedUsers[]) => void;
   setMoveUsers: (moveUser: MoveUser) => void;
   sendNoteSeletedEvent: (noteId: string, selected: boolean) => Promise<void>;
-  sendNoteDeletedEvent: (noteId: string) => Promise<void>;
+  sendNoteDeletedEvent: (arg: { _id: string } & ActionData) => Promise<void>;
   setOpenSocketModal: (value: boolean) => void;
   listen: (cb: Subscriber) => Subscription;
 };
@@ -188,7 +189,7 @@ export type NoteAddedPayloadEvent = {
     idwall: string;
   };
 };
-export type EventPayload =
+export type EventPayload = (
   | MetadataEvent
   | PingPayload
   | WallUpdatedPayload
@@ -200,9 +201,11 @@ export type EventPayload =
   | NoteMovedPayload
   | NoteUpdatedPayloadEvent
   | NoteSelectedPayload
-  | NoteDeletedPayloadEvent;
+  | NoteDeletedPayloadEvent
+) &
+  ActionData;
 
-export type ActionPayload =
+export type ActionPayload = (
   | MetadataPayload
   | PingPayload
   | WallUpdatedPayload
@@ -214,7 +217,9 @@ export type ActionPayload =
   | NoteMovedPayload
   | NoteUpdatedPayloadAction
   | NoteSelectedPayload
-  | NoteDeletedPayloadAction;
+  | NoteDeletedPayloadAction
+) &
+  ActionData;
 
 export type Subscriber = (event: EventPayload) => void;
 export type Subscription = () => void;
