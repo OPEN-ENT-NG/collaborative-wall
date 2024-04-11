@@ -109,7 +109,7 @@ export const Note = ({
           <Card.Text>{note.owner?.displayName}</Card.Text>
         </Card.Footer>
       </Card>
-      {canMoveNote && (
+      {canMoveNote && hasRightsToUpdateNote(note) && (
         <NoteActions
           note={note}
           setIsOpenDropdown={setIsOpenDropdown}
