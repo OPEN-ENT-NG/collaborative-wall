@@ -236,6 +236,7 @@ export const ShowMediaType = ({
           className={`media-hyperlink ${media.application ? `bg-light-${test}` : "bg-blue-200"}`}
           style={{
             height: modalNote ? "200px" : "120px",
+            border: !modalNote ? "solid 1px #E4E4E4" : "",
           }}
         >
           {!readonly && (
