@@ -255,7 +255,10 @@ export const ShowMediaType = ({
               />
             )}
           </div>
-          <div className="url-placement">
+          <div
+            className="url-placement"
+            style={{ maxWidth: modalNote ? "219px" : "113px" }}
+          >
             <a
               href={media.url}
               target="_blank"
