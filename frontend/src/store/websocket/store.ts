@@ -1,3 +1,4 @@
+import { odeServices } from "edifice-ts-client";
 import { v4 as uuid } from "uuid";
 import { create } from "zustand";
 
@@ -68,7 +69,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
       connectionAttempts: 0,
       maxAttempts: 5,
       connect: async (resourceId) => {
-        const { maxAttempts, mode, subscribers } = get();
+        const { maxAttempts, mode, subscribers, connectionAttempts } = get();
         const localhost = window.location.hostname === "localhost";
 
         set({ resourceId });
@@ -77,13 +78,31 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           interval = startHttpListener(resourceId, subscribers, DELAY);
           set({ status: Status.STARTED });
         } else {
-          for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+          for (let i = 0; i <= maxAttempts; i++) {
             console.log(`Connecting...`);
+
+            set((state) => ({
+              connectionAttempts: state.connectionAttempts + 1,
+            }));
+
+            if (connectionAttempts === maxAttempts) {
+              // If Websocket has not started, fallback to HTTP mode
+              set({
+                mode: Mode.HTTP,
+                status: Status.STARTED,
+                openSocketModal: true,
+              });
+              socket?.close();
+              interval = startHttpListener(resourceId, subscribers, DELAY);
+              break;
+            }
+
             socket = new WebSocket(
               localhost
                 ? `ws://${window.location.hostname}:9091/collaborativewall/${resourceId}`
                 : `ws://${window.location.host}/collaborativewall/realtime/${resourceId}`,
             );
+
             await new Promise(() => {
               socket?.addEventListener("open", () => {
                 console.log(`Connected...`);
@@ -125,9 +144,6 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
             }
           }
         }
-        // If Websocket has not started, fallback to HTTP mode
-        set({ mode: Mode.HTTP, status: Status.STARTED });
-        interval = startHttpListener(resourceId, subscribers, DELAY);
       },
       disconnect: () => {
         const { mode } = get();
@@ -166,10 +182,9 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         const { mode, resourceId } = get();
 
         if (mode === Mode.HTTP) {
-          await fetch(`/collaborativewall/${resourceId}/event`, {
-            body: JSON.stringify(payload),
-            method: "PUT",
-          });
+          await odeServices
+            .http()
+            .putJson(`/collaborativewall/${resourceId}/event`, payload);
         } else {
           socket?.send(JSON.stringify(payload));
         }
