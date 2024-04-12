@@ -1,43 +1,42 @@
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { MoveUser } from "~/models/types";
 import { CollaborativeWallProps } from "~/models/wall";
-// import { RealTimeProxyService } from "~/services/realtime/RealTimeProxyService";
 
-export enum WebSocketMode {
+export enum Mode {
   WS = "ws",
   HTTP = "http",
 }
 
-export enum WebsocketStatus {
+export enum Status {
   IDLE = "idle",
   STARTED = "started",
   STOPPED = "stopped",
 }
 
 export type WebsocketState = {
-  ready: boolean;
-  isOpened: boolean;
+  connectionAttempts: number;
+  maxAttempts: number;
+  maxConnectedUsers: number;
   connectedUsers: ConnectedUsers[];
   moveUsers: MoveUser[];
-  mode: WebSocketMode;
+  mode: Mode;
   resourceId: string;
   subscribers: Array<Subscriber>;
-  status: WebsocketStatus;
+  status: Status;
   openSocketModal: boolean;
 };
+
 export type ActionType = "Undo" | "Redo" | "Do";
 export type ActionData = { actionType: ActionType; actionId: string };
 export type WebsocketAction = {
-  start: () => void;
-  stop: () => void;
-  doStart: () => void;
-  doStop: () => void;
-  startRealTime: (resourceId: string, start: boolean) => void;
-  stopRealTime: () => void;
+  connect: (resourceId: string) => void;
+  disconnect: () => void;
+  setMaxConnectedUsers: (maxConnectedUsers: number) => void;
+  setConnectedUsers: (connectedUsers: ConnectedUsers[]) => void;
+  setMoveUsers: (moveUser: MoveUser) => void;
+  send: (payload: ActionPayload) => Promise<void>;
   subscribe(callback: Subscriber): Subscription;
   queryForMetadata: () => Promise<void>;
-  send: (payload: ActionPayload) => Promise<void>;
-  startListeners: () => void;
   sendPing: () => Promise<void>;
   sendWallDeletedEvent: () => Promise<void>;
   sendWallUpdateEvent: (wall: CollaborativeWallPayload) => Promise<void>;
@@ -50,12 +49,9 @@ export type WebsocketAction = {
   ) => Promise<void>;
   sendNoteUpdated: (note: PickedNoteUpdate & ActionData) => Promise<void>;
   sendNoteEditionStartedEvent: (noteId: string) => Promise<void>;
-  setConnectedUsers: (connectedUsers: ConnectedUsers[]) => void;
-  setMoveUsers: (moveUser: MoveUser) => void;
   sendNoteSeletedEvent: (noteId: string, selected: boolean) => Promise<void>;
   sendNoteDeletedEvent: (arg: { _id: string } & ActionData) => Promise<void>;
   setOpenSocketModal: (value: boolean) => void;
-  listen: (cb: Subscriber) => Subscription;
 };
 
 export type CollaborativeWallPayload = Pick<

@@ -5,18 +5,20 @@ import { NoteProps } from "./notes";
 import { ActionData } from "~/store/websocket/types";
 
 /* History Store */
+export type UpdatedNote =
+  | {
+      activeId: ID;
+      x: number;
+      y: number;
+      zIndex: number;
+    }
+  | undefined;
+
 export type HistoryState = {
   past: NewState[];
   present: NewState | null;
   future: NewState[];
-  updatedNote:
-    | {
-        activeId: ID;
-        x: number;
-        y: number;
-        zIndex: number;
-      }
-    | undefined;
+  updatedNote: UpdatedNote;
 };
 
 export type UpdateNote = {

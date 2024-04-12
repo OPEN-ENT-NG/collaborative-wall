@@ -4,6 +4,7 @@ import { useShallow } from "zustand/react/shallow";
 
 import { useThrottledFunction } from "./useThrottledFunction";
 import { useWebsocketStore } from "~/store";
+import { Mode } from "~/store/websocket/types";
 
 /* const getRandomPosition = () => ({
   x: Math.random() * window.innerWidth,
@@ -16,8 +17,9 @@ export const useMousePosition = () => {
     y: 0,
   });
 
-  const { sendNoteCursorMovedEvent } = useWebsocketStore(
+  const { mode, sendNoteCursorMovedEvent } = useWebsocketStore(
     useShallow((state) => ({
+      mode: state.mode,
       sendNoteCursorMovedEvent: state.sendNoteCursorMovedEvent,
     })),
   );
@@ -38,6 +40,8 @@ export const useMousePosition = () => {
   });
 
   useEffect(() => {
+    if (mode === Mode.HTTP) return;
+
     const updateMousePosition = (event: {
       clientX: number;
       clientY: number;
@@ -62,7 +66,7 @@ export const useMousePosition = () => {
       // clearInterval(intervalId);
       window.removeEventListener("mousemove", updateMousePosition);
     };
-  }, [throttledPosition]);
+  }, [mode, throttledPosition]);
 
   return mousePosition;
 };

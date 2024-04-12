@@ -1,4 +1,4 @@
-import React /* , { StrictMode } */ from "react";
+import React from "react";
 
 import "./i18n";
 import { OdeClientProvider, ThemeProvider } from "@edifice-ui/react";

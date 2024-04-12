@@ -27,12 +27,13 @@ import { EmptyScreenError } from "~/components/emptyscreen-error";
 import { Note } from "~/components/note";
 import { WhiteboardWrapper } from "~/components/whiteboard-wrapper";
 import { AppActions } from "~/features/app-actions";
+import { useConnectedUsers } from "~/features/websocket/useConnectedUsers";
 import { useAccess } from "~/hooks/useAccess";
 import { useDndKit } from "~/hooks/useDndKit";
 import { useEditNote } from "~/hooks/useEditNote";
-import { useMousePosition } from "~/hooks/useMousePosition";
 import { useThrottledFunction } from "~/hooks/useThrottledFunction";
 import { NoteProps } from "~/models/notes";
+import { UpdatedNote } from "~/models/store";
 import { MoveUser } from "~/models/types";
 import { CollaborativeWallProps } from "~/models/wall";
 import { getWall } from "~/services/api";
@@ -52,6 +53,7 @@ import { useHistoryStore, useWebsocketStore, useWhiteboard } from "~/store";
 import { ConnectedUsers } from "~/store/websocket/types";
 
 import "~/styles/index.css";
+
 const DescriptionModal = lazy(
   async () => await import("~/components/description-modal"),
 );
@@ -68,8 +70,6 @@ interface LoaderData {
   query: string | null;
 }
 
-const MAX_USERS_CONNECTED = 5;
-
 const renderCursors = (coUsers: ConnectedUsers[], moveUsers: MoveUser[]) => {
   if (!coUsers) return null;
 
@@ -85,6 +85,33 @@ const renderCursors = (coUsers: ConnectedUsers[], moveUsers: MoveUser[]) => {
     );
   });
 };
+
+const renderNotes = (
+  notes: NoteProps[],
+  updatedNote: UpdatedNote,
+  numberOfNotes: number,
+  hasRightsToMoveNote: (note: NoteProps) => boolean,
+) =>
+  notes
+    ?.sort(
+      (a: NoteProps, b: NoteProps) =>
+        (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
+    )
+    .map((note: NoteProps, i: number) => {
+      const isUpdated = note._id === updatedNote?.activeId;
+      return (
+        <Note
+          key={note._id}
+          note={{
+            ...note,
+            x: isUpdated ? updatedNote.x : note.x,
+            y: isUpdated ? updatedNote.y : note.y,
+            zIndex: isUpdated ? numberOfNotes + 1 : i,
+          }}
+          disabled={hasRightsToMoveNote(note)}
+        />
+      );
+    });
 
 export const wallLoader =
   (queryClient: QueryClient) =>
@@ -162,41 +189,42 @@ export const CollaborativeWall = () => {
   );
 
   const {
+    connect,
+    disconnect,
     openSocketModal,
-    startRealTime,
-    stopRealTime,
+    moveUsers,
     setOpenSocketModal,
     sendNoteMovedEvent,
     sendWallUpdateEvent,
-    listen,
-    connectedUsers,
+    subscribe,
     setConnectedUsers,
-    moveUsers,
     setMoveUsers,
+    setMaxConnectedUsers,
   } = useWebsocketStore(
     useShallow((state) => ({
-      mode: state.mode,
-      connectedUsers: state.connectedUsers,
+      connect: state.connect,
+      disconnect: state.disconnect,
       setConnectedUsers: state.setConnectedUsers,
       moveUsers: state.moveUsers,
       setMoveUsers: state.setMoveUsers,
       openSocketModal: state.openSocketModal,
-      startRealTime: state.startRealTime,
-      stopRealTime: state.stopRealTime,
       setOpenSocketModal: state.setOpenSocketModal,
       sendNoteMovedEvent: state.sendNoteMovedEvent,
       sendWallUpdateEvent: state.sendWallUpdateEvent,
-      listen: state.listen,
+      setMaxConnectedUsers: state.setMaxConnectedUsers,
+      subscribe: state.subscribe,
     })),
   );
 
   useEffect(() => {
-    startRealTime(wall?._id as string, true);
-    const unsubscribe = listen((event) => {
+    connect(wall?._id as string);
+
+    const unsubscribe = subscribe((event) => {
       const { type, ...otherProps } = event;
       switch (type) {
         case "metadata": {
           setConnectedUsers(event.connectedUsers);
+          setMaxConnectedUsers(event.maxConnectedUsers);
           break;
         }
         case "ping":
@@ -312,13 +340,14 @@ export const CollaborativeWall = () => {
     });
     return () => {
       unsubscribe();
-      stopRealTime();
+      disconnect();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const [filteredUsers, numberOfUsers] = useConnectedUsers();
+
   useTrashedResource(params?.wallId);
-  useMousePosition();
 
   const { handleOnDragEnd, handleOnDragStart } = useEditNote({
     onClick: !isMobile
@@ -370,42 +399,13 @@ export const CollaborativeWall = () => {
     }
   };
 
-  const filteredConnectedUsers = connectedUsers.filter(
-    (connectedUser: { id: string | undefined }) =>
-      connectedUser.id !== user?.userId,
-  );
-
-  const renderNotes = notes
-    ?.sort(
-      (a: NoteProps, b: NoteProps) =>
-        (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
-    )
-    .map((note: NoteProps, i: number) => {
-      const isUpdated = note._id === updatedNote?.activeId;
-      return (
-        <Note
-          key={note._id}
-          note={{
-            ...note,
-            x: isUpdated ? updatedNote.x : note.x,
-            y: isUpdated ? updatedNote.y : note.y,
-            zIndex: isUpdated ? numberOfNotes + 1 : i,
-          }}
-          disabled={hasRightsToMoveNote(note)}
-        />
-      );
-    });
-
-  const COUNT_CONNECTED_USERS = connectedUsers.length <= MAX_USERS_CONNECTED;
-
   if (isWallLoading && isNotesLoading) return <LoadingScreen />;
 
   if (isWallError || isNotesError) return <EmptyScreenError />;
 
   return (
     <>
-      {COUNT_CONNECTED_USERS &&
-        renderCursors(filteredConnectedUsers, moveUsers)}
+      {numberOfUsers && renderCursors(filteredUsers, moveUsers)}
 
       {!isMobile && (
         <AppHeader
@@ -430,7 +430,13 @@ export const CollaborativeWall = () => {
             onDragStart={handleOnDragStart}
             modifiers={[restrictToParentElement]}
           >
-            {renderNotes}
+            {notes &&
+              renderNotes(
+                notes,
+                updatedNote,
+                numberOfNotes,
+                hasRightsToMoveNote,
+              )}
           </DndContext>
         </WhiteboardWrapper>
 
