@@ -11,6 +11,7 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import net.atos.entng.collaborativewall.service.NoteService;
 import org.entcore.common.controller.ControllerHelper;
+import org.entcore.common.events.EventHelper;
 import org.entcore.common.http.response.DefaultResponseHandler;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
@@ -26,10 +27,12 @@ public class NotesHelper extends ControllerHelper {
     public static final String NOTE_MODIFIED_DATE_FIELD = "$date";
     public static final String NOTE_LASTEDIT_PARAMETER = "lastEdit";
     private final NoteService noteService;
+    private final EventHelper eventHelper;
 
-    public NotesHelper(final NoteService noteService) {
+    public NotesHelper(final NoteService noteService, final EventHelper eventHelper) {
         super();
         this.noteService = noteService;
+        this.eventHelper = eventHelper;
     }
 
     public void listAllNotes(HttpServerRequest request) {
@@ -104,8 +107,10 @@ public class NotesHelper extends ControllerHelper {
                         body.put("_id", noteId);
                         allNotes.add(body);
                     }
+                    this.eventHelper.onCreateResource(request, "wall_note");
                     renderJson(request, addStatus("ok", allNotesResponse));
                 } else {
+                    this.eventHelper.onCreateResource(request, "wall_note");
                     //send back wall and message to front
                     renderJson(request, addStatus(accessConcurrentResponse.left().getValue(), allNotesResponse));
                 }
