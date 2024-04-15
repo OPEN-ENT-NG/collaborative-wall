@@ -148,14 +148,6 @@ p.is-editor-empty:first-child::before {
   pointer-events: none;
 }
 
-div#CancelConfirmNoteModal {
-  z-index: 1056;
-}
-
-div#CancelConfirmNoteModal + div {
-  z-index: 1055;
-}
-
 @media (max-width: 440px) {
   .toolbar {
     bottom: 0px !important;

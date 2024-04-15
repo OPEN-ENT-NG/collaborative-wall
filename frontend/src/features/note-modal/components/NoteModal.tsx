@@ -54,7 +54,7 @@ export async function noteLoader({ request, params }: LoaderFunctionArgs) {
 export const NoteModal = () => {
   const data: NoteProps | undefined = useLoaderData() as NoteProps;
 
-  const [colorValue, setColorValue] = useState<string[]>(
+  const [colorValue] = useState<string[]>(
     data?.color || [noteColors.yellow.background],
   );
   const [media, setMedia] = useState<NoteMedia | null>(data?.media);
@@ -66,10 +66,13 @@ export const NoteModal = () => {
     isReadMode,
     isEditMode,
     isCreateMode,
-    handleSaveNote,
-    handleCreateNote,
-    handleModalClose,
+    formState: { isValid, isSubmitting },
+    control,
     handleNavigateToEditMode,
+    handleModalClose,
+    handleNoteFormSubmit,
+    handleSubmit,
+    register,
   } = useNoteModal(editorRef, colorValue, data, media);
 
   const { hasRightsToUpdateNote } = useAccess();
@@ -79,7 +82,7 @@ export const NoteModal = () => {
 
   return createPortal(
     <Modal
-      id="UpdateNoteModal"
+      id="NoteModal"
       onModalClose={handleModalClose}
       size="md"
       isOpen={true}
@@ -96,14 +99,17 @@ export const NoteModal = () => {
         <span className="text-gray-700 small">{data?.owner?.displayName}</span>
       </Modal.Subtitle>
       <Modal.Body>
-        <NoteContent
-          ref={editorRef}
-          dataNote={data}
-          editionMode={editionMode}
-          media={media}
-          setColorValue={setColorValue}
-          setMedia={setMedia}
-        />
+        <form id="noteModalForm" onSubmit={handleSubmit(handleNoteFormSubmit)}>
+          <NoteContent
+            ref={editorRef}
+            dataNote={data}
+            editionMode={editionMode}
+            media={media}
+            setMedia={setMedia}
+            control={control}
+            register={register}
+          />
+        </form>
       </Modal.Body>
       <Modal.Footer>
         {isReadMode && !hasRightsToUpdateNote(data) && (
@@ -139,34 +145,28 @@ export const NoteModal = () => {
           </>
         )}
         {(isEditMode || isCreateMode) && (
-          <Button
-            type="button"
-            color="tertiary"
-            variant="ghost"
-            onClick={handleModalClose}
-          >
-            {t("collaborativewall.modal.cancel", { ns: appCode })}
-          </Button>
-        )}
-        {isEditMode && (
-          <Button
-            type="button"
-            color="primary"
-            variant="filled"
-            onClick={handleSaveNote}
-          >
-            {t("collaborativewall.modal.save", { ns: appCode })}
-          </Button>
-        )}
-        {isCreateMode && (
-          <Button
-            type="button"
-            color="primary"
-            variant="filled"
-            onClick={handleCreateNote}
-          >
-            {t("collaborativewall.modal.add", { ns: appCode })}
-          </Button>
+          <>
+            <Button
+              type="button"
+              color="tertiary"
+              variant="ghost"
+              onClick={handleModalClose}
+            >
+              {t("collaborativewall.modal.cancel", { ns: appCode })}
+            </Button>
+            <Button
+              form="noteModalForm"
+              type="submit"
+              color="primary"
+              variant="filled"
+              isLoading={isSubmitting}
+              disabled={isSubmitting || !isValid}
+            >
+              {isEditMode && t("collaborativewall.modal.save", { ns: appCode })}
+              {isCreateMode &&
+                t("collaborativewall.modal.add", { ns: appCode })}
+            </Button>
+          </>
         )}
       </Modal.Footer>
     </Modal>,

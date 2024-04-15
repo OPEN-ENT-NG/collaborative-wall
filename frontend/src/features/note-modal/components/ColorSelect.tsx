@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs } from "react-router-dom";
 
 import { noteColors } from "~/config/init-config";
-import { NoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
 import { Square } from "~/utils/square";
 
@@ -30,11 +29,13 @@ export async function noteLoader({ params }: LoaderFunctionArgs) {
 }
 
 export const ColorSelect = ({
-  setColorValue,
-  dataNote,
+  value,
+  onChange,
+  onBlur,
 }: {
-  setColorValue: (value: string[]) => void;
-  dataNote?: NoteProps;
+  value: string[];
+  onChange?: (...event: any[]) => void;
+  onBlur?: (...event: any[]) => void;
 }) => {
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
@@ -102,9 +103,7 @@ export const ColorSelect = ({
   ];
 
   const placeholderValue = () => {
-    const color = colorsList.find(
-      (value) => value.value === dataNote?.color?.[0],
-    );
+    const color = colorsList.find((color) => color.value === value[0]);
 
     if (!color) return undefined;
     return color;
@@ -126,7 +125,8 @@ export const ColorSelect = ({
         placeholderValue()?.label ??
         t("collaborativewall.color.yellow", { ns: appCode })
       }
-      onValueChange={(value) => setColorValue([value as string])}
+      onValueChange={onChange}
+      onBlur={onBlur}
     />
   );
 };

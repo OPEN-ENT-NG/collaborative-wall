@@ -8,10 +8,11 @@ import {
   useOdeClient,
 } from "@edifice-ui/react";
 import { ILinkedResource, WorkspaceElement } from "edifice-ts-client";
+import { Control, Controller, UseFormRegister } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { ColorSelect } from "./ColorSelect";
-import { EditionMode } from "../hooks/useNoteModal";
+import { EditionMode, FormValues } from "../hooks/useNoteModal";
 import { ShowMediaType } from "~/components/show-media-type";
 import { ToolbarMedia } from "~/components/toolbar-media";
 import { useLinkToolbar } from "~/hooks/useLinkToolbar";
@@ -25,13 +26,15 @@ export const NoteContent = forwardRef(
       media,
       editionMode,
       dataNote,
-      setColorValue,
+      control,
       setMedia,
+      register,
     }: {
       media: NoteMedia | null;
       editionMode: EditionMode;
+      control: Control<FormValues>;
       dataNote?: NoteProps;
-      setColorValue: (value: string[]) => void;
+      register: UseFormRegister<FormValues>;
       setMedia: (value: NoteMedia | null) => void;
     },
     ref: Ref<EditorRef>,
@@ -117,7 +120,13 @@ export const NoteContent = forwardRef(
     return (
       <>
         {!isReadMode && (
-          <ColorSelect dataNote={dataNote} setColorValue={setColorValue} />
+          <Controller
+            control={control}
+            name="color"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <ColorSelect value={value} onChange={onChange} onBlur={onBlur} />
+            )}
+          />
         )}
 
         {!media?.url ? renderEdit : renderRead(media)}
@@ -132,6 +141,12 @@ export const NoteContent = forwardRef(
           placeholder={t("collaborativewall.modal.note.content.placeholder", {
             ns: appCode,
           })}
+        />
+
+        <input
+          type="hidden"
+          {...register("content")}
+          value={dataNote?.content || ""}
         />
 
         <MediaLibrary

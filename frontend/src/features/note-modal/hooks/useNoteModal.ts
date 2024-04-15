@@ -1,8 +1,14 @@
-import { RefObject, useState } from "react";
+import { RefObject, useCallback } from "react";
 
 import { EditorRef } from "@edifice-ui/editor";
 import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { DefaultValues, SubmitHandler, useForm } from "react-hook-form";
+import {
+  useBeforeUnload,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
 import { NoteMedia } from "~/models/noteMedia";
@@ -10,6 +16,12 @@ import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { useCreateNote, useUpdateNote } from "~/services/queries";
 import { updateData } from "~/services/queries/helpers";
 import { useHistoryStore, useWhiteboard } from "~/store";
+
+export interface FormValues {
+  color: string[];
+  media: NoteMedia | null;
+  content: string;
+}
 
 export type EditionMode = "read" | "edit" | "create";
 export const authorizedModes: EditionMode[] = ["read", "edit", "create"];
@@ -20,8 +32,6 @@ export const useNoteModal = (
   loadedData: NoteProps,
   media: NoteMedia | null,
 ) => {
-  const [cancelConfirmModal, setCancelConfirmModal] = useState(false);
-
   const navigate = useNavigate();
 
   const createNote = useCreateNote();
@@ -42,9 +52,34 @@ export const useNoteModal = (
     })),
   );
 
+  const defaultValues: DefaultValues<FormValues> = {
+    color: loadedData.color,
+    media: loadedData.media,
+    content: loadedData.content,
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { isDirty, isValid, isSubmitting },
+    control,
+  } = useForm<FormValues>({ defaultValues });
+
   const isReadMode = editionMode === "read";
   const isEditMode = editionMode === "edit";
   const isCreateMode = editionMode === "create";
+
+  // fix #WB2-1587: if user is leaving the page, a browser confirm box will be displayed
+  useBeforeUnload(
+    useCallback(
+      (event) => {
+        if (!isReadMode && isDirty) {
+          event.preventDefault();
+        }
+      },
+      [isReadMode, isDirty],
+    ),
+  );
 
   const navigateBack = () => navigate("..");
 
@@ -134,40 +169,36 @@ export const useNoteModal = (
     navigateBack();
   };
 
+  const handleNoteFormSubmit: SubmitHandler<FormValues> = async (
+    formData: FormValues,
+  ) => {
+    console.log(formData);
+    if (isCreateMode) {
+      handleCreateNote();
+    } else if (isEditMode) {
+      handleSaveNote();
+    }
+  };
+
   const handleNavigateToEditMode = () => {
     navigate(`../note/${loadedData._id}?mode=edit`);
   };
 
   const handleModalClose = () => {
-    // TODO check if note has changed
-    const changes = true;
-
-    if (!isReadMode() && changes) {
-      setCancelConfirmModal(true);
-    } else {
-      navigateBack();
-    }
-  };
-
-  const handleCancelModalClose = () => {
-    setCancelConfirmModal(false);
-  };
-
-  const handleCancelModalConfirm = () => {
     navigateBack();
   };
 
   return {
-    cancelConfirmModal,
     editionMode,
     isReadMode,
     isEditMode,
     isCreateMode,
+    formState: { isDirty, isValid, isSubmitting },
+    control,
     handleNavigateToEditMode,
-    handleCreateNote,
-    handleSaveNote,
+    handleNoteFormSubmit,
     handleModalClose,
-    handleCancelModalClose,
-    handleCancelModalConfirm,
+    handleSubmit,
+    register,
   };
 };
