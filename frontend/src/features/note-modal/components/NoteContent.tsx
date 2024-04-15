@@ -103,7 +103,7 @@ export const NoteContent = forwardRef(
     );
 
     const renderRead = (media: NoteMedia) => (
-      <div className="multimedia-section my-24">
+      <div className={`multimedia-section ${isReadMode ? `mb-24` : `my-24`}`}>
         <ShowMediaType
           media={media}
           modalNote={true}
