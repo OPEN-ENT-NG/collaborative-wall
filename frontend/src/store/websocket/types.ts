@@ -24,6 +24,7 @@ export type WebsocketState = {
   subscribers: Array<Subscriber>;
   status: Status;
   openSocketModal: boolean;
+  lastModified: Record<string, { $date: number }>;
 };
 
 export type ActionType = "Undo" | "Redo" | "Do";
@@ -156,7 +157,7 @@ export type NoteUpdatedPayloadAction = {
   wallId: string;
   type: "noteUpdated";
   noteId: string;
-  note: PickedNoteUpdate;
+  note: PickedNoteUpdate & { modified?: { $date: number } };
 };
 
 // TODO fin

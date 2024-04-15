@@ -105,7 +105,7 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
             this.noteService.get(id, previous -> {
                 if (previous.isRight()) {
                     final CollaborativeWallNote previousNote = CollaborativeWallNote.fromJson(previous.right().getValue());
-                    final CollaborativeWallNote safeNote = new CollaborativeWallNote(previousNote, note, System.currentTimeMillis());
+                    final CollaborativeWallNote safeNote = new CollaborativeWallNote(previousNote, note, checkConcurency?previousNote.getModified().getLong("$date"): System.currentTimeMillis());
                     this.noteService.update(id, safeNote.toJson(), user, checkConcurency, result -> {
                         if (result.isRight()) {
                             final CollaborativeNoteDiff diff = new CollaborativeNoteDiff(previousNote, safeNote);

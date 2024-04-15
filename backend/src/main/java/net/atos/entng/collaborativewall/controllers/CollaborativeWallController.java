@@ -47,6 +47,7 @@ import org.entcore.common.http.response.DefaultResponseHandler;
 import org.entcore.common.mongodb.MongoDbControllerHelper;
 import org.entcore.common.service.CrudService;
 import org.entcore.common.service.VisibilityFilter;
+import org.entcore.common.service.impl.MongoDbCrudService;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
 import org.vertx.java.core.http.RouteMatcher;
@@ -68,7 +69,8 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
 
     private final NotesHelper notesHelper;
     private final WallExplorerPlugin plugin;
-    private final CollaborativeWallService collaborativeWallService;
+    private final NoteService noteService;
+    private CollaborativeWallService collaborativeWallService;
     private Optional<CollaborativeWallRTService> wallRTService = Optional.empty();
 
 	@Override
@@ -82,6 +84,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         this.notesHelper.init(vertx, config, rm, securedActions);
         final Map<String, List<String>> groupedActions = new HashMap<>();
         this.shareService = plugin.createShareService(groupedActions);
+        this.collaborativeWallService =  new MongoDbCollaborativeWallService(this.crudService, noteService, securedActions);
 	}
 
     /**
@@ -95,7 +98,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         this.notesHelper = new NotesHelper(noteService);
         final EventStore eventStore = EventStoreFactory.getFactory().getEventStore(CollaborativeWall.class.getSimpleName());
         this.eventHelper = new EventHelper(eventStore);
-        this.collaborativeWallService =  new MongoDbCollaborativeWallService(this.getCrudService(), noteService, securedActions);
+        this.noteService = noteService;
     }
 
     public void setWallRTService(final CollaborativeWallRTService wallRTService) {
@@ -438,6 +441,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
             badRequest(request, "invalid.id");
             return;
         }
+        request.pause();
         UserUtils.getAuthenticatedUserInfos(this.eb, request).onSuccess(user -> {
             // check access to this wall
             this.collaborativeWallService.canAccess(id, user).onFailure(e -> {
@@ -449,6 +453,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                     return;
                 }
                 // get payload
+                request.resume();
                 RequestUtils.bodyToClass(request,CollaborativeWallUserAction.class).onSuccess(action -> {
                     // push events to others users
                     service.pushEventToAllUsers(id, user, action, true).onSuccess(e -> {
