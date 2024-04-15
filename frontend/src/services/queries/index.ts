@@ -103,10 +103,6 @@ export const useCreateNote = () => {
   });
 };
 
-export const noteQueryKey = () => {
-  return "notes";
-};
-
 export const useWallWithNotes = (wallId: string) => {
   return useQueries({
     queries: [

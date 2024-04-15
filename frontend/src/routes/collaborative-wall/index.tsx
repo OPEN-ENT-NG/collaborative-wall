@@ -39,7 +39,6 @@ import { MoveUser } from "~/models/types";
 import { CollaborativeWallProps } from "~/models/wall";
 import { getWall } from "~/services/api";
 import {
-  noteQueryKey,
   notesQueryOptions,
   useWallWithNotes,
   wallQueryOptions,
@@ -251,7 +250,9 @@ export const CollaborativeWall = () => {
             item: event.note,
             ...otherProps,
           });
-          queryClient.invalidateQueries({ queryKey: [noteQueryKey()] });
+          queryClient.invalidateQueries({
+            queryKey: notesQueryOptions(wall?._id as string).queryKey,
+          });
           break;
         }
         case "cursorMove": {
