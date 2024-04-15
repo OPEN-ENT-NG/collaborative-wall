@@ -64,6 +64,7 @@ export const NoteContent = forwardRef(
             application: "",
             name: medialIb?.text || "",
             url: medialIb?.url,
+            targetUrl: medialIb.target,
           });
         } else if (libraryMedia.assetId) {
           const medialIb = libraryMedia as ILinkedResource;

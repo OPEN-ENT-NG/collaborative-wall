@@ -6,4 +6,5 @@ export interface NoteMedia {
   application: string;
   type: MediaLibraryType;
   url: string;
+  targetUrl?: string;
 }

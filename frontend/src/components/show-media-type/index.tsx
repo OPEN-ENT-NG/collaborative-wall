@@ -232,17 +232,21 @@ export const ShowMediaType = ({
       );
     case "hyperlink":
       return (
-        <a href={media.url} target="_blank" style={{ width: "100%" }}>
-          <div
-            className={`media-hyperlink ${media.application ? `bg-light-${test}` : "bg-blue-200"}`}
-            style={{
-              height: modalNote ? "200px" : "120px",
-              border: !modalNote ? "solid 1px #E4E4E4" : "",
-            }}
+        <div
+          className={`media-hyperlink ${media.application ? `bg-light-${test}` : "bg-blue-200"}`}
+          style={{
+            height: modalNote ? "200px" : "120px",
+            border: !modalNote ? "solid 1px #E4E4E4" : "",
+          }}
+        >
+          {!readonly && (
+            <Toolbar className="delete-button mt-8 me-8" items={LinkItems} />
+          )}
+          <a
+            href={media.url}
+            target={media.targetUrl}
+            style={{ width: "100%" }}
           >
-            {!readonly && (
-              <Toolbar className="delete-button mt-8 me-8" items={LinkItems} />
-            )}
             <div className="application-background">
               {media.application ? (
                 <AppIcon
@@ -270,8 +274,8 @@ export const ShowMediaType = ({
                 {media.name ?? media.url}
               </div>
             </div>
-          </div>
-        </a>
+          </a>
+        </div>
       );
     default:
       break;
