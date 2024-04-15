@@ -1,5 +1,4 @@
 import { useUser } from "@edifice-ui/react";
-import { useShallow } from "zustand/react/shallow";
 
 import { useMousePosition } from "~/hooks/useMousePosition";
 import { useWebsocketStore } from "~/store";
@@ -11,11 +10,7 @@ export const useConnectedUsers = () => {
 
   useMousePosition();
 
-  const { connectedUsers } = useWebsocketStore(
-    useShallow((state) => ({
-      connectedUsers: state.connectedUsers,
-    })),
-  );
+  const { connectedUsers } = useWebsocketStore();
 
   const filteredUsers = connectedUsers.filter(
     (connectedUser: { id: string | undefined }) =>

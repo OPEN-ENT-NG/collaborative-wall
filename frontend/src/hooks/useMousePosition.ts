@@ -1,7 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 
-import { useShallow } from "zustand/react/shallow";
-
 import { useThrottledFunction } from "./useThrottledFunction";
 import { useWebsocketStore } from "~/store";
 import { Mode } from "~/store/websocket/types";
@@ -17,12 +15,7 @@ export const useMousePosition = () => {
     y: 0,
   });
 
-  const { mode, sendNoteCursorMovedEvent } = useWebsocketStore(
-    useShallow((state) => ({
-      mode: state.mode,
-      sendNoteCursorMovedEvent: state.sendNoteCursorMovedEvent,
-    })),
-  );
+  const { mode, sendNoteCursorMovedEvent } = useWebsocketStore();
 
   const callbackFnToThrottle = useCallback(
     ({ x, y }: { x: number; y: number }) => {

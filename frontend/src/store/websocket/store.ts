@@ -1,20 +1,17 @@
-import { odeServices } from "edifice-ts-client";
 import { v4 as uuid } from "uuid";
 import { create } from "zustand";
 
-import { NoteProps } from "~/models/notes";
-import { CollaborativeWallProps } from "~/models/wall";
+import { useHttpMode } from "./useHttpMode";
+import { useWSMode } from "./useWSMode";
 import {
   WebsocketState,
   WebsocketAction,
   Mode,
   Status,
   Subscriber,
-  EventPayload,
 } from "~/store/websocket/types";
 
 const websocketState = {
-  connectionAttempts: 0,
   maxAttempts: 5,
   maxConnectedUsers: 0,
   mode: Mode.WS,
@@ -26,166 +23,32 @@ const websocketState = {
   openSocketModal: false,
 };
 
-const DELAY = 20000;
-const refreshHttpData = async (
-  resourceId: string,
-  subscribers: Subscriber[],
-) => {
-  const [wall, notes] = await Promise.all([
-    fetch(`/collaborativewall/${resourceId}`).then((j) => j.json()),
-    fetch(`/collaborativewall/${resourceId}/notes`).then((j) => j.json()),
-  ]);
-  for (const sub of subscribers) {
-    sub({
-      type: "wallUpdate",
-      wallId: (wall as CollaborativeWallProps)._id,
-      wall: wall as CollaborativeWallProps,
-      actionType: "Do",
-      actionId: uuid(),
-    });
-    for (const note of notes as NoteProps[]) {
-      sub({
-        type: "noteAdded",
-        wallId: (wall as CollaborativeWallProps)._id,
-        note: note,
-        actionType: "Do",
-        actionId: uuid(),
-      });
-    }
-  }
-};
-let interval: number | undefined;
-const startHttpListener = (
-  resourceId: string,
-  subscribers: Subscriber[],
-  DELAY: number,
-) => {
-  // clear previous
-  clearInterval(interval);
-  refreshHttpData(resourceId, subscribers);
-  return setInterval(
-    () => refreshHttpData(resourceId, subscribers),
-    DELAY,
-  ) as unknown as number;
-};
-
-export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
+const createWebsocketStore = create<WebsocketState & WebsocketAction>(
   (set, get) => {
-    let socket: WebSocket | undefined;
-
     return {
       ...websocketState,
-      connectionAttempts: 0,
       maxAttempts: 5,
-      lastModified: {},
-      connect: async (resourceId) => {
-        const { maxAttempts, mode, subscribers, connectionAttempts } = get();
-        const localhost = window.location.hostname === "localhost";
-
-        set({ resourceId });
-        // keep last modified dates for each notes
-        const listenData = (event: EventPayload) => {
-          if (event.type === "noteAdded") {
-            set(({ lastModified }) => ({
-              lastModified: {
-                ...lastModified,
-                [event.note._id]: event.note.modified!,
-              },
-            }));
-          }
-        };
-
+      onReady(mode) {
         if (mode === Mode.HTTP) {
-          interval = startHttpListener(
-            resourceId,
-            [...subscribers, listenData],
-            DELAY,
-          );
-          set({ status: Status.STARTED });
-        } else {
-          for (let i = 0; i <= maxAttempts; i++) {
-            console.log(`Connecting...`);
-
-            set((state) => ({
-              connectionAttempts: state.connectionAttempts + 1,
-            }));
-
-            if (connectionAttempts === maxAttempts) {
-              // If Websocket has not started, fallback to HTTP mode
-              set({
-                mode: Mode.HTTP,
-                status: Status.STARTED,
-                openSocketModal: true,
-              });
-              socket?.close();
-              interval = startHttpListener(
-                resourceId,
-                [...subscribers, listenData],
-                DELAY,
-              );
-              break;
-            }
-
-            socket = new WebSocket(
-              localhost
-                ? `ws://${window.location.hostname}:9091/collaborativewall/${resourceId}`
-                : `ws://${window.location.host}/collaborativewall/realtime/${resourceId}`,
-            );
-
-            await new Promise(() => {
-              socket?.addEventListener("open", () => {
-                console.log(`Connected...`);
-              });
-              socket?.addEventListener("message", (event) => {
-                try {
-                  const { subscribers } = get();
-                  const data = JSON.parse(event.data) as EventPayload;
-                  subscribers.forEach((sub) => sub(data));
-                } catch (error) {
-                  console.error(
-                    "[collaborativewall][realtime] Could not parse message:",
-                    error,
-                  );
-                }
-              });
-              socket?.addEventListener("close", (event) => {
-                if (!event.wasClean) {
-                  console.warn(
-                    "[collaborativewall][realtime] Server closed connection unilaterally. restarting...",
-                    event,
-                  );
-                  // If Websocket closes, we try to reconnect
-                  get().connect(resourceId);
-                }
-              });
-              socket?.addEventListener("error", (event) => {
-                console.error(
-                  "[collaborativewall][realtime] Server has sent error:",
-                  event,
-                );
-              });
-            });
-
-            // When a Websocket is opened, readyState === 1 / WebSocket.OPEN
-            if (socket.readyState === WebSocket.OPEN) {
-              set({ mode: Mode.WS, status: Status.STARTED });
-              break;
-            }
-          }
+          set({ openSocketModal: true });
         }
+        set({ mode, status: Status.STARTED });
+      },
+      onClose() {
+        set({ status: Status.STOPPED });
       },
       disconnect: () => {
-        const { mode } = get();
-
-        if (mode === Mode.HTTP) {
-          clearInterval(interval);
-          interval = undefined;
-        } else {
-          socket?.close();
-          socket = undefined;
+        const { mode, wsProvider, status } = get();
+        if (status !== Status.STARTED) {
+          return;
         }
-
+        if (mode === Mode.WS) {
+          wsProvider?.close();
+        }
         set({ status: Status.STOPPED });
+      },
+      setResourceId(resourceId) {
+        set({ resourceId });
       },
       setMaxConnectedUsers: (maxConnectedUsers) => set({ maxConnectedUsers }),
       setConnectedUsers: (connectedUsers) => set({ connectedUsers }),
@@ -208,18 +71,17 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
           }
         }),
       send: async (payload) => {
-        const { mode, resourceId, subscribers, lastModified } = get();
-
+        const { mode, resourceId, httpProvider, wsProvider } = get();
         if (mode === Mode.HTTP) {
-          if (payload.type === "noteUpdated") {
-            payload.note.modified = lastModified[payload.note._id];
+          if (!httpProvider) {
+            throw "[store][send] Http provider not defined";
           }
-          await odeServices
-            .http()
-            .putJson(`/collaborativewall/${resourceId}/event`, payload);
-          await refreshHttpData(resourceId, subscribers);
+          await httpProvider.send(resourceId, payload);
         } else {
-          socket?.send(JSON.stringify(payload));
+          if (!wsProvider) {
+            throw "[store][send] WS provider not defined";
+          }
+          wsProvider.send(payload);
         }
       },
       subscribe: (subscriber: Subscriber) => {
@@ -391,3 +253,31 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
     };
   },
 );
+
+export const useWebsocketStore = () => {
+  const store = createWebsocketStore();
+  const httpProvider = useHttpMode(store.mode === Mode.HTTP, store.resourceId);
+  store.httpProvider = httpProvider;
+  store.wsProvider = useWSMode({
+    enabled: store.mode === Mode.WS,
+    onOpen() {
+      store.onReady(Mode.WS);
+    },
+    onClose() {
+      if (store.mode === Mode.WS && store.status === Status.STARTED) {
+        store.disconnect();
+      }
+    },
+    onMessage(event) {
+      if (store.mode === Mode.WS) {
+        store.subscribers.forEach((sub) => sub(event));
+      }
+    },
+    onReconnectStop() {
+      store.onReady(Mode.HTTP);
+    },
+    reconnectAttempts: store.maxAttempts,
+    wallId: store.resourceId,
+  });
+  return store;
+};

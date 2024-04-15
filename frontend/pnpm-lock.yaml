@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 dependencies:
   '@dnd-kit/core':
     specifier: 6.1.0
@@ -83,6 +79,12 @@ dependencies:
   react-router-dom:
     specifier: 6.21.3
     version: 6.21.3(react-dom@18.2.0)(react@18.2.0)
+  react-singleton-hook:
+    specifier: ^4.0.1
+    version: 4.0.1(react-dom@18.2.0)(react@18.2.0)
+  react-use-websocket:
+    specifier: 4.8.1
+    version: 4.8.1(react-dom@18.2.0)(react@18.2.0)
   react-zoom-pan-pinch:
     specifier: 3.4.2
     version: 3.4.2(react-dom@18.2.0)(react@18.2.0)
@@ -5024,6 +5026,32 @@ packages:
       react: 18.2.0
     dev: false
 
+  /react-singleton-hook@4.0.1(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-fWuk8VxcZPChrkQasDLM8pgd/7kyi+Cr/5FfCiD99FicjEru+JmtEZNnN4lJ8Z7KbqAST5CYPlpz6lmNsZFGNw==}
+    peerDependencies:
+      react: '18'
+      react-dom: '*'
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /react-use-websocket@4.8.1(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-FTXuG5O+LFozmu1BRfrzl7UIQngECvGJmL7BHsK4TYXuVt+mCizVA8lT0hGSIF0Z0TedF7bOo1nRzOUdginhDw==}
+    peerDependencies:
+      react: '>= 18.0.0'
+      react-dom: '>= 18.0.0'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
   /react-zoom-pan-pinch@3.4.2(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-Gg44aKCmfO4d19TmPaswwUeBtJkizR45YXxRd3MMK7FIINuSyqBF5/jDYPMZbMSjTvOI3v1p0FfKtebkTamP+w==}
     engines: {node: '>=8', npm: '>=5'}
@@ -5834,3 +5862,7 @@ packages:
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false

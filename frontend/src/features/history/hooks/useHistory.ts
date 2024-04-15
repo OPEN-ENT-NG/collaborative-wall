@@ -28,13 +28,7 @@ export const useHistory = () => {
 
   const toast = useToast();
   const { sendNoteUpdated, sendNoteDeletedEvent, sendNoteAddedEvent } =
-    useWebsocketStore(
-      useShallow((state) => ({
-        sendNoteAddedEvent: state.sendNoteAddedEvent,
-        sendNoteDeletedEvent: state.sendNoteDeletedEvent,
-        sendNoteUpdated: state.sendNoteUpdated,
-      })),
-    );
+    useWebsocketStore();
 
   const queryClient = useQueryClient();
 

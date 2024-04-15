@@ -12,9 +12,18 @@ export enum Status {
   STARTED = "started",
   STOPPED = "stopped",
 }
-
+export type HttpProvider = {
+  refetch: () => Promise<{
+    wall: CollaborativeWallProps | undefined;
+    notes: NoteProps[] | undefined;
+  }>;
+  send: (resourceId: string, event: ActionPayload) => Promise<void>;
+};
+export type WSProvider = {
+  send: (event: ActionPayload) => Promise<void>;
+  close: () => void;
+};
 export type WebsocketState = {
-  connectionAttempts: number;
   maxAttempts: number;
   maxConnectedUsers: number;
   connectedUsers: ConnectedUsers[];
@@ -24,17 +33,20 @@ export type WebsocketState = {
   subscribers: Array<Subscriber>;
   status: Status;
   openSocketModal: boolean;
-  lastModified: Record<string, { $date: number }>;
+  httpProvider?: HttpProvider;
+  wsProvider?: WSProvider;
 };
-
+export type ModifiedDate = { $date: number };
 export type ActionType = "Undo" | "Redo" | "Do";
 export type ActionData = { actionType: ActionType; actionId: string };
 export type WebsocketAction = {
-  connect: (resourceId: string) => void;
-  disconnect: () => void;
+  setResourceId: (resourceId: string) => void;
   setMaxConnectedUsers: (maxConnectedUsers: number) => void;
   setConnectedUsers: (connectedUsers: ConnectedUsers[]) => void;
   setMoveUsers: (moveUser: MoveUser) => void;
+  onReady: (mode: Mode) => void;
+  onClose: () => void;
+  disconnect: () => void;
   send: (payload: ActionPayload) => Promise<void>;
   subscribe(callback: Subscriber): Subscription;
   queryForMetadata: () => Promise<void>;

@@ -28,12 +28,7 @@ export const useNoteModal = (
     })),
   );
 
-  const { sendNoteAddedEvent, sendNoteUpdated } = useWebsocketStore(
-    useShallow((state) => ({
-      sendNoteAddedEvent: state.sendNoteAddedEvent,
-      sendNoteUpdated: state.sendNoteUpdated,
-    })),
-  );
+  const { sendNoteAddedEvent, sendNoteUpdated } = useWebsocketStore();
 
   const [searchParams] = useSearchParams();
 

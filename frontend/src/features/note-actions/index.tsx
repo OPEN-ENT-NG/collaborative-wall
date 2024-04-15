@@ -9,7 +9,6 @@ import {
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
-import { useShallow } from "zustand/react/shallow";
 
 import { ActionList } from "../note-modal/components/ActionList";
 import { useAccess } from "~/hooks/useAccess";
@@ -32,11 +31,7 @@ export const NoteActions = ({
 
   const { hasRightsToUpdateNote } = useAccess();
 
-  const { sendNoteDeletedEvent } = useWebsocketStore(
-    useShallow((state) => ({
-      sendNoteDeletedEvent: state.sendNoteDeletedEvent,
-    })),
-  );
+  const { sendNoteDeletedEvent } = useWebsocketStore();
 
   const { t } = useTranslation();
 

@@ -14,11 +14,7 @@ export const useEditNote = ({
 }) => {
   const { wallId } = useParams();
   const { setUpdatedNote } = useHistoryStore();
-  const { sendNoteUpdated } = useWebsocketStore(
-    useShallow((state) => ({
-      sendNoteUpdated: state.sendNoteUpdated,
-    })),
-  );
+  const { sendNoteUpdated } = useWebsocketStore();
   const queryClient = useQueryClient();
   const { zoom, toggleCanMoveBoard } = useWhiteboard(
     useShallow((state) => ({

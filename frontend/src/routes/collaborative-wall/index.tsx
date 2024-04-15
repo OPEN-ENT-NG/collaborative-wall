@@ -189,8 +189,7 @@ export const CollaborativeWall = () => {
   );
 
   const {
-    connect,
-    disconnect,
+    setResourceId,
     openSocketModal,
     moveUsers,
     setOpenSocketModal,
@@ -200,21 +199,8 @@ export const CollaborativeWall = () => {
     setConnectedUsers,
     setMoveUsers,
     setMaxConnectedUsers,
-  } = useWebsocketStore(
-    useShallow((state) => ({
-      connect: state.connect,
-      disconnect: state.disconnect,
-      setConnectedUsers: state.setConnectedUsers,
-      moveUsers: state.moveUsers,
-      setMoveUsers: state.setMoveUsers,
-      openSocketModal: state.openSocketModal,
-      setOpenSocketModal: state.setOpenSocketModal,
-      sendNoteMovedEvent: state.sendNoteMovedEvent,
-      sendWallUpdateEvent: state.sendWallUpdateEvent,
-      setMaxConnectedUsers: state.setMaxConnectedUsers,
-      subscribe: state.subscribe,
-    })),
-  );
+    disconnect,
+  } = useWebsocketStore();
 
   const [filteredUsers, numberOfUsers] = useConnectedUsers();
 
@@ -223,7 +209,7 @@ export const CollaborativeWall = () => {
   useLockBodyScroll();
 
   useEffect(() => {
-    connect(wall?._id as string);
+    setResourceId(wall?._id as string);
 
     const unsubscribe = subscribe((event) => {
       const { type, ...otherProps } = event;

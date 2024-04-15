@@ -11,7 +11,6 @@ import {
 } from "@edifice-ui/react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
-import { useShallow } from "zustand/react/shallow";
 
 import { backgroundColors, backgroundImages } from "~/config/init-config";
 import {
@@ -39,11 +38,7 @@ export default function BackgroundModal({
     wall.background.color,
   );
 
-  const { sendWallUpdateEvent } = useWebsocketStore(
-    useShallow((state) => ({
-      sendWallUpdateEvent: state.sendWallUpdateEvent,
-    })),
-  );
+  const { sendWallUpdateEvent } = useWebsocketStore();
 
   const handleClose = () => setIsOpen(false);
 
