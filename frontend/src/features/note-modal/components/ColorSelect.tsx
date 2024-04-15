@@ -5,7 +5,7 @@ import { LoaderFunctionArgs } from "react-router-dom";
 import { noteColors } from "~/config/init-config";
 import { NoteProps } from "~/models/notes";
 import { getNote } from "~/services/api";
-import { Square } from "~/utils/square";
+import { Circle } from "~/utils/circle";
 
 export async function noteLoader({ params }: LoaderFunctionArgs) {
   const { wallId, noteId } = params;
@@ -43,13 +43,13 @@ export const ColorSelect = ({
     {
       label: t("collaborativewall.color.white", { ns: appCode }),
       value: noteColors.white.background,
-      icon: <Square borderColor={noteColors.white.border} />,
+      icon: <Circle borderColor={noteColors.white.border} />,
     },
     {
       label: t("collaborativewall.color.yellow", { ns: appCode }),
       value: noteColors.yellow.background,
       icon: (
-        <Square
+        <Circle
           className="bg-yellow-200"
           borderColor={noteColors.yellow.border}
         />
@@ -59,7 +59,7 @@ export const ColorSelect = ({
       label: t("collaborativewall.color.orange", { ns: appCode }),
       value: noteColors.orange.background,
       icon: (
-        <Square
+        <Circle
           className="bg-orange-200"
           borderColor={noteColors.orange.border}
         />
@@ -69,14 +69,14 @@ export const ColorSelect = ({
       label: t("collaborativewall.color.red", { ns: appCode }),
       value: noteColors.red.background,
       icon: (
-        <Square className="bg-red-200" borderColor={noteColors.red.border} />
+        <Circle className="bg-red-200" borderColor={noteColors.red.border} />
       ),
     },
     {
       label: t("collaborativewall.color.purple", { ns: appCode }),
       value: noteColors.purple.background,
       icon: (
-        <Square
+        <Circle
           className="bg-purple-200"
           borderColor={noteColors.purple.border}
         />
@@ -86,14 +86,14 @@ export const ColorSelect = ({
       label: t("collaborativewall.color.blue", { ns: appCode }),
       value: noteColors.blue.background,
       icon: (
-        <Square className="bg-blue-200" borderColor={noteColors.blue.border} />
+        <Circle className="bg-blue-200" borderColor={noteColors.blue.border} />
       ),
     },
     {
       label: t("collaborativewall.color.green", { ns: appCode }),
       value: noteColors.green.background,
       icon: (
-        <Square
+        <Circle
           className="bg-green-200"
           borderColor={noteColors.green.border}
         />
@@ -115,7 +115,7 @@ export const ColorSelect = ({
       size="sm"
       icon={
         placeholderValue()?.icon ?? (
-          <Square
+          <Circle
             className="bg-yellow-200"
             borderColor={noteColors.yellow.border}
           />

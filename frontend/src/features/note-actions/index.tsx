@@ -1,10 +1,9 @@
-import { Fragment, RefAttributes } from "react";
+import { RefAttributes } from "react";
 
-import { Copy, Delete, Edit, Options } from "@edifice-ui/icons";
+import { Delete, Edit } from "@edifice-ui/icons";
 import {
   Dropdown,
   DropdownMenuOptions,
-  IconButton,
   IconButtonProps,
 } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
@@ -12,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import { useShallow } from "zustand/react/shallow";
 
+import { ActionList } from "../note-modal/components/ActionList";
 import { useAccess } from "~/hooks/useAccess";
 // import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteProps } from "~/models/notes";
@@ -23,10 +23,10 @@ export type NoteDropdownMenuOptions = DropdownMenuOptions & {
 
 export const NoteActions = ({
   note,
-  // setIsOpenDropdown,
+  setIsOpenDropdown,
 }: {
   note: NoteProps;
-  // setIsOpenDropdown: (value: boolean) => void;
+  setIsOpenDropdown: (value: boolean) => void;
 }) => {
   const navigate = useNavigate();
 
@@ -44,9 +44,9 @@ export const NoteActions = ({
     navigate(`note/${note._id}?mode=edit`);
   };
 
-  const handleCopy = () => {
-    // TODO
-  };
+  /* const handleCopy = () => {
+    TODO
+  }; */
 
   const handleDelete = async () => {
     await sendNoteDeletedEvent({
@@ -64,11 +64,6 @@ export const NoteActions = ({
       hidden: !hasRightsToUpdateNote(note),
     },
     {
-      icon: <Copy />,
-      label: t("duplicate"),
-      action: handleCopy,
-    },
-    {
       icon: <Delete />,
       label: t("remove"),
       action: handleDelete,
@@ -78,46 +73,19 @@ export const NoteActions = ({
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div onMouseDown={(event) => event.stopPropagation()}>
+    <div onMouseDown={(event) => event.preventDefault()}>
       <Dropdown placement="right-start">
         {(
           triggerProps: JSX.IntrinsicAttributes &
             Omit<IconButtonProps, "ref"> &
             RefAttributes<HTMLButtonElement>,
-        ) => {
-          // setIsOpenDropdown(triggerProps["aria-expanded"] as boolean);
-          return (
-            <>
-              <IconButton
-                {...triggerProps}
-                type="button"
-                aria-label="label"
-                color="secondary"
-                variant="ghost"
-                icon={<Options />}
-                className="card-actions-btn bg-white"
-              />
-              <Dropdown.Menu>
-                {dropdownOptions.map((dropdownOption, index) => (
-                  <Fragment key={index}>
-                    {dropdownOption.type === "divider" ? (
-                      <Dropdown.Separator />
-                    ) : (
-                      !dropdownOption.hidden && (
-                        <Dropdown.Item
-                          icon={dropdownOption.icon}
-                          onClick={() => dropdownOption.action(null)}
-                        >
-                          {dropdownOption.label}
-                        </Dropdown.Item>
-                      )
-                    )}
-                  </Fragment>
-                ))}
-              </Dropdown.Menu>
-            </>
-          );
-        }}
+        ) => (
+          <ActionList
+            triggerProps={triggerProps}
+            setIsOpenDropdown={setIsOpenDropdown}
+            dropdownOptions={dropdownOptions}
+          />
+        )}
       </Dropdown>
     </div>
   );

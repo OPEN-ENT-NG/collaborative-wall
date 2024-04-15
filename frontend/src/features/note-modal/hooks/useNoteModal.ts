@@ -1,11 +1,10 @@
-import { RefObject, useEffect } from "react";
+import { RefObject } from "react";
 
 import { EditorRef } from "@edifice-ui/editor";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import { useShallow } from "zustand/react/shallow";
 
-// import { useRealTimeService } from "~/hooks/useRealTimeService";
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { useWebsocketStore, useWhiteboard } from "~/store";
@@ -41,41 +40,9 @@ export const useNoteModal = (
   const editionMode: EditionMode =
     (searchParams.get("mode") as EditionMode) || "create";
 
-  // There is a window event listener on Space, "-", "=", "+" keys to move, unzoom, zoom the whiteboard respectively,
-  // So we need to stop these keys propagation in order to make these keys work in Editor.
-  useEffect(() => {
-    const stopPropagation = (event: KeyboardEvent) => {
-      if (
-        event.code === "Space" ||
-        event.key === "-" ||
-        event.key === "=" ||
-        event.key === "+"
-      ) {
-        event.stopPropagation();
-      }
-    };
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      stopPropagation(event);
-    };
-
-    const handleKeyUp = (event: KeyboardEvent) => {
-      stopPropagation(event);
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keyup", handleKeyUp);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keyup", handleKeyUp);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const isReadMode = () => editionMode === "read";
-  const isEditMode = () => editionMode === "edit";
-  const isCreateMode = () => editionMode === "create";
+  const isReadMode = editionMode === "read";
+  const isEditMode = editionMode === "edit";
+  const isCreateMode = editionMode === "create";
 
   const handleCreateNote = async () => {
     if (!wallId) {

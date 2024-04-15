@@ -1,4 +1,4 @@
-import { Delete, Download, Edit, ExternalLink } from "@edifice-ui/icons";
+import { Delete, Download, Edit, ExternalLink, Globe } from "@edifice-ui/icons";
 import {
   AppIcon,
   Attachment,
@@ -7,6 +7,7 @@ import {
   Toolbar,
   ToolbarItem,
   useOdeClient,
+  useOdeIcons,
 } from "@edifice-ui/react";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
@@ -47,6 +48,10 @@ export const ShowMediaType = ({
     "px-64": modalNote,
     "py-32": modalNote,
   });
+
+  const { getIconCode } = useOdeIcons();
+
+  const test = getIconCode(media.application) ?? "";
 
   const LinkItems: ToolbarItem[] = [
     {
@@ -227,31 +232,46 @@ export const ShowMediaType = ({
       );
     case "hyperlink":
       return (
-        <div
-          className="media-hyperlink"
-          style={{
-            height: modalNote ? "200px" : "120px",
-          }}
-        >
-          {!readonly && (
-            <Toolbar className="delete-button mt-8 me-8" items={LinkItems} />
-          )}
-          <div className="application-background">
-            {media.application && (
-              <AppIcon app={media.application} size={modalNote ? "80" : "40"} />
+        <a href={media.url} target="_blank" style={{ width: "100%" }}>
+          <div
+            className={`media-hyperlink ${media.application ? `bg-light-${test}` : "bg-blue-200"}`}
+            style={{
+              height: modalNote ? "200px" : "120px",
+              border: !modalNote ? "solid 1px #E4E4E4" : "",
+            }}
+          >
+            {!readonly && (
+              <Toolbar className="delete-button mt-8 me-8" items={LinkItems} />
             )}
-          </div>
-          <div className="url-placement" style={{}}>
-            <a
-              href={media.url}
-              target="_blank"
-              style={{ color: "white", display: "block" }}
-              className="text-truncate"
+            <div className="application-background">
+              {media.application ? (
+                <AppIcon
+                  app={media.application}
+                  size={modalNote ? "80" : "40"}
+                />
+              ) : (
+                <Globe
+                  className="text-blue"
+                  style={{
+                    width: modalNote ? "80" : "40",
+                    height: modalNote ? "80" : "40",
+                  }}
+                />
+              )}
+            </div>
+            <div
+              className="url-placement "
+              style={{ maxWidth: modalNote ? "219px" : "113px" }}
             >
-              {media.name ?? media.url}
-            </a>
+              <div
+                style={{ color: "white", display: "block" }}
+                className="text-truncate small"
+              >
+                {media.name ?? media.url}
+              </div>
+            </div>
           </div>
-        </div>
+        </a>
       );
     default:
       break;

@@ -30,6 +30,7 @@ export const updateData = (queryClient: QueryClient, note: NoteProps) => {
     },
   );
 };
+
 export const useUpdateNoteQueryData = () => {
   const queryClient = useQueryClient();
   return (note: Partial<NoteProps> & { wallid: string }) => {
@@ -47,6 +48,7 @@ export const useUpdateNoteQueryData = () => {
     );
   };
 };
+
 export const useDeleteNoteQueryData = () => {
   const queryClient = useQueryClient();
   return (note: NoteProps) => {

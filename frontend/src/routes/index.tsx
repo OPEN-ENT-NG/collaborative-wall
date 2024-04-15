@@ -63,6 +63,17 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
     element: <NotFound />,
     errorElement: <PageError />,
   },
+  {
+    path: "print/id/:wallId",
+    async lazy() {
+      const { wallLoader, CollaborativeWall } = await import("./print");
+      return {
+        loader: wallLoader(queryClient),
+        Component: CollaborativeWall,
+      };
+    },
+    errorElement: <PageError />,
+  },
 ];
 
 export const basename = import.meta.env.PROD ? "/collaborativewall" : "/";

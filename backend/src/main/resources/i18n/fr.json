@@ -41,6 +41,7 @@
   "collaborativewall.modal.title.read": "Note",
   "collaborativewall.modal.title.edit": "Modification",
   "collaborativewall.modal.title.create": "Nouvelle Note",
+  "collaborativewall.modal.note.content.placeholder": "Écrivez ici ce que vous voulez partager dans cette note.",
   "collaborativewall.note.notfound": "Note introuvable.",
   "collaborativewall.color.white": "Blanc",
   "collaborativewall.color.yellow": "Jaune",

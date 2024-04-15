@@ -11,6 +11,7 @@ import {
   useUser,
 } from "@edifice-ui/react";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useLockBodyScroll } from "@uidotdev/usehooks";
 import { IWebApp } from "edifice-ts-client";
 import {
   LoaderFunctionArgs,
@@ -171,7 +172,7 @@ export const CollaborativeWall = () => {
     setOpenShareModal,
     setOpenUpdateModal,
     setIsOpenBackgroundModal,
-    // setNumberOfNotes,
+    setNumberOfNotes,
     numberOfNotes,
   } = useWhiteboard(
     useShallow((state) => ({
@@ -183,7 +184,7 @@ export const CollaborativeWall = () => {
       setOpenUpdateModal: state.setOpenUpdateModal,
       setIsOpenBackgroundModal: state.setIsOpenBackgroundModal,
       setIsMobile: state.setIsMobile,
-      // setNumberOfNotes: state.setNumberOfNotes,
+      setNumberOfNotes: state.setNumberOfNotes,
       numberOfNotes: state.numberOfNotes,
     })),
   );
@@ -215,6 +216,12 @@ export const CollaborativeWall = () => {
       subscribe: state.subscribe,
     })),
   );
+
+  const [filteredUsers, numberOfUsers] = useConnectedUsers();
+
+  useTrashedResource(params?.wallId);
+
+  useLockBodyScroll();
 
   useEffect(() => {
     connect(wall?._id as string);
@@ -345,10 +352,6 @@ export const CollaborativeWall = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const [filteredUsers, numberOfUsers] = useConnectedUsers();
-
-  useTrashedResource(params?.wallId);
-
   const { handleOnDragEnd, handleOnDragStart } = useEditNote({
     onClick: !isMobile
       ? (id: any) => navigate(`note/${id}?mode=read`)
@@ -378,6 +381,15 @@ export const CollaborativeWall = () => {
   }>({
     callbackFn: callbackFnToThrottle,
   });
+
+  useEffect(() => {
+    if (notes) setNumberOfNotes(notes.length);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [notes]);
+
+  if (isWallLoading && isNotesLoading) return <LoadingScreen />;
+
+  if (isWallError || isNotesError) return <EmptyScreenError />;
 
   const handleOnUpdateSuccess = async () => {
     await queryClient.invalidateQueries({
@@ -418,10 +430,6 @@ export const CollaborativeWall = () => {
       )}
 
       <div className="collaborativewall-container">
-        {wall?.description && !isMobile && (
-          <DescriptionWall description={wall?.description} />
-        )}
-
         <WhiteboardWrapper>
           <DndContext
             sensors={sensors}
@@ -444,9 +452,8 @@ export const CollaborativeWall = () => {
       </div>
 
       <Suspense fallback={<LoadingScreen />}>
-        {wall?.description && (
-          <DescriptionModal description={wall.description} />
-        )}
+        {wall?.description && !isMobile && <DescriptionWall />}
+        {wall?.description && <DescriptionModal />}
         {wall && (
           <BackgroundModal
             setIsOpen={setIsOpenBackgroundModal}
