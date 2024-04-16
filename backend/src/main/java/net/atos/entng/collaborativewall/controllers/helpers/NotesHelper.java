@@ -110,7 +110,6 @@ public class NotesHelper extends ControllerHelper {
                     this.eventHelper.onCreateResource(request, "wall_note");
                     renderJson(request, addStatus("ok", allNotesResponse));
                 } else {
-                    this.eventHelper.onCreateResource(request, "wall_note");
                     //send back wall and message to front
                     renderJson(request, addStatus(accessConcurrentResponse.left().getValue(), allNotesResponse));
                 }
