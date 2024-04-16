@@ -1,7 +1,13 @@
-import { RefObject } from "react";
+import { RefObject, useCallback } from "react";
 
 import { EditorRef } from "@edifice-ui/editor";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import {
+  useBeforeUnload,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import { useShallow } from "zustand/react/shallow";
 
@@ -18,6 +24,7 @@ export const useNoteModal = (
   loadedData: NoteProps,
   media: NoteMedia | null,
 ) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const { wallId } = useParams();
@@ -38,6 +45,22 @@ export const useNoteModal = (
   const isReadMode = editionMode === "read";
   const isEditMode = editionMode === "edit";
   const isCreateMode = editionMode === "create";
+
+  const isDirty = useCallback(() => {
+    return (
+      loadedData.color[0] != colorValue[0] ||
+      loadedData.content != (editorRef.current?.getContent("html") as string) ||
+      loadedData.media?.id != media?.id
+    );
+  }, [loadedData, colorValue, editorRef, media]);
+
+  useBeforeUnload((event) => {
+    if (isCreateMode || (isEditMode && isDirty())) {
+      event.preventDefault();
+    }
+  });
+
+  const handleNavigateBack = () => navigate("..");
 
   const handleCreateNote = async () => {
     if (!wallId) {
@@ -90,7 +113,18 @@ export const useNoteModal = (
     handleNavigateBack();
   };
 
-  const handleNavigateBack = () => navigate("..");
+  const handleClose = () => {
+    if (isCreateMode || (isEditMode && isDirty())) {
+      const res: boolean = window.confirm(
+        t("collaborativewall.modal.note.confirm.close"),
+      );
+      if (res) {
+        handleNavigateBack();
+      }
+    } else {
+      handleNavigateBack();
+    }
+  };
 
   const handleNavigateToEditMode = () => {
     navigate(`../note/${loadedData._id}?mode=edit`);
@@ -105,5 +139,6 @@ export const useNoteModal = (
     handleNavigateToEditMode,
     handleCreateNote,
     handleSaveNote,
+    handleClose,
   };
 };

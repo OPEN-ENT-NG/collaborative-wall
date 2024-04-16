@@ -70,6 +70,7 @@ export const NoteModal = () => {
     handleNavigateToEditMode,
     handleSaveNote,
     handleCreateNote,
+    handleClose,
   } = useNoteModal(editorRef, colorValue, data, media);
 
   const { hasRightsToUpdateNote } = useAccess();
@@ -80,13 +81,13 @@ export const NoteModal = () => {
   return createPortal(
     <Modal
       id="UpdateNoteModal"
-      onModalClose={handleNavigateBack}
+      onModalClose={handleClose}
       size="md"
       isOpen={true}
       focusId=""
       scrollable={true}
     >
-      <Modal.Header onModalClose={handleNavigateBack}>
+      <Modal.Header onModalClose={handleClose}>
         {isReadMode && t("collaborativewall.modal.title.read", { ns: appCode })}
         {isEditMode && t("collaborativewall.modal.title.edit", { ns: appCode })}
         {isCreateMode &&
