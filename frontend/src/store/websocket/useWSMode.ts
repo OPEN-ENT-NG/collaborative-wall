@@ -25,7 +25,7 @@ export const useWSMode = ({
   const getSocketURL = useCallback(() => {
     return isLocalhost
       ? `ws://${window.location.hostname}:9091/collaborativewall/${wallId}`
-      : `ws://${window.location.host}/collaborativewall/realtime/${wallId}`;
+      : `wss://${window.location.host}/collaborativewall/realtime/${wallId}`;
   }, [isLocalhost, wallId]);
   const { sendJsonMessage, getWebSocket } = useWebSocket(
     getSocketURL,
