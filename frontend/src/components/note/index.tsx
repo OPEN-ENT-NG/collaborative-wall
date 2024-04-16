@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useDraggable } from "@dnd-kit/core";
+import { Editor } from "@edifice-ui/editor";
 import { Card } from "@edifice-ui/react";
-import { Editor, EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
@@ -39,25 +38,6 @@ export const Note = ({
       id: note._id,
       disabled: !canMoveNote || !disabled,
     });
-
-  const editor: Editor | null = useEditor({
-    extensions: [
-      StarterKit.configure({
-        paragraph: {
-          HTMLAttributes: {
-            class: `card-text small text-break text-truncate ${note.media ? "text-truncate-8" : "text-truncate-12"}`,
-          },
-        },
-      }),
-    ],
-    content: note.content,
-    editable: false,
-  });
-
-  useEffect(() => {
-    editor?.commands.setContent(note.content);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [note]);
 
   const handleClick = () => {
     if (!hasRightsToUpdateNote(note)) {
@@ -109,7 +89,12 @@ export const Note = ({
               overflow: "hidden",
             }}
           >
-            <EditorContent editor={editor} />
+            <Editor
+              content={note.content}
+              mode="read"
+              toolbar="none"
+              variant="ghost"
+            ></Editor>
           </div>
         </Card.Body>
         <Card.Footer>

@@ -64,6 +64,7 @@ export const NoteContent = forwardRef(
             application: "",
             name: medialIb?.text || "",
             url: medialIb?.url,
+            targetUrl: medialIb.target,
           });
         } else if (libraryMedia.assetId) {
           const medialIb = libraryMedia as ILinkedResource;
@@ -102,7 +103,7 @@ export const NoteContent = forwardRef(
     );
 
     const renderRead = (media: NoteMedia) => (
-      <div className="multimedia-section my-24">
+      <div className={`multimedia-section ${isReadMode ? `mb-24` : `my-24`}`}>
         <ShowMediaType
           media={media}
           modalNote={true}
