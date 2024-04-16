@@ -50,7 +50,7 @@ export const useNoteModal = (
     }
 
     const note: PickedNoteProps = {
-      content: editorRef.current?.getContent("plain") as string,
+      content: editorRef.current?.getContent("html") as string,
       color: colorValue,
       idwall: wallId,
       media: media,
@@ -81,7 +81,7 @@ export const useNoteModal = (
 
   const handleSaveNote = async () => {
     const note: PickedNoteProps = {
-      content: editorRef.current?.getContent("plain") as string,
+      content: editorRef.current?.getContent("html") as string,
       color: colorValue,
       idwall: loadedData.idwall as string,
       media: media || null,
