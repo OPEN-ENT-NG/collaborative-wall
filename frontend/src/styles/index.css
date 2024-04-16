@@ -127,6 +127,7 @@
 .collaborativewall-container .toolbar .btn {
   outline: none;
 }
+
 .card-container .card-actions-btn {
   position: absolute;
   top: 0;
@@ -156,8 +157,17 @@ p.is-editor-empty:first-child::before {
     padding: 8 0 !important;
     gap: 0px !important;
   }
+
   .zoom-out,
   .zoom-in {
     display: none !important;
   }
+}
+
+.cursor {
+  position: relative;
+  top: -0.8rem;
+  left: 1rem;
+  min-width: max-content;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
 }

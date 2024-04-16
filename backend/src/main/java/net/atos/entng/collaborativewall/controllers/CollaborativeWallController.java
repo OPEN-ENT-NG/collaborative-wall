@@ -22,40 +22,41 @@ package net.atos.entng.collaborativewall.controllers;
 import fr.wseduc.rs.*;
 import fr.wseduc.security.ActionType;
 import fr.wseduc.security.SecuredAction;
-import fr.wseduc.webutils.DefaultAsyncResult;
 import fr.wseduc.webutils.Either;
+import fr.wseduc.webutils.I18n;
 import fr.wseduc.webutils.http.Renders;
 import fr.wseduc.webutils.request.RequestUtils;
-import fr.wseduc.webutils.I18n;
+import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 import net.atos.entng.collaborativewall.CollaborativeWall;
 import net.atos.entng.collaborativewall.controllers.helpers.NotesHelper;
+import net.atos.entng.collaborativewall.events.CollaborativeWallUserAction;
 import net.atos.entng.collaborativewall.explorer.WallExplorerPlugin;
+import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
+import net.atos.entng.collaborativewall.service.CollaborativeWallService;
 import net.atos.entng.collaborativewall.service.NoteService;
-import org.entcore.common.controller.ControllerHelper;
+import net.atos.entng.collaborativewall.service.impl.MongoDbCollaborativeWallService;
 import org.entcore.common.events.EventHelper;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
 import org.entcore.common.explorer.IdAndVersion;
 import org.entcore.common.http.response.DefaultResponseHandler;
 import org.entcore.common.mongodb.MongoDbControllerHelper;
+import org.entcore.common.service.CrudService;
 import org.entcore.common.service.VisibilityFilter;
+import org.entcore.common.service.impl.MongoDbCrudService;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
-import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpServerRequest;
 import org.vertx.java.core.http.RouteMatcher;
-import io.vertx.core.json.JsonObject;
-import io.vertx.core.json.JsonArray;
-
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-
-import static org.entcore.common.http.response.DefaultResponseHandler.defaultResponseHandler;
 
 /**
  * Controller to manage URL paths for collaborative walls.
@@ -68,6 +69,9 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
 
     private final NotesHelper notesHelper;
     private final WallExplorerPlugin plugin;
+    private final NoteService noteService;
+    private CollaborativeWallService collaborativeWallService;
+    private Optional<CollaborativeWallRTService> wallRTService = Optional.empty();
 
 	@Override
 	public void init(Vertx vertx, JsonObject config, RouteMatcher rm,
@@ -80,6 +84,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         this.notesHelper.init(vertx, config, rm, securedActions);
         final Map<String, List<String>> groupedActions = new HashMap<>();
         this.shareService = plugin.createShareService(groupedActions);
+        this.collaborativeWallService =  new MongoDbCollaborativeWallService(this.crudService, noteService, securedActions);
 	}
 
     /**
@@ -92,7 +97,12 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         this.plugin = plugin;
         final EventStore eventStore = EventStoreFactory.getFactory().getEventStore(CollaborativeWall.class.getSimpleName());
         this.eventHelper = new EventHelper(eventStore);
+        this.noteService = noteService;
         this.notesHelper = new NotesHelper(noteService, this.eventHelper);
+    }
+
+    public void setWallRTService(final CollaborativeWallRTService wallRTService) {
+        this.wallRTService = Optional.ofNullable(wallRTService);
     }
 
     @Override
@@ -416,6 +426,47 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         });
     }
 
+    @Put("/:id/event")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    public void realtimeFallback(HttpServerRequest request) {
+        if(!this.wallRTService.isPresent()){
+            log.warn("Realtime fallback is disabled");
+            renderError(request, new JsonObject().put("error", "realtime.disabled"));
+            return;
+        }
+        final CollaborativeWallRTService service = this.wallRTService.get();
+        // check param
+        final String id = request.params().get("id");
+        if (id == null || id.trim().isEmpty()) {
+            badRequest(request, "invalid.id");
+            return;
+        }
+        request.pause();
+        UserUtils.getAuthenticatedUserInfos(this.eb, request).onSuccess(user -> {
+            // check access to this wall
+            this.collaborativeWallService.canAccess(id, user).onFailure(e -> {
+                log.error("An error occurred while checking access to wall", e);
+                renderError(request, new JsonObject().put("error", "unknown.error"));
+            }).onSuccess(canAccess -> {
+                if (!canAccess) {
+                    forbidden(request);
+                    return;
+                }
+                // get payload
+                request.resume();
+                RequestUtils.bodyToClass(request,CollaborativeWallUserAction.class).onSuccess(action -> {
+                    // push events to others users
+                    service.pushEventToAllUsers(id, user, action, true).onSuccess(e -> {
+                        noContent(request);
+                    }).onFailure(e -> {
+                        log.error("An error occurred while pushing event", e);
+                        renderError(request, new JsonObject().put("error", "unknown.error"));
+                    });
+                });
+            });
+        });
+    }
+
     // NOTES
 
     @Get("/:id/notes")
@@ -453,4 +504,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         notesHelper.delete(request);
     }
 
+    public CrudService getCrudService() {
+        return this.crudService;
+    }
 }

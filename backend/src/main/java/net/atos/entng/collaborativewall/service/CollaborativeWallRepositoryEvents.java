@@ -19,18 +19,20 @@
 
 package net.atos.entng.collaborativewall.service;
 
-import fr.wseduc.mongodb.MongoDb;
-import io.vertx.core.Vertx;
 import com.mongodb.QueryBuilder;
+import fr.wseduc.mongodb.MongoDb;
 import fr.wseduc.mongodb.MongoQueryBuilder;
-import io.vertx.core.eventbus.Message;
-import org.entcore.common.service.impl.MongoDbRepositoryEvents;
 import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import net.atos.entng.collaborativewall.CollaborativeWall;
+import org.entcore.common.service.impl.MongoDbRepositoryEvents;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 

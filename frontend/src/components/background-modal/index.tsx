@@ -17,7 +17,7 @@ import {
   CollaborativeWallProps,
   PickedCollaborativeWallProps,
 } from "~/models/wall";
-import { useUpdateWall } from "~/services/queries";
+import { useWebsocketStore } from "~/store";
 
 export default function BackgroundModal({
   isOpen,
@@ -38,7 +38,7 @@ export default function BackgroundModal({
     wall.background.color,
   );
 
-  const updateWall = useUpdateWall();
+  const { sendWallUpdateEvent } = useWebsocketStore();
 
   const handleClose = () => setIsOpen(false);
 
@@ -52,7 +52,7 @@ export default function BackgroundModal({
       name: wall.name,
       icon: wall.icon,
     };
-    updateWall.mutate({ wallId: wall._id, newWall });
+    sendWallUpdateEvent({ ...newWall, _id: wall._id });
     setIsOpen(false);
   };
 

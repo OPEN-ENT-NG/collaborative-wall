@@ -16,9 +16,17 @@ public interface NoteService {
 
     void create(JsonObject note, UserInfos user, Handler<Either<String, JsonObject>> callback);
 
-    void delete(String id, Long lastEdit, UserInfos user, Handler<Either<String, JsonObject>> callback);
+    void delete(String id, Long lastEdit, UserInfos user, boolean checkConcurency, Handler<Either<String, JsonObject>> callback);
 
-    void update(String id, JsonObject note, UserInfos user, Handler<Either<String, JsonObject>> callback);
+    default void delete(String id, Long lastEdit, UserInfos user, Handler<Either<String, JsonObject>> callback){
+        delete(id, lastEdit, user, true, callback);
+    }
+
+    void update(String id, JsonObject note, UserInfos user, boolean checkConcurency, Handler<Either<String, JsonObject>> callback);
+
+    default void update(String id, JsonObject note, UserInfos user, Handler<Either<String, JsonObject>> callback){
+        update(id, note, user, true, callback);
+    }
 
     void removeAllNotes(String idWall, Handler<Either<String, JsonObject>> callback);
 

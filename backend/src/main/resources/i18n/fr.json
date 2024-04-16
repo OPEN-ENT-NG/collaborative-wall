@@ -65,6 +65,8 @@
   "collaborativewall.add.media": "Ajoutez une ressource pour donner vie à vos notes.",
   "collaborativewall.toast.undo": "Dernière action annulée",
   "collaborativewall.toast.redo": "Dernière action rétablie",
+  "collaborativewall.modal.realtime.title": "Fonctionnalité de collaboration",
+  "collaborativewall.modal.realtime.text": "Il semble que votre réseau n’autorise pas les websockets, pour cette raison vous ne pouvez pas voir les modifications du mur par les autres utilisateurs en temps réel. Le mur sera néanmoins mis à jours toutes les 20 secondes. Veuillez contacter votre administrateur réseau pour plus d’informations.",
   "group.HeadTeacher": "Professeurs principaux de {0}.",
   "group.Direction": "Directeurs de {0}.",
   "group.Func": "Personnels de fonction {0}.",
