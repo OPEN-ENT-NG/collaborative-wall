@@ -90,9 +90,9 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     public CollaborativeWallController(String collection, NoteService noteService, WallExplorerPlugin plugin) {
         super(collection);
         this.plugin = plugin;
-        this.notesHelper = new NotesHelper(noteService);
         final EventStore eventStore = EventStoreFactory.getFactory().getEventStore(CollaborativeWall.class.getSimpleName());
         this.eventHelper = new EventHelper(eventStore);
+        this.notesHelper = new NotesHelper(noteService, this.eventHelper);
     }
 
     @Override
