@@ -3,26 +3,19 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
-import { updateState } from "~/features/history/utils/updateState";
 import { NewState } from "~/models/store";
-import {
-  useDeleteNote,
-  useCreateNote,
-  useUpdateNote,
-} from "~/services/queries";
-import { filterData, updateData } from "~/services/queries/helpers";
-import { useHistoryStore } from "~/store";
+import { filterData } from "~/services/queries/helpers";
+import { useHistoryStore, useWebsocketStore } from "~/store";
 
 const MAX_HISTORY = 40;
 
 export const useHistory = () => {
-  const { undo, redo, past, future, setUpdatedNote } = useHistoryStore(
+  const { undo, redo, past, future } = useHistoryStore(
     useShallow((state) => ({
       undo: state.undo,
       redo: state.redo,
       past: state.past,
       future: state.future,
-      setUpdatedNote: state.setUpdatedNote,
     })),
   );
 
@@ -34,35 +27,31 @@ export const useHistory = () => {
   const canRedo = future.length > 0 && future.length < MAX_HISTORY;
 
   const toast = useToast();
-  const deleteNote = useDeleteNote();
-  const createNote = useCreateNote();
-  const updateNote = useUpdateNote();
+  const { sendNoteUpdated, sendNoteDeletedEvent, sendNoteAddedEvent } =
+    useWebsocketStore();
 
   const queryClient = useQueryClient();
 
-  const deleteAction = async (action: NewState) => {
-    await deleteNote.mutateAsync(action.item);
+  const deleteAction = async (action: NewState, isUndo: boolean) => {
+    sendNoteDeletedEvent({
+      _id: action.item._id,
+      actionId: action.id,
+      actionType: isUndo ? "Undo" : "Redo",
+    });
     filterData(queryClient, action);
   };
 
-  const createAction = async (action: NewState) => {
-    const response = await createNote.mutateAsync({
+  const createAction = async (action: NewState, isUndo: boolean) => {
+    sendNoteAddedEvent({
+      actionId: action.id,
+      actionType: isUndo ? "Undo" : "Redo",
       color: action.item.color,
       content: action.item.content,
       idwall: action.item.idwall,
       media: action.item.media,
       x: action.item.x,
       y: action.item.y,
-    } as any);
-
-    const { status, wall } = response;
-
-    if (status !== "ok") return;
-
-    const size = wall.length;
-    const note = wall[size - 1];
-
-    updateState(action, note);
+    });
   };
 
   const moveAction = async (action: NewState, isUndo: boolean) => {
@@ -72,37 +61,16 @@ export const useHistory = () => {
     const y = isUndo ? previous?.y ?? 0 : next?.y ?? 0;
 
     try {
-      setUpdatedNote({
-        activeId: item._id,
+      await sendNoteUpdated({
+        actionId: action.id,
+        actionType: isUndo ? "Undo" : "Redo",
+        _id: item._id,
+        content: item.content,
+        color: item.color,
+        media: item.media,
         x,
         y,
-        zIndex: 2,
       });
-
-      await updateNote.mutateAsync(
-        {
-          id: item._id,
-          note: {
-            content: item.content,
-            color: item.color,
-            idwall: item.idwall,
-            media: item.media,
-            modified: item.modified,
-            x,
-            y,
-          },
-        },
-        {
-          onSuccess: async (data) => {
-            const { status, note: updatedNote } = data;
-
-            if (status !== "ok") return;
-
-            updateData(queryClient, updatedNote);
-            updateState(action, updatedNote);
-          },
-        },
-      );
     } catch (error) {
       console.error(error);
     }
@@ -122,30 +90,16 @@ export const useHistory = () => {
     const y = isUndo ? previous?.y ?? item.y : next?.y ?? item.y;
 
     try {
-      await updateNote.mutateAsync(
-        {
-          id: item._id,
-          note: {
-            content,
-            color,
-            idwall: item.idwall,
-            media,
-            modified: item.modified,
-            x,
-            y,
-          },
-        },
-        {
-          onSuccess: async (data) => {
-            const { status, note: updatedNote } = data;
-
-            if (status !== "ok") return;
-
-            updateData(queryClient, updatedNote);
-            updateState(action, updatedNote);
-          },
-        },
-      );
+      sendNoteUpdated({
+        actionId: action.id,
+        actionType: isUndo ? "Undo" : "Redo",
+        _id: item._id,
+        content,
+        color,
+        media,
+        x,
+        y,
+      });
     } catch (error) {
       console.error(error);
     }
@@ -154,10 +108,14 @@ export const useHistory = () => {
   const executeAction = async (action: NewState, isUndo: boolean) => {
     switch (action.type) {
       case "create":
-        isUndo ? await deleteAction(action) : await createAction(action);
+        isUndo
+          ? await deleteAction(action, isUndo)
+          : await createAction(action, isUndo);
         break;
       case "delete":
-        isUndo ? await createAction(action) : await deleteAction(action);
+        isUndo
+          ? await createAction(action, isUndo)
+          : await deleteAction(action, isUndo);
         break;
       case "move": {
         await moveAction(action, isUndo);

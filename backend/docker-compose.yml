@@ -7,3 +7,18 @@ services:
       - ./:/home/gradle/project
       - ~/.m2:/home/gradle/.m2
       - ~/.gradle:/home/gradle/.gradle
+  load-tester:
+    image: grafana/k6:master
+    volumes:
+      - ./src/test/stresstest:/home/k6/src
+      - ./src/test/resources/data:/home/k6/data
+    environment:
+      ROOT_URL: http://localhost:8090
+      DATA_ROOT_PATH: /home/k6/data
+      MAX_DURATION: 45s
+      USER_TTL: 20000
+      NB_USERS: 500
+      DELAY_BEFORE_SEND: 45000
+      NB_MESSAGES: 10000
+      ADMC_LOGIN: tom.mate
+      ADMC_PASSWORD: password

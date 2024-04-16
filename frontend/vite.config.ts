@@ -68,6 +68,10 @@ export default ({ mode }: { mode: string }) => {
 
   const server = {
     proxy,
+    /* hmr: {
+      host: "localhost",
+      protocol: "ws",
+    }, */
     host: "0.0.0.0",
     port: 3000,
     headers: resHeaders,

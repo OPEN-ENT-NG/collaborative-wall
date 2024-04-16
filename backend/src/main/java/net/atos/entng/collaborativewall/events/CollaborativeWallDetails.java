@@ -1,0 +1,63 @@
+package net.atos.entng.collaborativewall.events;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.vertx.core.json.JsonObject;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class CollaborativeWallDetails {
+  @JsonProperty("_id")
+  private final String id;
+  private final String name;
+  private final String description;
+  private final CollaborativeWallBackground background;
+  private final String icon;
+
+  @JsonCreator
+  public CollaborativeWallDetails(@JsonProperty("_id") final String id,
+                                  @JsonProperty("name") final String name,
+                                  @JsonProperty("description") final String description,
+                                  @JsonProperty("background") final CollaborativeWallBackground background,
+                                  @JsonProperty("icon") final String icon) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.background = background;
+    this.icon = icon;
+  }
+  public CollaborativeWallDetails(final String id, final CollaborativeWallDetails other) {
+    this(id, other.name, other.description, other.background, other.icon);
+  }
+
+
+  public String getId() {
+    return id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public CollaborativeWallBackground getBackground() {
+    return background;
+  }
+
+  public String getIcon() {
+    return icon;
+  }
+
+  public JsonObject toJson(){
+    return JsonObject.mapFrom(this);
+  }
+
+  public static CollaborativeWallDetails fromJson(final JsonObject json){
+    return json.mapTo(CollaborativeWallDetails.class);
+  }
+}

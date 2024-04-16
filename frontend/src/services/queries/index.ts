@@ -3,6 +3,7 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
+  useQueries,
 } from "@tanstack/react-query";
 import { IAction, ID, odeServices } from "edifice-ts-client";
 
@@ -99,6 +100,21 @@ export const useCreateNote = () => {
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
     },
+  });
+};
+
+export const useWallWithNotes = (wallId: string) => {
+  return useQueries({
+    queries: [
+      {
+        queryKey: wallQueryOptions(wallId).queryKey,
+        queryFn: wallQueryOptions(wallId).queryFn,
+      },
+      {
+        queryKey: notesQueryOptions(wallId).queryKey,
+        queryFn: notesQueryOptions(wallId).queryFn,
+      },
+    ],
   });
 };
 

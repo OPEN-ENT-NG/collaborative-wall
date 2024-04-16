@@ -21,13 +21,13 @@ package net.atos.entng.collaborativewall.events;
 
 import fr.wseduc.webutils.Either;
 import fr.wseduc.webutils.Either.Right;
-import org.entcore.common.search.SearchingEvents;
-import org.entcore.common.service.SearchService;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import org.entcore.common.search.SearchingEvents;
+import org.entcore.common.service.SearchService;
 
 import java.util.ArrayList;
 import java.util.List;

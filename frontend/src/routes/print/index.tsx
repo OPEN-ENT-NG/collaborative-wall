@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 import { Heading } from "@edifice-ui/react";
-import { QueryClient, useQueries } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import { LoaderFunctionArgs, useParams } from "react-router-dom";
 
 import { Note } from "~/components/note";
@@ -11,7 +11,11 @@ import {
   wallConfig,
 } from "~/config/init-config";
 import { NoteProps } from "~/models/notes";
-import { notesQueryOptions, wallQueryOptions } from "~/services/queries";
+import {
+  notesQueryOptions,
+  useWallWithNotes,
+  wallQueryOptions,
+} from "~/services/queries";
 
 import "~/styles/index.css";
 import "./index.css";
@@ -47,23 +51,7 @@ export const wallLoader =
 export const CollaborativeWall = () => {
   const params = useParams();
 
-  const [{ data: wall }, { data: notes }] = useQueries({
-    queries: [
-      {
-        queryKey: wallQueryOptions(params.wallId as string).queryKey,
-        queryFn: wallQueryOptions(params.wallId as string).queryFn,
-      },
-      {
-        queryKey: notesQueryOptions(params.wallId as string).queryKey,
-        queryFn: notesQueryOptions(params.wallId as string).queryFn,
-      },
-    ],
-  });
-
-  notes?.sort(
-    (a: NoteProps, b: NoteProps) =>
-      (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
-  );
+  const [{ data: wall }, { data: notes }] = useWallWithNotes(params.wallId!);
 
   useEffect(() => {
     setTimeout(() => window.print(), 1000);

@@ -1,15 +1,13 @@
 import { RefObject } from "react";
 
 import { EditorRef } from "@edifice-ui/editor";
-import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { v4 as uuid } from "uuid";
 import { useShallow } from "zustand/react/shallow";
 
 import { NoteMedia } from "~/models/noteMedia";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
-import { useCreateNote, useUpdateNote } from "~/services/queries";
-import { updateData } from "~/services/queries/helpers";
-import { useHistoryStore, useWhiteboard } from "~/store";
+import { useWebsocketStore, useWhiteboard } from "~/store";
 
 export type EditionMode = "read" | "edit" | "create";
 export const authorizedModes: EditionMode[] = ["read", "edit", "create"];
@@ -22,23 +20,20 @@ export const useNoteModal = (
 ) => {
   const navigate = useNavigate();
 
-  const createNote = useCreateNote();
-  const updateNote = useUpdateNote();
-
-  const queryClient = useQueryClient();
-  const { setHistory } = useHistoryStore();
-
   const { wallId } = useParams();
-  const [searchParams] = useSearchParams();
-  const editionMode: EditionMode =
-    (searchParams.get("mode") as EditionMode) || "create";
-
   const { positionViewport, zoom } = useWhiteboard(
     useShallow((state) => ({
       positionViewport: state.positionViewport,
       zoom: state.zoom,
     })),
   );
+
+  const { sendNoteAddedEvent, sendNoteUpdated } = useWebsocketStore();
+
+  const [searchParams] = useSearchParams();
+
+  const editionMode: EditionMode =
+    (searchParams.get("mode") as EditionMode) || "create";
 
   const isReadMode = editionMode === "read";
   const isEditMode = editionMode === "edit";
@@ -59,20 +54,11 @@ export const useNoteModal = (
     };
 
     try {
-      const response = await createNote.mutateAsync(note);
-
-      const { status, wall } = response;
-
-      if (status === "ok") {
-        const size = wall.length;
-        const note = wall[size - 1];
-
-        setHistory({
-          type: "create",
-          item: note,
-        });
-      }
-
+      await sendNoteAddedEvent({
+        ...note,
+        actionType: "Do",
+        actionId: uuid(),
+      });
       handleNavigateBack();
     } catch (error) {
       console.error(error);
@@ -90,42 +76,16 @@ export const useNoteModal = (
       y: loadedData.y,
     };
 
-    await updateNote.mutateAsync(
-      { id: loadedData._id, note },
-      {
-        onSuccess: async (responseData) => {
-          const { status, note: updatedNote } = responseData;
-
-          if (status !== "ok") return;
-
-          updateData(queryClient, updatedNote);
-
-          setHistory({
-            type: "edit",
-            item: {
-              ...updatedNote,
-              content: loadedData.content,
-              color: loadedData.color,
-              media: loadedData.media,
-            },
-            previous: {
-              x: loadedData.x,
-              y: loadedData.y,
-              color: loadedData.color,
-              content: loadedData.content,
-              media: loadedData.media || null,
-            },
-            next: {
-              x: updatedNote.x,
-              y: updatedNote.y,
-              color: updatedNote.color,
-              content: updatedNote.content,
-              media: updatedNote.media || null,
-            },
-          });
-        },
-      },
-    );
+    await sendNoteUpdated({
+      _id: loadedData._id,
+      content: note.content,
+      media: note.media,
+      color: note.color,
+      x: note.x,
+      y: note.y,
+      actionType: "Do",
+      actionId: uuid(),
+    });
 
     handleNavigateBack();
   };
