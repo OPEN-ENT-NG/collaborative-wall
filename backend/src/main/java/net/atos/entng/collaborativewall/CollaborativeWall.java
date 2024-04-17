@@ -89,7 +89,7 @@ public class CollaborativeWall extends BaseServer {
 
         final CollaborativeWallService collaborativeWallService = new MongoDbCollaborativeWallService(
             controller.getCrudService(),
-            noteService, securedActions);
+            noteService, plugin, securedActions);
 
         final JsonObject rtConfig = config.getJsonObject("real-time");
         if(rtConfig == null) {
