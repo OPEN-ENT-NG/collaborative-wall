@@ -237,6 +237,7 @@ export const ShowMediaType = ({
           style={{
             height: modalNote ? "200px" : "120px",
             border: !modalNote ? "solid 1px #E4E4E4" : "",
+            borderRadius: !modalNote ? "8px" : "16px",
           }}
         >
           {!readonly && (
@@ -265,7 +266,10 @@ export const ShowMediaType = ({
             </div>
             <div
               className="url-placement "
-              style={{ maxWidth: modalNote ? "219px" : "113px" }}
+              style={{
+                maxWidth: modalNote ? "219px" : "113px",
+                borderRadius: modalNote ? "0px 16px" : "0px 8px",
+              }}
             >
               <div
                 style={{ color: "white", display: "block" }}
