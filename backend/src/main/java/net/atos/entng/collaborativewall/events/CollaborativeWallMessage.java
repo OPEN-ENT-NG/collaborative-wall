@@ -49,7 +49,7 @@ public class CollaborativeWallMessage {
                                   @JsonProperty("move") final List<NoteMove> move,
                                   @JsonProperty("editing") final List<CollaborativeWallEditingInformation> editing,
                                   @JsonProperty("connectedUsers") final Set<CollaborativeWallUser> connectedUsers,
-                                  @JsonProperty("note") final CollaborativeWallNote oldNote,
+                                  @JsonProperty("oldNote") final CollaborativeWallNote oldNote,
                                   @JsonProperty("actionType") final CollaborativeWallUserAction.ActionType actionType,
                                   @JsonProperty("actionId") final String actionId,
                                   @JsonProperty("maxConnectedUsers") final Long maxConnectedUsers) {
