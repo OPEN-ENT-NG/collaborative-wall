@@ -84,7 +84,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         this.notesHelper.init(vertx, config, rm, securedActions);
         final Map<String, List<String>> groupedActions = new HashMap<>();
         this.shareService = plugin.createShareService(groupedActions);
-        this.collaborativeWallService =  new MongoDbCollaborativeWallService(this.crudService, noteService, securedActions);
+        this.collaborativeWallService =  new MongoDbCollaborativeWallService(this.crudService, noteService, plugin, securedActions);
 	}
 
     /**

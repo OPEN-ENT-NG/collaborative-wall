@@ -7,9 +7,11 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import net.atos.entng.collaborativewall.events.CollaborativeWallDetails;
 import net.atos.entng.collaborativewall.events.CollaborativeWallNote;
+import net.atos.entng.collaborativewall.explorer.WallExplorerPlugin;
 import net.atos.entng.collaborativewall.service.CollaborativeWallService;
 import net.atos.entng.collaborativewall.service.NoteService;
 import org.apache.commons.lang3.StringUtils;
+import org.entcore.common.explorer.IdAndVersion;
 import org.entcore.common.service.CrudService;
 import org.entcore.common.share.ShareModel;
 import org.entcore.common.share.ShareRoles;
@@ -22,14 +24,17 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
     private final CrudService crudService;
 
     private final NoteService noteService;
+    private final WallExplorerPlugin plugin;
     private final Map<String, SecuredAction> securedActions;
 
     public MongoDbCollaborativeWallService(final CrudService crudService,
                                            final NoteService noteService,
+                                           final WallExplorerPlugin plugin,
                                            final Map<String, SecuredAction> securedActions) {
         this.crudService = crudService;
         this.noteService = noteService;
         this.securedActions = securedActions;
+        this.plugin = plugin;
     }
 
     @Override
@@ -63,7 +68,11 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
         final Promise<CollaborativeWallDetails> promise = Promise.promise();
         this.crudService.update(wallId, wall.toJson(), result -> {
             if (result.isRight()) {
-                promise.complete(new CollaborativeWallDetails(wallId, wall));
+                this.plugin.notifyUpsert(user, wall.toJson()).onSuccess(e -> {
+                    promise.complete(new CollaborativeWallDetails(wallId, wall));
+                }).onFailure(e -> {
+                    promise.fail(e);
+                });
             } else {
                 promise.fail(result.left().getValue());
             }
@@ -76,7 +85,11 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
         final Promise<Void> promise = Promise.promise();
         this.crudService.delete(wallId, result -> {
             if (result.isRight()) {
-                promise.complete();
+                this.plugin.notifyDeleteById(user, new IdAndVersion(wallId, System.currentTimeMillis())).onSuccess(e -> {
+                    promise.complete();
+                }).onFailure(e -> {
+                    promise.fail(e);
+                });
             } else {
                 promise.fail(result.left().getValue());
             }
