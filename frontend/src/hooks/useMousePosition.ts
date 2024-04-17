@@ -4,11 +4,6 @@ import { useThrottledFunction } from "./useThrottledFunction";
 import { useWebsocketStore } from "~/store";
 import { Mode } from "~/store/websocket/types";
 
-/* const getRandomPosition = () => ({
-  x: Math.random() * window.innerWidth,
-  y: Math.random() * window.innerHeight,
-}); */
-
 export const useMousePosition = () => {
   const [mousePosition, setMousePosition] = useState<{ x: number; y: number }>({
     x: 0,
@@ -29,7 +24,7 @@ export const useMousePosition = () => {
     y: number;
   }>({
     callbackFn: callbackFnToThrottle,
-    throttleMs: 100,
+    throttleMs: 300,
   });
 
   useEffect(() => {
@@ -45,13 +40,6 @@ export const useMousePosition = () => {
       throttledPosition({ x, y });
       setMousePosition({ x, y });
     };
-
-    /* const moveMouseRandomly = () => {
-      throttledPosition(getRandomPosition());
-      setMousePosition(getRandomPosition());
-    }; */
-
-    // const intervalId = setInterval(moveMouseRandomly, 2000);
 
     window.addEventListener("mousemove", updateMousePosition);
 
