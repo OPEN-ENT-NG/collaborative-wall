@@ -417,6 +417,7 @@ export const CollaborativeWall = () => {
       )}
 
       <div className="collaborativewall-container">
+        {wall?.description && !isMobile && <DescriptionWall />}
         <WhiteboardWrapper>
           <DndContext
             sensors={sensors}
@@ -439,7 +440,6 @@ export const CollaborativeWall = () => {
       </div>
 
       <Suspense fallback={<LoadingScreen />}>
-        {wall?.description && !isMobile && <DescriptionWall />}
         {wall?.description && <DescriptionModal />}
         {wall && (
           <BackgroundModal
