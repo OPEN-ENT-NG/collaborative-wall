@@ -404,8 +404,6 @@ export const CollaborativeWall = () => {
 
   return (
     <>
-      {numberOfUsers && renderCursors(filteredUsers, moveUsers)}
-
       {!isMobile && (
         <AppHeader
           isFullscreen
@@ -418,6 +416,9 @@ export const CollaborativeWall = () => {
 
       <div className="collaborativewall-container">
         {wall?.description && !isMobile && <DescriptionWall />}
+
+        {numberOfUsers && renderCursors(filteredUsers, moveUsers)}
+
         <WhiteboardWrapper>
           <DndContext
             sensors={sensors}

@@ -32,7 +32,7 @@ export function Cursor({
       ref={rCursor}
       style={{
         position: "absolute",
-        zIndex: 9999,
+        zIndex: 99,
         top: -15,
         left: -15,
         width: 35,
