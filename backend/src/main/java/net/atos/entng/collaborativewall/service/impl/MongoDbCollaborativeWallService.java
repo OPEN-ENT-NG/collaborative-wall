@@ -68,7 +68,7 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
         final Promise<CollaborativeWallDetails> promise = Promise.promise();
         this.crudService.update(wallId, wall.toJson(), result -> {
             if (result.isRight()) {
-                this.plugin.notifyUpsert(user, wall.toJson()).onSuccess(e -> {
+                this.plugin.notifyUpsert(new IdAndVersion(wallId, System.currentTimeMillis()),user, wall.toJson()).onSuccess(e -> {
                     promise.complete(new CollaborativeWallDetails(wallId, wall));
                 }).onFailure(e -> {
                     promise.fail(e);
