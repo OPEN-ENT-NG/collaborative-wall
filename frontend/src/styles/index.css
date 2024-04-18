@@ -1,3 +1,9 @@
+.collaborativewall-container {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
 .collaborativewall-container .toolbar {
   position: fixed;
   bottom: 24px;

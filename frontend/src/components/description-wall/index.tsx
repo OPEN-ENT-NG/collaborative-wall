@@ -25,7 +25,7 @@ export function DescriptionWall() {
   );
 
   return (
-    <div className="description-wall">
+    <div className="description-wall d-flex justify-content-between">
       <p className="text-truncate">{wall?.description}</p>
       <Button
         variant="ghost"
