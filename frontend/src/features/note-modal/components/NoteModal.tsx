@@ -66,7 +66,6 @@ export const NoteModal = () => {
     isReadMode,
     isEditMode,
     isCreateMode,
-    handleNavigateBack,
     handleNavigateToEditMode,
     handleSaveNote,
     handleCreateNote,
@@ -113,7 +112,7 @@ export const NoteModal = () => {
               type="button"
               color="primary"
               variant="filled"
-              onClick={handleNavigateBack}
+              onClick={handleClose}
             >
               {t("collaborativewall.modal.close", { ns: appCode })}
             </Button>
@@ -125,7 +124,7 @@ export const NoteModal = () => {
               type="button"
               color="tertiary"
               variant="ghost"
-              onClick={handleNavigateBack}
+              onClick={handleClose}
             >
               {t("collaborativewall.modal.close", { ns: appCode })}
             </Button>
@@ -144,7 +143,7 @@ export const NoteModal = () => {
             type="button"
             color="tertiary"
             variant="ghost"
-            onClick={handleNavigateBack}
+            onClick={handleClose}
           >
             {t("collaborativewall.modal.cancel", { ns: appCode })}
           </Button>

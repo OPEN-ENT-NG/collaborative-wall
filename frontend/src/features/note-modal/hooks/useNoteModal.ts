@@ -1,6 +1,7 @@
 import { RefObject, useCallback } from "react";
 
 import { EditorRef } from "@edifice-ui/editor";
+import { useOdeClient } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
 import {
   useBeforeUnload,
@@ -25,6 +26,7 @@ export const useNoteModal = (
   media: NoteMedia | null,
 ) => {
   const { t } = useTranslation();
+  const { appCode } = useOdeClient();
   const navigate = useNavigate();
 
   const { wallId } = useParams();
@@ -60,7 +62,7 @@ export const useNoteModal = (
     }
   });
 
-  const handleNavigateBack = () => navigate("..");
+  const navigateBack = () => navigate("..");
 
   const handleCreateNote = async () => {
     if (!wallId) {
@@ -82,7 +84,7 @@ export const useNoteModal = (
         actionType: "Do",
         actionId: uuid(),
       });
-      handleNavigateBack();
+      navigateBack();
     } catch (error) {
       console.error(error);
     }
@@ -110,19 +112,19 @@ export const useNoteModal = (
       actionId: uuid(),
     });
 
-    handleNavigateBack();
+    navigateBack();
   };
 
   const handleClose = () => {
     if (isCreateMode || (isEditMode && isDirty())) {
       const res: boolean = window.confirm(
-        t("collaborativewall.modal.note.confirm.close"),
+        t("collaborativewall.modal.note.confirm.close", { ns: appCode }),
       );
       if (res) {
-        handleNavigateBack();
+        navigateBack();
       }
     } else {
-      handleNavigateBack();
+      navigateBack();
     }
   };
 
@@ -135,7 +137,6 @@ export const useNoteModal = (
     isReadMode,
     isEditMode,
     isCreateMode,
-    handleNavigateBack,
     handleNavigateToEditMode,
     handleCreateNote,
     handleSaveNote,
