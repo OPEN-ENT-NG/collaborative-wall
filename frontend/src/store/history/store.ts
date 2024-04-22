@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 import { HistoryAction, HistoryState, UpdateNote } from "~/models/store";
 
+const MAX_HISTORY = 40;
 const historyState = {
   past: [],
   present: null,
@@ -26,8 +27,6 @@ export const useHistoryStore = create<HistoryState & HistoryAction>(
         case "Do": {
           set((state) => {
             const newStateWithId = { ...newState, id: newState.actionId };
-            const newHistory = [...state.past, newStateWithId];
-
             if (newStateWithId === state.present) {
               return state;
             }
@@ -35,7 +34,8 @@ export const useHistoryStore = create<HistoryState & HistoryAction>(
             return {
               ...state,
               present: newStateWithId,
-              past: newHistory,
+              // remove oldest entries
+              past: [...state.past, newStateWithId].slice(-MAX_HISTORY),
               future: [],
             };
           });
@@ -63,7 +63,8 @@ export const useHistoryStore = create<HistoryState & HistoryAction>(
           ...state,
           present: previousState,
           past: newHistory,
-          future: [previousState, ...state.future],
+          // remove newest entries
+          future: [previousState, ...state.future].slice(0, MAX_HISTORY),
         };
       }),
     undoById: (id: string) =>
@@ -78,7 +79,8 @@ export const useHistoryStore = create<HistoryState & HistoryAction>(
           ...state,
           present: existing,
           past: newPast,
-          future: [existing, ...state.future],
+          // remove newest entries
+          future: [existing, ...state.future].slice(0, MAX_HISTORY),
         };
       }),
     redo: () =>
@@ -91,7 +93,8 @@ export const useHistoryStore = create<HistoryState & HistoryAction>(
         return {
           ...state,
           present: nextState,
-          past: [...state.past, nextState],
+          // remove oldest entries
+          past: [...state.past, nextState].slice(-MAX_HISTORY),
           future: newFuture,
         };
       }),
@@ -106,7 +109,8 @@ export const useHistoryStore = create<HistoryState & HistoryAction>(
         return {
           ...state,
           present: existing,
-          past: [...state.past, existing],
+          // remove oldest entries
+          past: [...state.past, existing].slice(-MAX_HISTORY),
           future: newFuture,
         };
       }),

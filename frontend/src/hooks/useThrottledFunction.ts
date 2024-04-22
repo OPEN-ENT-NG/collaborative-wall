@@ -5,7 +5,7 @@ type useThrottledFunctionProps<T> = {
   throttleMs?: number;
 };
 
-const DEFAULT_THROTTLE_MS = 100;
+export const DEFAULT_THROTTLE_MS = 100;
 
 const getRemainingTime = (lastTriggeredTime: number, throttleMs: number) => {
   const elapsedTime = Date.now() - lastTriggeredTime;

@@ -7,8 +7,6 @@ import { NewState } from "~/models/store";
 import { filterData } from "~/services/queries/helpers";
 import { useHistoryStore, useWebsocketStore } from "~/store";
 
-const MAX_HISTORY = 40;
-
 export const useHistory = () => {
   const { undo, redo, past, future } = useHistoryStore(
     useShallow((state) => ({
@@ -23,8 +21,8 @@ export const useHistory = () => {
 
   const { appCode } = useOdeClient();
 
-  const canUndo = past.length > 0 && past.length < MAX_HISTORY;
-  const canRedo = future.length > 0 && future.length < MAX_HISTORY;
+  const canUndo = past.length > 0;
+  const canRedo = future.length > 0;
 
   const toast = useToast();
   const { sendNoteUpdated, sendNoteDeletedEvent, sendNoteAddedEvent } =
