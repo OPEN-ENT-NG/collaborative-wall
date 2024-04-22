@@ -94,7 +94,10 @@ export const NoteContent = forwardRef(
     }, [libraryMedia]);
 
     const renderEdit = !isReadMode && (
-      <div className="multimedia-section my-24">
+      <div
+        className="multimedia-section my-24"
+        style={{ border: "1px solid #f2f2f2" }}
+      >
         <div className="toolbar-media py-48 px-12">
           <ToolbarMedia handleClickMedia={handleClickMedia} />
           {t("collaborativewall.add.media", { ns: appCode })}
@@ -103,7 +106,10 @@ export const NoteContent = forwardRef(
     );
 
     const renderRead = (media: NoteMedia) => (
-      <div className={`multimedia-section ${isReadMode ? `mb-24` : `my-24`}`}>
+      <div
+        className={`multimedia-section ${isReadMode ? `mb-24` : `my-24`}`}
+        style={{ border: isReadMode ? "" : "1px solid #f2f2f2" }}
+      >
         <ShowMediaType
           media={media}
           modalNote={true}
