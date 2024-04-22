@@ -14,23 +14,25 @@ public class CollaborativeWallNoteMedia {
   private final String application;
   private final String type;
   private final String url;
-
+  private final String targetUrl;
 
   @JsonCreator
   public CollaborativeWallNoteMedia(@JsonProperty("id") final String id,
                                     @JsonProperty("name") final String name,
                                     @JsonProperty("application") final String application,
                                     @JsonProperty("type") final String type,
-                                    @JsonProperty("url") final String url) {
+                                    @JsonProperty("url") final String url,
+                                    @JsonProperty("targetUrl") final String targetUrl) {
     this.id = id;
     this.name = name;
     this.application = application;
     this.type = type;
     this.url = url;
+    this.targetUrl = targetUrl;
   }
 
   public CollaborativeWallNoteMedia(CollaborativeWallNoteMedia other) {
-    this(other.id, other.name, other.application, other.type, other.url);
+    this(other.id, other.name, other.application, other.type, other.url, other.targetUrl);
   }
   public String getId() {
     return id;
@@ -50,6 +52,10 @@ public class CollaborativeWallNoteMedia {
 
   public String getUrl() {
     return url;
+  }
+
+  public String getTargetUrl() {
+    return targetUrl;
   }
 
   public JsonObject toJson(){
