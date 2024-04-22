@@ -62,10 +62,6 @@ export const noteColors: Colors = {
 };
 
 export const backgroundImages = [
-  "img/cloud.png",
-  "img/default.jpg",
-  "img/paper.jpg",
-  "img/wood.jpg",
   "img/blue-topo.png",
   "img/edifice.png",
   "img/green-hill.png",

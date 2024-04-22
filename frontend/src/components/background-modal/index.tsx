@@ -74,21 +74,33 @@ export default function BackgroundModal({
           </Modal.Header>
           <Modal.Body>
             <>
-              <Image
-                src={
-                  import.meta.env.PROD
-                    ? `/collaborativewall/public/${backgroundImageValue}`
-                    : `/${backgroundImageValue}`
-                }
-                className="py-16"
-                alt=""
-                width={288}
-                height={180}
-                style={{
-                  margin: "auto",
-                  background: `linear-gradient(${backgroundColorValue})`,
-                }}
-              />
+              <div className="my-16">
+                {backgroundImageValue.length !== 0 ? (
+                  <Image
+                    src={
+                      import.meta.env.PROD
+                        ? `/collaborativewall/public/${backgroundImageValue}`
+                        : `/${backgroundImageValue}`
+                    }
+                    alt=""
+                    width={288}
+                    height={180}
+                    style={{
+                      margin: "auto",
+                      background: `linear-gradient(${backgroundColorValue})`,
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: "288px",
+                      height: "180px",
+                      margin: "auto",
+                      background: `linear-gradient(${backgroundColorValue})`,
+                    }}
+                  ></div>
+                )}
+              </div>
               <div className="my-8">
                 <Heading className="py-8" headingStyle="h5">
                   {t("collaborativewall.label.images", { ns: appCode })}
@@ -102,7 +114,10 @@ export default function BackgroundModal({
                           isClickable={true}
                           isSelectable={false}
                           isSelected={isSelected}
-                          onClick={() => setBackgroundImageValue(image)}
+                          onClick={() => {
+                            setBackgroundImageValue(image);
+                            setBackgroundColorValue("");
+                          }}
                         >
                           <Card.Body space="0">
                             <Image
@@ -135,7 +150,10 @@ export default function BackgroundModal({
                           isClickable={true}
                           isSelectable={false}
                           isSelected={isSelected}
-                          onClick={() => setBackgroundColorValue(color)}
+                          onClick={() => {
+                            setBackgroundColorValue(color);
+                            setBackgroundImageValue("");
+                          }}
                         >
                           <Card.Body space="0">
                             <div
