@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 
-import { useThrottledFunction } from "./useThrottledFunction";
+import {
+  DEFAULT_THROTTLE_MS,
+  useThrottledFunction,
+} from "./useThrottledFunction";
 import { useWebsocketStore } from "~/store";
 import { Mode } from "~/store/websocket/types";
 
@@ -24,7 +27,7 @@ export const useMousePosition = () => {
     y: number;
   }>({
     callbackFn: callbackFnToThrottle,
-    throttleMs: 300,
+    throttleMs: DEFAULT_THROTTLE_MS,
   });
 
   useEffect(() => {
