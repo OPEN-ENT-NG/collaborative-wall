@@ -1,14 +1,12 @@
 import { v4 as uuid } from "uuid";
 import { create } from "zustand";
 
-import { useHttpMode } from "./useHttpMode";
-import { useWSMode } from "./useWSMode";
 import {
-  WebsocketState,
-  WebsocketAction,
   Mode,
   Status,
   Subscriber,
+  WebsocketAction,
+  WebsocketState,
 } from "~/store/websocket/types";
 
 const websocketState = {
@@ -23,7 +21,7 @@ const websocketState = {
   openSocketModal: false,
 };
 
-const createWebsocketStore = create<WebsocketState & WebsocketAction>(
+export const createWebsocketStore = create<WebsocketState & WebsocketAction>(
   (set, get) => {
     return {
       ...websocketState,
@@ -256,31 +254,3 @@ const createWebsocketStore = create<WebsocketState & WebsocketAction>(
     };
   },
 );
-
-export const useWebsocketStore = () => {
-  const store = createWebsocketStore();
-  const httpProvider = useHttpMode(store.mode === Mode.HTTP, store.resourceId);
-  store.httpProvider = httpProvider;
-  store.wsProvider = useWSMode({
-    enabled: store.mode === Mode.WS,
-    onOpen() {
-      store.onReady(Mode.WS);
-    },
-    onClose() {
-      if (store.mode === Mode.WS && store.status === Status.STARTED) {
-        store.disconnect();
-      }
-    },
-    onMessage(event) {
-      if (store.mode === Mode.WS) {
-        store.subscribers.forEach((sub) => sub(event));
-      }
-    },
-    onReconnectStop() {
-      store.onReady(Mode.HTTP);
-    },
-    reconnectAttempts: store.maxAttempts,
-    wallId: store.resourceId,
-  });
-  return store;
-};

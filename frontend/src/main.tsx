@@ -1,6 +1,5 @@
 import React from "react";
 
-import "./i18n";
 import { OdeClientProvider, ThemeProvider } from "@edifice-ui/react";
 import {
   QueryCache,
@@ -10,6 +9,7 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
+import "./i18n";
 
 import { router } from "./routes";
 
@@ -23,9 +23,9 @@ if (import.meta.env.DEV) {
   });
 }
 
-if (import.meta.env.DEV) {
+/* if (import.meta.env.DEV) {
   import("edifice-bootstrap/dist/index.css");
-}
+} */
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({

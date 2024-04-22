@@ -1,4 +1,4 @@
-import { NoteMedia } from "./noteMedia";
+import { NoteMedia } from "./note-media";
 
 export interface NoteProps {
   _id: string;

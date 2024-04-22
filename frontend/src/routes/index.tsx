@@ -2,10 +2,10 @@ import { QueryClient } from "@tanstack/react-query";
 import { Explorer } from "ode-explorer/lib";
 import { RouteObject, createBrowserRouter } from "react-router-dom";
 
-import { NotFound } from "./not-found";
-import Root from "./root";
 import { explorerConfig } from "~/config/config";
 import { PageError } from "~/routes/page-error";
+import { NotFound } from "./not-found";
+import Root from "./root";
 
 const routes = (queryClient: QueryClient): RouteObject[] => [
   {
@@ -39,7 +39,7 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
             path: "note",
             async lazy() {
               const { NoteModal } = await import(
-                "../features/note-modal/components/NoteModal"
+                "../features/note-modal/components/note-modal"
               );
               return { Component: NoteModal };
             },
@@ -48,7 +48,7 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
             path: "note/:noteId",
             async lazy() {
               const { noteLoader, NoteModal } = await import(
-                "../features/note-modal/components/NoteModal"
+                "../features/note-modal/components/note-modal"
               );
               return { loader: noteLoader, Component: NoteModal };
             },

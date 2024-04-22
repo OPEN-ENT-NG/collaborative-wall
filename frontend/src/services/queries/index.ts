@@ -1,12 +1,15 @@
 import {
   queryOptions,
   useMutation,
+  useQueries,
   useQuery,
   useQueryClient,
-  useQueries,
 } from "@tanstack/react-query";
 import { IAction, ID, odeServices } from "edifice-ts-client";
 
+import { workflows } from "~/config";
+import { NoteProps, PickedNoteProps } from "~/models/notes";
+import { PickedCollaborativeWallProps } from "~/models/wall";
 import {
   getNote,
   getNotes,
@@ -15,9 +18,6 @@ import {
   updateNote,
   updateWall,
 } from "../api";
-import { workflows } from "~/config";
-import { NoteProps, PickedNoteProps } from "~/models/notes";
-import { PickedCollaborativeWallProps } from "~/models/wall";
 
 export const wallQueryOptions = (wallId: string) =>
   queryOptions({

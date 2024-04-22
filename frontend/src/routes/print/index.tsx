@@ -1,15 +1,9 @@
 import { useEffect } from "react";
 
-import { Heading } from "@edifice-ui/react";
+import { Card, Heading } from "@edifice-ui/react";
 import { QueryClient } from "@tanstack/react-query";
 import { LoaderFunctionArgs, useParams } from "react-router-dom";
 
-import { Note } from "~/components/note";
-import {
-  backgroundColors,
-  backgroundImages,
-  wallConfig,
-} from "~/config/init-config";
 import { NoteProps } from "~/models/notes";
 import {
   notesQueryOptions,
@@ -17,7 +11,10 @@ import {
   wallQueryOptions,
 } from "~/services/queries";
 
-import "~/styles/index.css";
+import { Editor } from "@edifice-ui/editor";
+import { backgroundColors, backgroundImages, wallConfig } from "~/config";
+import { ShowMediaType } from "~/features/collaborative-wall/show-media-type";
+import "../collaborative-wall/index.css";
 import "./index.css";
 
 export const wallLoader =
@@ -63,7 +60,7 @@ export const CollaborativeWall = () => {
         <div
           className="transform-component-print"
           style={{
-            transform: `scale(${1000 / wallConfig.WIDTH_WALL}) translate(0px, 0px)`,
+            transform: `scale(${1000 / wallConfig.WIDTH_WALL})`,
           }}
         >
           <div
@@ -87,15 +84,41 @@ export const CollaborativeWall = () => {
                 )
                 .map((note: NoteProps, i: number) => {
                   return (
-                    <Note
-                      key={note._id}
-                      note={{
-                        ...note,
-                        x: note.x,
-                        y: note.y,
-                        zIndex: i,
-                      }}
-                    />
+                    <div
+                      style={
+                        {
+                          borderRadius: "1.2rem",
+                          zIndex: i,
+                          position: "absolute",
+                          backgroundColor: note.color?.[0],
+                          transform: `translate(${note.x}px, ${note.y}px)`,
+                        } as React.CSSProperties
+                      }
+                    >
+                      <Card className="note" isSelectable={false}>
+                        <Card.Body>
+                          {note.media?.url && (
+                            <ShowMediaType media={note.media} />
+                          )}
+                          <div
+                            style={{
+                              maxHeight: note.media?.url ? "302px" : "264px",
+                              overflow: "hidden",
+                            }}
+                          >
+                            <Editor
+                              content={note.content}
+                              mode="read"
+                              toolbar="none"
+                              variant="ghost"
+                            ></Editor>
+                          </div>
+                        </Card.Body>
+                        <Card.Footer>
+                          <Card.Text>{note.owner?.displayName}</Card.Text>
+                        </Card.Footer>
+                      </Card>
+                    </div>
                   );
                 })}
             </div>

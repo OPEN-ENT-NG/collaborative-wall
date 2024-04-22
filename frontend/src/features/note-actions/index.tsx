@@ -1,32 +1,18 @@
 import { RefAttributes } from "react";
 
 import { Delete, Edit } from "@edifice-ui/icons";
-import {
-  Dropdown,
-  DropdownMenuOptions,
-  IconButtonProps,
-} from "@edifice-ui/react";
+import { Dropdown, IconButtonProps } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 
-import { ActionList } from "../note-modal/components/ActionList";
-import { useAccess } from "~/hooks/useAccess";
-// import { useRealTimeService } from "~/hooks/useRealTimeService";
+import { useAccess } from "~/hooks/use-access";
 import { NoteProps } from "~/models/notes";
-import { useWebsocketStore } from "~/store";
+import { ActionList } from "../note-modal/components/action-list";
+import { useWebsocketStore } from "../websocket/hooks/use-websocket-store";
+import { NoteDropdownMenuOptions } from "./types";
 
-export type NoteDropdownMenuOptions = DropdownMenuOptions & {
-  hidden?: boolean;
-};
-
-export const NoteActions = ({
-  note,
-  setIsOpenDropdown,
-}: {
-  note: NoteProps;
-  setIsOpenDropdown: (value: boolean) => void;
-}) => {
+export const NoteActions = ({ note }: { note: NoteProps }) => {
   const navigate = useNavigate();
 
   const { hasRightsToUpdateNote } = useAccess();
@@ -68,7 +54,12 @@ export const NoteActions = ({
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div onMouseDown={(event) => event.preventDefault()}>
+    <div
+      onMouseDown={(event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      }}
+    >
       <Dropdown placement="right-start">
         {(
           triggerProps: JSX.IntrinsicAttributes &
@@ -77,7 +68,6 @@ export const NoteActions = ({
         ) => (
           <ActionList
             triggerProps={triggerProps}
-            setIsOpenDropdown={setIsOpenDropdown}
             dropdownOptions={dropdownOptions}
           />
         )}
