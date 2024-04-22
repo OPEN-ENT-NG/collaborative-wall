@@ -1,6 +1,5 @@
 import { create } from "zustand";
-
-import { HistoryAction, HistoryState, UpdateNote } from "~/models/store";
+import { HistoryAction, HistoryState, UpdateNote } from "./types";
 
 const MAX_HISTORY = 40;
 const historyState = {

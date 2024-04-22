@@ -1,10 +1,9 @@
-import { QueryClient } from "@tanstack/react-query";
-import { useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
 
-import { notesQueryOptions, wallQueryOptions } from ".";
 import { NoteProps } from "~/models/notes";
-import { NewState } from "~/models/store";
 import { CollaborativeWallProps } from "~/models/wall";
+import { NewState } from "~/store/history/types";
+import { notesQueryOptions, wallQueryOptions } from ".";
 
 export const filterData = (queryClient: QueryClient, action: NewState) => {
   return queryClient.setQueryData(

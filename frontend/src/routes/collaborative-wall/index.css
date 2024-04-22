@@ -1,0 +1,201 @@
+.collaborativewall-container {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+.collaborativewall-reactflow {
+  width: 100%;
+  height: 100%;
+}
+
+main {
+  height: 100vh;
+}
+
+.toolbar-media {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.multimedia-section {
+  width: 100%;
+  min-height: 120px;
+  border-radius: 16px;
+}
+
+.delete-button {
+  position: absolute;
+  background-color: #fff;
+  right: 0px;
+  z-index: 2;
+  gap: 8px;
+}
+
+.media-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.media-video {
+  border-radius: 8px;
+  max-height: 350px;
+  position: relative;
+  width: 100%;
+}
+
+.media-audio {
+  max-width: 205px;
+  position: relative;
+  width: 100%;
+}
+
+.media-hyperlink {
+  background-color: #d9d9d9;
+  width: 100%;
+  position: relative;
+}
+
+.application-background {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  justify-content: center;
+}
+
+.application-background .app-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.url-placement {
+  bottom: 0;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 4px 8px;
+  width: fit-content;
+  font-weight: bold;
+}
+
+.btn.focus,
+.btn:focus {
+  box-shadow: unset;
+}
+
+.description-wall {
+  /* position: fixed; */
+  z-index: 2;
+  background-color: rgb(255 255 255 / 80%);
+  width: 100%;
+  display: flex;
+  padding: 8px 76px;
+  align-items: center;
+  gap: 8px;
+}
+
+.note,
+.react-flow__node-note {
+  min-height: 224px;
+  width: 224px;
+  padding: 0;
+  border: unset;
+}
+
+.note,
+.react-flow__node-note .card {
+  background-color: transparent !important;
+}
+
+.note .card-body,
+.react-flow__node-note .card-body {
+  padding-bottom: 8px !important;
+  align-items: unset !important;
+  flex-wrap: wrap !important;
+  flex-grow: 1 !important;
+}
+
+.note .card-footer,
+.react-flow__node-note .card-footer {
+  background-color: transparent !important;
+  color: #909090 !important;
+  position: sticky !important;
+  bottom: 0 !important;
+}
+
+.note.is-dragging .card-header button {
+  cursor: grabbing !important;
+}
+
+.note.is-grab .card-header button {
+  cursor: grab !important;
+}
+
+.collaborativewall-container .toolbar .btn {
+  outline: none;
+}
+
+.note .card-container .card-actions-btn,
+.react-flow__node-note .card-container .card-actions-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  z-index: 2000;
+}
+
+.note .card-container:hover .card-actions-btn,
+.react-flow__node-note .card-container:hover .card-actions-btn {
+  opacity: 1;
+}
+
+p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  font-style: italic;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.collaborativewall-reactflow .toolbar {
+  position: fixed;
+  bottom: 2.4rem;
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 900;
+}
+
+@media (max-width: 440px) {
+  .toolbar {
+    bottom: 0px !important;
+    border-radius: 0 !important;
+    width: 100%;
+    padding: 8 0 !important;
+    gap: 0px !important;
+  }
+
+  .zoom-out,
+  .zoom-in {
+    display: none !important;
+  }
+}
+
+.cursor {
+  position: relative;
+  top: -0.8rem;
+  left: 1rem;
+  min-width: max-content;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.react-flow__attribution {
+  display: none;
+}

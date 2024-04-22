@@ -1,35 +1,42 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
-  Modal,
   Button,
-  useOdeClient,
-  Image,
-  Heading,
-  Grid,
+  ButtonColors,
+  ButtonTypes,
+  ButtonVariants,
   Card,
+  Grid,
+  Heading,
+  Image,
+  Modal,
+  useOdeClient,
 } from "@edifice-ui/react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 
-import { backgroundColors, backgroundImages } from "~/config/init-config";
+import { backgroundColors, backgroundImages } from "~/config";
+import { useWebsocketStore } from "~/features/websocket/hooks/use-websocket-store";
 import {
   CollaborativeWallProps,
   PickedCollaborativeWallProps,
 } from "~/models/wall";
-import { useWebsocketStore } from "~/store";
+
+const THUMBNAIL_WIDTH = 288;
+const THUMBNAIL_HEIGHT = 180;
 
 export default function BackgroundModal({
+  wall,
   isOpen,
   setIsOpen,
-  wall,
 }: {
+  wall: CollaborativeWallProps;
   isOpen: boolean;
   setIsOpen: (bool: boolean) => void;
-  wall: CollaborativeWallProps;
 }): JSX.Element | null {
   const { appCode } = useOdeClient();
   const { t } = useTranslation();
+  const { sendWallUpdateEvent } = useWebsocketStore();
 
   const [backgroundImageValue, setBackgroundImageValue] = useState<string>(
     wall.background.path,
@@ -38,9 +45,55 @@ export default function BackgroundModal({
     wall.background.color,
   );
 
-  const { sendWallUpdateEvent } = useWebsocketStore();
+  const renderImage = useCallback(
+    (image: string) =>
+      import.meta.env.PROD ? `/collaborativewall/public/${image}` : `/${image}`,
+    [],
+  );
+
+  const renderColor = (color: string) => `linear-gradient(${color})`;
+
+  const renderColorStyle = (color: string) => ({
+    background: renderColor(color),
+    width: "100%",
+    height: "52px",
+    paddingBottom: "75%",
+  });
+
+  const renderMainChoice =
+    backgroundImageValue.length !== 0 ? (
+      <Image
+        src={renderImage(backgroundImageValue)}
+        alt=""
+        width={THUMBNAIL_WIDTH}
+        height={THUMBNAIL_HEIGHT}
+        style={{
+          margin: "auto",
+          background: renderColor(backgroundColorValue),
+        }}
+      />
+    ) : (
+      <div
+        style={{
+          width: THUMBNAIL_WIDTH,
+          height: THUMBNAIL_HEIGHT,
+          margin: "auto",
+          background: renderColor(backgroundColorValue),
+        }}
+      ></div>
+    );
 
   const handleClose = () => setIsOpen(false);
+
+  const handleOnSelectImage = useCallback((image: string) => {
+    setBackgroundImageValue(image);
+    setBackgroundColorValue("");
+  }, []);
+
+  const handleOnSelectColor = useCallback((color: string) => {
+    setBackgroundColorValue(color);
+    setBackgroundImageValue("");
+  }, []);
 
   const handleSaveWall = () => {
     const newWall: PickedCollaborativeWallProps = {
@@ -58,7 +111,49 @@ export default function BackgroundModal({
 
   useEffect(() => {
     setBackgroundImageValue(wall.background.path);
-  }, [isOpen, wall.background]);
+  }, [wall.background]);
+
+  const backgroundModalActions: {
+    type: ButtonTypes;
+    color: ButtonColors;
+    variant: ButtonVariants;
+    text: string;
+    onClick: () => void;
+  }[] = [
+    {
+      type: "button",
+      color: "tertiary",
+      variant: "ghost",
+      text: t("close"),
+      onClick: handleClose,
+    },
+    {
+      type: "button",
+      color: "primary",
+      variant: "filled",
+      text: t("edit"),
+      onClick: handleSaveWall,
+    },
+  ];
+
+  const thumbnails = [
+    {
+      type: "image",
+      text: "collaborativewall.label.images",
+      elements: backgroundImages,
+      value: backgroundImageValue,
+      onClick: handleOnSelectImage,
+      render: renderImage,
+    },
+    {
+      type: "color",
+      text: "collaborativewall.label.colors",
+      elements: backgroundColors,
+      value: backgroundColorValue,
+      onClick: handleOnSelectColor,
+      render: renderColor,
+    },
+  ];
 
   return isOpen
     ? createPortal(
@@ -73,63 +168,34 @@ export default function BackgroundModal({
             {t("collaborativewall.modal.background", { ns: appCode })}
           </Modal.Header>
           <Modal.Body>
-            <>
-              <div className="my-16">
-                {backgroundImageValue.length !== 0 ? (
-                  <Image
-                    src={
-                      import.meta.env.PROD
-                        ? `/collaborativewall/public/${backgroundImageValue}`
-                        : `/${backgroundImageValue}`
-                    }
-                    alt=""
-                    width={288}
-                    height={180}
-                    style={{
-                      margin: "auto",
-                      background: `linear-gradient(${backgroundColorValue})`,
-                    }}
-                  />
-                ) : (
-                  <div
-                    style={{
-                      width: "288px",
-                      height: "180px",
-                      margin: "auto",
-                      background: `linear-gradient(${backgroundColorValue})`,
-                    }}
-                  ></div>
-                )}
-              </div>
-              <div className="my-8">
+            <div className="my-16">{renderMainChoice}</div>
+            {thumbnails.map((thumbnail) => (
+              <div className="my-8" key={thumbnail.type}>
                 <Heading className="py-8" headingStyle="h5">
-                  {t("collaborativewall.label.images", { ns: appCode })}
+                  {t(thumbnail.text, { ns: appCode })}
                 </Heading>
                 <Grid className="py-8">
-                  {backgroundImages.map((image) => {
-                    const isSelected = backgroundImageValue === image;
+                  {thumbnail.elements.map((item) => {
+                    const isSelected = thumbnail.value === item;
                     return (
-                      <Grid.Col sm="2" key={image}>
+                      <Grid.Col sm="2" key={item}>
                         <Card
                           isClickable={true}
                           isSelectable={false}
                           isSelected={isSelected}
-                          onClick={() => {
-                            setBackgroundImageValue(image);
-                            setBackgroundColorValue("");
-                          }}
+                          onClick={() => thumbnail.onClick(item)}
                         >
                           <Card.Body space="0">
-                            <Image
-                              src={
-                                import.meta.env.PROD
-                                  ? `/collaborativewall/public/${image}`
-                                  : `/${image}`
-                              }
-                              alt=""
-                              ratio="4"
-                              style={{ borderRadius: "4px" }}
-                            />
+                            {thumbnail.type === "image" ? (
+                              <Image
+                                src={thumbnail.render(item)}
+                                alt=""
+                                ratio="4"
+                                style={{ borderRadius: "4px" }}
+                              />
+                            ) : (
+                              <div style={renderColorStyle(item)}></div>
+                            )}
                           </Card.Body>
                         </Card>
                       </Grid.Col>
@@ -137,59 +203,20 @@ export default function BackgroundModal({
                   })}
                 </Grid>
               </div>
-              <div className="py-8">
-                <Heading className="py-8" headingStyle="h5">
-                  {t("collaborativewall.label.colors", { ns: appCode })}
-                </Heading>
-                <Grid className="my-8">
-                  {backgroundColors.map((color) => {
-                    const isSelected = backgroundColorValue === color;
-                    return (
-                      <Grid.Col sm="2" key={color}>
-                        <Card
-                          isClickable={true}
-                          isSelectable={false}
-                          isSelected={isSelected}
-                          onClick={() => {
-                            setBackgroundColorValue(color);
-                            setBackgroundImageValue("");
-                          }}
-                        >
-                          <Card.Body space="0">
-                            <div
-                              style={{
-                                background: `linear-gradient(${color})`,
-                                width: "100%",
-                                height: "52px",
-                                paddingBottom: "75%",
-                              }}
-                            ></div>
-                          </Card.Body>
-                        </Card>
-                      </Grid.Col>
-                    );
-                  })}
-                </Grid>
-              </div>
-            </>
+            ))}
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              type="button"
-              color="tertiary"
-              variant="ghost"
-              onClick={handleClose}
-            >
-              {t("close")}
-            </Button>
-            <Button
-              type="button"
-              color="primary"
-              variant="filled"
-              onClick={handleSaveWall}
-            >
-              {t("edit")}
-            </Button>
+            {backgroundModalActions.map((button) => (
+              <Button
+                key={button.text}
+                type={button.type}
+                color={button.color}
+                variant={button.variant}
+                onClick={button.onClick}
+              >
+                {button.text}
+              </Button>
+            ))}
           </Modal.Footer>
         </Modal>,
         document.getElementById("portal") as HTMLElement,
