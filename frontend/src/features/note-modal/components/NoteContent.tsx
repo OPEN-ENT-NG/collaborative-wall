@@ -3,11 +3,12 @@ import { Ref, forwardRef, useEffect } from "react";
 import { Editor, EditorRef } from "@edifice-ui/editor";
 import {
   IExternalLink,
+  InternalLinkTabResult,
   MediaLibrary,
   MediaLibraryType,
   useOdeClient,
 } from "@edifice-ui/react";
-import { ILinkedResource, WorkspaceElement } from "edifice-ts-client";
+import { WorkspaceElement } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 
 import { ColorSelect } from "./ColorSelect";
@@ -66,16 +67,17 @@ export const NoteContent = forwardRef(
             url: medialIb?.url,
             targetUrl: medialIb.target,
           });
-        } else if (libraryMedia.assetId) {
-          const medialIb = libraryMedia as ILinkedResource;
+        } else if (libraryMedia.resources) {
+          const medialIb = libraryMedia as InternalLinkTabResult;
           setMedia({
             type: (media as NoteMedia).type,
-            id: medialIb?.assetId,
-            name: medialIb?.name || "",
-            application: medialIb?.application || "",
+            id: medialIb?.resources?.[0]?.assetId ?? "",
+            name: medialIb?.resources?.[0]?.name || "",
+            application: medialIb?.resources?.[0]?.application || "",
             url:
-              medialIb.path ??
-              `/${medialIb.application}#/view/${medialIb.assetId}`,
+              medialIb.resources?.[0]?.path ??
+              `/${medialIb.resources?.[0]?.application}#/view/${medialIb.resources?.[0]?.assetId}`,
+            targetUrl: medialIb.target,
           });
         } else {
           const medialIb = libraryMedia as WorkspaceElement;

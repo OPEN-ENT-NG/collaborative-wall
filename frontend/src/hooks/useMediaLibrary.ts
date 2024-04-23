@@ -26,7 +26,7 @@ export const useMediaLibrary = () => {
         setLibraryMedia(result);
       } else if (result.resources) {
         mediaLibraryRef.current?.hide();
-        setLibraryMedia(result.resources[result.resources.length - 1]);
+        setLibraryMedia(result);
       } else if (result[result.length - 1]._id) {
         mediaLibraryRef.current?.hide();
         setLibraryMedia(result[result.length - 1]);
