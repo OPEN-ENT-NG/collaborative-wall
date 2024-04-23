@@ -66,7 +66,6 @@ export const backgroundImages = [
   "img/edifice.png",
   "img/green-hill.png",
   "img/orange-hill.png",
-  "img/sport.png",
 ];
 
 export const backgroundColors = [
