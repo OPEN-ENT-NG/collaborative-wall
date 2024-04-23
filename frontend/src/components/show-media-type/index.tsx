@@ -64,14 +64,14 @@ export const ShowMediaType = ({
         onClick: () => {
           if (media.application) {
             onEdit?.({
-              target: "_blank",
+              target: media.targetUrl,
               "data-id": media.id,
               "data-app-prefix": media.application,
             });
           } else {
             onEdit?.({
               href: media.url,
-              target: "_blank",
+              target: media.targetUrl,
               name: media.name,
             });
           }
