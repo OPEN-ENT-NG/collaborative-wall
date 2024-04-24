@@ -41,7 +41,7 @@ export const useCustomRF = (notes: NoteProps[] | undefined) => {
       setNodes(newNodes);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [notes]);
+  }, []);
 
   const onNodesChange = useCallback((changes: NodeChange[]) => {
     setNodes((nds) => applyNodeChanges(changes, nds));
