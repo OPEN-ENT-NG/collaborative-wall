@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Node, NodeChange, applyNodeChanges } from "reactflow";
 import { useAccess } from "~/hooks/use-access";
@@ -6,10 +6,13 @@ import { useEditNote } from "~/hooks/use-edit-note";
 import { useThrottledFunction } from "~/hooks/use-throttled-function";
 import { NoteProps } from "~/models/notes";
 import { useWhiteboard } from "~/store";
+import { Note } from "../collaborative-wall/note";
 import { useWebsocketStore } from "../websocket/hooks/use-websocket-store";
 
 export const useCustomRF = (notes: NoteProps[] | undefined) => {
   const [nodes, setNodes] = useState<Node[]>([]);
+
+  const nodeTypes = useMemo(() => ({ note: Note }), []);
 
   const isMobile = useWhiteboard((state) => state.isMobile);
   const navigate = useNavigate();
@@ -100,6 +103,7 @@ export const useCustomRF = (notes: NoteProps[] | undefined) => {
 
   return {
     nodes,
+    nodeTypes,
     onNodesChange,
     onNodeClick,
     onNodeDrag,
