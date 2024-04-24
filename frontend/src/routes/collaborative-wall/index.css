@@ -1,3 +1,35 @@
+main {
+  height: 100vh;
+}
+
+.btn.focus,
+.btn:focus {
+  box-shadow: unset;
+}
+
+.cursor {
+  position: relative;
+  top: -0.8rem;
+  left: 1rem;
+  min-width: max-content;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.react-flow__attribution {
+  display: none;
+}
+
+.description-wall {
+  position: fixed;
+  z-index: 2;
+  background-color: rgb(255 255 255 / 80%);
+  width: 100%;
+  display: flex;
+  padding: 8px 76px;
+  align-items: center;
+  gap: 8px;
+}
+
 .collaborativewall-container {
   position: relative;
   z-index: 1;
@@ -6,15 +38,24 @@
   width: 100%;
 }
 
+.collaborativewall-container .toolbar .btn {
+  outline: none;
+}
+
 .collaborativewall-reactflow {
   width: 100%;
   height: 100%;
 }
 
-main {
-  height: 100vh;
+.collaborativewall-reactflow .toolbar {
+  position: fixed;
+  bottom: 2.4rem;
+  left: 50%;
+  transform: translate(-50%, 0);
+  z-index: 900;
 }
 
+/* MEDIAS */
 .toolbar-media {
   display: flex;
   flex-direction: column;
@@ -85,22 +126,7 @@ main {
   font-weight: bold;
 }
 
-.btn.focus,
-.btn:focus {
-  box-shadow: unset;
-}
-
-.description-wall {
-  position: fixed;
-  z-index: 2;
-  background-color: rgb(255 255 255 / 80%);
-  width: 100%;
-  display: flex;
-  padding: 8px 76px;
-  align-items: center;
-  gap: 8px;
-}
-
+/* NOTES */
 .note,
 .react-flow__node-note,
 .react-flow__node-default {
@@ -139,10 +165,6 @@ main {
   cursor: grab !important;
 }
 
-.collaborativewall-container .toolbar .btn {
-  outline: none;
-}
-
 .note .card-container .card-actions-btn,
 .react-flow__node-note .card-container .card-actions-btn {
   position: absolute;
@@ -166,14 +188,6 @@ p.is-editor-empty:first-child::before {
   pointer-events: none;
 }
 
-.collaborativewall-reactflow .toolbar {
-  position: fixed;
-  bottom: 2.4rem;
-  left: 50%;
-  transform: translate(-50%, 0);
-  z-index: 900;
-}
-
 @media (max-width: 440px) {
   .toolbar {
     bottom: 0px !important;
@@ -187,16 +201,4 @@ p.is-editor-empty:first-child::before {
   .zoom-in {
     display: none !important;
   }
-}
-
-.cursor {
-  position: relative;
-  top: -0.8rem;
-  left: 1rem;
-  min-width: max-content;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-}
-
-.react-flow__attribution {
-  display: none;
 }
