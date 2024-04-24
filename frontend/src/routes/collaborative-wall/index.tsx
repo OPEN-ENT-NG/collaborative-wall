@@ -156,7 +156,6 @@ export const CollaborativeWall = () => {
 
   useTrashedResource(params?.wallId);
   useEvents(params?.wallId as string);
-  // useLockBodyScroll();
 
   useEffect(() => {
     if (query) setIsMobile(query);
