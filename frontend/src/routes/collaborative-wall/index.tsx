@@ -3,7 +3,6 @@ import { Suspense, lazy, useEffect, useMemo } from "react";
 import { LoadingScreen, useTrashedResource } from "@edifice-ui/react";
 
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
-import { useLockBodyScroll } from "@uidotdev/usehooks";
 import {
   LoaderFunctionArgs,
   Outlet,
@@ -54,8 +53,10 @@ const DescriptionModal = lazy(
   async () =>
     await import("~/features/description/components/description-modal"),
 );
-const UpdateModal = lazy(async () => await import("~/features/resource-modal"));
-const ShareModal = lazy(async () => await import("~/features/share-modal"));
+const UpdateModal = lazy(
+  async () => await import("~/components/resource-modal"),
+);
+const ShareModal = lazy(async () => await import("~/components/share-modal"));
 const WebsocketModal = lazy(
   async () => await import("~/features/websocket/components/modal"),
 );
@@ -155,7 +156,7 @@ export const CollaborativeWall = () => {
 
   useTrashedResource(params?.wallId);
   useEvents(params?.wallId as string);
-  useLockBodyScroll();
+  // useLockBodyScroll();
 
   useEffect(() => {
     if (query) setIsMobile(query);
