@@ -104,7 +104,7 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
         if (StringUtils.isBlank(id)) {
             // create note
             final CollaborativeWallNote safeNote = new CollaborativeWallNote(note, user, System.currentTimeMillis());
-            this.noteService.create(safeNote.toJson(), user, result -> {
+            this.noteService.create(safeNote.toJson(true), user, result -> {
                 if (result.isRight()) {
                     final CollaborativeWallNote newNote = new CollaborativeWallNote(result.right().getValue().getString("_id"), safeNote);
                     final CollaborativeNoteDiff diff = new CollaborativeNoteDiff(null, newNote);
@@ -119,7 +119,7 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
                 if (previous.isRight()) {
                     final CollaborativeWallNote previousNote = CollaborativeWallNote.fromJson(previous.right().getValue());
                     final CollaborativeWallNote safeNote = new CollaborativeWallNote(previousNote, note, checkConcurency?previousNote.getModified().getLong("$date"): System.currentTimeMillis());
-                    this.noteService.update(id, safeNote.toJson(), user, checkConcurency, result -> {
+                    this.noteService.update(id, safeNote.toJson(true), user, checkConcurency, result -> {
                         if (result.isRight()) {
                             final CollaborativeNoteDiff diff = new CollaborativeNoteDiff(previousNote, safeNote);
                             promise.complete(diff);

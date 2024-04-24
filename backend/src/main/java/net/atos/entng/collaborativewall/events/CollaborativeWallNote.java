@@ -134,8 +134,14 @@ public class CollaborativeWallNote {
         return idwall;
     }
 
-    public JsonObject toJson() {
-        return JsonObject.mapFrom(this);
+    public JsonObject toJson(boolean preserveNullValues) {
+        final JsonObject json = JsonObject.mapFrom(this);
+        if(preserveNullValues){
+            if(this.media == null){
+                json.putNull("media");
+            }
+        }
+        return json;
     }
 
     public static CollaborativeWallNote fromJson(final JsonObject json) {

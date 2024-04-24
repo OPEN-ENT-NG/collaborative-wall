@@ -89,6 +89,10 @@ export const useEvents = (id: string) => {
           break;
         }
         case "noteUpdated": {
+          // if media is missing => it means that it has been deleted
+          if (!event.note.media) {
+            event.note.media = null;
+          }
           updateData(queryClient, { ...event.note, idwall: event.wallId });
           if (
             event.oldNote.x !== event.note.x ||
