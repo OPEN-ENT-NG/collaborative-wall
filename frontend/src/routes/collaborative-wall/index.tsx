@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useMemo } from "react";
+import { Suspense, lazy, useEffect } from "react";
 
 import { LoadingScreen, useTrashedResource } from "@edifice-ui/react";
 
@@ -24,7 +24,6 @@ import { useWhiteboard } from "~/store";
 
 import { AppHeader } from "~/features/app/app-header";
 import { CustomBackground } from "~/features/collaborative-wall/custom-background";
-import { Note } from "~/features/collaborative-wall/note";
 import { useCustomRF } from "~/features/reactflow/use-custom-reactflow";
 import { useEvents } from "~/features/websocket/hooks/use-events";
 import { useWebsocketStore } from "~/features/websocket/hooks/use-websocket-store";
@@ -96,8 +95,6 @@ export const CollaborativeWall = () => {
   const params = useParams();
   const queryClient = useQueryClient();
 
-  const nodeTypes = useMemo(() => ({ note: Note }), []);
-
   const { query } = useLoaderData() as LoaderData;
 
   const [
@@ -134,6 +131,7 @@ export const CollaborativeWall = () => {
 
   const {
     nodes,
+    nodeTypes,
     onNodesChange,
     onNodeClick,
     onNodeDrag,
