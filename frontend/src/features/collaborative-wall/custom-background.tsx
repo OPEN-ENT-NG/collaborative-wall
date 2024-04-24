@@ -15,7 +15,7 @@ export const CustomBackground = () => {
 
   const hasBackgroundImage = !!data?.background.path;
 
-  const renderBackgroundImage = `url(${import.meta.env.PROD ? "/collaborativewall/public/${data?.background.path" ?? backgroundImages[0] : `/${data?.background.path ?? backgroundImages[0]}`}`;
+  const renderBackgroundImage = `url(${import.meta.env.PROD ? `/collaborativewall/public/${data?.background.path}` ?? backgroundImages[0] : `/${data?.background.path ?? backgroundImages[0]}`}`;
   const renderBackgroundColor = `linear-gradient(${data?.background.color || backgroundColors[0]})`;
 
   return (
