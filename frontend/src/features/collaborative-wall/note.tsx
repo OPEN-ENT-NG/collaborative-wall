@@ -20,6 +20,8 @@ export const Note = ({ data }: NodeProps) => {
       style={
         {
           ...style,
+          boxShadow: "0 0.2rem 0.6em rgba(0, 0, 0, 0.15)",
+          overflow: "clip",
           backgroundColor: data.note.color?.[0],
         } as React.CSSProperties
       }
