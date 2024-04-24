@@ -6,7 +6,7 @@ import { useEditNote } from "~/hooks/use-edit-note";
 import { useThrottledFunction } from "~/hooks/use-throttled-function";
 import { NoteProps } from "~/models/notes";
 import { useWhiteboard } from "~/store";
-import { Note } from "../collaborative-wall/note";
+import { Note } from "../collaborative-wall/components/note";
 import { useWebsocketStore } from "../websocket/hooks/use-websocket-store";
 
 export const useCustomRF = (notes: NoteProps[] | undefined) => {
@@ -41,7 +41,7 @@ export const useCustomRF = (notes: NoteProps[] | undefined) => {
       setNodes(newNodes);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [notes]);
 
   const onNodesChange = useCallback((changes: NodeChange[]) => {
     setNodes((nds) => applyNodeChanges(changes, nds));

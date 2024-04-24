@@ -15,9 +15,9 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
       {
         index: true,
         async lazy() {
-          const { rootLoader } = await import("~/routes/root");
+          const { loader } = await import("~/routes/root");
           return {
-            loader: rootLoader,
+            loader,
           };
         },
         // @ts-ignore
@@ -26,11 +26,11 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
       {
         path: "id/:wallId",
         async lazy() {
-          const { wallLoader, CollaborativeWall } = await import(
+          const { loader, CollaborativeWall } = await import(
             "./collaborative-wall"
           );
           return {
-            loader: wallLoader(queryClient),
+            loader: loader(queryClient),
             Component: CollaborativeWall,
           };
         },

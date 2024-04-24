@@ -86,6 +86,9 @@ export const useEvents = (id: string) => {
             zIndex: 2,
           });
           updateNoteQueryData({ ...event.note, wallid: event.wallId });
+          /* queryClient.invalidateQueries({
+            queryKey: notesQueryOptions(id).queryKey,
+          }); */
           break;
         }
         case "noteUpdated": {

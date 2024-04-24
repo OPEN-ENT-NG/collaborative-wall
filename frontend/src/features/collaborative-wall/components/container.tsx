@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 import { MoveUser } from "~/models/types";
 import { ConnectedUsers } from "~/store/websocket/types";
-import { Cursor } from "../websocket/components/cursor";
-import { useConnectedUsers } from "../websocket/hooks/use-connected-users";
-import { useWebsocketStore } from "../websocket/hooks/use-websocket-store";
+import { Cursor } from "../../websocket/components/cursor";
+import { useConnectedUsers } from "../../websocket/hooks/use-connected-users";
+import { useWebsocketStore } from "../../websocket/hooks/use-websocket-store";
 
 const renderCursors = (coUsers: ConnectedUsers[], moveUsers: MoveUser[]) => {
   if (!coUsers) return null;

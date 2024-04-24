@@ -4,13 +4,13 @@ import { EditorRef } from "@edifice-ui/editor";
 import { Button, Modal, useOdeClient } from "@edifice-ui/react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
-import { LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import { LoaderFunctionArgs } from "react-router-dom";
 
+import { QueryClient } from "@tanstack/react-query";
 import { noteColors } from "~/config";
 import { useAccess } from "~/hooks/use-access";
 import { NoteMedia } from "~/models/note-media";
-import { NoteProps } from "~/models/notes";
-import { getNote } from "~/services/api";
+import { noteQueryOptions, useNote } from "~/services/queries";
 import {
   EditionMode,
   authorizedModes,
@@ -18,46 +18,53 @@ import {
 } from "../hooks/use-note-modal";
 import { NoteContent } from "./note-content";
 
-export async function noteLoader({ request, params }: LoaderFunctionArgs) {
-  const mode: EditionMode = new URL(request.url).searchParams.get(
-    "mode",
-  ) as EditionMode;
+export const noteLoader =
+  (queryClient: QueryClient) =>
+  async ({ request, params }: LoaderFunctionArgs) => {
+    const noteQueries = noteQueryOptions(
+      params.wallId as string,
+      params.noteId as string,
+    );
 
-  if (!authorizedModes.includes(mode)) {
-    throw new Response("", {
-      status: 401,
-      statusText: `Mode ${mode} is not authorized`,
-    });
-  }
+    const mode: EditionMode = new URL(request.url).searchParams.get(
+      "mode",
+    ) as EditionMode;
 
-  const { wallId, noteId } = params;
+    if (!authorizedModes.includes(mode)) {
+      throw new Response("", {
+        status: 401,
+        statusText: `Mode ${mode} is not authorized`,
+      });
+    }
 
-  if (!wallId || !noteId) {
-    throw new Response("", {
-      status: 404,
-      statusText: "Wall id or Note id is null",
-    });
-  }
+    const { wallId, noteId } = params;
 
-  const note = await getNote(wallId, noteId);
+    if (!wallId || !noteId) {
+      throw new Response("", {
+        status: 404,
+        statusText: "Wall id or Note id is null",
+      });
+    }
 
-  if (!note) {
-    throw new Response("", {
-      status: 404,
-      statusText: "Not Found",
-    });
-  }
+    const note = await queryClient.fetchQuery(noteQueries);
 
-  return note;
-}
+    if (!note) {
+      throw new Response("", {
+        status: 404,
+        statusText: "Not Found",
+      });
+    }
+
+    return note;
+  };
 
 export const NoteModal = () => {
-  const data: NoteProps | undefined = useLoaderData() as NoteProps;
+  const { note } = useNote();
 
   const [colorValue, setColorValue] = useState<string[]>(
-    data?.color || [noteColors.yellow.background],
+    note?.color || [noteColors.yellow.background],
   );
-  const [media, setMedia] = useState<NoteMedia | null>(data?.media);
+  const [media, setMedia] = useState<NoteMedia | null>(note?.media);
 
   const editorRef = useRef<EditorRef>(null);
 
@@ -70,7 +77,7 @@ export const NoteModal = () => {
     handleSaveNote,
     handleCreateNote,
     handleClose,
-  } = useNoteModal(editorRef, colorValue, data, media);
+  } = useNoteModal(editorRef, colorValue, note, media);
 
   const { hasRightsToUpdateNote } = useAccess();
 
@@ -93,12 +100,12 @@ export const NoteModal = () => {
           t("collaborativewall.modal.title.create", { ns: appCode })}
       </Modal.Header>
       <Modal.Subtitle>
-        <span className="text-gray-700 small">{data?.owner?.displayName}</span>
+        <span className="text-gray-700 small">{note?.owner?.displayName}</span>
       </Modal.Subtitle>
       <Modal.Body>
         <NoteContent
           ref={editorRef}
-          dataNote={data}
+          dataNote={note}
           editionMode={editionMode}
           media={media}
           setColorValue={setColorValue}
@@ -106,7 +113,7 @@ export const NoteModal = () => {
         />
       </Modal.Body>
       <Modal.Footer>
-        {isReadMode && !hasRightsToUpdateNote(data) && (
+        {isReadMode && !hasRightsToUpdateNote(note) && (
           <>
             <Button
               type="button"
@@ -118,7 +125,7 @@ export const NoteModal = () => {
             </Button>
           </>
         )}
-        {isReadMode && hasRightsToUpdateNote(data) && (
+        {isReadMode && hasRightsToUpdateNote(note) && (
           <>
             <Button
               type="button"

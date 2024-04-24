@@ -1,15 +1,11 @@
 import { useUser } from "@edifice-ui/react";
-import { useParams } from "react-router-dom";
 
 import { NoteProps } from "~/models/notes";
-import { useGetWall } from "~/services/queries";
+import { useWall } from "~/services/queries";
 import { useHasRights } from "./use-has-rights";
 
 export const useAccess = () => {
-  const params = useParams();
-
-  const { data: wall } = useGetWall(params.wallId as string);
-
+  const { wall } = useWall();
   const { user } = useUser();
 
   const isCreator = useHasRights({

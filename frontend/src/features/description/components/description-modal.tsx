@@ -1,18 +1,16 @@
 import { Button, Modal, useOdeClient } from "@edifice-ui/react";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
-import { useGetWall } from "~/services/queries";
+import { useWall } from "~/services/queries";
 
 import { useWhiteboard } from "~/store";
 
 export default function DescriptionModal(): JSX.Element | null {
   const { appCode } = useOdeClient();
   const { t } = useTranslation();
-  const params = useParams();
 
-  const { data: wall } = useGetWall(params.wallId as string);
+  const { wall } = useWall();
 
   const { openDescriptionModal, seOpenDescriptionModal } = useWhiteboard(
     useShallow((state) => ({
