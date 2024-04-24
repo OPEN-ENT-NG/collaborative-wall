@@ -1,9 +1,10 @@
 import { Button, Heading, Layout } from "@edifice-ui/react";
 import { t } from "i18next";
-import { useRouteError } from "react-router-dom";
+import { useNavigate, useRouteError } from "react-router-dom";
 
 export const NotFound = () => {
   const error = useRouteError();
+  const navigate = useNavigate();
   console.error(error);
 
   return (
@@ -13,12 +14,7 @@ export const NotFound = () => {
           {t("oops")}
         </Heading>
         <div className="text">{t("e404.page")}</div>
-        <Button
-          color="primary"
-          onClick={() => {
-            window.location.href = "/collaborativewall";
-          }}
-        >
+        <Button color="primary" onClick={() => navigate(-1)}>
           {t("back")}
         </Button>
       </div>

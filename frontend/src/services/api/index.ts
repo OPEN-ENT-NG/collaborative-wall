@@ -7,11 +7,11 @@ import {
 } from "~/models/wall";
 
 /**
- * getWall API
+ * loadWall API
  * @param wallId wall id
  * @returns walls
  */
-export const getWall = async (
+export const loadWall = async (
   wallId: string,
 ): Promise<CollaborativeWallProps> => {
   const wall = await odeServices

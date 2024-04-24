@@ -15,11 +15,11 @@ import {
   useOdeClient,
 } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
 import { useAccess } from "~/hooks/use-access";
-import { useGetWall } from "~/services/queries";
+import { useWall } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 
 export type ActionDropdownMenuOptions = DropdownMenuOptions & {
@@ -29,13 +29,12 @@ export type ActionDropdownMenuOptions = DropdownMenuOptions & {
 
 export const AppActions = () => {
   const navigate = useNavigate();
-  const params = useParams();
 
   const { isCreator, isManager } = useAccess();
   const { appCode } = useOdeClient();
   const { t } = useTranslation();
 
-  const { data: wall } = useGetWall(params.wallId as string);
+  const { wall } = useWall();
 
   const { setOpenShareModal, setOpenUpdateModal, setIsOpenBackgroundModal } =
     useWhiteboard(

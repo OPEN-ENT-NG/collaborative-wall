@@ -4,35 +4,6 @@ import { Mode, Status } from "~/store/websocket/types";
 import { useHttpMode } from "./use-http-mode";
 import { useWSMode } from "./use-ws-mode";
 
-/* export const useWebsocketStore = () => {
-  const store = createWebsocketStore();
-  const httpProvider = useHttpMode(store.mode === Mode.HTTP, store.resourceId);
-
-  store.httpProvider = httpProvider;
-  store.wsProvider = useWSMode({
-    enabled: store.mode === Mode.WS,
-    onOpen() {
-      store.onReady(Mode.WS);
-    },
-    onClose() {
-      if (store.mode === Mode.WS && store.status === Status.STARTED) {
-        store.disconnect();
-      }
-    },
-    onMessage(event) {
-      if (store.mode === Mode.WS) {
-        store.subscribers.forEach((sub) => sub(event));
-      }
-    },
-    onReconnectStop() {
-      store.onReady(Mode.HTTP);
-    },
-    reconnectAttempts: store.maxAttempts,
-    wallId: store.resourceId,
-  });
-  return store;
-}; */
-
 export const useWebsocketStore = () => {
   const store = createWebsocketStore();
   const httpProvider = useHttpMode(store.mode === Mode.HTTP, store.resourceId);
@@ -60,13 +31,13 @@ export const useWebsocketStore = () => {
 
   useEffect(() => {
     /* Correctly use setState from zustand to update the store */
-    const cleanup = createWebsocketStore.setState((state) => ({
+    createWebsocketStore.setState((state) => ({
       ...state,
       httpProvider: httpProvider,
       wsProvider,
     }));
 
-    return cleanup;
+    // return cleanup;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

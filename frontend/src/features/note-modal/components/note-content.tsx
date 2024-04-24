@@ -11,7 +11,7 @@ import {
 import { WorkspaceElement } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 
-import { ShowMediaType } from "~/features/collaborative-wall/show-media-type";
+import { ShowMediaType } from "~/features/collaborative-wall/components/show-media-type";
 import { ToolbarMedia } from "~/features/note-modal/components/toolbar-media";
 import { useLinkToolbar } from "~/hooks/use-link-toolbar";
 import { useMediaLibrary } from "~/hooks/use-media-library";

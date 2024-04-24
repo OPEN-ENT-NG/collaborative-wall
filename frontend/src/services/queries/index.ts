@@ -7,13 +7,14 @@ import {
 } from "@tanstack/react-query";
 import { IAction, ID, odeServices } from "edifice-ts-client";
 
+import { useParams } from "react-router-dom";
 import { workflows } from "~/config";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { PickedCollaborativeWallProps } from "~/models/wall";
 import {
   getNote,
   getNotes,
-  getWall,
+  loadWall,
   sessionHasWorkflowRights,
   updateNote,
   updateWall,
@@ -22,19 +23,19 @@ import {
 export const wallQueryOptions = (wallId: string) =>
   queryOptions({
     queryKey: ["wall", wallId],
-    queryFn: async () => await getWall(wallId),
+    queryFn: () => loadWall(wallId),
   });
 
 export const notesQueryOptions = (wallId: string) =>
   queryOptions({
     queryKey: ["notes", wallId],
-    queryFn: async () => await getNotes(wallId as string),
+    queryFn: async () => getNotes(wallId as string),
   });
 
 export const noteQueryOptions = (wallId: string, noteId: string) =>
   queryOptions({
     queryKey: ["note", wallId, noteId],
-    queryFn: async () => await getNote(wallId, noteId),
+    queryFn: async () => getNote(wallId, noteId),
   });
 
 export const useActions = () => {
@@ -65,8 +66,14 @@ export const useActions = () => {
   });
 };
 
-export const useGetWall = (wallId: string) => {
-  return useQuery(wallQueryOptions(wallId));
+export const useWall = () => {
+  const params = useParams<{ wallId: string }>();
+  const query = useQuery(wallQueryOptions(params.wallId!));
+
+  return {
+    wall: query.data,
+    query,
+  };
 };
 
 export const useUpdateWall = () => {
@@ -85,8 +92,24 @@ export const useUpdateWall = () => {
   });
 };
 
-export const useGetNotes = (wallId: string) => {
-  return useQuery(notesQueryOptions(wallId));
+export const useNotes = () => {
+  const params = useParams<{ wallId: string }>();
+  const query = useQuery(notesQueryOptions(params.wallId!));
+
+  return {
+    notes: query.data,
+    query,
+  };
+};
+
+export const useNote = () => {
+  const params = useParams<{ wallId: string; noteId: string }>();
+  const query = useQuery(noteQueryOptions(params.wallId!, params.noteId!));
+
+  return {
+    note: query.data as NoteProps,
+    query,
+  };
 };
 
 export const useCreateNote = () => {
@@ -115,6 +138,14 @@ export const useWallWithNotes = (wallId: string) => {
         queryFn: notesQueryOptions(wallId).queryFn,
       },
     ],
+    combine: (results) => {
+      return {
+        data: results.map((result) => result.data),
+        pending: results.some((result) => result.isPending),
+        loading: results.some((result) => result.isLoading),
+        error: results.some((result) => result.isError),
+      };
+    },
   });
 };
 

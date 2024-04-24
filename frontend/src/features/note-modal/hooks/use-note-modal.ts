@@ -24,29 +24,21 @@ export const useNoteModal = (
   loadedData: NoteProps,
   media: NoteMedia | null,
 ) => {
-  const { t } = useTranslation();
-  const { appCode } = useOdeClient();
-  const navigate = useNavigate();
-
-  const { wallId } = useParams();
-  /* const { positionViewport } = useWhiteboard(
-    useShallow((state) => ({
-      positionViewport: state.positionViewport,
-    })),
-  ); */
-
-  const positionViewport = { x: 0, y: 0 };
-
-  const { sendNoteAddedEvent, sendNoteUpdated } = useWebsocketStore();
-
   const [searchParams] = useSearchParams();
 
+  const navigate = useNavigate();
+  const positionViewport = { x: 0, y: 0 };
   const editionMode: EditionMode =
     (searchParams.get("mode") as EditionMode) || "create";
 
   const isReadMode = editionMode === "read";
   const isEditMode = editionMode === "edit";
   const isCreateMode = editionMode === "create";
+
+  const { t } = useTranslation();
+  const { appCode } = useOdeClient();
+  const { wallId } = useParams();
+  const { sendNoteAddedEvent, sendNoteUpdated } = useWebsocketStore();
 
   const isDirty = useCallback(() => {
     return (

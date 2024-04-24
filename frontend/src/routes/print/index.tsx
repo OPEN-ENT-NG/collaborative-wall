@@ -13,7 +13,8 @@ import {
 
 import { Editor } from "@edifice-ui/editor";
 import { backgroundColors, backgroundImages, wallConfig } from "~/config";
-import { ShowMediaType } from "~/features/collaborative-wall/show-media-type";
+import { ShowMediaType } from "~/features/collaborative-wall/components/show-media-type";
+import { CollaborativeWallProps } from "~/models/wall";
 import "../collaborative-wall/index.css";
 import "./index.css";
 
@@ -47,8 +48,9 @@ export const wallLoader =
 
 export const CollaborativeWall = () => {
   const params = useParams();
-
-  const [{ data: wall }, { data: notes }] = useWallWithNotes(params.wallId!);
+  const queries = useWallWithNotes(params.wallId!);
+  const wall = queries.data[0] as CollaborativeWallProps;
+  const notes = queries.data[1] as NoteProps[];
 
   useEffect(() => {
     setTimeout(() => window.print(), 1000);
