@@ -100,7 +100,6 @@ export const useNoteModal = (
       x: loadedData.x,
       y: loadedData.y,
     };
-
     await sendNoteUpdated({
       _id: loadedData._id,
       content: note.content,
