@@ -48,14 +48,16 @@ public class CollaborativeWallNote {
         this.lastEdit = lastEdit;
         this.idwall = idwall;
         // manage imported media as String
-        if(media instanceof  CollaborativeWallNoteMedia){
+        if(media == null){
+            this.media = null;
+        }else if(media instanceof  CollaborativeWallNoteMedia){
             this.media = (CollaborativeWallNoteMedia)media;
         }else if (media instanceof String){
             this.media =  new CollaborativeWallNoteMedia(media.toString(), "", "", "", media.toString(), "");
         }else if(media instanceof Map){
             this.media = CollaborativeWallNoteMedia.fromJson(new JsonObject((Map<String, Object>) media));
         }else {
-            throw new IllegalArgumentException("Invalid type for media: "+media!=null?media.getClass().getName(): "null");
+            throw new IllegalArgumentException("Invalid type for media: "+media);
         }
     }
 
