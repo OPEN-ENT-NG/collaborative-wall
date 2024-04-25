@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vertx.core.json.JsonObject;
 
+import java.util.Map;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CollaborativeWallDetails {
@@ -20,13 +22,22 @@ public class CollaborativeWallDetails {
   public CollaborativeWallDetails(@JsonProperty("_id") final String id,
                                   @JsonProperty("name") final String name,
                                   @JsonProperty("description") final String description,
-                                  @JsonProperty("background") final CollaborativeWallBackground background,
+                                  @JsonProperty("background") final Object background,
                                   @JsonProperty("icon") final String icon) {
     this.id = id;
     this.name = name;
     this.description = description;
-    this.background = background;
     this.icon = icon;
+    // manage imported background as String
+    if(background instanceof  CollaborativeWallBackground){
+      this.background = (CollaborativeWallBackground)background;
+    }else if (background instanceof String){
+      this.background =  new CollaborativeWallBackground(background.toString(), "");
+    }else if(background instanceof Map){
+      this.background = CollaborativeWallBackground.fromJson(new JsonObject((Map<String, Object>) background));
+    }else {
+      throw new IllegalArgumentException("Invalid type for background: "+background!=null?background.getClass().getName(): "null");
+    }
   }
   public CollaborativeWallDetails(final String id, final CollaborativeWallDetails other) {
     this(id, other.name, other.description, other.background, other.icon);
