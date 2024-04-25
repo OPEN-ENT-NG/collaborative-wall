@@ -19,13 +19,13 @@ dependencies:
     version: 3.2.2(react@18.2.0)
   '@edifice-ui/editor':
     specifier: develop-pedago
-    version: 1.5.1-develop-pedago.4(@edifice-ui/icons@1.5.1-develop-pedago.3)(@edifice-ui/react@1.5.1-develop-pedago.4)(@react-spring/web@9.7.3)(@tiptap/extension-heading@2.3.0)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.1.0)(react@18.2.0)
+    version: 1.5.1-develop-pedago.6(@edifice-ui/icons@1.5.1-develop-pedago.6)(@edifice-ui/react@1.5.1-develop-pedago.6)(@react-spring/web@9.7.3)(@tiptap/extension-heading@2.3.0)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.1.0)(react@18.2.0)
   '@edifice-ui/icons':
     specifier: develop-pedago
-    version: 1.5.1-develop-pedago.3(react-dom@18.2.0)(react@18.2.0)
+    version: 1.5.1-develop-pedago.6(react-dom@18.2.0)(react@18.2.0)
   '@edifice-ui/react':
     specifier: develop-pedago
-    version: 1.5.1-develop-pedago.4(@babel/runtime@7.24.4)(@edifice-ui/icons@1.5.1-develop-pedago.3)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.3.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0)
+    version: 1.5.1-develop-pedago.6(@babel/runtime@7.24.4)(@edifice-ui/icons@1.5.1-develop-pedago.6)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.3.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0)
   '@mantine/hooks':
     specifier: 7.7.1
     version: 7.7.1(react@18.2.0)
@@ -141,10 +141,10 @@ devDependencies:
     version: 3.1.3
   edifice-bootstrap:
     specifier: develop-pedago
-    version: 1.4.1-develop-pedago.4
+    version: 1.5.0-develop-pedago.1
   edifice-ts-client:
     specifier: develop-pedago
-    version: 1.3.0-develop-pedago.4
+    version: 1.4.0-develop-pedago.1
   eslint:
     specifier: 8.56.0
     version: 8.56.0
@@ -574,8 +574,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-image@1.0.5-develop-pedago.6(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-F3ADW9dUkNchb6B031ufq10HsSf1z2c2WNDPQ4MzsRodudDYoBUnbVJ/F7NUVfcSu/b9GY/VSBXB2oNNu0mkXg==}
+  /@edifice-tiptap-extensions/extension-image@1.0.6-develop-pedago.2(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-AJIarKaXAcQ9DJdP2v7CJ5waW2YoOSfoj8y6e0qFINaomVbMRzXlXNfxAdBzZuaKC2QlPnbynw8MtIvgse5ZXQ==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -617,8 +617,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-table-cell@1.0.5-develop-pedago.6(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-9LqUivXcpkgJd4G+btlIwTK/V5/tiEmSFDJMCcuPG8fSKXegHRql3GnOkAw0teSTMQaRYAMfRBDwHzEzmzbWpg==}
+  /@edifice-tiptap-extensions/extension-table-cell@1.0.6-develop-pedago.2(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-myi+YLm7G54cqaW5NZE6kSjDx5/6lwxUqppZZPKJGuUCbNYDl/8t3HOY8oAqE89t6zykGKwFryh+ewuzOIHCnQ==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -638,8 +638,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-ui/editor@1.5.1-develop-pedago.4(@edifice-ui/icons@1.5.1-develop-pedago.3)(@edifice-ui/react@1.5.1-develop-pedago.4)(@react-spring/web@9.7.3)(@tiptap/extension-heading@2.3.0)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.1.0)(react@18.2.0):
-    resolution: {integrity: sha512-hqaKAJhQ8PkmjSW6OhusCkD0SvPKIoViAK/owYOGnM3rQB+OmHEzxvzC9HkniOKd25DKyJ+R/4GvmCWD0peF5g==}
+  /@edifice-ui/editor@1.5.1-develop-pedago.6(@edifice-ui/icons@1.5.1-develop-pedago.6)(@edifice-ui/react@1.5.1-develop-pedago.6)(@react-spring/web@9.7.3)(@tiptap/extension-heading@2.3.0)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.1.0)(react@18.2.0):
+    resolution: {integrity: sha512-QNiUk2fVNevTJR4w7IhJz+3Ddjs2SDPcDkZZ6G/kTZrp2sm9VoQmCtYTRCX9zp0eQlfGptsxaE3KTnikwGqnLA==}
     peerDependencies:
       '@edifice-ui/icons': '*'
       '@edifice-ui/react': '*'
@@ -657,17 +657,18 @@ packages:
       '@edifice-tiptap-extensions/extension-highlight': 1.0.5-develop-pedago.5(@tiptap/core@2.3.0)(@tiptap/extension-highlight@2.3.0)(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-hyperlink': 1.0.5-develop-pedago.5(@tiptap/core@2.3.0)(@tiptap/extension-link@2.3.0)(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-iframe': 1.0.5-develop-pedago.5(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-image': 1.0.5-develop-pedago.6(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-image': 1.0.6-develop-pedago.2(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-linker': 1.0.5-develop-pedago.5(@tiptap/core@2.3.0)(@tiptap/extension-link@2.3.0)(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-speechrecognition': 1.0.5-develop-pedago.5(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-speechsynthesis': 1.0.5-develop-pedago.5(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-table-cell': 1.0.5-develop-pedago.6(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-table-cell': 1.0.6-develop-pedago.2(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-video': 1.0.5-develop-pedago.5(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-ui/icons': 1.5.1-develop-pedago.3(react-dom@18.2.0)(react@18.2.0)
-      '@edifice-ui/react': 1.5.1-develop-pedago.4(@babel/runtime@7.24.4)(@edifice-ui/icons@1.5.1-develop-pedago.3)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.3.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0)
+      '@edifice-ui/icons': 1.5.1-develop-pedago.6(react-dom@18.2.0)(react@18.2.0)
+      '@edifice-ui/react': 1.5.1-develop-pedago.6(@babel/runtime@7.24.4)(@edifice-ui/icons@1.5.1-develop-pedago.6)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.3.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0)
       '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
       '@tiptap-pro/extension-mathematics': 2.6.4(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)(katex@0.16.8)
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
+      '@tiptap/extension-character-count': 2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
       '@tiptap/extension-color': 2.3.0(@tiptap/core@2.3.0)(@tiptap/extension-text-style@2.3.0)
       '@tiptap/extension-focus': 2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
       '@tiptap/extension-font-family': 2.3.0(@tiptap/core@2.3.0)(@tiptap/extension-text-style@2.3.0)
@@ -699,8 +700,8 @@ packages:
       - '@tiptap/extension-heading'
     dev: false
 
-  /@edifice-ui/icons@1.5.1-develop-pedago.3(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-zc0UcqtpxFQ4PEBjnleRgHkvPBoJfHfXnwzII3kq4SkjFl4qzgYvYR3J2eUjGBToFZTVqGoLDhgPNOWGjpRZrQ==}
+  /@edifice-ui/icons@1.5.1-develop-pedago.6(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-yuo8Ca0E3LBAb4SRj2Lf3+1QMca7uLhX4chHpmSYVNama1ggyxkbCHH5c1h0p+C7A981kYMNmhtCw7fRKchVuQ==}
     peerDependencies:
       react: 18.2.0
       react-dom: 18.2.0
@@ -709,8 +710,8 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@edifice-ui/react@1.5.1-develop-pedago.4(@babel/runtime@7.24.4)(@edifice-ui/icons@1.5.1-develop-pedago.3)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.3.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0):
-    resolution: {integrity: sha512-da+2HyNg2+jt+OAfT6OXszWKqZ2Jd3Clko2x2WGWque17f1aY7J+jIxdgOz8D95tpbCl19G4/OgmuHLEJJMBvw==}
+  /@edifice-ui/react@1.5.1-develop-pedago.6(@babel/runtime@7.24.4)(@edifice-ui/icons@1.5.1-develop-pedago.6)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.3.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0):
+    resolution: {integrity: sha512-QDH86mw6YW8BK+UNUmgHcwZAb2HS0/h20kh9qoCYb2KdL6UeIXVmoXTZ6L0Xh16WCgy8Dd4VARz/tw1FrlOHuQ==}
     peerDependencies:
       '@edifice-ui/icons': '*'
       '@react-spring/web': 9.7.3
@@ -721,9 +722,10 @@ packages:
       react-hook-form: 7.49.2
       react-i18next: 13.5.0
     dependencies:
-      '@edifice-ui/icons': 1.5.1-develop-pedago.3(react-dom@18.2.0)(react@18.2.0)
+      '@edifice-ui/icons': 1.5.1-develop-pedago.6(react-dom@18.2.0)(react@18.2.0)
       '@floating-ui/react': 0.26.0(react-dom@18.2.0)(react@18.2.0)
-      '@pixi/react': 7.1.1(@babel/runtime@7.24.4)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
+      '@pixi/mixin-get-child-by-name': 7.4.2(@pixi/display@7.4.2)
+      '@pixi/react': 7.1.2(@babel/runtime@7.24.4)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@popperjs/core': 2.11.8
       '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-query': 5.8.4(react-dom@18.2.0)(react@18.2.0)
@@ -1372,8 +1374,8 @@ packages:
       '@pixi/text': 7.4.2(@pixi/core@7.4.2)(@pixi/sprite@7.4.2)
     dev: false
 
-  /@pixi/react@7.1.1(@babel/runtime@7.24.4)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-W3LILsYiUxavrLoDGiIuQneFgSzsUuHkt6VVuAaqUPEGjMBzicgA5v5R2dPDmu3B+5BRwAHcJZttUKH7zFjbGw==}
+  /@pixi/react@7.1.2(@babel/runtime@7.24.4)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-ZhqeXcFCRfFYCvncGW6Bxc3PFCYN1PgpF60iZwQJA6/UD3DB70JQvtDkRnyQcy5yqsjNtdxS8HB42oNjQFnZrA==}
     peerDependencies:
       '@babel/runtime': ^7.14.8
       '@pixi/app': '>=6.0.0'
@@ -1702,128 +1704,128 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: false
 
-  /@rollup/rollup-android-arm-eabi@4.16.3:
-    resolution: {integrity: sha512-1ACInKIT0pXmTYuPoJAL8sOT0lV3PEACFSVxnD03hGIojJ1CmbzZmLJyk2xew+yxqTlmx7xydkiJcBzdp0V+AQ==}
+  /@rollup/rollup-android-arm-eabi@4.16.4:
+    resolution: {integrity: sha512-GkhjAaQ8oUTOKE4g4gsZ0u8K/IHU1+2WQSgS1TwTcYvL+sjbaQjNHFXbOJ6kgqGHIO1DfUhI/Sphi9GkRT9K+Q==}
     cpu: [arm]
     os: [android]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@rollup/rollup-android-arm64@4.16.3:
-    resolution: {integrity: sha512-vGl+Bny8cawCM7ExugzqEB8ke3t7Pm9/mo+ciA9kJh6pMuNyM+31qhewMwHwseDZ/LtdW0SCocW1CsMxcq1Lsg==}
+  /@rollup/rollup-android-arm64@4.16.4:
+    resolution: {integrity: sha512-Bvm6D+NPbGMQOcxvS1zUl8H7DWlywSXsphAeOnVeiZLQ+0J6Is8T7SrjGTH29KtYkiY9vld8ZnpV3G2EPbom+w==}
     cpu: [arm64]
     os: [android]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@rollup/rollup-darwin-arm64@4.16.3:
-    resolution: {integrity: sha512-Lj8J9WzQRvfWO4GfI+bBkIThUFV1PtI+es/YH/3cwUQ+edXu8Mre0JRJfRrAeRjPiHDPFFZaX51zfgHHEhgRAg==}
+  /@rollup/rollup-darwin-arm64@4.16.4:
+    resolution: {integrity: sha512-i5d64MlnYBO9EkCOGe5vPR/EeDwjnKOGGdd7zKFhU5y8haKhQZTN2DgVtpODDMxUr4t2K90wTUJg7ilgND6bXw==}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@rollup/rollup-darwin-x64@4.16.3:
-    resolution: {integrity: sha512-NPPOXMTIWJk50lgZmRReEYJFvLG5rgMDzaVauWNB2MgFQYm9HuNXQdVVg3iEZ3A5StIzxhMlPjVyS5fsv4PJmg==}
+  /@rollup/rollup-darwin-x64@4.16.4:
+    resolution: {integrity: sha512-WZupV1+CdUYehaZqjaFTClJI72fjJEgTXdf4NbW69I9XyvdmztUExBtcI2yIIU6hJtYvtwS6pkTkHJz+k08mAQ==}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@rollup/rollup-linux-arm-gnueabihf@4.16.3:
-    resolution: {integrity: sha512-ij4tv1XtWcDScaTgoMnvDEYZ2Wjl2ZhDFEyftjBKu6sNNLHIkKuXBol/bVSh+md5zSJ6em9hUXyPO3cVPCsl4Q==}
+  /@rollup/rollup-linux-arm-gnueabihf@4.16.4:
+    resolution: {integrity: sha512-ADm/xt86JUnmAfA9mBqFcRp//RVRt1ohGOYF6yL+IFCYqOBNwy5lbEK05xTsEoJq+/tJzg8ICUtS82WinJRuIw==}
     cpu: [arm]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@rollup/rollup-linux-arm-musleabihf@4.16.3:
-    resolution: {integrity: sha512-MTMAl30dzcfYB+smHe1sJuS2P1/hB8pqylkCe0/8/Lo8CADjy/eM8x43nBoR5eqcYgpOtCh7IgHpvqSMAE38xw==}
+  /@rollup/rollup-linux-arm-musleabihf@4.16.4:
+    resolution: {integrity: sha512-tJfJaXPiFAG+Jn3cutp7mCs1ePltuAgRqdDZrzb1aeE3TktWWJ+g7xK9SNlaSUFw6IU4QgOxAY4rA+wZUT5Wfg==}
     cpu: [arm]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@rollup/rollup-linux-arm64-gnu@4.16.3:
-    resolution: {integrity: sha512-vY3fAg6JLDoNh781HHHMPvt8K6RWG3OmEj3xI9BOFSQTD5PNaGKvCB815MyGlDnFYUw7lH+WvvQqoBwLtRDR1A==}
+  /@rollup/rollup-linux-arm64-gnu@4.16.4:
+    resolution: {integrity: sha512-7dy1BzQkgYlUTapDTvK997cgi0Orh5Iu7JlZVBy1MBURk7/HSbHkzRnXZa19ozy+wwD8/SlpJnOOckuNZtJR9w==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@rollup/rollup-linux-arm64-musl@4.16.3:
-    resolution: {integrity: sha512-61SpQGBSb8QkfV/hUYWezlEig4ro55t8NcE5wWmy1bqRsRVHCEDkF534d+Lln/YeLUoSWtJHvvG3bx9lH/S6uA==}
+  /@rollup/rollup-linux-arm64-musl@4.16.4:
+    resolution: {integrity: sha512-zsFwdUw5XLD1gQe0aoU2HVceI6NEW7q7m05wA46eUAyrkeNYExObfRFQcvA6zw8lfRc5BHtan3tBpo+kqEOxmg==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@rollup/rollup-linux-powerpc64le-gnu@4.16.3:
-    resolution: {integrity: sha512-4XGexJthsNhEEgv/zK4/NnAOjYKoeCsIoT+GkqTY2u3rse0lbJ8ft1bpDCdlkvifsLDL2uwe4fn8PLR4IMTKQQ==}
+  /@rollup/rollup-linux-powerpc64le-gnu@4.16.4:
+    resolution: {integrity: sha512-p8C3NnxXooRdNrdv6dBmRTddEapfESEUflpICDNKXpHvTjRRq1J82CbU5G3XfebIZyI3B0s074JHMWD36qOW6w==}
     cpu: [ppc64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@rollup/rollup-linux-riscv64-gnu@4.16.3:
-    resolution: {integrity: sha512-/pArXjqnEdhbQ1qe4CTTlJ6/GjWGdWNRucKAp4fqKnKf7QC0BES3QEV34ACumHHQ4uEGt4GctF2ISCMRhkli0A==}
+  /@rollup/rollup-linux-riscv64-gnu@4.16.4:
+    resolution: {integrity: sha512-Lh/8ckoar4s4Id2foY7jNgitTOUQczwMWNYi+Mjt0eQ9LKhr6sK477REqQkmy8YHY3Ca3A2JJVdXnfb3Rrwkng==}
     cpu: [riscv64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@rollup/rollup-linux-s390x-gnu@4.16.3:
-    resolution: {integrity: sha512-vu4f3Y8iwjtRfSZdmtP8nC1jmRx1IrRVo2cLQlQfpFZ0e2AE9YbPgfIzpuK+i3C4zFETaLLNGezbBns2NuS/uA==}
+  /@rollup/rollup-linux-s390x-gnu@4.16.4:
+    resolution: {integrity: sha512-1xwwn9ZCQYuqGmulGsTZoKrrn0z2fAur2ujE60QgyDpHmBbXbxLaQiEvzJWDrscRq43c8DnuHx3QorhMTZgisQ==}
     cpu: [s390x]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@rollup/rollup-linux-x64-gnu@4.16.3:
-    resolution: {integrity: sha512-n4HEgIJulNSmAKT3SYF/1wuzf9od14woSBseNkzur7a+KJIbh2Jb+J9KIsdGt3jJnsLW0BT1Sj6MiwL4Zzku6Q==}
+  /@rollup/rollup-linux-x64-gnu@4.16.4:
+    resolution: {integrity: sha512-LuOGGKAJ7dfRtxVnO1i3qWc6N9sh0Em/8aZ3CezixSTM+E9Oq3OvTsvC4sm6wWjzpsIlOCnZjdluINKESflJLA==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@rollup/rollup-linux-x64-musl@4.16.3:
-    resolution: {integrity: sha512-guO/4N1884ig2AzTKPc6qA7OTnFMUEg/X2wiesywRO1eRD7FzHiaiTQQOLFmnUXWj2pgQXIT1g5g3e2RpezXcQ==}
+  /@rollup/rollup-linux-x64-musl@4.16.4:
+    resolution: {integrity: sha512-ch86i7KkJKkLybDP2AtySFTRi5fM3KXp0PnHocHuJMdZwu7BuyIKi35BE9guMlmTpwwBTB3ljHj9IQXnTCD0vA==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@rollup/rollup-win32-arm64-msvc@4.16.3:
-    resolution: {integrity: sha512-+rxD3memdkhGz0NhNqbYHXBoA33MoHBK4uubZjF1IeQv1Psi6tqgsCcC6vwQjxBM1qoCqOQQBy0cgNbbZKnGUg==}
+  /@rollup/rollup-win32-arm64-msvc@4.16.4:
+    resolution: {integrity: sha512-Ma4PwyLfOWZWayfEsNQzTDBVW8PZ6TUUN1uFTBQbF2Chv/+sjenE86lpiEwj2FiviSmSZ4Ap4MaAfl1ciF4aSA==}
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@rollup/rollup-win32-ia32-msvc@4.16.3:
-    resolution: {integrity: sha512-0NxVbLhBXmwANWWbgZY/RdSkeuHEgF+u8Dc0qBowUVBYsR2y2vwVGjKgUcj1wtu3jpjs057io5g9HAPr3Icqjg==}
+  /@rollup/rollup-win32-ia32-msvc@4.16.4:
+    resolution: {integrity: sha512-9m/ZDrQsdo/c06uOlP3W9G2ENRVzgzbSXmXHT4hwVaDQhYcRpi9bgBT0FTG9OhESxwK0WjQxYOSfv40cU+T69w==}
     cpu: [ia32]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@rollup/rollup-win32-x64-msvc@4.16.3:
-    resolution: {integrity: sha512-hutnZavtOx/G4uVdgoZz5279By9NVbgmxOmGGgnzUjZYuwp2+NzGq6KXQmHXBWz7W/vottXn38QmKYAdQLa/vQ==}
+  /@rollup/rollup-win32-x64-msvc@4.16.4:
+    resolution: {integrity: sha512-YunpoOAyGLDseanENHmbFvQSfVL5BxW3k7hhy0eN4rb3gS/ct75dVD0EXOWIqFT/nE8XYW6LP6vz6ctKRi0k9A==}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
@@ -1918,6 +1920,16 @@ packages:
       '@tiptap/core': ^2.0.0
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
+    dev: false
+
+  /@tiptap/extension-character-count@2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-O6w0I+uezVjRrytDBfrVKCIVGzUZ2Lq2pD370gODvdPmVE1PsinDUgRxbyMkCoAHjc0CNHODRPS/VuN8RFC1xA==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.0
+      '@tiptap/pm': ^2.0.0
+    dependencies:
+      '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
+      '@tiptap/pm': 2.3.0
     dev: false
 
   /@tiptap/extension-code-block@2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
@@ -2930,7 +2942,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001612
-      electron-to-chromium: 1.4.746
+      electron-to-chromium: 1.4.748
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.23.0)
     dev: true
@@ -3321,16 +3333,16 @@ packages:
     resolution: {integrity: sha512-/pjZsA1b4RPHbeWZQn66SWS8nZZWLQQ23oE3Eam7aroEFGEvwKAsJfZ9ytiEMycfzXWpca4FA9QIOehf7PocBQ==}
     dev: false
 
-  /edifice-bootstrap@1.4.1-develop-pedago.4:
-    resolution: {integrity: sha512-Hyxfi+WUT/h+uf+rJn1BF7Wjkx6r2dosjHWC/e2NjpX65+xnjRhOMZ3qh/0J7DNUxsef4ggzypNjC1Wzr3G8Gg==}
+  /edifice-bootstrap@1.5.0-develop-pedago.1:
+    resolution: {integrity: sha512-qSADGI7lHUVZBcGPzhp5SS8Bg4y4XUIlPMUeYcjtx6sF5Jc/Iz2cUQn3ErweeJpd78VKo+JPS9qLFVOzCUGqPA==}
     engines: {node: 18 || 20}
     dependencies:
       '@popperjs/core': 2.11.8
       bootstrap: 5.3.2(@popperjs/core@2.11.8)
     dev: true
 
-  /edifice-ts-client@1.3.0-develop-pedago.4:
-    resolution: {integrity: sha512-k7uwnseGyQHKWt4bKSE8eEq+TG8kyMHq0sGd8UMFgFpAgnOHmYJrZykZFB+Fvr1UjjdnS+axhcz5eJn8gj4lzA==}
+  /edifice-ts-client@1.4.0-develop-pedago.1:
+    resolution: {integrity: sha512-IWZ3UJVtnLLvF/0bUonCXwV1p4wVhXa3yJsjKTrVd0aaujv6a9i7T4eNBp+a22FcI9p/Qdzhul15ej7W9fH8tQ==}
     engines: {node: 18 || 20}
     dependencies:
       axios: 1.6.6
@@ -3339,8 +3351,8 @@ packages:
       - debug
     dev: true
 
-  /electron-to-chromium@1.4.746:
-    resolution: {integrity: sha512-jeWaIta2rIG2FzHaYIhSuVWqC6KJYo7oSBX4Jv7g+aVujKztfvdpf+n6MGwZdC5hQXbax4nntykLH2juIQrfPg==}
+  /electron-to-chromium@1.4.748:
+    resolution: {integrity: sha512-VWqjOlPZn70UZ8FTKUOkUvBLeTQ0xpty66qV0yJcAGY2/CthI4xyW9aEozRVtuwv3Kpf5xTesmJUcPwuJmgP4A==}
     dev: true
 
   /emoji-picker-react@4.5.2(react@18.2.0):
@@ -3431,8 +3443,8 @@ packages:
     resolution: {integrity: sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==}
     engines: {node: '>= 0.4'}
 
-  /es-iterator-helpers@1.0.18:
-    resolution: {integrity: sha512-scxAJaewsahbqTYrGKJihhViaM6DDZDDoucfvzNbK0pOren1g/daDQ3IAhzn+1G14rBG7w+i5N+qul60++zlKA==}
+  /es-iterator-helpers@1.0.19:
+    resolution: {integrity: sha512-zoMwbCcH5hwUkKJkT8kDIBZSz9I6mVG//+lDCinLCGov4+r7NIy0ld8o03M0cJxl2spVf6ESYVS6/gpIfq1FFw==}
     engines: {node: '>= 0.4'}
     dependencies:
       call-bind: 1.0.7
@@ -3625,7 +3637,7 @@ packages:
       axobject-query: 3.2.1
       damerau-levenshtein: 1.0.8
       emoji-regex: 9.2.2
-      es-iterator-helpers: 1.0.18
+      es-iterator-helpers: 1.0.19
       eslint: 8.56.0
       hasown: 2.0.2
       jsx-ast-utils: 3.3.5
@@ -3654,7 +3666,7 @@ packages:
       array.prototype.flatmap: 1.3.2
       array.prototype.tosorted: 1.1.3
       doctrine: 2.1.0
-      es-iterator-helpers: 1.0.18
+      es-iterator-helpers: 1.0.19
       eslint: 8.56.0
       estraverse: 5.3.0
       jsx-ast-utils: 3.3.5
@@ -4735,8 +4747,8 @@ packages:
     engines: {node: 18 || 20}
     requiresBuild: true
     dependencies:
-      '@edifice-ui/icons': 1.5.1-develop-pedago.3(react-dom@18.2.0)(react@18.2.0)
-      '@edifice-ui/react': 1.5.1-develop-pedago.4(@babel/runtime@7.24.4)(@edifice-ui/icons@1.5.1-develop-pedago.3)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.3.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0)
+      '@edifice-ui/icons': 1.5.1-develop-pedago.6(react-dom@18.2.0)(react@18.2.0)
+      '@edifice-ui/react': 1.5.1-develop-pedago.6(@babel/runtime@7.24.4)(@edifice-ui/icons@1.5.1-develop-pedago.6)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.3.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0)
       '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-query': 5.8.4(react-dom@18.2.0)(react@18.2.0)
       clsx: 2.1.0
@@ -5360,29 +5372,29 @@ packages:
       glob: 7.2.3
     dev: true
 
-  /rollup@4.16.3:
-    resolution: {integrity: sha512-Ygm4fFO4usWcAG3Ud36Lmif5nudoi0X6QPLC+kRgrRjulAbmFkaTawP7fTIkRDnCNSf/4IAQzXM1T8e691kRtw==}
+  /rollup@4.16.4:
+    resolution: {integrity: sha512-kuaTJSUbz+Wsb2ATGvEknkI12XV40vIiHmLuFlejoo7HtDok/O5eDDD0UpCVY5bBX5U5RYo8wWP83H7ZsqVEnA==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
     hasBin: true
     dependencies:
       '@types/estree': 1.0.5
     optionalDependencies:
-      '@rollup/rollup-android-arm-eabi': 4.16.3
-      '@rollup/rollup-android-arm64': 4.16.3
-      '@rollup/rollup-darwin-arm64': 4.16.3
-      '@rollup/rollup-darwin-x64': 4.16.3
-      '@rollup/rollup-linux-arm-gnueabihf': 4.16.3
-      '@rollup/rollup-linux-arm-musleabihf': 4.16.3
-      '@rollup/rollup-linux-arm64-gnu': 4.16.3
-      '@rollup/rollup-linux-arm64-musl': 4.16.3
-      '@rollup/rollup-linux-powerpc64le-gnu': 4.16.3
-      '@rollup/rollup-linux-riscv64-gnu': 4.16.3
-      '@rollup/rollup-linux-s390x-gnu': 4.16.3
-      '@rollup/rollup-linux-x64-gnu': 4.16.3
-      '@rollup/rollup-linux-x64-musl': 4.16.3
-      '@rollup/rollup-win32-arm64-msvc': 4.16.3
-      '@rollup/rollup-win32-ia32-msvc': 4.16.3
-      '@rollup/rollup-win32-x64-msvc': 4.16.3
+      '@rollup/rollup-android-arm-eabi': 4.16.4
+      '@rollup/rollup-android-arm64': 4.16.4
+      '@rollup/rollup-darwin-arm64': 4.16.4
+      '@rollup/rollup-darwin-x64': 4.16.4
+      '@rollup/rollup-linux-arm-gnueabihf': 4.16.4
+      '@rollup/rollup-linux-arm-musleabihf': 4.16.4
+      '@rollup/rollup-linux-arm64-gnu': 4.16.4
+      '@rollup/rollup-linux-arm64-musl': 4.16.4
+      '@rollup/rollup-linux-powerpc64le-gnu': 4.16.4
+      '@rollup/rollup-linux-riscv64-gnu': 4.16.4
+      '@rollup/rollup-linux-s390x-gnu': 4.16.4
+      '@rollup/rollup-linux-x64-gnu': 4.16.4
+      '@rollup/rollup-linux-x64-musl': 4.16.4
+      '@rollup/rollup-win32-arm64-msvc': 4.16.4
+      '@rollup/rollup-win32-ia32-msvc': 4.16.4
+      '@rollup/rollup-win32-x64-msvc': 4.16.4
       fsevents: 2.3.3
     dev: true
 
@@ -5899,7 +5911,7 @@ packages:
       '@types/node': 20.11.13
       esbuild: 0.19.12
       postcss: 8.4.38
-      rollup: 4.16.3
+      rollup: 4.16.4
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
