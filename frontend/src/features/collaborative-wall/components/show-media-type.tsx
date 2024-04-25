@@ -34,7 +34,6 @@ export const ShowMediaType = ({
   onOpen,
 }: ShowMediaTypeProps) => {
   const { t } = useTranslation();
-
   const { appCode } = useOdeClient();
   const { canMoveNote } = useWhiteboard(
     useShallow((state) => ({

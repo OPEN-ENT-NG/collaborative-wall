@@ -130,7 +130,6 @@ export const NoteContent = forwardRef(
         )}
 
         {!media?.url ? renderEdit : renderRead(media)}
-
         <Editor
           ref={ref}
           content={dataNote?.content || ""}
@@ -142,7 +141,6 @@ export const NoteContent = forwardRef(
             ns: appCode,
           })}
         />
-
         <MediaLibrary
           appCode={appCode}
           ref={mediaLibraryRef}

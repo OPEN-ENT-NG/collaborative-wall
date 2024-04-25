@@ -5,21 +5,23 @@ import { useAccess } from "~/hooks/use-access";
 import { useEditNote } from "~/hooks/use-edit-note";
 import { useThrottledFunction } from "~/hooks/use-throttled-function";
 import { NoteProps } from "~/models/notes";
+import { useNotes } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 import { Note } from "../collaborative-wall/components/note";
 import { useWebsocketStore } from "../websocket/hooks/use-websocket-store";
 
-export const useCustomRF = (notes: NoteProps[] | undefined) => {
+export const useCustomRF = () => {
   const [nodes, setNodes] = useState<Node[]>([]);
 
   const nodeTypes = useMemo(() => ({ note: Note }), []);
-
   const isMobile = useWhiteboard((state) => state.isMobile);
   const navigate = useNavigate();
 
   const { handleOnDragEnd, handleOnDragStart } = useEditNote();
   const { sendNoteMovedEvent } = useWebsocketStore();
   const { hasRightsToMoveNote } = useAccess();
+
+  const { notes } = useNotes();
 
   useEffect(() => {
     if (notes) {

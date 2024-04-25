@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { type RightRole, odeServices, ResourceRight } from "edifice-ts-client";
+import { ResourceRight, odeServices, type RightRole } from "edifice-ts-client";
 
 export interface IObjectWithRights {
   rights: string[];
@@ -24,19 +24,6 @@ export function useHasRights({ roles, rights }: UseHasRightsProps) {
   const convertToArray = (rights: string | string[]) =>
     rights instanceof Array ? rights : [rights];
 
-  const checkRights = useCallback(
-    async (roles: Roles, rights: string | string[]) => {
-      const safeRights = convertToArray(rights);
-      const can = Array.isArray(roles)
-        ? await odeServices
-            .rights()
-            .sessionHasAtLeastOneResourceRight(roles, safeRights)
-        : await odeServices.rights().sessionHasResourceRight(roles, safeRights);
-      setState(can);
-    },
-    [],
-  );
-
   const checkRightForMultipleResources = useCallback(
     async (roles: Roles, rights: ResourceRight[][] | string[][]) => {
       const can = Array.isArray(roles)
@@ -50,6 +37,16 @@ export function useHasRights({ roles, rights }: UseHasRightsProps) {
     },
     [],
   );
+
+  const checkRights = async (roles: Roles, rights: string | string[]) => {
+    const safeRights = convertToArray(rights);
+    const can = Array.isArray(roles)
+      ? await odeServices
+          .rights()
+          .sessionHasAtLeastOneResourceRight(roles, safeRights)
+      : await odeServices.rights().sessionHasResourceRight(roles, safeRights);
+    setState(can);
+  };
 
   useEffect(() => {
     (async () => {
@@ -79,7 +76,7 @@ export function useHasRights({ roles, rights }: UseHasRightsProps) {
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [rights, roles]);
 
   return state;
 }

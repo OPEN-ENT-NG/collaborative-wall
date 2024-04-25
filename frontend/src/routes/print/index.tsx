@@ -20,21 +20,16 @@ import "./index.css";
 
 export const wallLoader =
   (queryClient: QueryClient) =>
-  async ({ params, request }: LoaderFunctionArgs) => {
+  async ({ params }: LoaderFunctionArgs) => {
     const { wallId } = params;
 
     const queryWall = wallQueryOptions(wallId as string);
     const queryNotes = notesQueryOptions(wallId as string);
 
-    const wall =
-      queryClient.getQueryData(queryWall.queryKey) ??
-      (await queryClient.fetchQuery(queryWall));
-    const notes =
-      queryClient.getQueryData(queryNotes.queryKey) ??
-      (await queryClient.fetchQuery(queryNotes));
-
-    const url = new URL(request.url);
-    const query = url.searchParams.get("xApp");
+    const [wall, notes] = await Promise.all([
+      queryClient.ensureQueryData(queryWall),
+      queryClient.ensureQueryData(queryNotes),
+    ]);
 
     if (!wall || !notes) {
       throw new Response("", {
@@ -43,7 +38,7 @@ export const wallLoader =
       });
     }
 
-    return { wall, notes, query };
+    return { wall, notes };
   };
 
 export const CollaborativeWall = () => {
