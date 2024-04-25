@@ -30,11 +30,10 @@ export type ActionDropdownMenuOptions = DropdownMenuOptions & {
 export const AppActions = () => {
   const navigate = useNavigate();
 
+  const { wall } = useWall();
   const { isCreator, isManager } = useAccess();
   const { appCode } = useOdeClient();
   const { t } = useTranslation();
-
-  const { wall } = useWall();
 
   const { setOpenShareModal, setOpenUpdateModal, setIsOpenBackgroundModal } =
     useWhiteboard(

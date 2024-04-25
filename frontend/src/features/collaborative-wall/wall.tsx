@@ -5,10 +5,8 @@ import { Outlet } from "react-router-dom";
 import ReactFlow from "reactflow";
 import { useShallow } from "zustand/react/shallow";
 import { nodeExtent, translateExtent } from "~/config";
-import { NoteProps } from "~/models/notes";
-import { CollaborativeWallProps } from "~/models/wall";
 import { loadWall } from "~/services/api";
-import { wallQueryOptions } from "~/services/queries";
+import { useWall, wallQueryOptions } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 import { AppHeader } from "../app/app-header";
 import { useCustomRF } from "../reactflow/use-custom-reactflow";
@@ -37,14 +35,10 @@ const BackgroundModal = lazy(
   async () => await import("~/components/background-modal"),
 );
 
-export const Wall = ({
-  wall,
-  notes,
-}: {
-  wall: CollaborativeWallProps;
-  notes: NoteProps[];
-}) => {
+export const Wall = () => {
   const queryClient = useQueryClient();
+
+  const { wall } = useWall();
 
   const {
     openShareModal,
@@ -79,14 +73,14 @@ export const Wall = ({
     onNodeDrag,
     onNodeDragStop,
     onNodeDragStart,
-  } = useCustomRF(notes);
+  } = useCustomRF();
 
   const handleOnUpdateSuccess = async () => {
+    if (!wall) return;
+
     await queryClient.invalidateQueries({
       queryKey: wallQueryOptions(wall._id).queryKey,
     });
-
-    if (!wall) return;
 
     const newWall = await loadWall(wall._id);
 
@@ -94,15 +88,15 @@ export const Wall = ({
     setOpenUpdateModal(false);
   };
 
-  useTrashedResource(wall._id);
-  useEvents(wall._id as string);
+  useTrashedResource(wall?._id);
+  useEvents(wall?._id as string);
 
   return (
     <>
       <AppHeader />
 
       <CollaborativeWallContainer>
-        {wall.description && !isMobile && <DescriptionWall />}
+        {wall?.description && !isMobile && <DescriptionWall />}
 
         <div className="collaborativewall-reactflow">
           <ReactFlow
@@ -132,7 +126,7 @@ export const Wall = ({
       </CollaborativeWallContainer>
 
       <Suspense fallback={<LoadingScreen />}>
-        {wall.description && <DescriptionModal />}
+        {wall?.description && <DescriptionModal />}
 
         {openBackgroundModal && wall && (
           <BackgroundModal

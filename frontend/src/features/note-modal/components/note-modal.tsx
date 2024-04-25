@@ -65,6 +65,7 @@ export const NoteModal = () => {
     note?.color || [noteColors.yellow.background],
   );
   const [media, setMedia] = useState<NoteMedia | null>(note?.media);
+
   useEffect(() => {
     setMedia(note?.media);
   }, [note?.media]);

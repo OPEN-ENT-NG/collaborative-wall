@@ -31,12 +31,19 @@ export const loader =
       }));
     }
 
-    await Promise.all([
-      queryClient.fetchQuery(queryWall),
-      queryClient.fetchQuery(queryNotes),
+    const [wall, notes] = await Promise.all([
+      queryClient.ensureQueryData(queryWall),
+      queryClient.ensureQueryData(queryNotes),
     ]);
 
-    return { query };
+    if (!wall || !notes) {
+      throw new Response("", {
+        status: 404,
+        statusText: "Not Found",
+      });
+    }
+
+    return { wall, notes, query };
   };
 
 export const CollaborativeWall = () => {
@@ -47,5 +54,5 @@ export const CollaborativeWall = () => {
 
   if (!wall || !notes || query.isError) return <EmptyScreenError />;
 
-  return <Wall wall={wall} notes={notes} />;
+  return <Wall />;
 };
