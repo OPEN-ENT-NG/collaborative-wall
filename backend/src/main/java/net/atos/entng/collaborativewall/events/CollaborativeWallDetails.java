@@ -29,14 +29,16 @@ public class CollaborativeWallDetails {
     this.description = description;
     this.icon = icon;
     // manage imported background as String
-    if(background instanceof  CollaborativeWallBackground){
+    if(background == null){
+      this.background = null;
+    }else if(background instanceof  CollaborativeWallBackground){
       this.background = (CollaborativeWallBackground)background;
     }else if (background instanceof String){
       this.background =  new CollaborativeWallBackground(background.toString(), "");
     }else if(background instanceof Map){
       this.background = CollaborativeWallBackground.fromJson(new JsonObject((Map<String, Object>) background));
     }else {
-      throw new IllegalArgumentException("Invalid type for background: "+background!=null?background.getClass().getName(): "null");
+      throw new IllegalArgumentException("Invalid type for background: "+background);
     }
   }
   public CollaborativeWallDetails(final String id, final CollaborativeWallDetails other) {
