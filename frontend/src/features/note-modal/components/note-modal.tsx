@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { EditorRef } from "@edifice-ui/editor";
 import { Button, Modal, useOdeClient } from "@edifice-ui/react";
@@ -65,6 +65,9 @@ export const NoteModal = () => {
     note?.color || [noteColors.yellow.background],
   );
   const [media, setMedia] = useState<NoteMedia | null>(note?.media);
+  useEffect(() => {
+    setMedia(note?.media);
+  }, [note?.media]);
 
   const editorRef = useRef<EditorRef>(null);
 
@@ -83,7 +86,6 @@ export const NoteModal = () => {
 
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
-
   return createPortal(
     <Modal
       id="UpdateNoteModal"
