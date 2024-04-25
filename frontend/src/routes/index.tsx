@@ -6,6 +6,7 @@ import { explorerConfig } from "~/config/config";
 import { PageError } from "~/routes/page-error";
 import { NotFound } from "./not-found";
 import Root from "./root";
+import { CollaborativeWall, loader as wallLoader } from "./collaborative-wall";
 
 const routes = (queryClient: QueryClient): RouteObject[] => [
   {
@@ -25,7 +26,10 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
       },
       {
         path: "id/:wallId",
-        async lazy() {
+        loader: wallLoader(queryClient),
+        element: <CollaborativeWall />,
+
+        /* async lazy() {
           const { loader, CollaborativeWall } = await import(
             "./collaborative-wall"
           );
@@ -33,7 +37,7 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
             loader: loader(queryClient),
             Component: CollaborativeWall,
           };
-        },
+        }, */
         children: [
           {
             path: "note",

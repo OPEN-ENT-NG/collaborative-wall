@@ -2,14 +2,13 @@ import { Editor } from "@edifice-ui/editor";
 import { Card } from "@edifice-ui/react";
 import { NodeProps } from "reactflow";
 import { NoteActions } from "~/features/note-actions";
-import { useAccess } from "~/hooks/use-access";
 import { useWhiteboard } from "~/store";
 import { ShowMediaType } from "./show-media-type";
+import { useAccessStore } from "~/hooks/use-access-rights";
 
 export const Note = ({ data }: NodeProps) => {
-  const { hasRightsToUpdateNote } = useAccess();
-
   const canMoveNote = useWhiteboard((state) => state.canMoveNote);
+  const { hasRightsToUpdateNote } = useAccessStore();
 
   const style = {
     borderRadius: "12px",

@@ -21,7 +21,7 @@ export const authorizedModes: EditionMode[] = ["read", "edit", "create"];
 export const useNoteModal = (
   editorRef: RefObject<EditorRef>,
   colorValue: string[],
-  loadedData: NoteProps,
+  loadedData: NoteProps | undefined,
   media: NoteMedia | null,
 ) => {
   const [searchParams] = useSearchParams();
@@ -42,7 +42,7 @@ export const useNoteModal = (
 
   const isDirty = useCallback(() => {
     return (
-      loadedData.color[0] != colorValue[0] ||
+      loadedData?.color[0] != colorValue[0] ||
       loadedData.content != (editorRef.current?.getContent("html") as string) ||
       loadedData.media?.id != media?.id
     );
@@ -83,17 +83,19 @@ export const useNoteModal = (
   };
 
   const handleSaveNote = async () => {
+    if (!loadedData) return;
+
     const note: PickedNoteProps = {
       content: editorRef.current?.getContent("html") as string,
       color: colorValue,
-      idwall: loadedData.idwall as string,
+      idwall: loadedData?.idwall as string,
       media: media || null,
-      modified: loadedData.modified,
-      x: loadedData.x,
-      y: loadedData.y,
+      modified: loadedData?.modified,
+      x: loadedData?.x,
+      y: loadedData?.y,
     };
     await sendNoteUpdated({
-      _id: loadedData._id,
+      _id: loadedData?._id,
       content: note.content,
       media: note.media,
       color: note.color,
@@ -120,6 +122,8 @@ export const useNoteModal = (
   };
 
   const handleNavigateToEditMode = () => {
+    if (!loadedData) return;
+
     navigate(`../note/${loadedData._id}?mode=edit`);
   };
 

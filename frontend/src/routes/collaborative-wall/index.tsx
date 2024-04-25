@@ -3,16 +3,17 @@ import { LoaderFunctionArgs } from "react-router-dom";
 
 import {
   notesQueryOptions,
-  useNotes,
   useWall,
   wallQueryOptions,
 } from "~/services/queries";
 
-import { LoadingScreen } from "@edifice-ui/react";
+import { LoadingScreen, useTrashedResource } from "@edifice-ui/react";
 import "reactflow/dist/style.css";
-import { EmptyScreenError } from "~/components/emptyscreen-error";
+import { AppHeader } from "~/features/app/app-header";
 import { Wall } from "~/features/collaborative-wall/wall";
+import { useAccessStore } from "~/hooks/use-access-rights";
 import { useWhiteboard } from "~/store";
+import { useRightsStore } from "~/store/rights/store";
 import "./index.css";
 
 export const loader =
@@ -47,12 +48,19 @@ export const loader =
   };
 
 export const CollaborativeWall = () => {
-  const { wall, query } = useWall();
-  const { notes } = useNotes();
+  const isLoadingRights = useRightsStore((state) => state.isLoading);
 
-  if (query.isPending) return <LoadingScreen />;
+  const { wall } = useWall();
 
-  if (!wall || !notes || query.isError) return <EmptyScreenError />;
+  useAccessStore();
+  useTrashedResource(wall?._id);
 
-  return <Wall />;
+  if (isLoadingRights) return <LoadingScreen position={false} />;
+
+  return (
+    <>
+      <AppHeader />
+      <Wall />
+    </>
+  );
 };

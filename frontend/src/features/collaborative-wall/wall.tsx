@@ -1,14 +1,15 @@
-import { LoadingScreen, useTrashedResource } from "@edifice-ui/react";
+import { LoadingScreen } from "@edifice-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Suspense, lazy } from "react";
 import { Outlet } from "react-router-dom";
 import ReactFlow from "reactflow";
 import { useShallow } from "zustand/react/shallow";
+import { EmptyScreenError } from "~/components/emptyscreen-error";
 import { nodeExtent, translateExtent } from "~/config";
 import { loadWall } from "~/services/api";
-import { useWall, wallQueryOptions } from "~/services/queries";
+import { useNotes, useWall, wallQueryOptions } from "~/services/queries";
 import { useWhiteboard } from "~/store";
-import { AppHeader } from "../app/app-header";
+import DescriptionWall from "../description/components/description-wall";
 import { useCustomRF } from "../reactflow/use-custom-reactflow";
 import { useEvents } from "../websocket/hooks/use-events";
 import { useWebsocketStore } from "../websocket/hooks/use-websocket-store";
@@ -16,10 +17,6 @@ import { CollaborativeWallContainer } from "./components/container";
 import { CustomBackground } from "./components/custom-background";
 import { ToolbarWrapper } from "./components/toolbar";
 
-const DescriptionWall = lazy(
-  async () =>
-    await import("~/features/description/components/description-wall"),
-);
 const DescriptionModal = lazy(
   async () =>
     await import("~/features/description/components/description-modal"),
@@ -38,7 +35,8 @@ const BackgroundModal = lazy(
 export const Wall = () => {
   const queryClient = useQueryClient();
 
-  const { wall } = useWall();
+  const { wall, query } = useWall();
+  const { notes } = useNotes();
 
   const {
     openShareModal,
@@ -88,13 +86,14 @@ export const Wall = () => {
     setOpenUpdateModal(false);
   };
 
-  useTrashedResource(wall?._id);
   useEvents(wall?._id as string);
+
+  if (query.isPending) return <LoadingScreen position={false} />;
+
+  if (!wall || !notes || query.isError) return <EmptyScreenError />;
 
   return (
     <>
-      <AppHeader />
-
       <CollaborativeWallContainer>
         {wall?.description && !isMobile && <DescriptionWall />}
 
@@ -125,7 +124,7 @@ export const Wall = () => {
         <Outlet />
       </CollaborativeWallContainer>
 
-      <Suspense fallback={<LoadingScreen />}>
+      <Suspense fallback={<LoadingScreen position={false} />}>
         {wall?.description && <DescriptionModal />}
 
         {openBackgroundModal && wall && (

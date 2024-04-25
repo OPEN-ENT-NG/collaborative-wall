@@ -7,8 +7,8 @@ import { useReactFlow } from "reactflow";
 import { useShallow } from "zustand/react/shallow";
 
 import { useHistory } from "~/features/history/hooks/use-history";
-import { useAccess } from "~/hooks/use-access";
 import { useWhiteboard } from "~/store";
+import { useRightsStore } from "~/store/rights/store";
 
 export const ToolbarWrapper = ({ isMobile }: { isMobile: boolean }) => {
   const navigate = useNavigate();
@@ -25,10 +25,11 @@ export const ToolbarWrapper = ({ isMobile }: { isMobile: boolean }) => {
     })),
   );
 
+  const allRolesButRead = useRightsStore((state) => state.allRolesButRead);
+
   const { t } = useTranslation();
 
   const { canUndo, canRedo, handleUndo, handleRedo } = useHistory();
-  const { allRolesButRead } = useAccess();
 
   /**
    * feat/WB2-1584: hot keys for undo/redo

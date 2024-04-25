@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Node, NodeChange, applyNodeChanges } from "reactflow";
-import { useAccess } from "~/hooks/use-access";
+// import { useAccess } from "~/hooks/use-access";
 import { useEditNote } from "~/hooks/use-edit-note";
 import { useThrottledFunction } from "~/hooks/use-throttled-function";
 import { NoteProps } from "~/models/notes";
@@ -9,6 +9,7 @@ import { useNotes } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 import { Note } from "../collaborative-wall/components/note";
 import { useWebsocketStore } from "../websocket/hooks/use-websocket-store";
+import { useAccessStore } from "~/hooks/use-access-rights";
 
 export const useCustomRF = () => {
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -17,11 +18,10 @@ export const useCustomRF = () => {
   const isMobile = useWhiteboard((state) => state.isMobile);
   const navigate = useNavigate();
 
+  const { notes } = useNotes();
   const { handleOnDragEnd, handleOnDragStart } = useEditNote();
   const { sendNoteMovedEvent } = useWebsocketStore();
-  const { hasRightsToMoveNote } = useAccess();
-
-  const { notes } = useNotes();
+  const { hasRightsToMoveNote } = useAccessStore();
 
   useEffect(() => {
     if (notes) {

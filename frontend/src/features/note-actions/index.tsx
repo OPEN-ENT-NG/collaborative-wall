@@ -6,19 +6,17 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 
-import { useAccess } from "~/hooks/use-access";
 import { NoteProps } from "~/models/notes";
 import { ActionList } from "../note-modal/components/action-list";
 import { useWebsocketStore } from "../websocket/hooks/use-websocket-store";
 import { NoteDropdownMenuOptions } from "./types";
+import { useAccessStore } from "~/hooks/use-access-rights";
 
 export const NoteActions = ({ note }: { note: NoteProps }) => {
   const navigate = useNavigate();
 
-  const { hasRightsToUpdateNote } = useAccess();
-
+  const { hasRightsToUpdateNote } = useAccessStore();
   const { sendNoteDeletedEvent } = useWebsocketStore();
-
   const { t } = useTranslation();
 
   const handleEdit = () => {

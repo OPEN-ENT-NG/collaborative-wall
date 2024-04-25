@@ -8,7 +8,6 @@ import { LoaderFunctionArgs } from "react-router-dom";
 
 import { QueryClient } from "@tanstack/react-query";
 import { noteColors } from "~/config";
-import { useAccess } from "~/hooks/use-access";
 import { NoteMedia } from "~/models/note-media";
 import { noteQueryOptions, useNote } from "~/services/queries";
 import {
@@ -17,6 +16,7 @@ import {
   useNoteModal,
 } from "../hooks/use-note-modal";
 import { NoteContent } from "./note-content";
+import { useAccessStore } from "~/hooks/use-access-rights";
 
 export const noteLoader =
   (queryClient: QueryClient) =>
@@ -64,11 +64,14 @@ export const NoteModal = () => {
   const [colorValue, setColorValue] = useState<string[]>(
     note?.color || [noteColors.yellow.background],
   );
-  const [media, setMedia] = useState<NoteMedia | null>(note?.media);
+
+  const [media, setMedia] = useState<NoteMedia | null>(note?.media ?? null);
 
   useEffect(() => {
-    setMedia(note?.media);
-  }, [note?.media]);
+    if (note) {
+      setMedia(note?.media);
+    }
+  }, [note]);
 
   const editorRef = useRef<EditorRef>(null);
 
@@ -83,10 +86,11 @@ export const NoteModal = () => {
     handleClose,
   } = useNoteModal(editorRef, colorValue, note, media);
 
-  const { hasRightsToUpdateNote } = useAccess();
+  const { hasRightsToUpdateNote } = useAccessStore();
 
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
+
   return createPortal(
     <Modal
       id="UpdateNoteModal"
@@ -116,7 +120,7 @@ export const NoteModal = () => {
         />
       </Modal.Body>
       <Modal.Footer>
-        {isReadMode && !hasRightsToUpdateNote(note) && (
+        {isReadMode && note && !hasRightsToUpdateNote(note) && (
           <>
             <Button
               type="button"
@@ -128,7 +132,7 @@ export const NoteModal = () => {
             </Button>
           </>
         )}
-        {isReadMode && hasRightsToUpdateNote(note) && (
+        {isReadMode && note && hasRightsToUpdateNote(note) && (
           <>
             <Button
               type="button"
