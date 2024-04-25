@@ -18,9 +18,9 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
-import { useAccess } from "~/hooks/use-access";
 import { useWall } from "~/services/queries";
 import { useWhiteboard } from "~/store";
+import { useRightsStore } from "~/store/rights/store";
 
 export type ActionDropdownMenuOptions = DropdownMenuOptions & {
   id: string;
@@ -31,9 +31,14 @@ export const AppActions = () => {
   const navigate = useNavigate();
 
   const { wall } = useWall();
-  const { isCreator, isManager } = useAccess();
   const { appCode } = useOdeClient();
   const { t } = useTranslation();
+  const { isCreator, isManager } = useRightsStore(
+    useShallow((state) => ({
+      isCreator: state.isCreator,
+      isManager: state.isManager,
+    })),
+  );
 
   const { setOpenShareModal, setOpenUpdateModal, setIsOpenBackgroundModal } =
     useWhiteboard(

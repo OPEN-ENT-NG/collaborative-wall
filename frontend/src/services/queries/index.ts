@@ -107,7 +107,7 @@ export const useNote = () => {
   const query = useQuery(noteQueryOptions(params.wallId!, params.noteId!));
 
   return {
-    note: query.data as NoteProps,
+    note: query.data,
     query,
   };
 };
