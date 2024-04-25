@@ -14,6 +14,8 @@ import { v4 as uuid } from "uuid";
 import { useWebsocketStore } from "~/features/websocket/hooks/use-websocket-store";
 import { NoteMedia } from "~/models/note-media";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
+import { useWhiteboard } from "~/store";
+import { useShallow } from "zustand/react/shallow";
 
 export type EditionMode = "read" | "edit" | "create";
 export const authorizedModes: EditionMode[] = ["read", "edit", "create"];
@@ -27,7 +29,6 @@ export const useNoteModal = (
   const [searchParams] = useSearchParams();
 
   const navigate = useNavigate();
-  const positionViewport = { x: 0, y: 0 };
   const editionMode: EditionMode =
     (searchParams.get("mode") as EditionMode) || "create";
 
@@ -39,6 +40,18 @@ export const useNoteModal = (
   const { appCode } = useOdeClient();
   const { wallId } = useParams();
   const { sendNoteAddedEvent, sendNoteUpdated } = useWebsocketStore();
+
+  const { positionViewport } = useWhiteboard(
+    useShallow((state) => ({
+      positionViewport: state.positionViewport,
+    })),
+  );
+
+  const randomPosition = () => {
+    const min = -100;
+    const max = 100;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
 
   const isDirty = useCallback(() => {
     return (
@@ -66,8 +79,18 @@ export const useNoteModal = (
       color: colorValue,
       idwall: wallId,
       media: media,
-      x: Math.trunc(positionViewport.x * -1 + window.innerWidth / 2),
-      y: Math.trunc(positionViewport.y * -1 + window.innerHeight / 2),
+      x: Math.trunc(
+        positionViewport.x * -1 +
+          window.innerWidth / 2 -
+          100 +
+          randomPosition(),
+      ),
+      y: Math.trunc(
+        positionViewport.y * -1 +
+          window.innerHeight / 2 -
+          150 +
+          randomPosition(),
+      ),
     };
 
     try {

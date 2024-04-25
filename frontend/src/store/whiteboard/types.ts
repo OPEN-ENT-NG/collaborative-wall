@@ -10,6 +10,10 @@ export type State = {
   openDescriptionModal: boolean;
   openBackgroundModal: boolean;
   numberOfNotes: number;
+  positionViewport: {
+    x: number;
+    y: number;
+  };
 };
 
 export type Action = {
@@ -25,4 +29,5 @@ export type Action = {
   setOpenDescriptionModal: (value: boolean) => void;
   setIsOpenBackgroundModal: (value: boolean) => void;
   setIsOpenDropdown: (value: boolean) => void;
+  setPositionViewport: (value: { x: number; y: number }) => void;
 };
