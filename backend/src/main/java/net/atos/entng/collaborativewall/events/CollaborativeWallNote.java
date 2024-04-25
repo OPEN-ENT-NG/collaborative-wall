@@ -33,7 +33,7 @@ public class CollaborativeWallNote {
                                  @JsonProperty("y") final Long y,
                                  @JsonProperty("color") final List<String> color,
                                  @JsonProperty("lastEdit") final String lastEdit,
-                                 @JsonProperty("media") final CollaborativeWallNoteMedia media,
+                                 @JsonProperty("media") final Object media,
                                  @JsonProperty("idwall") final String idwall,
                                  @JsonProperty("created") final Map<String, Object> created,
                                  @JsonProperty("modified") final Map<String, Object> modified) {
@@ -46,8 +46,17 @@ public class CollaborativeWallNote {
         this.y = y;
         this.color = color;
         this.lastEdit = lastEdit;
-        this.media = media;
         this.idwall = idwall;
+        // manage imported media as String
+        if(media instanceof  CollaborativeWallNoteMedia){
+            this.media = (CollaborativeWallNoteMedia)media;
+        }else if (media instanceof String){
+            this.media =  new CollaborativeWallNoteMedia(media.toString(), "", "", "", media.toString(), "");
+        }else if(media instanceof Map){
+            this.media = CollaborativeWallNoteMedia.fromJson(new JsonObject((Map<String, Object>) media));
+        }else {
+            throw new IllegalArgumentException("Invalid type for media: "+media!=null?media.getClass().getName(): "null");
+        }
     }
 
     public CollaborativeWallNote(final String id, final CollaborativeWallNote other) {
