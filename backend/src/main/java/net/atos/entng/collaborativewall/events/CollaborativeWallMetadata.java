@@ -35,7 +35,7 @@ public class CollaborativeWallMetadata {
                                    final List<JsonObject> notes,
                                    final List<CollaborativeWallEditingInformation> editing,
                                    final Set<CollaborativeWallUser> connectedUsers) {
-    this(CollaborativeWallDetails.fromJson(wall), notes.stream().map(note -> CollaborativeWallNote.fromJson(note)).collect(Collectors.toList()), editing, connectedUsers);
+    this(CollaborativeWallDetails.fromJson(wall), notes.stream().filter(note -> note != null).map(note -> CollaborativeWallNote.fromJson(note)).collect(Collectors.toList()), editing, connectedUsers);
   }
 
   public CollaborativeWallDetails getWall() {
