@@ -14,8 +14,8 @@ import {
   EditionMode,
   authorizedModes,
   useNoteModal,
-} from "../hooks/use-note-modal";
-import { NoteContent } from "./note-content";
+} from "../../features/note-modal/hooks/use-note-modal";
+import { NoteContent } from "../../features/note-modal/components/note-content";
 import { useAccessStore } from "~/hooks/use-access-rights";
 
 export const noteLoader =
@@ -46,7 +46,7 @@ export const noteLoader =
       });
     }
 
-    const note = await queryClient.fetchQuery(noteQueries);
+    const note = await queryClient.ensureQueryData(noteQueries);
 
     if (!note) {
       throw new Response("", {

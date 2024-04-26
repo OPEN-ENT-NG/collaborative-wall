@@ -1,33 +1,9 @@
 import { Select, useOdeClient } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
-import { LoaderFunctionArgs } from "react-router-dom";
 import { noteColors } from "~/config";
 
 import { NoteProps } from "~/models/notes";
-import { getNote } from "~/services/api";
 import { Circle } from "~/utils/circle";
-
-export async function noteLoader({ params }: LoaderFunctionArgs) {
-  const { wallId, noteId } = params;
-
-  if (!wallId || !noteId) {
-    throw new Response("", {
-      status: 404,
-      statusText: "Wall id or Note id is null",
-    });
-  }
-
-  const note = await getNote(wallId, noteId);
-
-  if (!note) {
-    throw new Response("", {
-      status: 404,
-      statusText: "Not Found",
-    });
-  }
-
-  return note;
-}
 
 export const ColorSelect = ({
   setColorValue,

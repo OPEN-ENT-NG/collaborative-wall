@@ -26,10 +26,7 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
       },
       {
         path: "id/:wallId",
-        loader: wallLoader(queryClient),
-        element: <CollaborativeWall />,
-
-        /* async lazy() {
+        async lazy() {
           const { loader, CollaborativeWall } = await import(
             "./collaborative-wall"
           );
@@ -37,24 +34,13 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
             loader: loader(queryClient),
             Component: CollaborativeWall,
           };
-        }, */
+        },
         children: [
-          {
-            path: "note",
-            async lazy() {
-              const { NoteModal } = await import(
-                "../features/note-modal/components/note-modal"
-              );
-              return { Component: NoteModal };
-            },
-          },
           {
             path: "note/:noteId",
             async lazy() {
-              const { noteLoader, NoteModal } = await import(
-                "../features/note-modal/components/note-modal"
-              );
-              return { loader: noteLoader, Component: NoteModal };
+              const { noteLoader, NoteModal } = await import("./note-modal");
+              return { loader: noteLoader(queryClient), Component: NoteModal };
             },
           },
         ],
