@@ -192,9 +192,4 @@ p.is-editor-empty:first-child::before {
     padding: 8 0 !important;
     gap: 0px !important;
   }
-
-  .zoom-out,
-  .zoom-in {
-    display: none !important;
-  }
 }
