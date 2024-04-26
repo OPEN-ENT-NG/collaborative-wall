@@ -16,6 +16,8 @@ import { NoteMedia } from "~/models/note-media";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
 import { useWhiteboard } from "~/store";
 import { useShallow } from "zustand/react/shallow";
+import { useQueryClient } from "@tanstack/react-query";
+import { noteQueryOptions } from "~/services/queries";
 
 export type EditionMode = "read" | "edit" | "create";
 export const authorizedModes: EditionMode[] = ["read", "edit", "create"];
@@ -27,6 +29,10 @@ export const useNoteModal = (
   media: NoteMedia | null,
 ) => {
   const [searchParams] = useSearchParams();
+
+  const queryClient = useQueryClient();
+
+  const params = useParams<{ wallId: string; noteId: string }>();
 
   const navigate = useNavigate();
   const editionMode: EditionMode =
@@ -55,7 +61,7 @@ export const useNoteModal = (
 
   const isDirty = useCallback(() => {
     return (
-      loadedData?.color[0] != colorValue[0] ||
+      loadedData?.color?.[0] != colorValue[0] ||
       loadedData.content != (editorRef.current?.getContent("html") as string) ||
       loadedData.media?.id != media?.id
     );
@@ -105,6 +111,11 @@ export const useNoteModal = (
     }
   };
 
+  const noteQueries = noteQueryOptions(
+    params.wallId as string,
+    params.noteId as string,
+  );
+
   const handleSaveNote = async () => {
     if (!loadedData) return;
 
@@ -126,6 +137,10 @@ export const useNoteModal = (
       y: note.y,
       actionType: "Do",
       actionId: uuid(),
+    });
+
+    await queryClient.invalidateQueries({
+      queryKey: noteQueries.queryKey,
     });
 
     navigateBack();
