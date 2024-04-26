@@ -13,6 +13,10 @@ const initialState = {
   openDescriptionModal: false,
   openBackgroundModal: false,
   numberOfNotes: 0,
+  positionViewport: {
+    x: 0,
+    y: 0,
+  },
 };
 
 export const useWhiteboard = create<State & Action>((set) => ({
@@ -37,4 +41,6 @@ export const useWhiteboard = create<State & Action>((set) => ({
   setIsOpenBackgroundModal: (value: boolean) =>
     set({ openBackgroundModal: value }),
   setIsOpenDropdown: (value: boolean) => set({ isOpenDropdown: value }),
+  setPositionViewport: (value: { x: number; y: number }) =>
+    set({ positionViewport: value }),
 }));
