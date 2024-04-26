@@ -61,8 +61,6 @@ export const noteLoader =
 export const NoteModal = () => {
   const { note } = useNote();
 
-  console.log(note);
-
   const [colorValue, setColorValue] = useState<string[]>(
     note?.color || [noteColors.yellow.background],
   );
