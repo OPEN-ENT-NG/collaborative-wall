@@ -1,6 +1,7 @@
 import { Card } from "@edifice-ui/react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { useEffect } from "react";
 import { NodeProps } from "reactflow";
 import { NoteActions } from "~/features/note-actions";
 import { useAccessStore } from "~/hooks/use-access-rights";
@@ -22,7 +23,10 @@ export const Note = ({ data }: NodeProps) => {
     content: data.note.content,
   });
 
-  console.log(data.note.content);
+  useEffect(() => {
+    editor?.commands.setContent(data.note.content);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   return (
     <div
