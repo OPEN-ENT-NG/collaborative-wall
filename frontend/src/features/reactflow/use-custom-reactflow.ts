@@ -6,8 +6,8 @@ import {
   ReactFlowInstance,
   applyNodeChanges,
 } from "reactflow";
+import { v4 as uuid } from "uuid";
 import { useAccessStore } from "~/hooks/use-access-rights";
-import { useEditNote } from "~/hooks/use-edit-note";
 import { useThrottledFunction } from "~/hooks/use-throttled-function";
 import { NoteProps } from "~/models/notes";
 import { useNotes } from "~/services/queries";
@@ -23,8 +23,9 @@ export const useCustomRF = () => {
   const navigate = useNavigate();
 
   const { notes } = useNotes();
-  const { handleOnDragEnd, handleOnDragStart } = useEditNote();
-  const { sendNoteMovedEvent, sendNoteCursorMovedEvent } = useWebsocketStore();
+  const { toggleCanMoveBoard } = useWhiteboard();
+  const { sendNoteMovedEvent, sendNoteCursorMovedEvent, sendNoteUpdated } =
+    useWebsocketStore();
   const { hasRightsToMoveNote } = useAccessStore();
 
   const callbackFnToThrottlePosition = useCallback(
@@ -63,9 +64,27 @@ export const useCustomRF = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notes]);
 
+  const callbackFnToThrottle = useCallback(
+    ({ _id, x, y }: { _id: string; x: number; y: number }) => {
+      sendNoteMovedEvent(_id, {
+        _id,
+        x,
+        y,
+      });
+    },
+    [sendNoteMovedEvent],
+  );
+
+  const { throttledFn: throttledOnMove } = useThrottledFunction<{
+    _id: string;
+    x: number;
+    y: number;
+  }>({
+    callbackFn: callbackFnToThrottle,
+  });
+
   const onInit = useCallback(
     (instance: ReactFlowInstance) => {
-      console.log("init", { instance });
       if (notes) {
         const newNodes = notes
           ?.sort(
@@ -97,27 +116,9 @@ export const useCustomRF = () => {
     (_event: React.MouseEvent, node: Node) => {
       !isMobile ? navigate(`note/${node.id}?mode=read`) : undefined;
     },
-    [isMobile, navigate],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
-
-  const callbackFnToThrottle = useCallback(
-    ({ _id, x, y }: { _id: string; x: number; y: number }) => {
-      sendNoteMovedEvent(_id, {
-        _id,
-        x,
-        y,
-      });
-    },
-    [sendNoteMovedEvent],
-  );
-
-  const { throttledFn: throttledOnMove } = useThrottledFunction<{
-    _id: string;
-    x: number;
-    y: number;
-  }>({
-    callbackFn: callbackFnToThrottle,
-  });
 
   const onPaneMouseMove = useCallback(
     (event: React.MouseEvent) => {
@@ -143,18 +144,34 @@ export const useCustomRF = () => {
   );
 
   const onNodeDragStop = useCallback(
-    (_event: React.MouseEvent, node: Node) => {
-      handleOnDragEnd({
-        id: node.id,
-        coordinates: { x: node.position.x, y: node.position.y },
+    async (_event: React.MouseEvent, node: Node) => {
+      toggleCanMoveBoard();
+
+      const coordinates = { x: node.position.x, y: node.position.y };
+      const activeId = node.id as string;
+      const findNote = notes?.find((note) => note._id === activeId);
+
+      if (!findNote) return;
+
+      const position = {
+        x: coordinates.x,
+        y: coordinates.y,
+      };
+
+      await sendNoteUpdated({
+        ...findNote,
+        ...position,
+        actionType: "Do",
+        actionId: uuid(),
       });
     },
-    [handleOnDragEnd],
+    [notes, sendNoteUpdated, toggleCanMoveBoard],
   );
 
   const onNodeDragStart = useCallback(
-    () => handleOnDragStart(),
-    [handleOnDragStart],
+    () => toggleCanMoveBoard(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
   return {
