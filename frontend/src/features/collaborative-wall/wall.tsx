@@ -3,13 +3,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Suspense, lazy } from "react";
 import { Outlet } from "react-router-dom";
 import ReactFlow from "reactflow";
+import "reactflow/dist/base.css";
 import { useShallow } from "zustand/react/shallow";
 import { EmptyScreenError } from "~/components/emptyscreen-error";
 import { nodeExtent, translateExtent } from "~/config";
 import { loadWall } from "~/services/api";
 import { useNotes, useWall, wallQueryOptions } from "~/services/queries";
 import { useWhiteboard } from "~/store";
-import DescriptionWall from "../description/components/description-wall";
 import { useCustomRF } from "../reactflow/use-custom-reactflow";
 import { useEvents } from "../websocket/hooks/use-events";
 import { useWebsocketStore } from "../websocket/hooks/use-websocket-store";
@@ -66,6 +66,7 @@ export const Wall = () => {
   const {
     nodes,
     nodeTypes,
+    onInit,
     onNodesChange,
     onNodeClick,
     onNodeDrag,
@@ -96,8 +97,6 @@ export const Wall = () => {
   return (
     <>
       <CollaborativeWallContainer>
-        {wall?.description && !isMobile && <DescriptionWall />}
-
         <div className="collaborativewall-reactflow">
           <ReactFlow
             nodes={nodes}
@@ -110,6 +109,7 @@ export const Wall = () => {
             zoomOnPinch={false}
             zoomOnDoubleClick={false}
             panOnScroll={true}
+            onInit={onInit}
             onNodesChange={onNodesChange}
             onNodeClick={isOpenDropdown ? undefined : onNodeClick}
             onNodeDragStart={onNodeDragStart}

@@ -1,6 +1,7 @@
 import { useUser } from "@edifice-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { useHasFocus } from "~/hooks/use-document-focus";
 import { notesQueryOptions } from "~/services/queries";
 import {
   updateData,
@@ -13,6 +14,7 @@ import { useWebsocketStore } from "./use-websocket-store";
 
 export const useEvents = (id: string) => {
   const queryClient = useQueryClient();
+  const focus = useHasFocus();
 
   const updateNoteQueryData = useUpdateNoteQueryData();
   const deleteNoteQueryData = useDeleteNoteQueryData();
@@ -28,7 +30,17 @@ export const useEvents = (id: string) => {
     setMoveUsers,
     setMaxConnectedUsers,
     disconnect,
+    setIsVisible,
   } = useWebsocketStore();
+
+  useEffect(() => {
+    if (focus) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focus]);
 
   useEffect(() => {
     setResourceId(id);
