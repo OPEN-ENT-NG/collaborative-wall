@@ -20,6 +20,7 @@ export const useCustomRF = () => {
 
   const nodeTypes = useMemo(() => ({ note: Note }), []);
   const isMobile = useWhiteboard((state) => state.isMobile);
+  const canMoveNote = useWhiteboard((state) => state.canMoveNote);
   const navigate = useNavigate();
 
   const { notes } = useNotes();
@@ -55,14 +56,14 @@ export const useCustomRF = () => {
             type: "note",
             data: { note },
             position: { x: note.x, y: note.y },
-            draggable: hasRightsToMoveNote(note),
+            draggable: canMoveNote && hasRightsToMoveNote(note),
             zIndex: index,
           };
         });
       setNodes(newNodes);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [notes]);
+  }, [notes, canMoveNote]);
 
   const callbackFnToThrottle = useCallback(
     ({ _id, x, y }: { _id: string; x: number; y: number }) => {
