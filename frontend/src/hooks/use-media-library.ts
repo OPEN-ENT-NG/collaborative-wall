@@ -19,28 +19,42 @@ export const useMediaLibrary = () => {
     }
     mediaLibraryRef.current?.hide();
   };
-  const onSuccess = (result: MediaLibraryResult) => {
-    if (mediaLibraryRef.current?.type) {
-      if (result.url) {
-        mediaLibraryRef.current?.hide();
-        setLibraryMedia(result);
-      } else if (result.resources) {
-        mediaLibraryRef.current?.hide();
-        setLibraryMedia(result);
-      } else if (result[result.length - 1]._id) {
-        mediaLibraryRef.current?.hide();
-        setLibraryMedia(result[result.length - 1]);
-      } else {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(result, "text/html");
-        const element = doc.body.firstChild as HTMLBodyElement;
 
-        const href = element?.getAttribute("src");
-        mediaLibraryRef.current?.hide();
-        setLibraryMedia(href);
+  const onSuccess = (result: MediaLibraryResult) => {
+    let updatedMedia;
+
+    switch (mediaLibraryRef.current?.type) {
+      case "video": {
+        if (typeof result === "object") {
+          updatedMedia = result[0];
+        } else {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(result, "text/html");
+          const element = doc.body.firstChild as HTMLBodyElement;
+
+          const href = element?.getAttribute("src");
+          mediaLibraryRef.current?.hide();
+          updatedMedia = href;
+        }
+        break;
+      }
+      case "audio": {
+        if (result.length === undefined) {
+          updatedMedia = result;
+        } else {
+          updatedMedia = result[0];
+        }
+        break;
+      }
+      default: {
+        updatedMedia = result[0];
       }
     }
+
+    mediaLibraryRef.current?.hide();
+    setLibraryMedia(updatedMedia);
   };
+
   const onTabChange = async (
     _tab: TabsItemProps,
     uploads?: WorkspaceElement[],
