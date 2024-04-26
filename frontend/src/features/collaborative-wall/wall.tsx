@@ -9,8 +9,10 @@ import { EmptyScreenError } from "~/components/emptyscreen-error";
 import { nodeExtent, translateExtent } from "~/config";
 import { loadWall } from "~/services/api";
 import { useNotes, useWall, wallQueryOptions } from "~/services/queries";
-import { useWhiteboard } from "~/store";
+import { createWebsocketStore, useWhiteboard } from "~/store";
+import { Status } from "~/store/websocket/types";
 import { useCustomRF } from "../reactflow/use-custom-reactflow";
+import { RenderedCursors } from "../websocket/components/rendered-cursors";
 import { useEvents } from "../websocket/hooks/use-events";
 import { useWebsocketStore } from "../websocket/hooks/use-websocket-store";
 import { CollaborativeWallContainer } from "./components/container";
@@ -60,8 +62,12 @@ export const Wall = () => {
     })),
   );
 
-  const { openSocketModal, setOpenSocketModal, sendWallUpdateEvent } =
-    useWebsocketStore();
+  const status = createWebsocketStore((state) => state.status);
+  const openSocketModal = createWebsocketStore(
+    (state) => state.openSocketModal,
+  );
+
+  const { setOpenSocketModal, sendWallUpdateEvent } = useWebsocketStore();
 
   const {
     nodes,
@@ -78,19 +84,21 @@ export const Wall = () => {
   const handleOnUpdateSuccess = async () => {
     if (!wall) return;
 
+    const newWall = await loadWall(wall._id);
+
+    sendWallUpdateEvent(newWall);
+
     await queryClient.invalidateQueries({
       queryKey: wallQueryOptions(wall._id).queryKey,
     });
 
-    const newWall = await loadWall(wall._id);
-
-    sendWallUpdateEvent(newWall);
     setOpenUpdateModal(false);
   };
 
   useEvents(wall?._id as string);
 
-  if (query.isPending) return <LoadingScreen position={false} />;
+  if (query.isPending || status === Status.IDLE)
+    return <LoadingScreen position={false} />;
 
   if (!wall || !notes || query.isError) return <EmptyScreenError />;
 
@@ -117,6 +125,7 @@ export const Wall = () => {
             onNodeDragStop={onNodeDragStop}
             onPaneMouseMove={onPaneMouseMove}
           >
+            <RenderedCursors />
             <CustomBackground />
             <ToolbarWrapper isMobile={isMobile} />
           </ReactFlow>
