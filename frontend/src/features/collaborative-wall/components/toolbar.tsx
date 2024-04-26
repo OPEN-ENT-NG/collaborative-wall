@@ -83,11 +83,13 @@ export const ToolbarWrapper = ({ isMobile }: { isMobile: boolean }) => {
         onClick: () => toggleCanMoveNote(),
       },
       tooltip: t("collaborativewall.toolbar.movewhiteboard", { ns: appCode }),
+      visibility: showIf(allRolesButRead),
     },
 
     {
       type: "divider",
       name: "div-2",
+      visibility: showIf(allRolesButRead),
     },
     {
       type: "icon",
