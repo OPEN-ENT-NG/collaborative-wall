@@ -6,7 +6,6 @@ import { explorerConfig } from "~/config/config";
 import { PageError } from "~/routes/page-error";
 import { NotFound } from "./not-found";
 import Root from "./root";
-import { CollaborativeWall, loader as wallLoader } from "./collaborative-wall";
 
 const routes = (queryClient: QueryClient): RouteObject[] => [
   {
