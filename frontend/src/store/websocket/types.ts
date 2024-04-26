@@ -35,6 +35,7 @@ export type WebsocketState = {
   openSocketModal: boolean;
   httpProvider?: HttpProvider;
   wsProvider?: WSProvider;
+  isVisible: boolean;
 };
 export type ModifiedDate = { $date: number };
 export type ActionType = "Undo" | "Redo" | "Do";
@@ -44,12 +45,14 @@ export type WebsocketAction = {
   setMaxConnectedUsers: (maxConnectedUsers: number) => void;
   setConnectedUsers: (connectedUsers: ConnectedUsers[]) => void;
   setMoveUsers: (moveUser: MoveUser) => void;
+  setRemoveMoveUser: (id: string) => void;
   onReady: (mode: Mode) => void;
   onClose: () => void;
   disconnect: () => void;
   send: (payload: ActionPayload) => Promise<void>;
   subscribe(callback: Subscriber): Subscription;
   queryForMetadata: () => Promise<void>;
+  setIsVisible: (value: boolean) => void;
   sendPing: () => Promise<void>;
   sendWallDeletedEvent: () => Promise<void>;
   sendWallUpdateEvent: (wall: CollaborativeWallPayload) => Promise<void>;
