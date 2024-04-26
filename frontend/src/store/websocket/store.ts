@@ -19,6 +19,7 @@ const websocketState = {
   resourceId: "",
   subscribers: [],
   openSocketModal: false,
+  isVisible: false,
 };
 
 export const createWebsocketStore = create<WebsocketState & WebsocketAction>(
@@ -48,6 +49,7 @@ export const createWebsocketStore = create<WebsocketState & WebsocketAction>(
         }
         set({ status: Status.STOPPED });
       },
+      setIsVisible: (isVisible) => set({ isVisible }),
       setResourceId(resourceId) {
         set({ resourceId });
       },
@@ -71,6 +73,11 @@ export const createWebsocketStore = create<WebsocketState & WebsocketAction>(
             return { moveUsers: [...state.moveUsers, moveUser] };
           }
         }),
+      setRemoveMoveUser: (id) => {
+        set((state) => ({
+          moveUsers: state.moveUsers.filter((moveUser) => moveUser.id !== id),
+        }));
+      },
       send: async (payload) => {
         const { mode, resourceId, httpProvider, wsProvider } = get();
         if (mode === Mode.HTTP) {
