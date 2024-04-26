@@ -1,12 +1,9 @@
 import { useUser } from "@edifice-ui/react";
 
-import { useMousePosition } from "~/hooks/use-mouse-position";
 import { useWebsocketStore } from "./use-websocket-store";
 
 export const useConnectedUsers = () => {
   const { user } = useUser();
-
-  useMousePosition();
 
   const { connectedUsers, maxConnectedUsers } = useWebsocketStore();
 
