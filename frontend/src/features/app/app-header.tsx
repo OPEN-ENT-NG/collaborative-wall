@@ -16,11 +16,7 @@ export const AppHeader = () => {
 
   return (
     !isMobile && (
-      <BaseAppHeader
-        isFullscreen
-        style={{ position: "sticky" }}
-        render={() => <AppActions />}
-      >
+      <BaseAppHeader isFullscreen render={() => <AppActions />}>
         <Breadcrumb app={currentApp as IWebApp} name={wall?.name} />
       </BaseAppHeader>
     )

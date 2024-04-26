@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Node, NodeChange, applyNodeChanges } from "reactflow";
-// import { useAccess } from "~/hooks/use-access";
+import {
+  Node,
+  NodeChange,
+  ReactFlowInstance,
+  applyNodeChanges,
+} from "reactflow";
 import { useAccessStore } from "~/hooks/use-access-rights";
 import { useEditNote } from "~/hooks/use-edit-note";
 import { useThrottledFunction } from "~/hooks/use-throttled-function";
@@ -58,6 +62,32 @@ export const useCustomRF = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notes]);
+
+  const onInit = useCallback(
+    (instance: ReactFlowInstance) => {
+      console.log("init", { instance });
+      if (notes) {
+        const newNodes = notes
+          ?.sort(
+            (a: NoteProps, b: NoteProps) =>
+              (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
+          )
+          .map((note, index) => {
+            return {
+              id: note._id,
+              type: "note",
+              data: { note },
+              position: { x: note.x, y: note.y },
+              draggable: hasRightsToMoveNote(note),
+              zIndex: index,
+            };
+          });
+        instance.setNodes(newNodes);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [notes],
+  );
 
   const onNodesChange = useCallback((changes: NodeChange[]) => {
     setNodes((nds) => applyNodeChanges(changes, nds));
@@ -130,6 +160,7 @@ export const useCustomRF = () => {
   return {
     nodes,
     nodeTypes,
+    onInit,
     onNodesChange,
     onNodeClick,
     onNodeDrag,

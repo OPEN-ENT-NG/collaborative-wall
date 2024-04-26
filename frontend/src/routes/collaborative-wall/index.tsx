@@ -8,9 +8,9 @@ import {
 } from "~/services/queries";
 
 import { LoadingScreen, useTrashedResource } from "@edifice-ui/react";
-import "reactflow/dist/style.css";
 import { AppHeader } from "~/features/app/app-header";
 import { Wall } from "~/features/collaborative-wall/wall";
+import DescriptionWall from "~/features/description/components/description-wall";
 import { useAccessStore } from "~/hooks/use-access-rights";
 import { useWhiteboard } from "~/store";
 import { useRightsStore } from "~/store/rights/store";
@@ -49,6 +49,7 @@ export const loader =
 
 export const CollaborativeWall = () => {
   const isLoadingRights = useRightsStore((state) => state.isLoading);
+  const isMobile = useWhiteboard((state) => state.isMobile);
 
   const { wall } = useWall();
 
@@ -59,7 +60,10 @@ export const CollaborativeWall = () => {
 
   return (
     <>
-      <AppHeader />
+      <div className="position-fixed z-3 top-0 start-0 end-0">
+        <AppHeader />
+        {wall?.description && !isMobile && <DescriptionWall />}
+      </div>
       <Wall />
     </>
   );

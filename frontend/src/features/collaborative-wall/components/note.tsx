@@ -1,10 +1,11 @@
-import { Editor } from "@edifice-ui/editor";
 import { Card } from "@edifice-ui/react";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
 import { NodeProps } from "reactflow";
 import { NoteActions } from "~/features/note-actions";
+import { useAccessStore } from "~/hooks/use-access-rights";
 import { useWhiteboard } from "~/store";
 import { ShowMediaType } from "./show-media-type";
-import { useAccessStore } from "~/hooks/use-access-rights";
 
 export const Note = ({ data }: NodeProps) => {
   const canMoveNote = useWhiteboard((state) => state.canMoveNote);
@@ -13,6 +14,15 @@ export const Note = ({ data }: NodeProps) => {
   const style = {
     borderRadius: "12px",
   };
+
+  const extensions = [StarterKit];
+
+  const editor = useEditor({
+    extensions,
+    content: data.note.content,
+  });
+
+  console.log(data.note.content);
 
   return (
     <div
@@ -35,12 +45,7 @@ export const Note = ({ data }: NodeProps) => {
               overflow: "hidden",
             }}
           >
-            <Editor
-              content={data.note.content}
-              mode="read"
-              toolbar="none"
-              variant="ghost"
-            ></Editor>
+            <EditorContent editor={editor} />
           </div>
         </Card.Body>
         <Card.Footer>
