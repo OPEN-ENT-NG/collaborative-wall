@@ -71,6 +71,7 @@ export const Wall = () => {
     onNodeDrag,
     onNodeDragStop,
     onNodeDragStart,
+    onPaneMouseMove,
   } = useCustomRF();
 
   const handleOnUpdateSuccess = async () => {
@@ -108,13 +109,13 @@ export const Wall = () => {
             zoomOnScroll={false}
             zoomOnPinch={false}
             zoomOnDoubleClick={false}
-            onlyRenderVisibleElements={true}
             panOnScroll={true}
             onNodesChange={onNodesChange}
             onNodeClick={isOpenDropdown ? undefined : onNodeClick}
             onNodeDragStart={onNodeDragStart}
             onNodeDrag={onNodeDrag}
             onNodeDragStop={onNodeDragStop}
+            onPaneMouseMove={onPaneMouseMove}
           >
             <CustomBackground />
             <ToolbarWrapper isMobile={isMobile} />

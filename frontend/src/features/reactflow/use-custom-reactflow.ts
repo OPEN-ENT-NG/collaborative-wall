@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Node, NodeChange, applyNodeChanges } from "reactflow";
 // import { useAccess } from "~/hooks/use-access";
+import { useAccessStore } from "~/hooks/use-access-rights";
 import { useEditNote } from "~/hooks/use-edit-note";
 import { useThrottledFunction } from "~/hooks/use-throttled-function";
 import { NoteProps } from "~/models/notes";
@@ -9,7 +10,6 @@ import { useNotes } from "~/services/queries";
 import { useWhiteboard } from "~/store";
 import { Note } from "../collaborative-wall/components/note";
 import { useWebsocketStore } from "../websocket/hooks/use-websocket-store";
-import { useAccessStore } from "~/hooks/use-access-rights";
 
 export const useCustomRF = () => {
   const [nodes, setNodes] = useState<Node[]>([]);
@@ -20,8 +20,22 @@ export const useCustomRF = () => {
 
   const { notes } = useNotes();
   const { handleOnDragEnd, handleOnDragStart } = useEditNote();
-  const { sendNoteMovedEvent } = useWebsocketStore();
+  const { sendNoteMovedEvent, sendNoteCursorMovedEvent } = useWebsocketStore();
   const { hasRightsToMoveNote } = useAccessStore();
+
+  const callbackFnToThrottlePosition = useCallback(
+    ({ x, y }: { x: number; y: number }) => {
+      sendNoteCursorMovedEvent([{ x, y }]);
+    },
+    [sendNoteCursorMovedEvent],
+  );
+
+  const { throttledFn: throttledPosition } = useThrottledFunction<{
+    x: number;
+    y: number;
+  }>({
+    callbackFn: callbackFnToThrottlePosition,
+  });
 
   useEffect(() => {
     if (notes) {
@@ -75,17 +89,27 @@ export const useCustomRF = () => {
     callbackFn: callbackFnToThrottle,
   });
 
+  const onPaneMouseMove = useCallback(
+    (event: React.MouseEvent) => {
+      if (event) {
+        throttledPosition({ x: event.clientX, y: event.clientY });
+      }
+    },
+    [throttledPosition],
+  );
+
   const onNodeDrag = useCallback(
-    (_event: React.MouseEvent, node: Node) => {
+    (event: React.MouseEvent, node: Node) => {
       const coordinates = {
         x: node.position.x,
         y: node.position.y,
       };
       if (coordinates) {
         throttledOnMove({ _id: node.id, ...coordinates });
+        throttledPosition({ x: event.clientX, y: event.clientY });
       }
     },
-    [throttledOnMove],
+    [throttledOnMove, throttledPosition],
   );
 
   const onNodeDragStop = useCallback(
@@ -111,5 +135,6 @@ export const useCustomRF = () => {
     onNodeDrag,
     onNodeDragStop,
     onNodeDragStart,
+    onPaneMouseMove,
   };
 };

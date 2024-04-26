@@ -33,10 +33,10 @@ export function Cursor({
       style={{
         position: "absolute",
         zIndex: 99,
-        top: -15,
+        top: -60,
         left: -15,
-        width: 35,
-        height: 35,
+        width: 44,
+        height: 44,
       }}
     >
       <svg
