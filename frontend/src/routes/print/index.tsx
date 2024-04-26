@@ -16,7 +16,8 @@ import { backgroundColors, backgroundImages, wallConfig } from "~/config";
 import { ShowMediaType } from "~/features/collaborative-wall/components/show-media-type";
 import { CollaborativeWallProps } from "~/models/wall";
 import "../collaborative-wall/index.css";
-import "./index.css";
+// import "./index.css";
+import styles from "./print.module.css";
 
 export const wallLoader =
   (queryClient: QueryClient) =>
@@ -48,14 +49,18 @@ export const CollaborativeWall = () => {
   const notes = queries.data[1] as NoteProps[];
 
   useEffect(() => {
-    setTimeout(() => window.print(), 1000);
-  }, []);
+    // Use setTimeout to update the message after 2000 milliseconds (2 seconds)
+    const timeoutId = setTimeout(() => window.print(), 1000);
+
+    // Cleanup function to clear the timeout if the component unmounts
+    return () => clearTimeout(timeoutId);
+  }, []); // Empty dependency array ensures the effect runs only once
 
   return (
-    <div className="print-full-page">
-      <div className="transform-wrapper-print">
+    <div className={styles["print-full-page"]}>
+      <div className={styles["transform-wrapper-print"]}>
         <div
-          className="transform-component-print"
+          className={styles["transform-component-print"]}
           style={{
             transform: `scale(${1000 / wallConfig.WIDTH_WALL})`,
           }}
