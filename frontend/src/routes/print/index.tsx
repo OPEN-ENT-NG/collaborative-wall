@@ -5,11 +5,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { LoaderFunctionArgs, useParams } from "react-router-dom";
 
 import { NoteProps } from "~/models/notes";
-import {
-  notesQueryOptions,
-  useWallWithNotes,
-  wallQueryOptions,
-} from "~/services/queries";
+import { useWallWithNotes } from "~/services/queries";
 
 import { Editor } from "@edifice-ui/editor";
 import { backgroundColors, backgroundImages, wallConfig } from "~/config";
@@ -17,6 +13,8 @@ import { ShowMediaType } from "~/features/collaborative-wall/components/show-med
 import { CollaborativeWallProps } from "~/models/wall";
 import "../collaborative-wall/index.css";
 // import "./index.css";
+import { notesQueryOptions } from "~/services/queries/notes";
+import { wallQueryOptions } from "~/services/queries/wall";
 import styles from "./print.module.css";
 
 export const wallLoader =

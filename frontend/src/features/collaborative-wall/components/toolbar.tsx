@@ -7,28 +7,25 @@ import { useReactFlow } from "reactflow";
 import { useShallow } from "zustand/react/shallow";
 
 import { useHistory } from "~/features/history/hooks/use-history";
-import { useWhiteboard } from "~/store";
+import { useWhiteboardStore } from "~/store";
 import { useRightsStore } from "~/store/rights/store";
 
 export const ToolbarWrapper = ({ isMobile }: { isMobile: boolean }) => {
   const navigate = useNavigate();
-  const showIf = (truthy: boolean) => (truthy ? "show" : "hide");
   const reactFlow = useReactFlow();
+  const showIf = (truthy: boolean) => (truthy ? "show" : "hide");
   const handleCreateClick = () => navigate("note");
+  const allRolesButRead = useRightsStore((state) => state.allRolesButRead);
 
   const { appCode } = useOdeClient();
+  const { t } = useTranslation();
 
-  const { canMoveNote, toggleCanMoveNote } = useWhiteboard(
+  const { canMoveNote, toggleCanMoveNote } = useWhiteboardStore(
     useShallow((state) => ({
       canMoveNote: state.canMoveNote,
       toggleCanMoveNote: state.toggleCanMoveNote,
     })),
   );
-
-  const allRolesButRead = useRightsStore((state) => state.allRolesButRead);
-
-  const { t } = useTranslation();
-
   const { canUndo, canRedo, handleUndo, handleRedo } = useHistory();
 
   /**

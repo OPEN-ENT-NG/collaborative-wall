@@ -5,13 +5,13 @@ import { useViewport } from "reactflow";
 import { useShallow } from "zustand/react/shallow";
 import { backgroundColors, backgroundImages } from "~/config";
 import { wallQueryOptions } from "~/services/queries";
-import { useWhiteboard } from "~/store";
+import { useWhiteboardStore } from "~/store";
 
 export const CustomBackground = () => {
   const { x, y } = useViewport();
   const params = useParams();
 
-  const { setPositionViewport } = useWhiteboard(
+  const { setPositionViewport } = useWhiteboardStore(
     useShallow((state) => ({
       setPositionViewport: state.setPositionViewport,
     })),

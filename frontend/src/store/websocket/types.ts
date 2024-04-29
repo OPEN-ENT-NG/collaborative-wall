@@ -25,6 +25,7 @@ export type WSProvider = {
 };
 export type WebsocketState = {
   maxAttempts: number;
+  readyState: boolean;
   maxConnectedUsers: number;
   connectedUsers: ConnectedUsers[];
   moveUsers: MoveUser[];

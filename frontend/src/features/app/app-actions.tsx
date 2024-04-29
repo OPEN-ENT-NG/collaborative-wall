@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
 import { useWall } from "~/services/queries";
-import { useWhiteboard } from "~/store";
+import { useWhiteboardStore } from "~/store";
 import { useRightsStore } from "~/store/rights/store";
 
 export type ActionDropdownMenuOptions = DropdownMenuOptions & {
@@ -33,6 +33,8 @@ export const AppActions = () => {
   const { wall } = useWall();
   const { appCode } = useOdeClient();
   const { t } = useTranslation();
+
+  /** Store to handle correctly rights to access ressource to avoid unexpected re-renders  */
   const { isCreator, isManager } = useRightsStore(
     useShallow((state) => ({
       isCreator: state.isCreator,
@@ -40,14 +42,9 @@ export const AppActions = () => {
     })),
   );
 
+  /* When destructring methods, it's okay to not shallow. We doesn't use stored state */
   const { setOpenShareModal, setOpenUpdateModal, setIsOpenBackgroundModal } =
-    useWhiteboard(
-      useShallow((state) => ({
-        setOpenShareModal: state.setOpenShareModal,
-        setOpenUpdateModal: state.setOpenUpdateModal,
-        setIsOpenBackgroundModal: state.setIsOpenBackgroundModal,
-      })),
-    );
+    useWhiteboardStore();
 
   const dropdownOptions: ActionDropdownMenuOptions[] = [
     {

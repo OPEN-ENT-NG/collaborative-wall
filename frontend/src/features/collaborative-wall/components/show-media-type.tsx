@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 
 import { NoteMedia } from "~/models/note-media";
-import { useWhiteboard } from "~/store";
+import { useWhiteboardStore } from "~/store";
 
 export interface ShowMediaTypeProps {
   media: NoteMedia;
@@ -35,7 +35,7 @@ export const ShowMediaType = ({
 }: ShowMediaTypeProps) => {
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
-  const { canMoveNote } = useWhiteboard(
+  const { canMoveNote } = useWhiteboardStore(
     useShallow((state) => ({
       canMoveNote: state.canMoveNote,
     })),
@@ -50,7 +50,7 @@ export const ShowMediaType = ({
 
   const { getIconCode } = useOdeIcons();
 
-  const test = getIconCode(media.application) ?? "";
+  const hyperlinkCode = getIconCode(media.application) ?? "";
 
   const LinkItems: ToolbarItem[] = [
     {
@@ -232,7 +232,7 @@ export const ShowMediaType = ({
     case "hyperlink":
       return (
         <div
-          className={`media-hyperlink ${media.application ? `bg-light-${test}` : "bg-blue-200"}`}
+          className={`media-hyperlink ${media.application ? `bg-light-${hyperlinkCode}` : "bg-blue-200"}`}
           style={{
             height: modalNote ? "200px" : "120px",
             border: !modalNote ? "solid 1px #E4E4E4" : "",

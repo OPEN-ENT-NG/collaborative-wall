@@ -1,37 +1,46 @@
 import { useUser } from "@edifice-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { useHasFocus } from "~/hooks/use-document-focus";
-import { notesQueryOptions } from "~/services/queries";
 import {
+  deleteNoteQueryData,
+  notesQueryOptions,
   updateData,
-  useDeleteNoteQueryData,
-  useUpdateNoteQueryData,
-  useUpdateWallQueryData,
-} from "~/services/queries/helpers";
-import { useHistoryStore } from "~/store";
-import { useWebsocketStore } from "./use-websocket-store";
+  updateNoteQueryData,
+  updateWallQueryData,
+  useWall,
+} from "~/services/queries";
+import { useHistoryStore } from "~/store/history/store";
+import { useWebsocketStore } from "~/store/websocket/store";
 
-export const useEvents = (id: string) => {
+export const useEvents = () => {
   const queryClient = useQueryClient();
   const focus = useHasFocus();
 
-  const updateNoteQueryData = useUpdateNoteQueryData();
-  const deleteNoteQueryData = useDeleteNoteQueryData();
-  const updateWallQueryData = useUpdateWallQueryData();
-
+  const { wall } = useWall();
   const { user } = useUser();
-  const { setHistory, setUpdatedNote } = useHistoryStore();
+  const { setHistory } = useHistoryStore();
 
   const {
-    setResourceId,
     subscribe,
+    disconnect,
+    setResourceId,
     setConnectedUsers,
     setMoveUsers,
     setMaxConnectedUsers,
-    disconnect,
     setIsVisible,
-  } = useWebsocketStore();
+  } = useWebsocketStore(
+    useShallow((state) => ({
+      subscribe: state.subscribe,
+      disconnect: state.disconnect,
+      setResourceId: state.setResourceId,
+      setConnectedUsers: state.setConnectedUsers,
+      setMoveUsers: state.setMoveUsers,
+      setMaxConnectedUsers: state.setMaxConnectedUsers,
+      setIsVisible: state.setIsVisible,
+    })),
+  );
 
   useEffect(() => {
     if (focus) {
@@ -43,10 +52,11 @@ export const useEvents = (id: string) => {
   }, [focus]);
 
   useEffect(() => {
-    setResourceId(id);
+    setResourceId(wall?._id as string);
 
     const unsubscribe = subscribe((event) => {
       const { type, ...otherProps } = event;
+
       switch (type) {
         case "metadata": {
           setConnectedUsers(event.connectedUsers);
@@ -61,7 +71,7 @@ export const useEvents = (id: string) => {
           break;
         }
         case "wallUpdate": {
-          updateWallQueryData(event.wall);
+          updateWallQueryData(queryClient, event.wall);
           break;
         }
         case "noteAdded": {
@@ -71,7 +81,7 @@ export const useEvents = (id: string) => {
             ...otherProps,
           });
           queryClient.invalidateQueries({
-            queryKey: notesQueryOptions(id).queryKey,
+            queryKey: notesQueryOptions(wall?._id as string).queryKey,
           });
           break;
         }
@@ -91,13 +101,10 @@ export const useEvents = (id: string) => {
           break;
         }
         case "noteMoved": {
-          setUpdatedNote({
-            activeId: event.note._id,
-            x: event.note.x,
-            y: event.note.y,
-            zIndex: 2,
+          updateNoteQueryData(queryClient, {
+            ...event.note,
+            wallid: event.wallId,
           });
-          updateNoteQueryData({ ...event.note, wallid: event.wallId });
           /* queryClient.invalidateQueries({
             queryKey: notesQueryOptions(id).queryKey,
           }); */
@@ -126,12 +133,6 @@ export const useEvents = (id: string) => {
                 y: event.note.y,
               },
               ...otherProps,
-            });
-            setUpdatedNote({
-              activeId: event.note._id,
-              x: event.note.x,
-              y: event.note.y,
-              zIndex: 2,
             });
           } else {
             // note has been updated
@@ -168,7 +169,7 @@ export const useEvents = (id: string) => {
             item: event.note,
             ...otherProps,
           });
-          deleteNoteQueryData(event.note);
+          deleteNoteQueryData(queryClient, event.note);
           break;
         }
       }

@@ -45,7 +45,6 @@ export type NewState = {
 };
 
 export type HistoryAction = {
-  setUpdatedNote: ({ activeId, x, y, zIndex }: UpdateNote) => void;
   setHistory: (newState: Omit<NewState, "id"> & ActionData) => void;
   undo: () => void;
   redo: () => void;

@@ -84,7 +84,7 @@ export const NoteContent = forwardRef(
           setMedia({
             type: (media as NoteMedia).type,
             id: medialIb?._id || "",
-            name: medialIb?.application || "",
+            name: medialIb?.name || "",
             application: "",
             url: medialIb?._id
               ? `/workspace/document/${medialIb?._id}`

@@ -46,6 +46,10 @@ export const useMediaLibrary = () => {
         }
         break;
       }
+      case "hyperlink": {
+        updatedMedia = result;
+        break;
+      }
       default: {
         updatedMedia = result[0];
       }

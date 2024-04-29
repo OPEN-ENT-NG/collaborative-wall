@@ -1,14 +1,21 @@
 import { useOdeClient, useToast } from "@edifice-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
-import { useWebsocketStore } from "~/features/websocket/hooks/use-websocket-store";
+import { filterData } from "~/services/queries";
+import { useHistoryStore } from "~/store/history/store";
 
-import { filterData } from "~/services/queries/helpers";
-import { useHistoryStore } from "~/store";
 import { NewState } from "~/store/history/types";
+import { useWebsocketStore } from "~/store/websocket/store";
 
 export const useHistory = () => {
+  const { t } = useTranslation();
+  const { appCode } = useOdeClient();
+
+  const { sendNoteUpdated, sendNoteDeletedEvent, sendNoteAddedEvent } =
+    useWebsocketStore();
+
   const { undo, redo, past, future } = useHistoryStore(
     useShallow((state) => ({
       undo: state.undo,
@@ -18,21 +25,15 @@ export const useHistory = () => {
     })),
   );
 
-  const { t } = useTranslation();
-
-  const { appCode } = useOdeClient();
-
-  const canUndo = past.length > 0;
-  const canRedo = future.length > 0;
-
   const toast = useToast();
-  const { sendNoteUpdated, sendNoteDeletedEvent, sendNoteAddedEvent } =
-    useWebsocketStore();
-
   const queryClient = useQueryClient();
 
+  /* enable or disable undo/redo */
+  const canUndo = useMemo(() => past.length > 0, [past]);
+  const canRedo = useMemo(() => future.length > 0, [future]);
+
   const deleteAction = async (action: NewState, isUndo: boolean) => {
-    sendNoteDeletedEvent({
+    await sendNoteDeletedEvent({
       _id: action.item._id,
       actionId: action.id,
       actionType: isUndo ? "Undo" : "Redo",
@@ -41,7 +42,7 @@ export const useHistory = () => {
   };
 
   const createAction = async (action: NewState, isUndo: boolean) => {
-    sendNoteAddedEvent({
+    await sendNoteAddedEvent({
       actionId: action.id,
       actionType: isUndo ? "Undo" : "Redo",
       color: action.item.color,
@@ -89,7 +90,7 @@ export const useHistory = () => {
     const y = isUndo ? previous?.y ?? item.y : next?.y ?? item.y;
 
     try {
-      sendNoteUpdated({
+      await sendNoteUpdated({
         actionId: action.id,
         actionType: isUndo ? "Undo" : "Redo",
         _id: item._id,
@@ -129,28 +130,35 @@ export const useHistory = () => {
     }
   };
 
-  const handleUndo = async () => {
+  const handleUndo = useCallback(async () => {
     undo();
 
     const lastAction = past[past.length - 1];
 
     executeAction(lastAction, true);
     toast.success(t("collaborativewall.toast.undo", { ns: appCode }));
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [past, future]);
 
-  const handleRedo = async () => {
+  const handleRedo = useCallback(async () => {
     redo();
 
     const nextAction = future[0];
 
     executeAction(nextAction, false);
     toast.success(t("collaborativewall.toast.redo", { ns: appCode }));
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [future, future]);
 
-  return {
-    canUndo,
-    canRedo,
-    handleUndo,
-    handleRedo,
-  };
+  const memoizedValues = useMemo(
+    () => ({
+      canUndo,
+      canRedo,
+      handleUndo,
+      handleRedo,
+    }),
+    [canUndo, canRedo, handleUndo, handleRedo],
+  );
+
+  return memoizedValues;
 };

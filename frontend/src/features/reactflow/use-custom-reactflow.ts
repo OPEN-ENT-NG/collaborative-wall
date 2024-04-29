@@ -11,23 +11,29 @@ import { useAccessStore } from "~/hooks/use-access-rights";
 import { useThrottledFunction } from "~/hooks/use-throttled-function";
 import { NoteProps } from "~/models/notes";
 import { useNotes } from "~/services/queries";
-import { useWhiteboard } from "~/store";
+import { useWebsocketStore, useWhiteboardStore } from "~/store";
 import { Note } from "../collaborative-wall/components/note";
-import { useWebsocketStore } from "../websocket/hooks/use-websocket-store";
 
 export const useCustomRF = () => {
+  /** Creade nodes elements for React Flow and add new "note" type */
   const [nodes, setNodes] = useState<Node[]>([]);
-
   const nodeTypes = useMemo(() => ({ note: Note }), []);
-  const isMobile = useWhiteboard((state) => state.isMobile);
-  const canMoveNote = useWhiteboard((state) => state.canMoveNote);
+
+  /* React Router useNavigate hook */
   const navigate = useNavigate();
 
-  const { notes } = useNotes();
-  const { toggleCanMoveBoard } = useWhiteboard();
+  /* Collaborative Wall Store */
+  const isMobile = useWhiteboardStore((state) => state.isMobile);
+  const canMoveNote = useWhiteboardStore((state) => state.canMoveNote);
+  const { toggleCanMoveBoard } = useWhiteboardStore();
+
+  /* Stores */
   const { sendNoteMovedEvent, sendNoteCursorMovedEvent, sendNoteUpdated } =
     useWebsocketStore();
   const { hasRightsToMoveNote } = useAccessStore();
+
+  /* Notes data */
+  const { notes } = useNotes();
 
   const callbackFnToThrottlePosition = useCallback(
     ({ x, y }: { x: number; y: number }) => {
@@ -84,6 +90,7 @@ export const useCustomRF = () => {
     callbackFn: callbackFnToThrottle,
   });
 
+  /* onInit we use React Flow instance to set nodes */
   const onInit = useCallback(
     (instance: ReactFlowInstance) => {
       if (notes) {
@@ -113,6 +120,7 @@ export const useCustomRF = () => {
     setNodes((nds) => applyNodeChanges(changes, nds));
   }, []);
 
+  /* onNodeClick we navigate to note modal component */
   const onNodeClick = useCallback(
     (_event: React.MouseEvent, node: Node) => {
       !isMobile ? navigate(`note/${node.id}?mode=read`) : undefined;
@@ -121,6 +129,7 @@ export const useCustomRF = () => {
     [],
   );
 
+  /* onPaneMouseMove is useful to track mouse position */
   const onPaneMouseMove = useCallback(
     (event: React.MouseEvent) => {
       if (event) {
@@ -130,6 +139,7 @@ export const useCustomRF = () => {
     [throttledPosition],
   );
 
+  /* onNodeDrag to track mouse and note positions */
   const onNodeDrag = useCallback(
     (event: React.MouseEvent, node: Node) => {
       const coordinates = {
@@ -144,6 +154,7 @@ export const useCustomRF = () => {
     [throttledOnMove, throttledPosition],
   );
 
+  /* onNodeDragStop, we update note */
   const onNodeDragStop = useCallback(
     async (_event: React.MouseEvent, node: Node) => {
       toggleCanMoveBoard();
@@ -166,7 +177,8 @@ export const useCustomRF = () => {
         actionId: uuid(),
       });
     },
-    [notes, sendNoteUpdated, toggleCanMoveBoard],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [notes],
   );
 
   const onNodeDragStart = useCallback(

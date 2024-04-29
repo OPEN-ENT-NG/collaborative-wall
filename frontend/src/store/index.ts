@@ -1,3 +1,3 @@
 export { useHistoryStore } from "./history/store";
-export { createWebsocketStore } from "./websocket/store";
-export { useWhiteboard } from "./whiteboard/store";
+export { useWebsocketStore } from "./websocket/store";
+export { useWhiteboardStore } from "./whiteboard/store";

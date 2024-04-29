@@ -1,5 +1,7 @@
 import { create } from "zustand";
-import { HistoryAction, HistoryState, UpdateNote } from "./types";
+import { updateState } from "~/features/history/helpers/update-state";
+import { ActionData } from "../websocket/types";
+import { HistoryAction, HistoryState, NewState } from "./types";
 
 const MAX_HISTORY = 40;
 const historyState = {
@@ -9,18 +11,26 @@ const historyState = {
   updatedNote: undefined,
 };
 
+const recreateNote = (
+  present: NewState,
+  newState: Omit<NewState, "id"> & ActionData,
+  type: string,
+) => {
+  if (type === "create") {
+    updateState(
+      {
+        id: present?.id,
+        type: present.type,
+        item: present.item,
+      },
+      newState.item,
+    );
+  }
+};
+
 export const useHistoryStore = create<HistoryState & HistoryAction>(
   (set, get) => ({
     ...historyState,
-    setUpdatedNote: ({ activeId, x, y, zIndex }: UpdateNote) =>
-      set(() => ({
-        updatedNote: {
-          activeId,
-          x,
-          y,
-          zIndex,
-        },
-      })),
     setHistory: (newState) => {
       switch (newState.actionType) {
         case "Do": {
@@ -41,11 +51,13 @@ export const useHistoryStore = create<HistoryState & HistoryAction>(
           break;
         }
         case "Redo": {
-          const { redoById } = get();
+          const { redoById, present } = get();
+          if (present) recreateNote(present, newState, newState.type);
           return redoById(newState.actionId);
         }
         case "Undo": {
-          const { undoById } = get();
+          const { undoById, present } = get();
+          if (present) recreateNote(present, newState, newState.type);
           return undoById(newState.actionId);
         }
       }
