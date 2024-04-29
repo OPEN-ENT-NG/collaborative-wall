@@ -1,4 +1,4 @@
-import React, { StrictMode } from "react";
+import React from "react";
 
 import { OdeClientProvider, ThemeProvider } from "@edifice-ui/react";
 import {
@@ -43,18 +43,18 @@ const queryClient = new QueryClient({
 });
 
 root.render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <OdeClientProvider
-        params={{
-          app: "collaborativewall",
-        }}
-      >
-        <ThemeProvider>
-          <RouterProvider router={router(queryClient)} />
-        </ThemeProvider>
-      </OdeClientProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  </StrictMode>,
+  // <StrictMode>
+  <QueryClientProvider client={queryClient}>
+    <OdeClientProvider
+      params={{
+        app: "collaborativewall",
+      }}
+    >
+      <ThemeProvider>
+        <RouterProvider router={router(queryClient)} />
+      </ThemeProvider>
+    </OdeClientProvider>
+    <ReactQueryDevtools initialIsOpen={false} />
+  </QueryClientProvider>,
+  // </StrictMode>,
 );

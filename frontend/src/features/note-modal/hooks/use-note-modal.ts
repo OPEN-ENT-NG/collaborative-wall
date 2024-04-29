@@ -11,16 +11,23 @@ import {
 } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 
-import { useWebsocketStore } from "~/features/websocket/hooks/use-websocket-store";
+import { useShallow } from "zustand/react/shallow";
+import { useInvalidateNoteQueries } from "~/hooks/use-invalidate-note-queries";
 import { NoteMedia } from "~/models/note-media";
 import { NoteProps, PickedNoteProps } from "~/models/notes";
-import { useWhiteboard } from "~/store";
-import { useShallow } from "zustand/react/shallow";
-import { useQueryClient } from "@tanstack/react-query";
-import { noteQueryOptions } from "~/services/queries";
+import { useWebsocketStore, useWhiteboardStore } from "~/store";
 
 export type EditionMode = "read" | "edit" | "create";
 export const authorizedModes: EditionMode[] = ["read", "edit", "create"];
+
+/**  Outside function to handle random position
+ * Defined outside the hook so that this method is recreated on each render
+ */
+const randomPosition = () => {
+  const min = -100;
+  const max = 100;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 
 export const useNoteModal = (
   editorRef: RefObject<EditorRef>,
@@ -28,13 +35,9 @@ export const useNoteModal = (
   loadedData: NoteProps | undefined,
   media: NoteMedia | null,
 ) => {
+  /* Search params for read | edit mode */
   const [searchParams] = useSearchParams();
 
-  const queryClient = useQueryClient();
-
-  const params = useParams<{ wallId: string; noteId: string }>();
-
-  const navigate = useNavigate();
   const editionMode: EditionMode =
     (searchParams.get("mode") as EditionMode) || "create";
 
@@ -42,23 +45,28 @@ export const useNoteModal = (
   const isEditMode = editionMode === "edit";
   const isCreateMode = editionMode === "create";
 
+  /* Invalidate Notes Queries after mutation */
+  const invalidateNoteQueries = useInvalidateNoteQueries();
+
+  /* React Router useNavigate */
+  const navigate = useNavigate();
+
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
+
+  /* Get wall id based on frontend route */
   const { wallId } = useParams();
+
+  /* Websocket methods to perform mutations */
   const { sendNoteAddedEvent, sendNoteUpdated } = useWebsocketStore();
 
-  const { positionViewport } = useWhiteboard(
+  const { positionViewport } = useWhiteboardStore(
     useShallow((state) => ({
       positionViewport: state.positionViewport,
     })),
   );
 
-  const randomPosition = () => {
-    const min = -100;
-    const max = 100;
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
+  /** Function to handle confirmed modal when use leaves page or closes modal */
   const isDirty = useCallback(() => {
     return (
       loadedData?.color?.[0] != colorValue[0] ||
@@ -105,16 +113,12 @@ export const useNoteModal = (
         actionType: "Do",
         actionId: uuid(),
       });
+      await invalidateNoteQueries();
       navigateBack();
     } catch (error) {
       console.error(error);
     }
   };
-
-  const noteQueries = noteQueryOptions(
-    params.wallId as string,
-    params.noteId as string,
-  );
 
   const handleSaveNote = async () => {
     if (!loadedData) return;
@@ -139,9 +143,7 @@ export const useNoteModal = (
       actionId: uuid(),
     });
 
-    await queryClient.invalidateQueries({
-      queryKey: noteQueries.queryKey,
-    });
+    await invalidateNoteQueries();
 
     navigateBack();
   };

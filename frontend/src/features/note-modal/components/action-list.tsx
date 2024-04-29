@@ -3,7 +3,7 @@ import { Fragment, RefAttributes, useEffect } from "react";
 import { Options } from "@edifice-ui/icons";
 import { Dropdown, IconButton, IconButtonProps } from "@edifice-ui/react";
 import { NoteDropdownMenuOptions } from "~/features/note-actions/types";
-import { useWhiteboard } from "~/store";
+import { useWhiteboardStore } from "~/store";
 
 export const ActionList = ({
   triggerProps,
@@ -14,7 +14,7 @@ export const ActionList = ({
     RefAttributes<HTMLButtonElement>;
   dropdownOptions: NoteDropdownMenuOptions[];
 }) => {
-  const { setIsOpenDropdown } = useWhiteboard();
+  const { setIsOpenDropdown } = useWhiteboardStore();
 
   useEffect(() => {
     setIsOpenDropdown(triggerProps["aria-expanded"] as boolean);

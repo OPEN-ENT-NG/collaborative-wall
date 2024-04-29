@@ -144,7 +144,7 @@ devDependencies:
     version: 1.5.0-develop-pedago.1
   edifice-ts-client:
     specifier: develop-pedago
-    version: 1.4.0-develop-pedago.1
+    version: 1.4.0-develop-pedago.2
   eslint:
     specifier: 8.56.0
     version: 8.56.0
@@ -2710,7 +2710,7 @@ packages:
       '@babel/plugin-transform-react-jsx-self': 7.24.1(@babel/core@7.24.4)
       '@babel/plugin-transform-react-jsx-source': 7.24.1(@babel/core@7.24.4)
       '@types/babel__core': 7.20.5
-      react-refresh: 0.14.0
+      react-refresh: 0.14.1
       vite: 5.0.12(@types/node@20.11.13)
     transitivePeerDependencies:
       - supports-color
@@ -2942,7 +2942,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001612
-      electron-to-chromium: 1.4.748
+      electron-to-chromium: 1.4.749
       node-releases: 2.0.14
       update-browserslist-db: 1.0.13(browserslist@4.23.0)
     dev: true
@@ -3341,8 +3341,8 @@ packages:
       bootstrap: 5.3.2(@popperjs/core@2.11.8)
     dev: true
 
-  /edifice-ts-client@1.4.0-develop-pedago.1:
-    resolution: {integrity: sha512-IWZ3UJVtnLLvF/0bUonCXwV1p4wVhXa3yJsjKTrVd0aaujv6a9i7T4eNBp+a22FcI9p/Qdzhul15ej7W9fH8tQ==}
+  /edifice-ts-client@1.4.0-develop-pedago.2:
+    resolution: {integrity: sha512-rqrYVKVVkqo2ef4bQckLNcuFDpvEaN6BQOdeMoYdHn+3sRM5Q0MEMDSFOzvBfrY9LzR9eBk3wtt7kP12oSNN3g==}
     engines: {node: 18 || 20}
     dependencies:
       axios: 1.6.6
@@ -3351,8 +3351,8 @@ packages:
       - debug
     dev: true
 
-  /electron-to-chromium@1.4.748:
-    resolution: {integrity: sha512-VWqjOlPZn70UZ8FTKUOkUvBLeTQ0xpty66qV0yJcAGY2/CthI4xyW9aEozRVtuwv3Kpf5xTesmJUcPwuJmgP4A==}
+  /electron-to-chromium@1.4.749:
+    resolution: {integrity: sha512-LRMMrM9ITOvue0PoBrvNIraVmuDbJV5QC9ierz/z5VilMdPOVMjOtpICNld3PuXuTZ3CHH/UPxX9gHhAPwi+0Q==}
     dev: true
 
   /emoji-picker-react@4.5.2(react@18.2.0):
@@ -5129,7 +5129,7 @@ packages:
     dependencies:
       loose-envify: 1.4.0
       react: 18.2.0
-      scheduler: 0.23.0
+      scheduler: 0.23.1
 
   /react-error-boundary@4.0.12(react@18.2.0):
     resolution: {integrity: sha512-kJdxdEYlb7CPC1A0SeUY38cHpjuu6UkvzKiAmqmOFL21VRfMhOcWxTCBgLVCO0VEMh9JhFNcVaXlV4/BTpiwOA==}
@@ -5216,8 +5216,8 @@ packages:
     resolution: {integrity: sha512-kzmNjIgU32mO4mmH5+iUyrqlpFQhF8K2k7eZ4fdLSOPFrD1XgEuSBv9LDEgxRXTMBqMd8ppT0x6TIzqE5pdGdw==}
     dev: false
 
-  /react-refresh@0.14.0:
-    resolution: {integrity: sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==}
+  /react-refresh@0.14.1:
+    resolution: {integrity: sha512-iZiRCtNGY3QYP3pYOSSBOvQmBpQTcJccr/VcK2blpJrpPTUDjeN51mxm5nsrkCzBwsbGUj+TN9q2oPz5E13FLg==}
     engines: {node: '>=0.10.0'}
     dev: true
 
@@ -5432,8 +5432,8 @@ packages:
       is-regex: 1.1.4
     dev: true
 
-  /scheduler@0.23.0:
-    resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
+  /scheduler@0.23.1:
+    resolution: {integrity: sha512-5GKS5JGfiah1O38Vfa9srZE4s3wdHbwjlCrvIookrg2FO9aIwKLOJXuJQFlEfNcVSOXuaL2hzDeY20uVXcUtrw==}
     dependencies:
       loose-envify: 1.4.0
 

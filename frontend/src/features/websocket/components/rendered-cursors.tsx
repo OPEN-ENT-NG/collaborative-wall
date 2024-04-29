@@ -1,18 +1,25 @@
-import { createWebsocketStore } from "~/store";
-import { useConnectedUsers } from "../hooks/use-connected-users";
-import { useWebsocketStore } from "../hooks/use-websocket-store";
+import { useUser } from "@edifice-ui/react";
+import { useWebsocketStore } from "~/store";
 import { Cursor } from "./cursor";
 
 export const RenderedCursors = () => {
-  const [filteredUsers, numberOfUsers] = useConnectedUsers();
+  const { user } = useUser();
 
-  const { moveUsers } = useWebsocketStore();
+  const connectedUsers = useWebsocketStore((state) => state.connectedUsers);
+  const maxConnectedUsers = useWebsocketStore(
+    (state) => state.maxConnectedUsers,
+  );
+  const isVisible = useWebsocketStore((state) => state.isVisible);
+  const moveUsers = useWebsocketStore((state) => state.moveUsers);
 
-  const isVisible = createWebsocketStore((state) => state.isVisible);
+  const numberOfUsers = connectedUsers.length <= maxConnectedUsers;
+  const filteredUsers = connectedUsers.filter(
+    (connectedUser: { id: string | undefined }) =>
+      connectedUser.id !== user?.userId,
+  );
 
   const renderCursors = () => {
     if (!filteredUsers || !moveUsers) return null;
-
     if (isVisible) return;
 
     return moveUsers.map((moveUser) => {
@@ -26,5 +33,6 @@ export const RenderedCursors = () => {
       );
     });
   };
+
   return numberOfUsers ? renderCursors() : null;
 };

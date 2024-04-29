@@ -12,6 +12,7 @@ import {
 const websocketState = {
   maxAttempts: 5,
   maxConnectedUsers: 0,
+  readyState: false,
   mode: Mode.WS,
   status: Status.IDLE,
   connectedUsers: [],
@@ -22,14 +23,13 @@ const websocketState = {
   isVisible: false,
 };
 
-export const createWebsocketStore = create<WebsocketState & WebsocketAction>(
+export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
   (set, get) => {
     return {
       ...websocketState,
-      maxAttempts: 5,
       onReady(mode) {
         if (mode === Mode.HTTP) {
-          set({ openSocketModal: true });
+          set({ openSocketModal: true, readyState: true });
         } else {
           // connected to websocket once => should be able to reconnect even if network is unstable
           set({ maxAttempts: Infinity });
@@ -47,7 +47,7 @@ export const createWebsocketStore = create<WebsocketState & WebsocketAction>(
         if (mode === Mode.WS) {
           wsProvider?.close();
         }
-        set({ status: Status.STOPPED });
+        set({ status: Status.STOPPED, readyState: false });
       },
       setIsVisible: (isVisible) => set({ isVisible }),
       setResourceId(resourceId) {

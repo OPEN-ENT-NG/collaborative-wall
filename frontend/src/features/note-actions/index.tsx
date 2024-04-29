@@ -4,16 +4,18 @@ import { Delete, Edit } from "@edifice-ui/icons";
 import { Dropdown, IconButtonProps } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { v4 as uuid } from "uuid";
 
-import { NoteProps } from "~/models/notes";
-import { ActionList } from "../note-modal/components/action-list";
-import { useWebsocketStore } from "../websocket/hooks/use-websocket-store";
-import { NoteDropdownMenuOptions } from "./types";
+import { v4 as uuid } from "uuid";
 import { useAccessStore } from "~/hooks/use-access-rights";
+import { useInvalidateNoteQueries } from "~/hooks/use-invalidate-note-queries";
+import { NoteProps } from "~/models/notes";
+import { useWebsocketStore } from "~/store";
+import { ActionList } from "../note-modal/components/action-list";
+import { NoteDropdownMenuOptions } from "./types";
 
 export const NoteActions = ({ note }: { note: NoteProps }) => {
   const navigate = useNavigate();
+  const invalidateNoteQueries = useInvalidateNoteQueries();
 
   const { hasRightsToUpdateNote } = useAccessStore();
   const { sendNoteDeletedEvent } = useWebsocketStore();
@@ -23,16 +25,13 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
     navigate(`note/${note._id}?mode=edit`);
   };
 
-  /* const handleCopy = () => {
-    TODO
-  }; */
-
   const handleDelete = async () => {
     await sendNoteDeletedEvent({
       _id: note._id,
       actionType: "Do",
       actionId: uuid(),
     });
+    await invalidateNoteQueries();
   };
 
   const dropdownOptions: NoteDropdownMenuOptions[] = [

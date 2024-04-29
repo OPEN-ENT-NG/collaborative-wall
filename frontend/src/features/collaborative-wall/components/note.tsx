@@ -5,11 +5,11 @@ import { useEffect } from "react";
 import { NodeProps } from "reactflow";
 import { NoteActions } from "~/features/note-actions";
 import { useAccessStore } from "~/hooks/use-access-rights";
-import { useWhiteboard } from "~/store";
+import { useWhiteboardStore } from "~/store";
 import { ShowMediaType } from "./show-media-type";
 
 export const Note = ({ data }: NodeProps) => {
-  const canMoveNote = useWhiteboard((state) => state.canMoveNote);
+  const canMoveNote = useWhiteboardStore((state) => state.canMoveNote);
   const { hasRightsToUpdateNote } = useAccessStore();
 
   const style = {

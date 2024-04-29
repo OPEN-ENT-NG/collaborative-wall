@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 import { useWall } from "~/services/queries";
 
-import { useWhiteboard } from "~/store";
+import { useWhiteboardStore } from "~/store";
 
 export default function DescriptionModal(): JSX.Element | null {
   const { appCode } = useOdeClient();
@@ -12,14 +12,14 @@ export default function DescriptionModal(): JSX.Element | null {
 
   const { wall } = useWall();
 
-  const { openDescriptionModal, seOpenDescriptionModal } = useWhiteboard(
+  const { openDescriptionModal, setOpenDescriptionModal } = useWhiteboardStore(
     useShallow((state) => ({
-      seOpenDescriptionModal: state.setOpenDescriptionModal,
+      setOpenDescriptionModal: state.setOpenDescriptionModal,
       openDescriptionModal: state.openDescriptionModal,
     })),
   );
 
-  const handleClose = () => seOpenDescriptionModal(false);
+  const handleClose = () => setOpenDescriptionModal(false);
 
   return openDescriptionModal
     ? createPortal(

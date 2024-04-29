@@ -19,7 +19,7 @@ const initialState = {
   },
 };
 
-export const useWhiteboard = create<State & Action>((set) => ({
+export const useWhiteboardStore = create<State & Action>((set) => ({
   ...initialState,
   setIsMobile: (query) => set({ isMobile: query === "mobile" }),
   toggleCanMoveBoard: () =>

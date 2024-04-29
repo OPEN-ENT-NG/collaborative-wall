@@ -12,7 +12,7 @@ import { AppHeader } from "~/features/app/app-header";
 import { Wall } from "~/features/collaborative-wall/wall";
 import DescriptionWall from "~/features/description/components/description-wall";
 import { useAccessStore } from "~/hooks/use-access-rights";
-import { useWhiteboard } from "~/store";
+import { useWhiteboardStore } from "~/store";
 import { useRightsStore } from "~/store/rights/store";
 import "./index.css";
 
@@ -26,7 +26,7 @@ export const loader =
     const query = searchParams.get("xApp");
 
     if (query) {
-      useWhiteboard.setState((state) => ({
+      useWhiteboardStore.setState((state) => ({
         ...state,
         isMobile: !!query,
       }));
@@ -49,7 +49,7 @@ export const loader =
 
 export const CollaborativeWall = () => {
   const isLoadingRights = useRightsStore((state) => state.isLoading);
-  const isMobile = useWhiteboard((state) => state.isMobile);
+  const isMobile = useWhiteboardStore((state) => state.isMobile);
 
   const { wall } = useWall();
 

@@ -1,9 +1,15 @@
-import { Button, useOdeClient } from "@edifice-ui/react";
+import { Button, LoadingScreen, useOdeClient } from "@edifice-ui/react";
+import { Suspense, lazy } from "react";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 import { useWall } from "~/services/queries";
 
-import { useWhiteboard } from "~/store";
+import { useWhiteboardStore } from "~/store";
+
+const DescriptionModal = lazy(
+  async () =>
+    await import("~/features/description/components/description-modal"),
+);
 
 export default function DescriptionWall() {
   const { appCode } = useOdeClient();
@@ -11,10 +17,10 @@ export default function DescriptionWall() {
 
   const { wall } = useWall();
 
-  const { seOpenDescriptionModal } = useWhiteboard(
+  const { openDescriptionModal, setOpenDescriptionModal } = useWhiteboardStore(
     useShallow((state) => ({
-      seOpenDescriptionModal: state.setOpenDescriptionModal,
       openDescriptionModal: state.openDescriptionModal,
+      setOpenDescriptionModal: state.setOpenDescriptionModal,
     })),
   );
 
@@ -24,11 +30,15 @@ export default function DescriptionWall() {
       <Button
         variant="ghost"
         color="tertiary"
-        onClick={() => seOpenDescriptionModal(true)}
+        onClick={() => setOpenDescriptionModal(true)}
         style={{ whiteSpace: "nowrap" }}
       >
         {t("collaborativewall.see.more", { ns: appCode })}
       </Button>
+
+      <Suspense fallback={<LoadingScreen position={false} />}>
+        {openDescriptionModal && wall?.description && <DescriptionModal />}
+      </Suspense>
     </div>
   );
 }

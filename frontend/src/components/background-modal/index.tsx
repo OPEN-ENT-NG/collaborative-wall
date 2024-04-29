@@ -16,11 +16,11 @@ import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 
 import { backgroundColors, backgroundImages } from "~/config";
-import { useWebsocketStore } from "~/features/websocket/hooks/use-websocket-store";
 import {
   CollaborativeWallProps,
   PickedCollaborativeWallProps,
 } from "~/models/wall";
+import { useWebsocketStore } from "~/store";
 
 const THUMBNAIL_WIDTH = 288;
 const THUMBNAIL_HEIGHT = 180;
@@ -95,7 +95,7 @@ export default function BackgroundModal({
     setBackgroundImageValue("");
   }, []);
 
-  const handleSaveWall = () => {
+  const handleSaveWall = async () => {
     const newWall: PickedCollaborativeWallProps = {
       background: {
         path: backgroundImageValue,
@@ -105,7 +105,7 @@ export default function BackgroundModal({
       name: wall.name,
       icon: wall.icon,
     };
-    sendWallUpdateEvent({ ...newWall, _id: wall._id });
+    await sendWallUpdateEvent({ ...newWall, _id: wall._id });
     setIsOpen(false);
   };
 
