@@ -57,6 +57,7 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
         event.preventDefault();
         event.stopPropagation();
       }}
+      className="dropdown-note-action"
     >
       <Dropdown placement="right-start">
         {(
