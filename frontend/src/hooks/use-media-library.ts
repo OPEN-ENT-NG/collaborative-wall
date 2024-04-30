@@ -23,6 +23,8 @@ export const useMediaLibrary = () => {
   const onSuccess = (result: MediaLibraryResult) => {
     let updatedMedia;
 
+    console.log(mediaLibraryRef.current?.type, { result }, typeof result);
+
     switch (mediaLibraryRef.current?.type) {
       case "video": {
         if (typeof result === "object") {
@@ -36,6 +38,16 @@ export const useMediaLibrary = () => {
           mediaLibraryRef.current?.hide();
           updatedMedia = href;
         }
+        break;
+      }
+      case "embedder": {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(result, "text/html");
+        const element = doc.body.firstChild as HTMLBodyElement;
+
+        const href = element?.getAttribute("src");
+        mediaLibraryRef.current?.hide();
+        updatedMedia = href;
         break;
       }
       case "audio": {
