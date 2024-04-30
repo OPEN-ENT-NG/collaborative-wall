@@ -161,6 +161,17 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         renderView(request, new JsonObject(), "index.html", null);
     }
 
+    /**
+     * Display react front print /print/id/:id
+     * @param request
+     */
+    @Get("/print/id/:id")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    public void viewPrintById(HttpServerRequest request) {
+        renderView(request, new JsonObject(), "index.html", null);
+    }
+
+    @Deprecated
     @Get("/print/wall")
     @ApiDoc("Allows to print a wall")
     @SecuredAction("collaborativewall.print")
