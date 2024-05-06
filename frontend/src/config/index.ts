@@ -40,7 +40,7 @@ export const translateExtent: CoordinateExtent = [
 ];
 
 export const nodeExtent: CoordinateExtent = [
-  [-wallConfig.WIDTH_WALL, -wallConfig.HEIGHT_WALL],
+  [0, 0],
   [wallConfig.WIDTH_WALL, wallConfig.HEIGHT_WALL],
 ];
 
