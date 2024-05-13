@@ -24,6 +24,7 @@ export const useEvents = () => {
 
   const {
     subscribe,
+    queryForMetadata,
     disconnect,
     setResourceId,
     setConnectedUsers,
@@ -32,6 +33,8 @@ export const useEvents = () => {
     setIsVisible,
   } = useWebsocketStore(
     useShallow((state) => ({
+      connectedUsers: state.connectedUsers,
+      queryForMetadata: state.queryForMetadata,
       subscribe: state.subscribe,
       disconnect: state.disconnect,
       setResourceId: state.setResourceId,
@@ -170,6 +173,10 @@ export const useEvents = () => {
             ...otherProps,
           });
           deleteNoteQueryData(queryClient, event.note);
+          break;
+        }
+        case "disconnection": {
+          queryForMetadata();
           break;
         }
       }

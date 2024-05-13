@@ -203,6 +203,15 @@ export type NoteAddedPayloadEvent = {
     idwall: string;
   };
 };
+
+export type DisconnectionPayloadEvent = {
+  wallId: string;
+  userId: string;
+  type: "disconnection";
+  /* note: NoteProps & {
+    idwall: string;
+  }; */
+};
 export type EventPayload = (
   | MetadataEvent
   | PingPayload
@@ -216,6 +225,7 @@ export type EventPayload = (
   | NoteUpdatedPayloadEvent
   | NoteSelectedPayload
   | NoteDeletedPayloadEvent
+  | DisconnectionPayloadEvent
 ) &
   ActionData;
 
