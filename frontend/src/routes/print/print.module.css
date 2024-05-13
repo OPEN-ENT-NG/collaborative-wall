@@ -1,5 +1,7 @@
 .print-full-page {
   pointer-events: none;
+  print-color-adjust: exact !important;
+  -webkit-print-color-adjust: exact !important;
 }
 
 .transform-wrapper-print {
