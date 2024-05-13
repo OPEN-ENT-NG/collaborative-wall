@@ -33,9 +33,8 @@ export const useEvents = () => {
     setIsVisible,
   } = useWebsocketStore(
     useShallow((state) => ({
-      connectedUsers: state.connectedUsers,
-      queryForMetadata: state.queryForMetadata,
       subscribe: state.subscribe,
+      queryForMetadata: state.queryForMetadata,
       disconnect: state.disconnect,
       setResourceId: state.setResourceId,
       setConnectedUsers: state.setConnectedUsers,
@@ -78,11 +77,13 @@ export const useEvents = () => {
           break;
         }
         case "noteAdded": {
-          setHistory({
-            type: "create",
-            item: event.note,
-            ...otherProps,
-          });
+          if (user?.userId === event.userId) {
+            setHistory({
+              type: "create",
+              item: event.note,
+              ...otherProps,
+            });
+          }
           queryClient.invalidateQueries({
             queryKey: notesQueryOptions(wall?._id as string).queryKey,
           });
@@ -108,70 +109,71 @@ export const useEvents = () => {
             ...event.note,
             wallid: event.wallId,
           });
-          /* queryClient.invalidateQueries({
-            queryKey: notesQueryOptions(id).queryKey,
-          }); */
           break;
         }
         case "noteUpdated": {
           // if media is missing => it means that it has been deleted
-          if (!event.note.media) {
-            event.note.media = null;
-          }
+          if (!event.note.media) event.note.media = null;
+
           updateData(queryClient, { ...event.note, idwall: event.wallId });
-          if (
-            event.oldNote.x !== event.note.x ||
-            event.oldNote.y !== event.note.y
-          ) {
-            // note has been moved
-            setHistory({
-              type: "move",
-              item: event.note,
-              previous: {
-                x: event.oldNote.x,
-                y: event.oldNote.y,
-              },
-              next: {
-                x: event.note.x,
-                y: event.note.y,
-              },
-              ...otherProps,
-            });
-          } else {
-            // note has been updated
-            setHistory({
-              type: "edit",
-              item: {
-                ...event.note,
-                content: event.note.content,
-                color: event.note.color,
-                media: event.note.media,
-              },
-              previous: {
-                x: event.oldNote.x,
-                y: event.oldNote.y,
-                color: event.oldNote.color,
-                content: event.oldNote.content,
-                media: event.oldNote.media || null,
-              },
-              next: {
-                x: event.note.x,
-                y: event.note.y,
-                color: event.note.color,
-                content: event.note.content,
-                media: event.note.media || null,
-              },
-              ...otherProps,
-            });
+
+          if (user?.userId === event.userId) {
+            if (
+              event.oldNote.x !== event.note.x ||
+              event.oldNote.y !== event.note.y
+            ) {
+              // note has been moved
+              setHistory({
+                type: "move",
+                item: event.note,
+                previous: {
+                  x: event.oldNote.x,
+                  y: event.oldNote.y,
+                },
+                next: {
+                  x: event.note.x,
+                  y: event.note.y,
+                },
+                ...otherProps,
+              });
+            } else {
+              // note has been updated
+              setHistory({
+                type: "edit",
+                item: {
+                  ...event.note,
+                  content: event.note.content,
+                  color: event.note.color,
+                  media: event.note.media,
+                },
+                previous: {
+                  x: event.oldNote.x,
+                  y: event.oldNote.y,
+                  color: event.oldNote.color,
+                  content: event.oldNote.content,
+                  media: event.oldNote.media || null,
+                },
+                next: {
+                  x: event.note.x,
+                  y: event.note.y,
+                  color: event.note.color,
+                  content: event.note.content,
+                  media: event.note.media || null,
+                },
+                ...otherProps,
+              });
+            }
           }
           break;
         }
         case "noteDeleted": {
-          setHistory({
-            type: "delete",
-            item: event.note,
-            ...otherProps,
-          });
+          if (user?.userId === event.userId) {
+            setHistory({
+              type: "delete",
+              item: event.note,
+              ...otherProps,
+            });
+          }
           deleteNoteQueryData(queryClient, event.note);
           break;
         }

@@ -161,20 +161,21 @@ export type PickedNoteUpdate = Pick<
   "_id" | "content" | "media" | "color" | "x" | "y"
 >;
 
-export type NoteUpdatedPayloadEvent = {
-  wallId: string;
+export type NoteUpdatedPayload = {
   type: "noteUpdated";
+  wallId: string;
   noteId: string;
-  oldNote: NoteProps;
-  note: NoteProps;
 };
 
+export type NoteUpdatedPayloadEvent = {
+  oldNote: NoteProps;
+  userId: string;
+  note: NoteProps;
+} & NoteUpdatedPayload;
+
 export type NoteUpdatedPayloadAction = {
-  wallId: string;
-  type: "noteUpdated";
-  noteId: string;
   note: PickedNoteUpdate & { modified?: { $date: number } };
-};
+} & NoteUpdatedPayload;
 
 // TODO fin
 
@@ -184,21 +185,23 @@ export type NoteSelectedPayload = {
   noteId: string;
 };
 
-export type NoteDeletedPayloadAction = {
+export type NoteDeletedPayload = {
   wallId: string;
   type: "noteDeleted";
   noteId: string;
 };
+
+export type NoteDeletedPayloadAction = NoteDeletedPayload;
+
 export type NoteDeletedPayloadEvent = {
-  wallId: string;
-  type: "noteDeleted";
-  noteId: string;
   note: NoteProps;
-};
+  userId: string;
+} & NoteDeletedPayload;
 
 export type NoteAddedPayloadEvent = {
   wallId: string;
   type: "noteAdded";
+  userId: string;
   note: NoteProps & {
     idwall: string;
   };
