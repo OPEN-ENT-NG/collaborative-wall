@@ -1,3 +1,7 @@
+import clsx from "clsx";
+
+import styles from "./color-item.module.css";
+
 export const Circle = ({
   borderColor,
   className,
@@ -7,12 +11,8 @@ export const Circle = ({
 }) => {
   return (
     <div
-      className={className}
+      className={clsx(className, styles.item)}
       style={{
-        width: "22px",
-        height: "22px",
-        border: "1px solid",
-        borderRadius: "22px",
         borderColor: borderColor,
       }}
     />
