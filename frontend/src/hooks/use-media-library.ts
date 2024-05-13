@@ -23,8 +23,6 @@ export const useMediaLibrary = () => {
   const onSuccess = (result: MediaLibraryResult) => {
     let updatedMedia;
 
-    console.log(mediaLibraryRef.current?.type, { result }, typeof result);
-
     switch (mediaLibraryRef.current?.type) {
       case "video": {
         if (typeof result === "object") {
