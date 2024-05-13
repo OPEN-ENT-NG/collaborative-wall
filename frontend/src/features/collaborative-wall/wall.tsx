@@ -1,5 +1,4 @@
 import { LoadingScreen } from "@edifice-ui/react";
-import { Suspense, lazy } from "react";
 import { Outlet } from "react-router-dom";
 import ReactFlow from "reactflow";
 import "reactflow/dist/base.css";
@@ -12,15 +11,12 @@ import { Mode, Status } from "~/store/websocket/types";
 import { useCustomRF } from "../reactflow/use-custom-reactflow";
 import { RenderedCursors } from "../websocket/components/rendered-cursors";
 import { useEvents } from "../websocket/hooks/use-events";
-import { useProviderConnection } from "../websocket/hooks/use-provider-connexion";
-import { CollaborativeWallContainer } from "./components/container";
+import { useProviderConnection } from "../websocket/hooks/use-provider-connection";
+import { CollaborativeWallContainer } from "./components/collaborative-wall-container";
 import { CustomBackground } from "./components/custom-background";
 import { ToolbarWrapper } from "./components/toolbar";
 
 /* Lazy Loaded Modal */
-const WebsocketModal = lazy(
-  async () => await import("~/features/websocket/components/modal"),
-);
 
 export const Wall = () => {
   /* Get fresh data from react query */
@@ -36,16 +32,13 @@ export const Wall = () => {
   );
 
   /* Websocket Store */
-  const { mode, status, readyState, openSocketModal, setOpenSocketModal } =
-    useWebsocketStore(
-      useShallow((state) => ({
-        mode: state.mode,
-        status: state.status,
-        readyState: state.readyState,
-        openSocketModal: state.openSocketModal,
-        setOpenSocketModal: state.setOpenSocketModal,
-      })),
-    );
+  const { mode, status, readyState } = useWebsocketStore(
+    useShallow((state) => ({
+      mode: state.mode,
+      status: state.status,
+      readyState: state.readyState,
+    })),
+  );
 
   /* React Flow */
   const {
@@ -66,6 +59,8 @@ export const Wall = () => {
 
   /* Hook to check HTTP or Websocket connection */
   useProviderConnection();
+
+  /* Websocket Events */
   useEvents();
 
   if (isPending || !readyState || isIDLE)
@@ -105,15 +100,6 @@ export const Wall = () => {
 
         <Outlet />
       </CollaborativeWallContainer>
-
-      <Suspense>
-        {openSocketModal && (
-          <WebsocketModal
-            isOpen={openSocketModal}
-            onClose={() => setOpenSocketModal(false)}
-          />
-        )}
-      </Suspense>
     </>
   );
 };

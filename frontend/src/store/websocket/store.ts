@@ -29,12 +29,12 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
       ...websocketState,
       onReady(mode) {
         if (mode === Mode.HTTP) {
-          set({ openSocketModal: true, readyState: true });
+          set({ openSocketModal: true });
         } else {
           // connected to websocket once => should be able to reconnect even if network is unstable
           set({ maxAttempts: Infinity });
         }
-        set({ mode, status: Status.STARTED });
+        set({ mode, status: Status.STARTED, readyState: true });
       },
       onClose() {
         set({ status: Status.STOPPED });

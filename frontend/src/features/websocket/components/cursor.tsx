@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { useOdeTheme } from "@edifice-ui/react";
 
-import { usePerfectCursor } from "../../hooks/use-cursor";
+import { usePerfectCursor } from "../hooks/use-cursor";
 
 export function Cursor({
   point,

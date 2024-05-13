@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useWall } from "~/services/queries";
 import { useWebsocketStore } from "~/store/websocket/store";
-import { Mode } from "~/store/websocket/types";
+import { Mode, Status } from "~/store/websocket/types";
 import { useHttpMode } from "./use-http-mode";
 import { useWSMode } from "./use-ws-mode";
 
@@ -9,17 +9,9 @@ export const useProviderConnection = () => {
   const { wall } = useWall();
 
   const mode = useWebsocketStore((state) => state.mode);
-  const resourceId = useWebsocketStore((state) => state.resourceId);
 
-  const httpProvider = useHttpMode(mode === Mode.HTTP, resourceId);
-  const wsProvider =
-    useWSMode(/* {
-    onMessage(event) {
-      if (store.mode === Mode.WS) {
-        store.subscribers.forEach((sub) => sub(event));
-      }
-    },
-  } */);
+  const httpProvider = useHttpMode(mode === Mode.HTTP, wall?._id);
+  const wsProvider = useWSMode();
 
   useEffect(() => {
     /* Correctly use setState from zustand to update the store */
@@ -28,9 +20,11 @@ export const useProviderConnection = () => {
       resourceId: wall?._id,
       httpProvider,
       wsProvider,
+      readyState: mode === Mode.HTTP,
+      openSocketModal: mode === Mode.HTTP,
+      status: mode === Mode.HTTP ? Status.STARTED : Status.IDLE,
     }));
 
-    // return cleanup;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
