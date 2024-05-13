@@ -15,7 +15,6 @@ import {
   useOdeClient,
 } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 
 import { useWall } from "~/services/queries";
@@ -28,8 +27,6 @@ export type ActionDropdownMenuOptions = DropdownMenuOptions & {
 };
 
 export const AppActions = () => {
-  const navigate = useNavigate();
-
   const { wall } = useWall();
   const { appCode } = useOdeClient();
   const { t } = useTranslation();
@@ -72,7 +69,7 @@ export const AppActions = () => {
       id: "print",
       label: t("print"),
       icon: <Print />,
-      action: () => navigate(`/print/id/${wall?._id}`),
+      action: () => window.open(`/collaborativewall/print/id/${wall?._id}`),
       visibility: true,
     },
   ];
