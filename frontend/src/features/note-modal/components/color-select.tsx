@@ -2,8 +2,8 @@ import { Select, useOdeClient } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
 import { noteColors } from "~/config";
 
+import { Circle } from "~/components/color-item/color-item";
 import { NoteProps } from "~/models/notes";
-import { Circle } from "~/utils/circle";
 
 export const ColorSelect = ({
   setColorValue,
