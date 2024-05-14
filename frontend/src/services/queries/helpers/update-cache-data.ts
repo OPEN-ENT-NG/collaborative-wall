@@ -1,8 +1,14 @@
 import { QueryClient } from "@tanstack/react-query";
 import { NoteProps } from "~/models/notes";
-import { notesQueryOptions } from "..";
+import { noteQueryOptions, notesQueryOptions } from "..";
 
 export const updateData = (queryClient: QueryClient, note: NoteProps) => {
+  // update individual note
+  queryClient.setQueryData(
+    noteQueryOptions(note.idwall, note._id).queryKey,
+    () => note,
+  );
+  // update list notes
   return queryClient.setQueryData(
     notesQueryOptions(note.idwall).queryKey,
     (previousNotes: NoteProps[] | undefined) => {
