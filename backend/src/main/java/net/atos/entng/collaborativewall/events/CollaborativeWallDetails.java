@@ -17,17 +17,23 @@ public class CollaborativeWallDetails {
   private final String description;
   private final CollaborativeWallBackground background;
   private final String icon;
+  private final Object shared;
+  private final Object owner;
 
   @JsonCreator
   public CollaborativeWallDetails(@JsonProperty("_id") final String id,
                                   @JsonProperty("name") final String name,
                                   @JsonProperty("description") final String description,
                                   @JsonProperty("background") final Object background,
-                                  @JsonProperty("icon") final String icon) {
+                                  @JsonProperty("icon") final String icon,
+                                  @JsonProperty("shared") final Object shared,
+                                  @JsonProperty("owner") final Object owner) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.icon = icon;
+    this.shared = shared;
+    this.owner = owner;
     // manage imported background as String
     if(background == null){
       this.background = null;
@@ -42,7 +48,7 @@ public class CollaborativeWallDetails {
     }
   }
   public CollaborativeWallDetails(final String id, final CollaborativeWallDetails other) {
-    this(id, other.name, other.description, other.background, other.icon);
+    this(id, other.name, other.description, other.background, other.icon, other.shared, other.owner);
   }
 
 
@@ -64,6 +70,14 @@ public class CollaborativeWallDetails {
 
   public String getIcon() {
     return icon;
+  }
+
+  public Object getShared() {
+    return shared;
+  }
+
+  public Object getOwner() {
+    return owner;
   }
 
   public JsonObject toJson(){

@@ -33,12 +33,14 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import net.atos.entng.collaborativewall.CollaborativeWall;
 import net.atos.entng.collaborativewall.controllers.helpers.NotesHelper;
+import net.atos.entng.collaborativewall.events.CollaborativeWallDetails;
 import net.atos.entng.collaborativewall.events.CollaborativeWallUserAction;
 import net.atos.entng.collaborativewall.explorer.WallExplorerPlugin;
 import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
 import net.atos.entng.collaborativewall.service.CollaborativeWallService;
 import net.atos.entng.collaborativewall.service.NoteService;
 import net.atos.entng.collaborativewall.service.impl.MongoDbCollaborativeWallService;
+import org.entcore.common.controller.ControllerHelper;
 import org.entcore.common.events.EventHelper;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
@@ -268,7 +270,23 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @ApiDoc("Allows to get a collaborative wall associated to the given identifier")
     @SecuredAction(value = "collaborativewall.read", type = ActionType.RESOURCE)
     public void retrieve(HttpServerRequest request) {
-        super.retrieve(request);
+        UserUtils.getAuthenticatedUserInfos(this.eb, request).onSuccess(user -> {
+            String id = request.params().get("id");
+            this.crudService.retrieve(id, user,  result -> {
+                try{
+                    if(result.isRight()){
+                        final JsonObject json = CollaborativeWallDetails.fromJson(result.right().getValue()).toJson();
+                        Renders.renderJson(request, this.addNormalizedRights(json));
+                    }else{
+                        final JsonObject error = (new JsonObject()).put("error", result.left().getValue());
+                        Renders.renderJson(request, error, 400);
+                    }
+                }catch (Exception e){
+                    log.error("Retrieve wall failed:", e);
+                    Renders.renderError(request, new JsonObject().put("error","unexpected.error"));
+                }
+            });
+        });
     }
 
     @Override
