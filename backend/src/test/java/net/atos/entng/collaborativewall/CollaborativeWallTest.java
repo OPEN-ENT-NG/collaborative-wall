@@ -1,5 +1,6 @@
 package net.atos.entng.collaborativewall;
 
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
@@ -38,7 +39,7 @@ public class CollaborativeWallTest {
 
     @Test
     public void shouldSerializeWall(TestContext context) {
-        final CollaborativeWallDetails note = new CollaborativeWallDetails("ID", "NAME", "DESCRIPTION", new CollaborativeWallBackground("path/to/image", "RED"), "ICON");
+        final CollaborativeWallDetails note = new CollaborativeWallDetails("ID", "NAME", "DESCRIPTION", new CollaborativeWallBackground("path/to/image", "RED"), "ICON", new JsonArray(), new JsonObject().put("userId", "ID"));
         // parse
         final String toJson1 = note.toJson().toString();
         // parse then serialize
@@ -48,7 +49,7 @@ public class CollaborativeWallTest {
 
     @Test
     public void shouldSerializeWallUsingBackgroundString(TestContext context) {
-        final CollaborativeWallDetails note = new CollaborativeWallDetails("ID", "NAME", "DESCRIPTION", new CollaborativeWallBackground("path/to/image", ""), "ICON");
+        final CollaborativeWallDetails note = new CollaborativeWallDetails("ID", "NAME", "DESCRIPTION", new CollaborativeWallBackground("path/to/image", ""), "ICON", null, new JsonObject());
         // parse
         final String toJson1 = note.toJson().toString();
         // parse then serialize
