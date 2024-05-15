@@ -172,11 +172,12 @@
 }
 
 .note .card-container:hover .card-actions-btn,
-.react-flow__node-note .card-container:hover .card-actions-btn {
+.react-flow__node-note .card-container:hover .card-actions-btn,
+.react-flow__node-note .card-container .card-actions-btn[aria-expanded="true"] {
   opacity: 1;
 }
 
-.card.is-selected{
+.card.is-selected {
   border-width: 3px;
   border-color: #ff8d2e;
 }
@@ -204,7 +205,7 @@ p.is-editor-empty:first-child::before {
   }
 }
 
-@media (max-width: 1300px) {
+@media (hover: none) {
   .dropdown-note-action .dropdown .btn {
     opacity: 1;
   }

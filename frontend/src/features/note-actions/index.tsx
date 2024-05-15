@@ -17,9 +17,10 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
   const navigate = useNavigate();
   const invalidateNoteQueries = useInvalidateNoteQueries();
 
+  const { t } = useTranslation();
+
   const { hasRightsToUpdateNote } = useAccessStore();
   const { sendNoteDeletedEvent } = useWebsocketStore();
-  const { t } = useTranslation();
 
   const handleEdit = () => {
     navigate(`note/${note._id}?mode=edit`);
@@ -51,13 +52,7 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div
-      onMouseDown={(event) => {
-        event.preventDefault();
-        event.stopPropagation();
-      }}
-      className="dropdown-note-action"
-    >
+    <div className="dropdown-note-action nodrag">
       <Dropdown placement="right-start">
         {(
           triggerProps: JSX.IntrinsicAttributes &
