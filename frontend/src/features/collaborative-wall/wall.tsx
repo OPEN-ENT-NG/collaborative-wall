@@ -86,11 +86,12 @@ export const Wall = () => {
             nodeDragThreshold={0}
             onInit={onInit}
             onNodesChange={onNodesChange}
-            onNodeClick={isOpenDropdown ? undefined : onNodeClick}
+            onNodeClick={onNodeClick}
             onNodeDragStart={onNodeDragStart}
             onNodeDrag={onNodeDrag}
             onNodeDragStop={onNodeDragStop}
             onPaneMouseMove={onPaneMouseMove}
+            panOnDrag={!isOpenDropdown}
           >
             {isWebsocketMode && <RenderedCursors />}
             <CustomBackground />
