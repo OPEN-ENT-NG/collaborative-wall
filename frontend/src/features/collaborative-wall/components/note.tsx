@@ -21,6 +21,7 @@ export const Note = ({ data }: NodeProps) => {
   const editor = useEditor({
     extensions,
     content: data.note.content,
+    editable: false,
   });
 
   useEffect(() => {
