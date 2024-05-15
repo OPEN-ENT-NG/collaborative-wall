@@ -121,7 +121,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
 
     @Get("")
 	@SecuredAction("collaborativewall.view")
-	public void collaborativewall(HttpServerRequest request) {
+	public void view(HttpServerRequest request) {
         renderView(request, new JsonObject(), "index.html", null);
 		/* final String view = request.params().get("collaborativewall");
 		if("home".equals(view)){
