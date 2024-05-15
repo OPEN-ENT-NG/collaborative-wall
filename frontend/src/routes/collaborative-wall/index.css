@@ -176,13 +176,22 @@
   opacity: 1;
 }
 
-.card.is-selected{
+.card.is-selected {
   border-width: 3px;
   border-color: #ff8d2e;
 }
 
 .card.is-selected:hover {
   border-color: #ff8d2e;
+}
+
+.note:focus-within {
+  border: 2px solid #2a9cc8;
+  border-radius: 12px;
+}
+
+.card-container:focus-within .dropdown-note-action .dropdown .btn {
+  opacity: 1;
 }
 
 p.is-editor-empty:first-child::before {

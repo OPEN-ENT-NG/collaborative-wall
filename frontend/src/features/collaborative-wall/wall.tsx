@@ -84,6 +84,7 @@ export const Wall = () => {
             zoomOnDoubleClick={false}
             panOnScroll={true}
             nodeDragThreshold={0}
+            nodesFocusable={false}
             onInit={onInit}
             onNodesChange={onNodesChange}
             onNodeClick={isOpenDropdown ? undefined : onNodeClick}
