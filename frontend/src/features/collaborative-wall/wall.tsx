@@ -83,7 +83,7 @@ export const Wall = () => {
             zoomOnPinch={false}
             zoomOnDoubleClick={false}
             panOnScroll={true}
-            nodeDragThreshold={1}
+            nodeDragThreshold={0}
             onInit={onInit}
             onNodesChange={onNodesChange}
             onNodeClick={isOpenDropdown ? undefined : onNodeClick}
