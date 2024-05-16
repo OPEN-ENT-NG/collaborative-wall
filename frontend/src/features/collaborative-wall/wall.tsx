@@ -24,10 +24,10 @@ export const Wall = () => {
   const { notes } = useNotes();
 
   /* Collaborative Store */
-  const { isOpenDropdown, isMobile } = useWhiteboardStore(
+  const { dropdownState, isMobile } = useWhiteboardStore(
     useShallow((state) => ({
       isMobile: state.isMobile,
-      isOpenDropdown: state.isOpenDropdown,
+      dropdownState: state.dropdownState,
     })),
   );
 
@@ -92,7 +92,7 @@ export const Wall = () => {
             onNodeDrag={onNodeDrag}
             onNodeDragStop={onNodeDragStop}
             onPaneMouseMove={onPaneMouseMove}
-            panOnDrag={!isOpenDropdown}
+            panOnDrag={!dropdownState.isOpen}
           >
             {isWebsocketMode && <RenderedCursors />}
             <CustomBackground />

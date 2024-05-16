@@ -60,6 +60,7 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
             RefAttributes<HTMLButtonElement>,
         ) => (
           <ActionList
+            noteId={note._id}
             triggerProps={triggerProps}
             dropdownOptions={dropdownOptions}
           />

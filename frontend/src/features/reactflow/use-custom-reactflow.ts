@@ -25,6 +25,7 @@ export const useCustomRF = () => {
   /* Collaborative Wall Store */
   const isMobile = useWhiteboardStore((state) => state.isMobile);
   const canMoveNote = useWhiteboardStore((state) => state.canMoveNote);
+  const dropdownState = useWhiteboardStore((state) => state.dropdownState);
   const { toggleCanMoveBoard } = useWhiteboardStore();
 
   /* Stores */
@@ -70,6 +71,20 @@ export const useCustomRF = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notes, canMoveNote]);
+
+  useEffect(() => {
+    if (dropdownState.idDropdown) {
+      setNodes((prevNodes) =>
+        prevNodes.map((node, index) => ({
+          ...node,
+          zIndex:
+            node.id === dropdownState.idDropdown && dropdownState.isOpen
+              ? 1500
+              : index,
+        })),
+      );
+    }
+  }, [dropdownState]);
 
   const callbackFnToThrottle = useCallback(
     ({ _id, x, y }: { _id: string; x: number; y: number }) => {

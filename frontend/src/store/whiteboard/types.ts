@@ -3,7 +3,10 @@ export type State = {
   canMoveBoard: boolean;
   canMoveNote: boolean;
   isDragging: boolean;
-  isOpenDropdown: boolean;
+  dropdownState: {
+    isOpen: boolean;
+    idDropdown: string;
+  };
   openShareModal: boolean;
   openUpdateModal: boolean;
   openCreateModal: boolean;
@@ -28,6 +31,6 @@ export type Action = {
   setOpenCreateModal: (value: boolean) => void;
   setOpenDescriptionModal: (value: boolean) => void;
   setIsOpenBackgroundModal: (value: boolean) => void;
-  setIsOpenDropdown: (value: boolean) => void;
+  setDropdownState: (value: { isOpen: boolean; idDropdown: string }) => void;
   setPositionViewport: (value: { x: number; y: number }) => void;
 };

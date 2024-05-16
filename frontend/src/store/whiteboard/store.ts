@@ -6,7 +6,10 @@ const initialState = {
   canMoveBoard: true,
   canMoveNote: true,
   isDragging: false,
-  isOpenDropdown: false,
+  dropdownState: {
+    isOpen: false,
+    idDropdown: "",
+  },
   openShareModal: false,
   openUpdateModal: false,
   openCreateModal: false,
@@ -38,7 +41,8 @@ export const useWhiteboardStore = create<State & Action>((set) => ({
   setNumberOfNotes: (value: number) => set({ numberOfNotes: value }),
   setOpenDescriptionModal: (value) => set({ openDescriptionModal: value }),
   setIsOpenBackgroundModal: (value) => set({ openBackgroundModal: value }),
-  setIsOpenDropdown: (value) => set({ isOpenDropdown: value }),
+  setDropdownState: (value: { isOpen: boolean; idDropdown: string }) =>
+    set({ dropdownState: value }),
   setPositionViewport: (value: { x: number; y: number }) =>
     set({ positionViewport: value }),
 }));

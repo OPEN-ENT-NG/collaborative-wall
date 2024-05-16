@@ -6,18 +6,24 @@ import { NoteDropdownMenuOptions } from "~/features/note-actions/types";
 import { useWhiteboardStore } from "~/store";
 
 export const ActionList = ({
+  noteId,
   triggerProps,
   dropdownOptions,
 }: {
+  noteId: string;
   triggerProps: JSX.IntrinsicAttributes &
     Omit<IconButtonProps, "ref"> &
     RefAttributes<HTMLButtonElement>;
   dropdownOptions: NoteDropdownMenuOptions[];
 }) => {
-  const { setIsOpenDropdown } = useWhiteboardStore();
+  const { setDropdownState } = useWhiteboardStore();
 
   useEffect(() => {
-    setIsOpenDropdown(triggerProps["aria-expanded"] as boolean);
+    setDropdownState({
+      isOpen: triggerProps["aria-expanded"] as boolean,
+      idDropdown: noteId,
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [triggerProps["aria-expanded"]]);
 
