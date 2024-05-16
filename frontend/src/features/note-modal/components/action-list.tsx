@@ -41,7 +41,7 @@ export const ActionList = ({
               !dropdownOption.hidden && (
                 <Dropdown.Item
                   icon={dropdownOption.icon}
-                  onClick={() => dropdownOption.action(null)}
+                  onClick={dropdownOption.action}
                 >
                   {dropdownOption.label}
                 </Dropdown.Item>
