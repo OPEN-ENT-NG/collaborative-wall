@@ -22,11 +22,15 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
   const { hasRightsToUpdateNote } = useAccessStore();
   const { sendNoteDeletedEvent } = useWebsocketStore();
 
-  const handleEdit = () => {
+  const handleEdit = (event: React.MouseEvent) => {
+    event.stopPropagation();
+
     navigate(`note/${note._id}?mode=edit`);
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (event: React.MouseEvent) => {
+    event.stopPropagation();
+
     await sendNoteDeletedEvent({
       _id: note._id,
       actionType: "Do",
