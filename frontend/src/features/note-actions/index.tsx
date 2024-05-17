@@ -23,13 +23,21 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
   const { sendNoteDeletedEvent } = useWebsocketStore();
 
   const handleEdit = (event: React.MouseEvent) => {
-    event.stopPropagation();
+    // Stop Mouse click event propagation when user clicks on dropdown action
+    // to prevent ReactFlow onNodeClick event to open Note Modal on read mode
+    if (event) {
+      event.stopPropagation();
+    }
 
     navigate(`note/${note._id}?mode=edit`);
   };
 
   const handleDelete = async (event: React.MouseEvent) => {
-    event.stopPropagation();
+    // Stop Mouse click event propagation when user clicks on dropdown action
+    // to prevent ReactFlow onNodeClick event to open Note Modal on read mode
+    if (event) {
+      event.stopPropagation();
+    }
 
     await sendNoteDeletedEvent({
       _id: note._id,
