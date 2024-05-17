@@ -79,8 +79,8 @@
   "devDependencies": {
     "@axe-core/react": "4.8.4",
     "@tanstack/react-query-devtools": "5.8.4",
-    "@tiptap/extension-image": "^2.3.2",
-    "@tiptap/extension-table-cell": "^2.3.2",
+    "@tiptap/extension-image": "^2.4.0",
+    "@tiptap/extension-table-cell": "^2.4.0",
     "@types/node": "20.11.13",
     "@types/react": "18.2.48",
     "@types/react-dom": "18.2.18",

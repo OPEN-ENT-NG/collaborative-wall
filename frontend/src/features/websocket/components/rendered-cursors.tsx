@@ -9,7 +9,7 @@ export const RenderedCursors = () => {
   const maxConnectedUsers = useWebsocketStore(
     (state) => state.maxConnectedUsers,
   );
-  const isVisible = useWebsocketStore((state) => state.isVisible);
+  // const isVisible = useWebsocketStore((state) => state.isVisible);
   const moveUsers = useWebsocketStore((state) => state.moveUsers);
 
   const numberOfUsers = connectedUsers.length <= maxConnectedUsers;
@@ -20,10 +20,12 @@ export const RenderedCursors = () => {
 
   const renderCursors = () => {
     if (!filteredUsers || !moveUsers) return null;
-    if (isVisible) return;
 
     return moveUsers.map((moveUser) => {
       const user = filteredUsers.find((user) => user.id === moveUser.id);
+
+      if (moveUser.x === 0 && moveUser.y === 0) return;
+
       return (
         <Cursor
           key={moveUser.id}

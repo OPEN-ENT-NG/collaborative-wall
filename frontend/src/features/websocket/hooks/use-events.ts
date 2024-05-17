@@ -2,7 +2,6 @@ import { useUser } from "@edifice-ui/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { useHasFocus } from "~/hooks/use-document-focus";
 import {
   deleteNoteQueryData,
   notesQueryOptions,
@@ -16,7 +15,6 @@ import { useWebsocketStore } from "~/store/websocket/store";
 
 export const useEvents = () => {
   const queryClient = useQueryClient();
-  const focus = useHasFocus();
 
   const { wall } = useWall();
   const { user } = useUser();
@@ -30,7 +28,7 @@ export const useEvents = () => {
     setConnectedUsers,
     setMoveUsers,
     setMaxConnectedUsers,
-    setIsVisible,
+    // setIsVisible,
   } = useWebsocketStore(
     useShallow((state) => ({
       subscribe: state.subscribe,
@@ -40,18 +38,9 @@ export const useEvents = () => {
       setConnectedUsers: state.setConnectedUsers,
       setMoveUsers: state.setMoveUsers,
       setMaxConnectedUsers: state.setMaxConnectedUsers,
-      setIsVisible: state.setIsVisible,
+      // setIsVisible: state.setIsVisible,
     })),
   );
-
-  useEffect(() => {
-    if (focus) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [focus]);
 
   useEffect(() => {
     setResourceId(wall?._id as string);

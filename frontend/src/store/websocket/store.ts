@@ -65,7 +65,11 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
             return {
               moveUsers: state.moveUsers.map((user, index) =>
                 index === existingUserIndex
-                  ? { ...user, x: moveUser.x, y: moveUser.y }
+                  ? {
+                      ...user,
+                      x: moveUser.x,
+                      y: moveUser.y,
+                    }
                   : user,
               ),
             };

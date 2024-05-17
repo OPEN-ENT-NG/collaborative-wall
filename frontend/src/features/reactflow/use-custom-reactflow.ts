@@ -1,3 +1,4 @@
+import { useDocumentVisibility, usePageLeave } from "@mantine/hooks";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -28,6 +29,13 @@ export const useCustomRF = () => {
   const dropdownState = useWhiteboardStore((state) => state.dropdownState);
   const { toggleCanMoveBoard } = useWhiteboardStore();
 
+  const documentVisible = useDocumentVisibility();
+  const [moveOut, setMoveOut] = useState(0);
+
+  usePageLeave(() => {
+    setMoveOut((prev) => prev + 1);
+  });
+
   /* Stores */
   const { sendNoteMovedEvent, sendNoteCursorMovedEvent, sendNoteUpdated } =
     useWebsocketStore();
@@ -49,6 +57,22 @@ export const useCustomRF = () => {
   }>({
     callbackFn: callbackFnToThrottlePosition,
   });
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout | number;
+
+    const sendEventWithDelay = () => {
+      timeoutId = setTimeout(() => {
+        sendNoteCursorMovedEvent([{ x: 0, y: 0 }]);
+      }, 100);
+    };
+
+    if (!documentVisible || moveOut !== 0) {
+      sendEventWithDelay();
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [documentVisible, moveOut, sendNoteCursorMovedEvent]);
 
   useEffect(() => {
     if (notes) {
