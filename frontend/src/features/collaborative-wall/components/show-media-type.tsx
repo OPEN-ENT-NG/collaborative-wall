@@ -143,7 +143,6 @@ export const ShowMediaType = ({
             className="media-audio"
             controls
             data-document-id={media.id}
-            muted
             style={{ zIndex: canMoveNote ? "1" : "0", marginBottom: "-8px" }}
           >
             <track default kind="captions" srcLang="fr" src=""></track>
