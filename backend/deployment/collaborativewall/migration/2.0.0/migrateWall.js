@@ -9,7 +9,7 @@ while (cursor.hasNext()) {
       {
         $set: {
           background: {
-            path: "img/edifice.png",
+            path: "img/green-hill.png",
             color: "",
           },
           oldBackground: oldBackground,
