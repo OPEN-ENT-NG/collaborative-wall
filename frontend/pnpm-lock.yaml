@@ -6,9 +6,9 @@ specifiers:
   '@dnd-kit/modifiers': 7.0.0
   '@dnd-kit/sortable': 8.0.0
   '@dnd-kit/utilities': 3.2.2
-  '@edifice-ui/editor': develop-pedago
-  '@edifice-ui/icons': develop-pedago
-  '@edifice-ui/react': develop-pedago
+  '@edifice-ui/editor': develop
+  '@edifice-ui/icons': develop
+  '@edifice-ui/react': develop
   '@mantine/hooks': 7.7.1
   '@react-spring/web': 9.7.3
   '@tanstack/react-query': 5.8.4
@@ -30,8 +30,8 @@ specifiers:
   concurrently: 8.2.2
   csstype: 3.1.3
   dayjs: 1.11.10
-  edifice-bootstrap: develop-pedago
-  edifice-ts-client: develop-pedago
+  edifice-bootstrap: develop
+  edifice-ts-client: develop
   eslint: 8.56.0
   eslint-config-prettier: 9.1.0
   eslint-plugin-import: 2.29.1
@@ -42,7 +42,7 @@ specifiers:
   i18next: 23.8.1
   i18next-http-backend: 2.4.2
   lint-staged: 15.2.1
-  ode-explorer: develop-pedago
+  ode-explorer: develop
   perfect-cursors: 1.0.5
   prettier: 3.2.4
   react: 18.2.0
@@ -65,9 +65,9 @@ dependencies:
   '@dnd-kit/modifiers': 7.0.0_sm3txfnl76aqlmpp73hvpv5hze
   '@dnd-kit/sortable': 8.0.0_sm3txfnl76aqlmpp73hvpv5hze
   '@dnd-kit/utilities': 3.2.2_react@18.2.0
-  '@edifice-ui/editor': 1.5.4-develop-pedago.9_sflxgvhnetiwv4d6qmlhonw6dm
-  '@edifice-ui/icons': 1.5.4-develop-pedago.5_biqbaboplfbrettd7655fr4n2y
-  '@edifice-ui/react': 1.5.4-develop-pedago.9_2weytnospndb77mukp7uao5tdu
+  '@edifice-ui/editor': 1.5.4-develop.12_nflzthpjofrp6dnevsooanif7i
+  '@edifice-ui/icons': 1.5.4-develop.11_biqbaboplfbrettd7655fr4n2y
+  '@edifice-ui/react': 1.5.4-develop.12_azcrv2oskcdvk66gptlm5kms44
   '@mantine/hooks': 7.7.1_react@18.2.0
   '@react-spring/web': 9.7.3_biqbaboplfbrettd7655fr4n2y
   '@tanstack/react-query': 5.8.4_biqbaboplfbrettd7655fr4n2y
@@ -79,7 +79,7 @@ dependencies:
   dayjs: 1.11.10
   i18next: 23.8.1
   i18next-http-backend: 2.4.2
-  ode-explorer: 1.4.2-develop-pedago.202405171443_n2xappcne7kxjl2uez6rqoc2oy
+  ode-explorer: 1.4.2-develop.202405211100_n2xappcne7kxjl2uez6rqoc2oy
   perfect-cursors: 1.0.5
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
@@ -107,8 +107,8 @@ devDependencies:
   '@vitejs/plugin-react': 4.2.1_vite@5.0.12
   concurrently: 8.2.2
   csstype: 3.1.3
-  edifice-bootstrap: 1.5.4-develop-pedago.5
-  edifice-ts-client: 1.5.0-develop-pedago.1
+  edifice-bootstrap: 1.5.4-develop.11
+  edifice-ts-client: 1.5.4-develop.11
   eslint: 8.56.0
   eslint-config-prettier: 9.1.0_eslint@8.56.0
   eslint-plugin-import: 2.29.1_reu6wblayc2ebs6yvqfzusygdy
@@ -417,8 +417,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@edifice-tiptap-extensions/extension-alert/1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-HHKGivvCP2fQXMuICIbeStAWTmEnaUhgdnfYlvIFKeNj7WTxKEo8Swt8szgfOY+Svz4fKFpSLeZDkRu4s2JEmQ==}
+  /@edifice-tiptap-extensions/extension-alert/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
+    resolution: {integrity: sha512-fKsbyqnuu/RW/ydBh+iCoOyI345D8u6nPZv0shtKgCI5rloRW/WIjK70SLtqdIIycSxdYJPMAG4C/vnR2HtKPA==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -427,8 +427,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-attachment/1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-SNQv/dcJtCBfiWLsFANNL5E/Dxt6IsLdiOGH+2WkfPsjoYPzMw0sM2/Uowf6dRtBTWC5jZ2iv7yfmusve8+Ybg==}
+  /@edifice-tiptap-extensions/extension-attachment/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
+    resolution: {integrity: sha512-XsLxbtw5GTDFIUX+WdOfc5aWihBlpNnfWuiiEyC57IEV9dI0nrbhCMFcaOhRepy9o6YqkewmeajJ9zVc3kB7LA==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -437,8 +437,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-audio/1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-Yb/fkEV9uAH1EkgOGD9UGFSArQflcr5VbecRNtJrGj63M7u4r7TqXa09WGOWtKnxhZ81nP3+2eE1MgByLUa3KQ==}
+  /@edifice-tiptap-extensions/extension-audio/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
+    resolution: {integrity: sha512-zOy3juNRYTi0ggUk/ICzSSeLStcnawA5X5uDTfpYKz+gMasdnjJ7pVxQwrO56RVTO1oYME/2gxZjVITZ0FKIUA==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -447,22 +447,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-font-size/1.5.4-develop-pedago.5_klzv2nl3ti4udskh4xkfl25p6y:
-    resolution: {integrity: sha512-NR6q7hDHy+f0P5z8kf07M0QOOgAHvKMY+JzAcvEziu1oyL5lCOmsmk/Pjr9qDsWu+m5ZLQf0dRlLyvJtZh570w==}
-    peerDependencies:
-      '@tiptap/core': 2.3.0
-      '@tiptap/extension-heading': 2.3.0
-      '@tiptap/extension-text-style': 2.3.0
-      '@tiptap/pm': 2.3.0
-    dependencies:
-      '@tiptap/core': 2.3.0_@tiptap+pm@2.3.0
-      '@tiptap/extension-heading': 2.3.0_@tiptap+core@2.4.0
-      '@tiptap/extension-text-style': 2.3.0_@tiptap+core@2.4.0
-      '@tiptap/pm': 2.3.0
-    dev: false
-
-  /@edifice-tiptap-extensions/extension-heading/1.5.4-develop-pedago.5_klzv2nl3ti4udskh4xkfl25p6y:
-    resolution: {integrity: sha512-PxInnx4EfhdcReeZ2VgT0qtF4g/vQYIYwggvSTAIKHfzsQb+Wrh/1PctM9S1232r7K2bMy+SBWkY8eHUnf9wQg==}
+  /@edifice-tiptap-extensions/extension-font-size/1.5.4-develop.11_klzv2nl3ti4udskh4xkfl25p6y:
+    resolution: {integrity: sha512-s7HumDAsib38IqHa1/Ozq7BsPkoWicbUfKXve1LCJSoY+ZTfP9sckDcFmGzMt/qenavPxj7FI1cv/Z/1B9cc0g==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/extension-heading': 2.3.0
@@ -475,8 +461,22 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-highlight/1.5.4-develop-pedago.5_kfrsxsl32rrnoax47ppwikvt4i:
-    resolution: {integrity: sha512-4/gKoGENRQ5dAjcCNnQ7X9rm2rlO1tuOMmmr8hAINHiIhw+vEpVpot673AwomF2GnDR4WZUWor7PQ+y/gXy7kQ==}
+  /@edifice-tiptap-extensions/extension-heading/1.5.4-develop.11_klzv2nl3ti4udskh4xkfl25p6y:
+    resolution: {integrity: sha512-RmsbL0tshIuUXxBy79htLtTUaoAqyVLOxZDWrp0h+TSMyrLAMNbhlUbhfJpNuFwJh8OM5ZRG9AhVrrRYPWI4Zw==}
+    peerDependencies:
+      '@tiptap/core': 2.3.0
+      '@tiptap/extension-heading': 2.3.0
+      '@tiptap/extension-text-style': 2.3.0
+      '@tiptap/pm': 2.3.0
+    dependencies:
+      '@tiptap/core': 2.3.0_@tiptap+pm@2.3.0
+      '@tiptap/extension-heading': 2.3.0_@tiptap+core@2.4.0
+      '@tiptap/extension-text-style': 2.3.0_@tiptap+core@2.4.0
+      '@tiptap/pm': 2.3.0
+    dev: false
+
+  /@edifice-tiptap-extensions/extension-highlight/1.5.4-develop.11_kfrsxsl32rrnoax47ppwikvt4i:
+    resolution: {integrity: sha512-dQYIVZnV9VEAZF8QTMahr4KpxcrpcOODQcTRdHiqpIZegUJtqYD7lmbdEUA931YTMMvQEH72YBbX2oT43KcxkQ==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/extension-highlight': 2.3.0
@@ -487,8 +487,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-hyperlink/1.5.4-develop-pedago.5_kribai77ngl5zwybgoggcmfdi4:
-    resolution: {integrity: sha512-U0bbgzuQxoR1yOdIzqEK9WxYdfPWeWbth+lIbqkCNxvXlkH+MoK9F/nm5B8Iot1Trs4aX6Qpka0W4yVmMKaz2g==}
+  /@edifice-tiptap-extensions/extension-hyperlink/1.5.4-develop.11_kribai77ngl5zwybgoggcmfdi4:
+    resolution: {integrity: sha512-K4B15QC1vCTNsFCek20DEch/GdhZAGSuDFiaZcpt2Q9chmoTW6KAylPfOP0dRmbcZciLnpUHvLpXkyA+32plDg==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/extension-link': 2.3.0
@@ -499,8 +499,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-iframe/1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-/1KH/C/U1zSWzdczQYWHAVZ+ARQv/aeVW1V3Dq+iARG4NIkx7fBK8D2S6XwRUz2qmNN591wz3Hw6Ci4bdlrdPg==}
+  /@edifice-tiptap-extensions/extension-iframe/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
+    resolution: {integrity: sha512-ZzyFokQJ4YZboG5Mld/N0nT/2DXnXZyU+4Dcmxx19d1wBrgNDC+D5MUkkbeiRjOAoNCSqNUTDmeeCSzIwZ1Kww==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -509,8 +509,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-image/1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-OUFyL47ePyik9xGucsX2PqvKZ3GgFWBssSdh/RMqQ+FVgZfU2h/q1pOJywHHYfpSbC+iYfeOQ3/ka7zGPp9Qpg==}
+  /@edifice-tiptap-extensions/extension-image/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
+    resolution: {integrity: sha512-674awbZkmYVNXGWRuetxYLCK5BtIEdJG35wmcChDUgtOzi9sHWJpegcFbzV5ANZDiMemQM4lE2asOMpvbPOZIw==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -520,8 +520,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-linker/1.5.4-develop-pedago.5_kribai77ngl5zwybgoggcmfdi4:
-    resolution: {integrity: sha512-/q6W3OH3AH9qyIWkPFp0XUupqhCUQXxdUPbfI/zhfT+HMQkhrGrpc1bGSxe0izZIyMmvgEg4jGUcX62GqWCM/w==}
+  /@edifice-tiptap-extensions/extension-linker/1.5.4-develop.11_kribai77ngl5zwybgoggcmfdi4:
+    resolution: {integrity: sha512-0jNm1j4oZYCGyUtrJpo2MHFjNXR+lYB1cC3DaKcbEsv4wI66GsOsqncjx0DWZkQLZcbU+kiVZJ6/5DedSjpfWg==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/extension-link': 2.3.0
@@ -532,8 +532,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-speechrecognition/1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-iOhyf7wUgmnK84Jr9ZY0MHrwLxZ5G8gC6TkWj29xnTujZZskTIJl+JTfpAoPN801eqs2E1J/tO5WohI25Z1MjQ==}
+  /@edifice-tiptap-extensions/extension-speechrecognition/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
+    resolution: {integrity: sha512-w0TxjtFa93/JMR5hl3XuEaFx1MJ8o+xGl+tW1BasFCo/RhV3aJaXxKw7EoY0p9XcGbhAnLx5qygl0OoEeazk0g==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -542,8 +542,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-speechsynthesis/1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-aQmmSwI8rO8jcEDaQoZ+fZLSX0rMZhX95mwz130/dkCTCN0ISdBA28WEIbkNyKaKrZlkwgWAkEoxjWnWbRgKEw==}
+  /@edifice-tiptap-extensions/extension-speechsynthesis/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
+    resolution: {integrity: sha512-J8AATC57WWOwRHGfylHeVUffDhm5q7xgMWcpDIqS9H98kNrvAmNGsweA4l5BGBkL1Alqechp0LjyDAqJox1Yew==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -552,8 +552,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-table-cell/1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-RddA4bJ/bR1jLeTxXcyAAleT0qxYvtYvYZSixLU1ytLZuhQnFNvijCGC76035g4tMRKRw8DQH0aigi1pO0fj5A==}
+  /@edifice-tiptap-extensions/extension-table-cell/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
+    resolution: {integrity: sha512-UEEk3/5MY56DGW3ufsZHmajrmPysNIP+vRm8RL/9ycK5bhG7Afo8cNMAl8TNPfubCWS1Y/3NEBf+nlgp9wKvjw==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -563,8 +563,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-video/1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-nM4WYJDhDZ0H75/WoR//UcNJhxEJySpRIjw9X3hPNOg/oo5L4gtdprMj5CyefpzKWF9QHBL+Wk3Du8I4GSIULw==}
+  /@edifice-tiptap-extensions/extension-video/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
+    resolution: {integrity: sha512-zioA8HBNCtX6zM7EQkxCgyWrVsbmGuMfgIX/9WklD+6M4hzNiKmjiCb5iwXPVWo1oGILZ0Qu2WgfI2SWbJIvNQ==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -573,8 +573,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-ui/editor/1.5.4-develop-pedago.9_sflxgvhnetiwv4d6qmlhonw6dm:
-    resolution: {integrity: sha512-Bd8JnZpRZT/R6zNzvnBmVY+rDmmzpmlO9XysPlR59Oa9A5xUsJYkqIhJ0b1cxY4E9hjW6lZEJWNnTMHyp+XUaQ==}
+  /@edifice-ui/editor/1.5.4-develop.12_nflzthpjofrp6dnevsooanif7i:
+    resolution: {integrity: sha512-YAO3hF8r661AP+IbBjVpgEf48hKY0Mw3uPYYE9Nr1B5LMa42B9ad3RPCA1txPHvVbYnjlj4owIptTzb9G7jrLA==}
     peerDependencies:
       '@edifice-ui/icons': '*'
       '@edifice-ui/react': '*'
@@ -584,22 +584,22 @@ packages:
       react-dom: 18.2.0
       react-i18next: 14.1.0
     dependencies:
-      '@edifice-tiptap-extensions/extension-alert': 1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-attachment': 1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-audio': 1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-font-size': 1.5.4-develop-pedago.5_klzv2nl3ti4udskh4xkfl25p6y
-      '@edifice-tiptap-extensions/extension-heading': 1.5.4-develop-pedago.5_klzv2nl3ti4udskh4xkfl25p6y
-      '@edifice-tiptap-extensions/extension-highlight': 1.5.4-develop-pedago.5_kfrsxsl32rrnoax47ppwikvt4i
-      '@edifice-tiptap-extensions/extension-hyperlink': 1.5.4-develop-pedago.5_kribai77ngl5zwybgoggcmfdi4
-      '@edifice-tiptap-extensions/extension-iframe': 1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-image': 1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-linker': 1.5.4-develop-pedago.5_kribai77ngl5zwybgoggcmfdi4
-      '@edifice-tiptap-extensions/extension-speechrecognition': 1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-speechsynthesis': 1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-table-cell': 1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-video': 1.5.4-develop-pedago.5_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-ui/icons': 1.5.4-develop-pedago.5_biqbaboplfbrettd7655fr4n2y
-      '@edifice-ui/react': 1.5.4-develop-pedago.9_2weytnospndb77mukp7uao5tdu
+      '@edifice-tiptap-extensions/extension-alert': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
+      '@edifice-tiptap-extensions/extension-attachment': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
+      '@edifice-tiptap-extensions/extension-audio': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
+      '@edifice-tiptap-extensions/extension-font-size': 1.5.4-develop.11_klzv2nl3ti4udskh4xkfl25p6y
+      '@edifice-tiptap-extensions/extension-heading': 1.5.4-develop.11_klzv2nl3ti4udskh4xkfl25p6y
+      '@edifice-tiptap-extensions/extension-highlight': 1.5.4-develop.11_kfrsxsl32rrnoax47ppwikvt4i
+      '@edifice-tiptap-extensions/extension-hyperlink': 1.5.4-develop.11_kribai77ngl5zwybgoggcmfdi4
+      '@edifice-tiptap-extensions/extension-iframe': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
+      '@edifice-tiptap-extensions/extension-image': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
+      '@edifice-tiptap-extensions/extension-linker': 1.5.4-develop.11_kribai77ngl5zwybgoggcmfdi4
+      '@edifice-tiptap-extensions/extension-speechrecognition': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
+      '@edifice-tiptap-extensions/extension-speechsynthesis': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
+      '@edifice-tiptap-extensions/extension-table-cell': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
+      '@edifice-tiptap-extensions/extension-video': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
+      '@edifice-ui/icons': 1.5.4-develop.11_biqbaboplfbrettd7655fr4n2y
+      '@edifice-ui/react': 1.5.4-develop.12_azcrv2oskcdvk66gptlm5kms44
       '@react-spring/web': 9.7.3_biqbaboplfbrettd7655fr4n2y
       '@tiptap-pro/extension-mathematics': 2.2.1_kemoul4kcywealwijqcyxw2rii
       '@tiptap/core': 2.3.0_@tiptap+pm@2.3.0
@@ -634,8 +634,8 @@ packages:
       react-i18next: 14.1.0_loy6jduu4rijpxjdkwh5l2qewi
     dev: false
 
-  /@edifice-ui/icons/1.5.4-develop-pedago.5_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-Kq5VKfezdDVFUOOFbF1BvWtoA/ZB2bRDJTVwKzTuhp7YFe307ghu6TsipSEYwGk0EKIj+OVrMlWKev1lLLcbVQ==}
+  /@edifice-ui/icons/1.5.4-develop.11_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-E1aPg8VziZ3jCyuqmZfN5uSKy5fA3L+fVXfQFCrNMsFrAKtoVy1TU20i1a4QzM/Us9RmhUVKdcuDou87p7Ut5Q==}
     peerDependencies:
       react: 18.2.0
       react-dom: 18.2.0
@@ -644,8 +644,8 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /@edifice-ui/react/1.5.4-develop-pedago.9_2weytnospndb77mukp7uao5tdu:
-    resolution: {integrity: sha512-RblW1IsoRUUNexbYnDBjQvzgWqKAeI/3+/CMj/EywiauBCYO7dX70dt0nbwg44bl23Cu9CjMLoI452n8b3ka7Q==}
+  /@edifice-ui/react/1.5.4-develop.12_azcrv2oskcdvk66gptlm5kms44:
+    resolution: {integrity: sha512-Qh7TOuHkimQeQmsG828sW1UYMfZUH0P9tAY3pSrlzOBGDvlopQ5p74gaOvchOkrTn0vEWyatYpUoGYg1r3yHjA==}
     peerDependencies:
       '@edifice-ui/icons': '*'
       '@react-spring/web': 9.7.3
@@ -656,7 +656,7 @@ packages:
       react-hook-form: 7.49.2
       react-i18next: 14.1.0
     dependencies:
-      '@edifice-ui/icons': 1.5.4-develop-pedago.5_biqbaboplfbrettd7655fr4n2y
+      '@edifice-ui/icons': 1.5.4-develop.11_biqbaboplfbrettd7655fr4n2y
       '@floating-ui/react': 0.26.0_biqbaboplfbrettd7655fr4n2y
       '@pixi/mixin-get-child-by-name': 7.4.2_@pixi+display@7.4.2
       '@pixi/react': 7.1.2_4qnfnh3ah7aw3pcnxn3553ejay
@@ -3347,16 +3347,15 @@ packages:
     resolution: {integrity: sha512-/pjZsA1b4RPHbeWZQn66SWS8nZZWLQQ23oE3Eam7aroEFGEvwKAsJfZ9ytiEMycfzXWpca4FA9QIOehf7PocBQ==}
     dev: false
 
-  /edifice-bootstrap/1.5.4-develop-pedago.5:
-    resolution: {integrity: sha512-/jjB55YuxD8Tq7y9Rp7TeQZUu70gNzpCx2Vq7gBXm7nfO1KKk7TFFT5LpY9FiXzfC1pUoqPjt/2yFKkd+Z9RmQ==}
+  /edifice-bootstrap/1.5.4-develop.11:
+    resolution: {integrity: sha512-rGVpuj1d+ePbTzpW0aLVzspdlwu9eDwcJfNEUK49tnKfD9b2EJRRGdDb4DC+y62YWlAc/Fi+Xqd6kc9XEaF/QQ==}
     dependencies:
       '@popperjs/core': 2.11.8
       bootstrap: 5.3.2_@popperjs+core@2.11.8
     dev: true
 
-  /edifice-ts-client/1.5.0-develop-pedago.1:
-    resolution: {integrity: sha512-YV7QY/mgVaz7QIdmkvcQw+PXT/cakCN7vmYlbcTe6NN8AZKP7kwYDkKZbZK4qsrJ6Q0ZQCSI0tSUXCUVUlKIJA==}
-    engines: {node: 18 || 20}
+  /edifice-ts-client/1.5.4-develop.11:
+    resolution: {integrity: sha512-GO2QytDp2Rkti+BgkpOfzswoHByU02Q2oeX203H1k/nNTNUyWbCfLzWtrvAicIALddAQOwTY5O6eyJ7eqdMdEw==}
     dependencies:
       axios: 1.6.6
       core-js: 3.35.1
@@ -4757,13 +4756,13 @@ packages:
       es-object-atoms: 1.0.0
     dev: true
 
-  /ode-explorer/1.4.2-develop-pedago.202405171443_n2xappcne7kxjl2uez6rqoc2oy:
-    resolution: {integrity: sha512-lh0dDowXm3+z+jwefjgiMY62Ak8jFolf+QndJ2E4PYndTBngElLAnkVCAXXO8R0ICKS5hvDHqMj/diEQogeGmA==}
+  /ode-explorer/1.4.2-develop.202405211100_n2xappcne7kxjl2uez6rqoc2oy:
+    resolution: {integrity: sha512-dZhUzcOCD7FWWS20JDcYVSuTbH9nfKX0XbHTPBT4n24i3P3ZJmbwPbCo/x3Lwf+PNn0mUhdgiBmMVEdh3D5pTw==}
     engines: {node: 18 || 20}
     requiresBuild: true
     dependencies:
-      '@edifice-ui/icons': 1.5.4-develop-pedago.5_biqbaboplfbrettd7655fr4n2y
-      '@edifice-ui/react': 1.5.4-develop-pedago.9_2weytnospndb77mukp7uao5tdu
+      '@edifice-ui/icons': 1.5.4-develop.11_biqbaboplfbrettd7655fr4n2y
+      '@edifice-ui/react': 1.5.4-develop.12_azcrv2oskcdvk66gptlm5kms44
       '@react-spring/web': 9.7.3_biqbaboplfbrettd7655fr4n2y
       '@tanstack/react-query': 5.8.4_biqbaboplfbrettd7655fr4n2y
       clsx: 2.1.0
