@@ -7,43 +7,15 @@ import {
   Paperclip,
   RecordVideo,
 } from "@edifice-ui/icons";
-import {
-  MediaLibrary,
-  MediaLibraryResult,
-  MediaLibraryType,
-  Toolbar,
-  useOdeClient,
-} from "@edifice-ui/react";
-import { WorkspaceElement } from "edifice-ts-client";
+import { Toolbar } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
-import { useLoaderData } from "react-router-dom";
-
-import { NoteProps } from "~/models/notes";
 
 export const ToolbarMedia = ({
-  setMediaNote,
-  setMediaType,
+  handleClickMedia,
 }: {
-  setMediaNote: (value: WorkspaceElement) => void;
-  setMediaType: (value: MediaLibraryType) => void;
-}) => {
-  const data = useLoaderData() as NoteProps;
-
-export const ToolbarMedia = ({
-  handleClick,
-}: {
-  handleClick: (type: any) => void;
+  handleClickMedia: (type: any) => void;
 }) => {
   const { t } = useTranslation();
-
-  mediaLibraryModalHandlers.onSuccess = (result: MediaLibraryResult) => {
-    setMediaNote(result[result.length - 1]);
-  };
-
-  const handleClickMedia = (type: MediaLibraryType) => {
-    setMediaType(type);
-    return mediaLibraryModalRef.current?.show(type);
-  };
 
   const toolbarItems: any[] = useMemo(() => {
     return [
