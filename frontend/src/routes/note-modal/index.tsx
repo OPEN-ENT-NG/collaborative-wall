@@ -2,21 +2,20 @@ import { useEffect, useRef, useState } from "react";
 
 import { EditorRef } from "@edifice-ui/editor";
 import { Button, Modal, useOdeClient } from "@edifice-ui/react";
+import { QueryClient } from "@tanstack/react-query";
 import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
 import { LoaderFunctionArgs } from "react-router-dom";
-
-import { QueryClient } from "@tanstack/react-query";
 import { noteColors } from "~/config";
-import { NoteMedia } from "~/models/note-media";
+import { NoteContent } from "~/features/Note/components/NoteContent";
+import { useAccessStore } from "~/hooks/useAccessStore";
+import { MediaProps } from "~/models/media";
 import { noteQueryOptions, useNote } from "~/services/queries";
 import {
   EditionMode,
   authorizedModes,
   useNoteModal,
-} from "../../features/note-modal/hooks/use-note-modal";
-import { NoteContent } from "../../features/note-modal/components/note-content";
-import { useAccessStore } from "~/hooks/use-access-rights";
+} from "../../features/Note/hooks/useNoteModal";
 
 export const noteLoader =
   (queryClient: QueryClient) =>
@@ -58,14 +57,14 @@ export const noteLoader =
     return note;
   };
 
-export const NoteModal = () => {
+export const Component = () => {
   const { note } = useNote();
 
   const [colorValue, setColorValue] = useState<string[]>(
     note?.color || [noteColors.yellow.background],
   );
 
-  const [media, setMedia] = useState<NoteMedia | null>(note?.media ?? null);
+  const [media, setMedia] = useState<MediaProps | null>(note?.media ?? null);
 
   useEffect(() => {
     if (note) {

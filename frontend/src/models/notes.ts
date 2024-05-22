@@ -1,4 +1,4 @@
-import { NoteMedia } from "./note-media";
+import { MediaProps } from "./media";
 
 export interface NoteProps {
   _id: string;
@@ -7,7 +7,7 @@ export interface NoteProps {
   y: number;
   idwall: string;
   color: string[];
-  media: NoteMedia | null;
+  media: MediaProps | null;
   created?: { $date: number };
   modified?: { $date: number };
   owner?: {

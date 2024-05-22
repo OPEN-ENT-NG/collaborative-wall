@@ -9,7 +9,7 @@ import { useWallWithNotes } from "~/services/queries";
 
 import { Editor } from "@edifice-ui/editor";
 import { backgroundColors, backgroundImages, wallConfig } from "~/config";
-import { ShowMediaType } from "~/features/collaborative-wall/components/show-media-type";
+import { NoteMedia } from "~/features/Note/components/NoteMedia";
 import { CollaborativeWallProps } from "~/models/wall";
 import "../collaborative-wall/index.css";
 // import "./index.css";
@@ -40,7 +40,7 @@ export const wallLoader =
     return { wall, notes };
   };
 
-export const CollaborativeWall = () => {
+export const Component = () => {
   const params = useParams();
   const queries = useWallWithNotes(params.wallId!);
   const wall = queries.data[0] as CollaborativeWallProps;
@@ -99,9 +99,7 @@ export const CollaborativeWall = () => {
                     >
                       <Card className="note" isSelectable={false}>
                         <Card.Body>
-                          {note.media?.url && (
-                            <ShowMediaType media={note.media} />
-                          )}
+                          {note.media?.url && <NoteMedia media={note.media} />}
                           <div
                             style={{
                               maxHeight: note.media?.url ? "302px" : "264px",

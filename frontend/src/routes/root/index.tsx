@@ -10,6 +10,7 @@ export const loader = async () => {
   // Check if the URL is an old format (angular root with hash) and redirect to the new format
   if (hashLocation) {
     const isWallPath = matchPath("/view/:wallId", hashLocation);
+
     if (isWallPath) {
       // Redirect to the new format
       const redirectPath = `/id/${isWallPath?.params.wallId}`;
@@ -22,7 +23,7 @@ export const loader = async () => {
   return null;
 };
 
-function Root() {
+export const Root = () => {
   const location = useLocation();
 
   const { init } = useOdeClient();
@@ -34,6 +35,6 @@ function Root() {
       <Outlet />
     </Layout>
   );
-}
+};
 
 export default Root;

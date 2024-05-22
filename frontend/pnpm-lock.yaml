@@ -1,128 +1,5 @@
 lockfileVersion: '6.0'
 
-<<<<<<< Updated upstream
-specifiers:
-  '@axe-core/react': 4.8.4
-  '@dnd-kit/core': 6.1.0
-  '@dnd-kit/modifiers': 7.0.0
-  '@dnd-kit/sortable': 8.0.0
-  '@dnd-kit/utilities': 3.2.2
-  '@edifice-ui/editor': develop
-  '@edifice-ui/icons': develop
-  '@edifice-ui/react': develop
-  '@mantine/hooks': 7.7.1
-  '@react-spring/web': 9.7.3
-  '@tanstack/react-query': 5.8.4
-  '@tanstack/react-query-devtools': 5.8.4
-  '@tiptap/extension-image': ^2.3.0
-  '@tiptap/extension-table-cell': ^2.3.0
-  '@tiptap/pm': 2.3.0
-  '@tiptap/react': 2.3.0
-  '@tiptap/starter-kit': 2.3.0
-  '@types/node': 20.11.13
-  '@types/react': 18.2.48
-  '@types/react-dom': 18.2.18
-  '@types/uuid': 9.0.1
-  '@typescript-eslint/eslint-plugin': 6.20.0
-  '@typescript-eslint/parser': 6.20.0
-  '@uidotdev/usehooks': 2.4.1
-  '@vitejs/plugin-react': 4.2.1
-  clsx: 2.1.0
-  concurrently: 8.2.2
-  csstype: 3.1.3
-  dayjs: 1.11.10
-  edifice-bootstrap: develop
-  edifice-ts-client: develop
-  eslint: 8.56.0
-  eslint-config-prettier: 9.1.0
-  eslint-plugin-import: 2.29.1
-  eslint-plugin-jsx-a11y: 6.8.0
-  eslint-plugin-react: 7.33.2
-  eslint-plugin-react-hooks: 4.6.0
-  husky: 8.0.3
-  i18next: 23.8.1
-  i18next-http-backend: 2.4.2
-  lint-staged: 15.2.1
-  ode-explorer: develop
-  perfect-cursors: 1.0.5
-  prettier: 3.2.4
-  react: 18.2.0
-  react-dom: 18.2.0
-  react-error-boundary: 4.0.12
-  react-hook-form: 7.49.3
-  react-i18next: 14.1.0
-  react-router-dom: 6.21.3
-  react-use-websocket: 4.8.1
-  react-zoom-pan-pinch: 3.4.2
-  reactflow: 11.11.2
-  typescript: 5.3.3
-  uuid: 9.0.1
-  vite: 5.0.12
-  vite-tsconfig-paths: 4.3.1
-  zustand: 4.5.0
-
-dependencies:
-  '@dnd-kit/core': 6.1.0_biqbaboplfbrettd7655fr4n2y
-  '@dnd-kit/modifiers': 7.0.0_sm3txfnl76aqlmpp73hvpv5hze
-  '@dnd-kit/sortable': 8.0.0_sm3txfnl76aqlmpp73hvpv5hze
-  '@dnd-kit/utilities': 3.2.2_react@18.2.0
-  '@edifice-ui/editor': 1.5.4-develop.12_nflzthpjofrp6dnevsooanif7i
-  '@edifice-ui/icons': 1.5.4-develop.11_biqbaboplfbrettd7655fr4n2y
-  '@edifice-ui/react': 1.5.4-develop.12_azcrv2oskcdvk66gptlm5kms44
-  '@mantine/hooks': 7.7.1_react@18.2.0
-  '@react-spring/web': 9.7.3_biqbaboplfbrettd7655fr4n2y
-  '@tanstack/react-query': 5.8.4_biqbaboplfbrettd7655fr4n2y
-  '@tiptap/pm': 2.3.0
-  '@tiptap/react': 2.3.0_k2otuwltj2zhlen5n3c3tzww3q
-  '@tiptap/starter-kit': 2.3.0_@tiptap+pm@2.3.0
-  '@uidotdev/usehooks': 2.4.1_biqbaboplfbrettd7655fr4n2y
-  clsx: 2.1.0
-  dayjs: 1.11.10
-  i18next: 23.8.1
-  i18next-http-backend: 2.4.2
-  ode-explorer: 1.4.2-develop.202405211100_n2xappcne7kxjl2uez6rqoc2oy
-  perfect-cursors: 1.0.5
-  react: 18.2.0
-  react-dom: 18.2.0_react@18.2.0
-  react-error-boundary: 4.0.12_react@18.2.0
-  react-hook-form: 7.49.3_react@18.2.0
-  react-i18next: 14.1.0_loy6jduu4rijpxjdkwh5l2qewi
-  react-router-dom: 6.21.3_biqbaboplfbrettd7655fr4n2y
-  react-use-websocket: 4.8.1_biqbaboplfbrettd7655fr4n2y
-  react-zoom-pan-pinch: 3.4.2_biqbaboplfbrettd7655fr4n2y
-  reactflow: 11.11.2_p2jlmv6k7k3po6tueteg46f2ku
-  uuid: 9.0.1
-  zustand: 4.5.0_7kh72gklg5qjlh5zc6s6v3p6v4
-
-devDependencies:
-  '@axe-core/react': 4.8.4
-  '@tanstack/react-query-devtools': 5.8.4_ckfiffndvnsabstt7xm5edcxg4
-  '@tiptap/extension-image': 2.4.0_@tiptap+core@2.4.0
-  '@tiptap/extension-table-cell': 2.4.0_@tiptap+core@2.4.0
-  '@types/node': 20.11.13
-  '@types/react': 18.2.48
-  '@types/react-dom': 18.2.18
-  '@types/uuid': 9.0.1
-  '@typescript-eslint/eslint-plugin': 6.20.0_mb4aacsok44wlk3qf5ewcirf74
-  '@typescript-eslint/parser': 6.20.0_xdgzedli73k7lw4xlyzszm74om
-  '@vitejs/plugin-react': 4.2.1_vite@5.0.12
-  concurrently: 8.2.2
-  csstype: 3.1.3
-  edifice-bootstrap: 1.5.4-develop.11
-  edifice-ts-client: 1.5.4-develop.11
-  eslint: 8.56.0
-  eslint-config-prettier: 9.1.0_eslint@8.56.0
-  eslint-plugin-import: 2.29.1_reu6wblayc2ebs6yvqfzusygdy
-  eslint-plugin-jsx-a11y: 6.8.0_eslint@8.56.0
-  eslint-plugin-react: 7.33.2_eslint@8.56.0
-  eslint-plugin-react-hooks: 4.6.0_eslint@8.56.0
-  husky: 8.0.3
-  lint-staged: 15.2.1
-  prettier: 3.2.4
-  typescript: 5.3.3
-  vite: 5.0.12_@types+node@20.11.13
-  vite-tsconfig-paths: 4.3.1_k4vd64pzbncq7ly75tf4y6jxte
-=======
 settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
@@ -142,13 +19,13 @@ dependencies:
     version: 3.2.2(react@18.2.0)
   '@edifice-ui/editor':
     specifier: develop
-    version: 1.5.4-develop.14(@edifice-ui/icons@1.5.4-develop.14)(@edifice-ui/react@1.5.4-develop.11)(@react-spring/web@9.7.3)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.1.0)(react@18.2.0)
+    version: 1.5.4-develop.15(@edifice-ui/icons@1.5.4-develop.15)(@edifice-ui/react@1.5.4-develop.15)(@react-spring/web@9.7.3)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.1.0)(react@18.2.0)
   '@edifice-ui/icons':
     specifier: develop
-    version: 1.5.4-develop.14(react-dom@18.2.0)(react@18.2.0)
+    version: 1.5.4-develop.15(react-dom@18.2.0)(react@18.2.0)
   '@edifice-ui/react':
-    specifier: file:edifice-ui-react-1.5.4-develop.11.tgz
-    version: file:edifice-ui-react-1.5.4-develop.11.tgz(@babel/runtime@7.24.5)(@edifice-ui/icons@1.5.4-develop.14)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0)
+    specifier: develop
+    version: 1.5.4-develop.15(@babel/runtime@7.24.5)(@edifice-ui/icons@1.5.4-develop.15)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0)
   '@mantine/hooks':
     specifier: 7.7.1
     version: 7.7.1(react@18.2.0)
@@ -304,7 +181,6 @@ devDependencies:
   vite-tsconfig-paths:
     specifier: 4.3.1
     version: 4.3.1(typescript@5.3.3)(vite@5.0.12)
->>>>>>> Stashed changes
 
 packages:
 
@@ -601,13 +477,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-tiptap-extensions/extension-alert/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-fKsbyqnuu/RW/ydBh+iCoOyI345D8u6nPZv0shtKgCI5rloRW/WIjK70SLtqdIIycSxdYJPMAG4C/vnR2HtKPA==}
-=======
   /@edifice-tiptap-extensions/extension-alert@1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
     resolution: {integrity: sha512-FqjvibojyPgxoFmvYLhneGGCLwAXTpIEAimIYUn18wYIikcSdNaJWQQQgvHvMxbBN9euH+czDcOP1SKZYU5u1w==}
->>>>>>> Stashed changes
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -616,13 +487,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-tiptap-extensions/extension-attachment/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-XsLxbtw5GTDFIUX+WdOfc5aWihBlpNnfWuiiEyC57IEV9dI0nrbhCMFcaOhRepy9o6YqkewmeajJ9zVc3kB7LA==}
-=======
   /@edifice-tiptap-extensions/extension-attachment@1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
     resolution: {integrity: sha512-BUT1JPsui6WNr22lMv9LyDFvArIe7tnEESK/EvgHpS/+zULJ3yHFXKXjOAZ66uFSjBe0CWdCZ1eUk3cADr0syg==}
->>>>>>> Stashed changes
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -631,13 +497,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-tiptap-extensions/extension-audio/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-zOy3juNRYTi0ggUk/ICzSSeLStcnawA5X5uDTfpYKz+gMasdnjJ7pVxQwrO56RVTO1oYME/2gxZjVITZ0FKIUA==}
-=======
   /@edifice-tiptap-extensions/extension-audio@1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
     resolution: {integrity: sha512-8/I17KHkUq+1+zhSzRKrO2r8m63qmSQd0cHlWhVfyHq8VJ6fvk3pcoSOoZVR7/fBWrshQr2NPkToXAac6rRmHQ==}
->>>>>>> Stashed changes
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -646,13 +507,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-tiptap-extensions/extension-font-size/1.5.4-develop.11_klzv2nl3ti4udskh4xkfl25p6y:
-    resolution: {integrity: sha512-s7HumDAsib38IqHa1/Ozq7BsPkoWicbUfKXve1LCJSoY+ZTfP9sckDcFmGzMt/qenavPxj7FI1cv/Z/1B9cc0g==}
-=======
   /@edifice-tiptap-extensions/extension-font-size@1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/extension-heading@2.3.0)(@tiptap/extension-text-style@2.3.0)(@tiptap/pm@2.3.0):
     resolution: {integrity: sha512-LLPhGX0njVIdgwh5sXyRqH4we68ZJRioCooerrOPsiyuNzypIg2ZDpq9h6o9YIseXTkDMp8FN9EtUViTdAw5zg==}
->>>>>>> Stashed changes
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/extension-heading': 2.3.0
@@ -665,13 +521,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-tiptap-extensions/extension-heading/1.5.4-develop.11_klzv2nl3ti4udskh4xkfl25p6y:
-    resolution: {integrity: sha512-RmsbL0tshIuUXxBy79htLtTUaoAqyVLOxZDWrp0h+TSMyrLAMNbhlUbhfJpNuFwJh8OM5ZRG9AhVrrRYPWI4Zw==}
-=======
   /@edifice-tiptap-extensions/extension-heading@1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/extension-heading@2.3.0)(@tiptap/extension-text-style@2.3.0)(@tiptap/pm@2.3.0):
     resolution: {integrity: sha512-HyjxCm9yuykzq6LE3GZax2VXRrGMm5OKBmUkVJK4aLBsCCXuIBUfIpqkwCRlkCfkHe5262CqkhkMIO1fz65mJg==}
->>>>>>> Stashed changes
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/extension-heading': 2.3.0
@@ -684,13 +535,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-tiptap-extensions/extension-highlight/1.5.4-develop.11_kfrsxsl32rrnoax47ppwikvt4i:
-    resolution: {integrity: sha512-dQYIVZnV9VEAZF8QTMahr4KpxcrpcOODQcTRdHiqpIZegUJtqYD7lmbdEUA931YTMMvQEH72YBbX2oT43KcxkQ==}
-=======
   /@edifice-tiptap-extensions/extension-highlight@1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/extension-highlight@2.3.0)(@tiptap/pm@2.3.0):
     resolution: {integrity: sha512-umUtrRRGwoZS8h5QJNZ0xphk8Py1z0Y2QmjtrTLq+VgN5+AVCjrg56FlMibIrGV85fHe0OYdaDdR/kzikX5j9A==}
->>>>>>> Stashed changes
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/extension-highlight': 2.3.0
@@ -701,13 +547,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-tiptap-extensions/extension-hyperlink/1.5.4-develop.11_kribai77ngl5zwybgoggcmfdi4:
-    resolution: {integrity: sha512-K4B15QC1vCTNsFCek20DEch/GdhZAGSuDFiaZcpt2Q9chmoTW6KAylPfOP0dRmbcZciLnpUHvLpXkyA+32plDg==}
-=======
   /@edifice-tiptap-extensions/extension-hyperlink@1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/extension-link@2.3.0)(@tiptap/pm@2.3.0):
     resolution: {integrity: sha512-yzDb365BjaBFyDpeaIaNioi+mNMWJFlEOz9jVRlsCAwC9rAx10OzWP2AxP9QIqPZgqWdDi4hUh41hlpUlpyA9A==}
->>>>>>> Stashed changes
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/extension-link': 2.3.0
@@ -718,13 +559,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-tiptap-extensions/extension-iframe/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-ZzyFokQJ4YZboG5Mld/N0nT/2DXnXZyU+4Dcmxx19d1wBrgNDC+D5MUkkbeiRjOAoNCSqNUTDmeeCSzIwZ1Kww==}
-=======
   /@edifice-tiptap-extensions/extension-iframe@1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
     resolution: {integrity: sha512-X74z2AdYvf17q4BOlExgvambTSGlgFrAbHPT/YWqw4HwoW5kdfVsQ+gdstpsq5TH5mva0WLqvwSwAJnhTG8N2A==}
->>>>>>> Stashed changes
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -733,13 +569,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-tiptap-extensions/extension-image/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-674awbZkmYVNXGWRuetxYLCK5BtIEdJG35wmcChDUgtOzi9sHWJpegcFbzV5ANZDiMemQM4lE2asOMpvbPOZIw==}
-=======
   /@edifice-tiptap-extensions/extension-image@1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
     resolution: {integrity: sha512-iSp/MYYYuGrcE32LinoqxPaEMRJHs9tlFt8B1pb3QSwIHKQjTE6/iY/MTBIShIp+FCwrFRpcHjsToBPEKVKcOg==}
->>>>>>> Stashed changes
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -749,13 +580,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-tiptap-extensions/extension-linker/1.5.4-develop.11_kribai77ngl5zwybgoggcmfdi4:
-    resolution: {integrity: sha512-0jNm1j4oZYCGyUtrJpo2MHFjNXR+lYB1cC3DaKcbEsv4wI66GsOsqncjx0DWZkQLZcbU+kiVZJ6/5DedSjpfWg==}
-=======
   /@edifice-tiptap-extensions/extension-linker@1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/extension-link@2.3.0)(@tiptap/pm@2.3.0):
     resolution: {integrity: sha512-pnZLiNV0EmuAlBu42RxA3X9Sr2+OPUAc+Pw/F0BK1OX2rlzzrNVIVdJeuFfWmEAIH8mkK31nst01gB8ORw/wKg==}
->>>>>>> Stashed changes
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/extension-link': 2.3.0
@@ -766,13 +592,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-tiptap-extensions/extension-speechrecognition/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-w0TxjtFa93/JMR5hl3XuEaFx1MJ8o+xGl+tW1BasFCo/RhV3aJaXxKw7EoY0p9XcGbhAnLx5qygl0OoEeazk0g==}
-=======
   /@edifice-tiptap-extensions/extension-speechrecognition@1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
     resolution: {integrity: sha512-cRebQMfutyuApiK8rIqJehOm59WsV3Btagx/5Jor/OgPEshjPhivAzQcKjbrdrwwtAspyx6bdrZAGZ/WrM28RQ==}
->>>>>>> Stashed changes
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -781,13 +602,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-tiptap-extensions/extension-speechsynthesis/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-J8AATC57WWOwRHGfylHeVUffDhm5q7xgMWcpDIqS9H98kNrvAmNGsweA4l5BGBkL1Alqechp0LjyDAqJox1Yew==}
-=======
   /@edifice-tiptap-extensions/extension-speechsynthesis@1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
     resolution: {integrity: sha512-MoFZyyBxSL7kM6dD3JK8WXs4kN0G8yhSy26Ct/B5eivcwV7qtszSaH+xRCAVuhuIHaHb8O/F2bSDHmMxtFbpKA==}
->>>>>>> Stashed changes
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -796,13 +612,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-tiptap-extensions/extension-table-cell/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-UEEk3/5MY56DGW3ufsZHmajrmPysNIP+vRm8RL/9ycK5bhG7Afo8cNMAl8TNPfubCWS1Y/3NEBf+nlgp9wKvjw==}
-=======
   /@edifice-tiptap-extensions/extension-table-cell@1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
     resolution: {integrity: sha512-DWfbrjaSv85+6KkzmtZMUHYy+yyvIzemm7A9m4N6tBPgZr9iLrs0gsvc2iwiAlz7d5QJoAYTIPRmQuGm6fpZew==}
->>>>>>> Stashed changes
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -812,13 +623,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-tiptap-extensions/extension-video/1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy:
-    resolution: {integrity: sha512-zioA8HBNCtX6zM7EQkxCgyWrVsbmGuMfgIX/9WklD+6M4hzNiKmjiCb5iwXPVWo1oGILZ0Qu2WgfI2SWbJIvNQ==}
-=======
   /@edifice-tiptap-extensions/extension-video@1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
     resolution: {integrity: sha512-fnl3fJrQJeTKsb7QDMuYSBUQXEBRJPg2B/LKsF5UwFnLb+yPxv144uJJ0xa8Bpx2bpzFvdebdWPKrAYzivf9DQ==}
->>>>>>> Stashed changes
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -827,13 +633,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-ui/editor/1.5.4-develop.12_nflzthpjofrp6dnevsooanif7i:
-    resolution: {integrity: sha512-YAO3hF8r661AP+IbBjVpgEf48hKY0Mw3uPYYE9Nr1B5LMa42B9ad3RPCA1txPHvVbYnjlj4owIptTzb9G7jrLA==}
-=======
-  /@edifice-ui/editor@1.5.4-develop.14(@edifice-ui/icons@1.5.4-develop.14)(@edifice-ui/react@1.5.4-develop.11)(@react-spring/web@9.7.3)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.1.0)(react@18.2.0):
-    resolution: {integrity: sha512-ShL68Uwp4e2S88cBXyXdSMBGCQGgSyj+crGn7PSNUVnmlQHDZyTIykticOlNB9gRCJKv/zjj/bM1b5GhaDqwvw==}
->>>>>>> Stashed changes
+  /@edifice-ui/editor@1.5.4-develop.15(@edifice-ui/icons@1.5.4-develop.15)(@edifice-ui/react@1.5.4-develop.15)(@react-spring/web@9.7.3)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.1.0)(react@18.2.0):
+    resolution: {integrity: sha512-t6+GnNXw/Z2OsCILZqoMJq2D4T2OnIZzYqC2hKBWdU19odx+4QNUocuuXMTFKhgl1skKTl7AABbp2teuuLr09w==}
     peerDependencies:
       '@edifice-ui/icons': '*'
       '@edifice-ui/react': '*'
@@ -843,47 +644,6 @@ packages:
       react-dom: 18.2.0
       react-i18next: 14.1.0
     dependencies:
-<<<<<<< Updated upstream
-      '@edifice-tiptap-extensions/extension-alert': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-attachment': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-audio': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-font-size': 1.5.4-develop.11_klzv2nl3ti4udskh4xkfl25p6y
-      '@edifice-tiptap-extensions/extension-heading': 1.5.4-develop.11_klzv2nl3ti4udskh4xkfl25p6y
-      '@edifice-tiptap-extensions/extension-highlight': 1.5.4-develop.11_kfrsxsl32rrnoax47ppwikvt4i
-      '@edifice-tiptap-extensions/extension-hyperlink': 1.5.4-develop.11_kribai77ngl5zwybgoggcmfdi4
-      '@edifice-tiptap-extensions/extension-iframe': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-image': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-linker': 1.5.4-develop.11_kribai77ngl5zwybgoggcmfdi4
-      '@edifice-tiptap-extensions/extension-speechrecognition': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-speechsynthesis': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-table-cell': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-tiptap-extensions/extension-video': 1.5.4-develop.11_dp2z3wi74fsgaywduhtgrxwwiy
-      '@edifice-ui/icons': 1.5.4-develop.11_biqbaboplfbrettd7655fr4n2y
-      '@edifice-ui/react': 1.5.4-develop.12_azcrv2oskcdvk66gptlm5kms44
-      '@react-spring/web': 9.7.3_biqbaboplfbrettd7655fr4n2y
-      '@tiptap-pro/extension-mathematics': 2.2.1_kemoul4kcywealwijqcyxw2rii
-      '@tiptap/core': 2.3.0_@tiptap+pm@2.3.0
-      '@tiptap/extension-character-count': 2.3.0_dp2z3wi74fsgaywduhtgrxwwiy
-      '@tiptap/extension-color': 2.3.0_iljtzxaixgjn6bwsklb3d6ieae
-      '@tiptap/extension-focus': 2.3.0_dp2z3wi74fsgaywduhtgrxwwiy
-      '@tiptap/extension-font-family': 2.3.0_iljtzxaixgjn6bwsklb3d6ieae
-      '@tiptap/extension-heading': 2.3.0_@tiptap+core@2.4.0
-      '@tiptap/extension-highlight': 2.3.0_@tiptap+core@2.4.0
-      '@tiptap/extension-image': 2.3.0_@tiptap+core@2.3.0
-      '@tiptap/extension-link': 2.3.0_u3y3yuyqcil6wnxe2e2ebnujga
-      '@tiptap/extension-list-item': 2.3.0_@tiptap+core@2.3.0
-      '@tiptap/extension-placeholder': 2.3.0_dp2z3wi74fsgaywduhtgrxwwiy
-      '@tiptap/extension-subscript': 2.3.0_@tiptap+core@2.3.0
-      '@tiptap/extension-superscript': 2.3.0_@tiptap+core@2.3.0
-      '@tiptap/extension-table': 2.3.0_dp2z3wi74fsgaywduhtgrxwwiy
-      '@tiptap/extension-table-cell': 2.3.0_@tiptap+core@2.3.0
-      '@tiptap/extension-table-header': 2.3.0_@tiptap+core@2.3.0
-      '@tiptap/extension-table-row': 2.3.0_@tiptap+core@2.3.0
-      '@tiptap/extension-text-align': 2.3.0_@tiptap+core@2.3.0
-      '@tiptap/extension-text-style': 2.3.0_@tiptap+core@2.4.0
-      '@tiptap/extension-typography': 2.3.0_@tiptap+core@2.3.0
-      '@tiptap/extension-underline': 2.3.0_@tiptap+core@2.3.0
-=======
       '@edifice-tiptap-extensions/extension-alert': 1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-attachment': 1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-audio': 1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
@@ -898,8 +658,8 @@ packages:
       '@edifice-tiptap-extensions/extension-speechsynthesis': 1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-table-cell': 1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-video': 1.5.4-develop.14(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-ui/icons': 1.5.4-develop.14(react-dom@18.2.0)(react@18.2.0)
-      '@edifice-ui/react': file:edifice-ui-react-1.5.4-develop.11.tgz(@babel/runtime@7.24.5)(@edifice-ui/icons@1.5.4-develop.14)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0)
+      '@edifice-ui/icons': 1.5.4-develop.15(react-dom@18.2.0)(react@18.2.0)
+      '@edifice-ui/react': 1.5.4-develop.15(@babel/runtime@7.24.5)(@edifice-ui/icons@1.5.4-develop.15)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0)
       '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
       '@tiptap-pro/extension-mathematics': 2.2.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)(katex@0.16.8)
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
@@ -923,7 +683,6 @@ packages:
       '@tiptap/extension-text-style': 2.3.0(@tiptap/core@2.4.0)
       '@tiptap/extension-typography': 2.3.0(@tiptap/core@2.3.0)
       '@tiptap/extension-underline': 2.3.0(@tiptap/core@2.3.0)
->>>>>>> Stashed changes
       '@tiptap/pm': 2.3.0
       '@tiptap/react': 2.3.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)(react-dom@18.2.0)(react@18.2.0)
       '@tiptap/starter-kit': 2.3.0(@tiptap/pm@2.3.0)
@@ -935,13 +694,8 @@ packages:
       react-i18next: 14.1.0(i18next@23.8.1)(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-ui/icons/1.5.4-develop.11_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-E1aPg8VziZ3jCyuqmZfN5uSKy5fA3L+fVXfQFCrNMsFrAKtoVy1TU20i1a4QzM/Us9RmhUVKdcuDou87p7Ut5Q==}
-=======
-  /@edifice-ui/icons@1.5.4-develop.14(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-gOS+OuEaUTWMC/LvIXTD8e0UD1VwfY0mJL2gP6siAIgNhnWH3Vls6ie9Dv823aKMybYcT/Id0rJPR5ZzLhtcqA==}
->>>>>>> Stashed changes
+  /@edifice-ui/icons@1.5.4-develop.15(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-C59RDQpwVO+ieo/B5qL48OwUBGPs6jQGPeHx7n1YtBWQhOaPViQFTIG7lBT4td65Lx9DRkWkYM6i3JI1ziJi7Q==}
     peerDependencies:
       react: 18.2.0
       react-dom: 18.2.0
@@ -950,13 +704,8 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-<<<<<<< Updated upstream
-  /@edifice-ui/react/1.5.4-develop.12_azcrv2oskcdvk66gptlm5kms44:
-    resolution: {integrity: sha512-Qh7TOuHkimQeQmsG828sW1UYMfZUH0P9tAY3pSrlzOBGDvlopQ5p74gaOvchOkrTn0vEWyatYpUoGYg1r3yHjA==}
-=======
-  /@edifice-ui/react@1.5.4-develop.14(@babel/runtime@7.24.5)(@edifice-ui/icons@1.5.4-develop.14)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0):
-    resolution: {integrity: sha512-KAE6d0I4GPdfjvGcnLhj7DQzLEXTiR2JKdVikajMZbtXOHZOfsKoUot0yHEHYRvwV5/+uBxkuUD373+hVABE9w==}
->>>>>>> Stashed changes
+  /@edifice-ui/react@1.5.4-develop.15(@babel/runtime@7.24.5)(@edifice-ui/icons@1.5.4-develop.15)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0):
+    resolution: {integrity: sha512-uX8BA38AUdParUBUFxtycO10Za7MDXozbDzueVV9Y7/BYCB/BgNkC7lnXPQLknbI5/e6Fe5KSXbXCJjBn5ENog==}
     peerDependencies:
       '@edifice-ui/icons': '*'
       '@react-spring/web': 9.7.3
@@ -967,17 +716,10 @@ packages:
       react-hook-form: 7.49.2
       react-i18next: 14.1.0
     dependencies:
-<<<<<<< Updated upstream
-      '@edifice-ui/icons': 1.5.4-develop.11_biqbaboplfbrettd7655fr4n2y
-      '@floating-ui/react': 0.26.0_biqbaboplfbrettd7655fr4n2y
-      '@pixi/mixin-get-child-by-name': 7.4.2_@pixi+display@7.4.2
-      '@pixi/react': 7.1.2_4qnfnh3ah7aw3pcnxn3553ejay
-=======
-      '@edifice-ui/icons': 1.5.4-develop.14(react-dom@18.2.0)(react@18.2.0)
+      '@edifice-ui/icons': 1.5.4-develop.15(react-dom@18.2.0)(react@18.2.0)
       '@floating-ui/react': 0.26.0(react-dom@18.2.0)(react@18.2.0)
       '@pixi/mixin-get-child-by-name': 7.4.2(@pixi/display@7.4.2)
       '@pixi/react': 7.1.2(@babel/runtime@7.24.5)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
->>>>>>> Stashed changes
       '@popperjs/core': 2.11.8
       '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-query': 5.8.4(react-dom@18.2.0)(react@18.2.0)
@@ -3665,25 +3407,15 @@ packages:
     resolution: {integrity: sha512-/pjZsA1b4RPHbeWZQn66SWS8nZZWLQQ23oE3Eam7aroEFGEvwKAsJfZ9ytiEMycfzXWpca4FA9QIOehf7PocBQ==}
     dev: false
 
-<<<<<<< Updated upstream
-  /edifice-bootstrap/1.5.4-develop.11:
-    resolution: {integrity: sha512-rGVpuj1d+ePbTzpW0aLVzspdlwu9eDwcJfNEUK49tnKfD9b2EJRRGdDb4DC+y62YWlAc/Fi+Xqd6kc9XEaF/QQ==}
-=======
   /edifice-bootstrap@1.5.4-develop.14:
     resolution: {integrity: sha512-v1PlkVK9J0FjOvvkpgsqm1izIUsC5M6cZTa9EeqgQR7YfKp++tunfLTjttq5HrEw75ZHHyWTjpKHDmQ45c64Fw==}
->>>>>>> Stashed changes
     dependencies:
       '@popperjs/core': 2.11.8
       bootstrap: 5.3.2(@popperjs/core@2.11.8)
     dev: true
 
-<<<<<<< Updated upstream
-  /edifice-ts-client/1.5.4-develop.11:
-    resolution: {integrity: sha512-GO2QytDp2Rkti+BgkpOfzswoHByU02Q2oeX203H1k/nNTNUyWbCfLzWtrvAicIALddAQOwTY5O6eyJ7eqdMdEw==}
-=======
   /edifice-ts-client@1.5.4-develop.14:
     resolution: {integrity: sha512-cRM4B9AGsoDT2qapKhePBngnM7KrMPNcfoT9LGgeM99+AFTU4jG++wZBXyGt4HL+I6drvxJ1HBCP6GQgHkYaxQ==}
->>>>>>> Stashed changes
     dependencies:
       axios: 1.6.6
       core-js: 3.35.1
@@ -5084,26 +4816,15 @@ packages:
       es-object-atoms: 1.0.0
     dev: true
 
-<<<<<<< Updated upstream
-  /ode-explorer/1.4.2-develop.202405211100_n2xappcne7kxjl2uez6rqoc2oy:
-=======
   /ode-explorer@1.4.2-develop.202405211100(@babel/runtime@7.24.5)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@tiptap/core@2.4.0)(@types/react@18.2.48)(csstype@3.1.3)(prop-types@15.8.1):
->>>>>>> Stashed changes
     resolution: {integrity: sha512-dZhUzcOCD7FWWS20JDcYVSuTbH9nfKX0XbHTPBT4n24i3P3ZJmbwPbCo/x3Lwf+PNn0mUhdgiBmMVEdh3D5pTw==}
     engines: {node: 18 || 20}
     requiresBuild: true
     dependencies:
-<<<<<<< Updated upstream
-      '@edifice-ui/icons': 1.5.4-develop.11_biqbaboplfbrettd7655fr4n2y
-      '@edifice-ui/react': 1.5.4-develop.12_azcrv2oskcdvk66gptlm5kms44
-      '@react-spring/web': 9.7.3_biqbaboplfbrettd7655fr4n2y
-      '@tanstack/react-query': 5.8.4_biqbaboplfbrettd7655fr4n2y
-=======
-      '@edifice-ui/icons': 1.5.4-develop.14(react-dom@18.2.0)(react@18.2.0)
-      '@edifice-ui/react': 1.5.4-develop.14(@babel/runtime@7.24.5)(@edifice-ui/icons@1.5.4-develop.14)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0)
+      '@edifice-ui/icons': 1.5.4-develop.15(react-dom@18.2.0)(react@18.2.0)
+      '@edifice-ui/react': 1.5.4-develop.15(@babel/runtime@7.24.5)(@edifice-ui/icons@1.5.4-develop.15)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0)
       '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-query': 5.8.4(react-dom@18.2.0)(react@18.2.0)
->>>>>>> Stashed changes
       clsx: 2.1.0
       dayjs: 1.11.10
       i18next: 23.8.1
@@ -6431,65 +6152,4 @@ packages:
       '@types/react': 18.2.48
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
-    dev: false
-
-  file:edifice-ui-react-1.5.4-develop.11.tgz(@babel/runtime@7.24.5)(@edifice-ui/icons@1.5.4-develop.14)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.3)(react-i18next@14.1.0)(react@18.2.0):
-    resolution: {integrity: sha512-C3ErTPA4LXLkaG9IDYBDWgjr/p0yjUs0ufCDup4gJ9LjoXWeuSZw5ulJbpev5sMdg//+z7N0UVms+K1XGOQbcQ==, tarball: file:edifice-ui-react-1.5.4-develop.11.tgz}
-    id: file:edifice-ui-react-1.5.4-develop.11.tgz
-    name: '@edifice-ui/react'
-    version: 1.5.4-develop.11
-    peerDependencies:
-      '@edifice-ui/icons': '*'
-      '@react-spring/web': 9.7.3
-      '@tanstack/react-query': 5.8.4
-      clsx: 2.1.0
-      react: 18.2.0
-      react-dom: 18.2.0
-      react-hook-form: 7.49.2
-      react-i18next: 14.1.0
-    dependencies:
-      '@edifice-ui/icons': 1.5.4-develop.14(react-dom@18.2.0)(react@18.2.0)
-      '@floating-ui/react': 0.26.0(react-dom@18.2.0)(react@18.2.0)
-      '@pixi/mixin-get-child-by-name': 7.4.2(@pixi/display@7.4.2)
-      '@pixi/react': 7.1.2(@babel/runtime@7.24.5)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
-      '@popperjs/core': 2.11.8
-      '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
-      '@tanstack/react-query': 5.8.4(react-dom@18.2.0)(react@18.2.0)
-      '@tiptap/pm': 2.3.0
-      '@tiptap/react': 2.3.0(@tiptap/core@2.4.0)(@tiptap/pm@2.3.0)(react-dom@18.2.0)(react@18.2.0)
-      '@tiptap/starter-kit': 2.3.0(@tiptap/pm@2.3.0)
-      clsx: 2.1.0
-      dayjs: 1.11.10
-      html-react-parser: 4.2.1(react@18.2.0)
-      pako: 2.1.0
-      pixi.js: 7.4.2
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      react-hook-form: 7.49.3(react@18.2.0)
-      react-hot-toast: 2.4.1(csstype@3.1.3)(react-dom@18.2.0)(react@18.2.0)
-      react-i18next: 14.1.0(i18next@23.8.1)(react-dom@18.2.0)(react@18.2.0)
-      react-popper: 2.3.0(@popperjs/core@2.11.8)(react-dom@18.2.0)(react@18.2.0)
-      swiper: 10.1.0
-      ua-parser-js: 1.0.36
-    transitivePeerDependencies:
-      - '@babel/runtime'
-      - '@pixi/app'
-      - '@pixi/constants'
-      - '@pixi/core'
-      - '@pixi/display'
-      - '@pixi/extensions'
-      - '@pixi/graphics'
-      - '@pixi/math'
-      - '@pixi/mesh'
-      - '@pixi/mesh-extras'
-      - '@pixi/particle-container'
-      - '@pixi/sprite'
-      - '@pixi/sprite-animated'
-      - '@pixi/sprite-tiling'
-      - '@pixi/text'
-      - '@pixi/text-bitmap'
-      - '@pixi/ticker'
-      - '@tiptap/core'
-      - csstype
-      - prop-types
     dev: false

@@ -1,6 +1,7 @@
+import { AppParams } from "ode-explorer/lib";
 import { workflows } from ".";
 
-export const explorerConfig = {
+export const explorerConfig: AppParams = {
   app: "collaborativewall",
   types: ["collaborativewall"],
   libraryAppFilter: "CollaborativeWall",

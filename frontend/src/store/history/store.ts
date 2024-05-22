@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { updateState } from "~/features/history/helpers/update-state";
+import { updateState } from "~/features/History/helpers/updateState";
 import { ActionData } from "../websocket/types";
 import { HistoryAction, HistoryState, NewState } from "./types";
 

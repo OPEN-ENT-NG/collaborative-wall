@@ -8,12 +8,11 @@ import {
 } from "~/services/queries";
 
 import { LoadingScreen, useTrashedResource } from "@edifice-ui/react";
-import { AppHeader } from "~/features/app/app-header";
-import { Wall } from "~/features/collaborative-wall/wall";
-import DescriptionWall from "~/features/description/components/description-wall";
-import { useAccessStore } from "~/hooks/use-access-rights";
-import { useWhiteboardStore } from "~/store";
-import { useRightsStore } from "~/store/rights/store";
+import { AppHeader } from "~/features/App/AppHeader";
+import { Description } from "~/features/Description/Description";
+import { Wall } from "~/features/Wall/Wall";
+import { useAccessStore } from "~/hooks/useAccessStore";
+import { useRightsStore, useWhiteboardStore } from "~/store";
 import "./index.css";
 
 export const loader =
@@ -47,7 +46,7 @@ export const loader =
     return { wall, notes, query };
   };
 
-export const CollaborativeWall = () => {
+export const Component = () => {
   const isLoadingRights = useRightsStore((state) => state.isLoading);
   const isMobile = useWhiteboardStore((state) => state.isMobile);
 
@@ -62,7 +61,7 @@ export const CollaborativeWall = () => {
     <>
       <div className="position-fixed z-3 top-0 start-0 end-0">
         <AppHeader />
-        {wall?.description && !isMobile && <DescriptionWall />}
+        {wall?.description && !isMobile && <Description />}
       </div>
       <Wall />
     </>

@@ -1,3 +1,5 @@
+import { CoordinateExtent } from "reactflow";
+
 export const workflows = {
   view: "net.atos.entng.collaborativewall.controllers.CollaborativeWallController|view",
   list: "net.atos.entng.collaborativewall.controllers.CollaborativeWallController|list",
@@ -23,8 +25,6 @@ export const rights = {
       "net-atos-entng-collaborativewall-controllers-CollaborativeWallController|delete",
   },
 };
-
-import { CoordinateExtent } from "reactflow";
 
 const HEIGHT_WALL = 1800;
 const WIDTH_WALL = 2880;

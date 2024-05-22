@@ -1,5 +1,5 @@
 import { ID } from "edifice-ts-client";
-import { NoteMedia } from "~/models/note-media";
+import { MediaProps } from "~/models/media";
 import { NoteProps } from "~/models/notes";
 
 import { ActionData } from "~/store/websocket/types";
@@ -33,7 +33,7 @@ type NoteState = {
   y: number;
   color?: string[];
   content?: string;
-  media?: NoteMedia | null;
+  media?: MediaProps | null;
 };
 
 export type NewState = {
