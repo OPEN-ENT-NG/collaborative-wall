@@ -25,7 +25,7 @@ export default function DescriptionWall() {
   );
 
   return (
-    <div className="description-wall d-flex justify-content-between">
+    <div className="description-wall d-flex justify-content-between py-8 px-16 px-md-48">
       <p className="text-truncate">{wall?.description}</p>
       <Button
         variant="ghost"
