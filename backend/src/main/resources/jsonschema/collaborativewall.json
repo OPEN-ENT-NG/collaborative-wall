@@ -17,6 +17,9 @@
         },
         "_id": {
             "type": "string"
+        },
+        "folder": {
+            "type": "number"
         }
     },
     "required": [

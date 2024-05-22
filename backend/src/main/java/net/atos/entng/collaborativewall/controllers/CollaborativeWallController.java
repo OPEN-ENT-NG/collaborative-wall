@@ -238,6 +238,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                 if (user != null) {
                     final Handler<Either<String, JsonObject>> handler = DefaultResponseHandler.notEmptyResponseHandler(request);
                     // create wall
+                    final Optional<Number> folderId = Optional.ofNullable(wall.getNumber("folder"));
                     crudService.create(wall, user, (r) -> {
                         if (r.isLeft()) {
                             // if fail return error
@@ -249,7 +250,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                             wall.put("version", System.currentTimeMillis());
                             wall.put("_id", r.right().getValue().getString("_id"));
                             plugin.setCreatorForModel(user, wall);
-                            plugin.notifyUpsert(user, wall).onSuccess(e -> {
+                            plugin.notifyUpsert(user, wall, folderId).onSuccess(e -> {
                                 // on success return 200
                                 handler.handle(r);
                             }).onFailure(e -> {
