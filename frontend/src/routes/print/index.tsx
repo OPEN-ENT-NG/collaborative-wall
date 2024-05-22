@@ -74,7 +74,7 @@ export const CollaborativeWall = () => {
           >
             <div
               style={{
-                backgroundImage: `url(${import.meta.env.PROD ? `/collaborativewall/public/${path}` : `/${path}`}`,
+                backgroundImage: `url(${import.meta.env.PROD ? `/collaborativewall/public/${path}` : `/${path}`})`,
                 width: "100%",
                 height: "100%",
               }}
