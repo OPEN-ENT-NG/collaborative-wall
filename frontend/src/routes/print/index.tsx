@@ -53,6 +53,8 @@ export const CollaborativeWall = () => {
     // Cleanup function to clear the timeout if the component unmounts
     return () => clearTimeout(timeoutId);
   }, []); // Empty dependency array ensures the effect runs only once
+  const hasBackgroundImage = !!wall?.background.path;
+  const path = hasBackgroundImage ? wall?.background.path : backgroundImages[0];
 
   return (
     <div className={styles["print-full-page"]}>
@@ -72,7 +74,7 @@ export const CollaborativeWall = () => {
           >
             <div
               style={{
-                backgroundImage: `url(${import.meta.env.PROD ? `/collaborativewall/public/${wall?.background.path ?? backgroundImages[0]}` : `/${wall?.background.path ?? backgroundImages[0]}`}`,
+                backgroundImage: `url(${import.meta.env.PROD ? `/collaborativewall/public/${path}` : `/${path}`}`,
                 width: "100%",
                 height: "100%",
               }}
