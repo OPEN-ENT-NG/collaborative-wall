@@ -172,7 +172,7 @@ export const useCustomRF = () => {
   const onPaneMouseMove = useCallback(
     (event: React.MouseEvent) => {
       if (event) {
-        throttledPosition({ x: event.clientX, y: event.clientY });
+        throttledPosition({ x: event.pageX, y: event.pageY });
       }
     },
     [throttledPosition],
@@ -187,7 +187,7 @@ export const useCustomRF = () => {
       };
       if (coordinates) {
         throttledOnMove({ _id: node.id, ...coordinates });
-        throttledPosition({ x: event.clientX, y: event.clientY });
+        throttledPosition({ x: event.pageX, y: event.pageY });
       }
     },
     [throttledOnMove, throttledPosition],
