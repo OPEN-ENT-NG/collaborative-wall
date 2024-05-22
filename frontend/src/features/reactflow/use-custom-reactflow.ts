@@ -129,9 +129,12 @@ export const useCustomRF = () => {
     callbackFn: callbackFnToThrottle,
   });
 
+  const [reactFlowInstance, setReactFlowInstance] =
+    useState<ReactFlowInstance<unknown, unknown>>();
   /* onInit we use React Flow instance to set nodes */
   const onInit = useCallback(
     (instance: ReactFlowInstance) => {
+      setReactFlowInstance(instance);
       if (notes) {
         const newNodes = notes
           ?.sort(
@@ -172,10 +175,13 @@ export const useCustomRF = () => {
   const onPaneMouseMove = useCallback(
     (event: React.MouseEvent) => {
       if (event) {
-        throttledPosition({ x: event.pageX, y: event.pageY });
+        const clientCoords = { x: event.clientX, y: event.clientY };
+        throttledPosition(
+          reactFlowInstance?.project(clientCoords) ?? clientCoords,
+        );
       }
     },
-    [throttledPosition],
+    [throttledPosition, reactFlowInstance],
   );
 
   /* onNodeDrag to track mouse and note positions */
@@ -186,11 +192,14 @@ export const useCustomRF = () => {
         y: node.position.y,
       };
       if (coordinates) {
+        const clientCoords = { x: event.clientX, y: event.clientY };
         throttledOnMove({ _id: node.id, ...coordinates });
-        throttledPosition({ x: event.pageX, y: event.pageY });
+        throttledPosition(
+          reactFlowInstance?.project(clientCoords) ?? clientCoords,
+        );
       }
     },
-    [throttledOnMove, throttledPosition],
+    [throttledOnMove, throttledPosition, reactFlowInstance],
   );
 
   /* onNodeDragStop, we update note */
