@@ -6,7 +6,6 @@ import {
   NodeChange,
   ReactFlowInstance,
   applyNodeChanges,
-  useReactFlow,
 } from "reactflow";
 import { v4 as uuid } from "uuid";
 import { useAccessStore } from "~/hooks/use-access-rights";
@@ -17,7 +16,6 @@ import { useWebsocketStore, useWhiteboardStore } from "~/store";
 import { Note } from "../collaborative-wall/components/note";
 
 export const useCustomRF = () => {
-  const reactFlow = useReactFlow();
   /** Creade nodes elements for React Flow and add new "note" type */
   const [nodes, setNodes] = useState<Node[]>([]);
   const nodeTypes = useMemo(() => ({ note: Note }), []);
@@ -174,12 +172,10 @@ export const useCustomRF = () => {
   const onPaneMouseMove = useCallback(
     (event: React.MouseEvent) => {
       if (event) {
-        throttledPosition(
-          reactFlow.project({ x: event.clientX, y: event.clientY }),
-        );
+        throttledPosition({ x: event.pageX, y: event.pageY });
       }
     },
-    [throttledPosition, reactFlow],
+    [throttledPosition],
   );
 
   /* onNodeDrag to track mouse and note positions */
