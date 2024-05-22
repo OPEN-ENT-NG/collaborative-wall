@@ -191,12 +191,10 @@ export const useCustomRF = () => {
       };
       if (coordinates) {
         throttledOnMove({ _id: node.id, ...coordinates });
-        throttledPosition(
-          reactFlow.project({ x: event.clientX, y: event.clientY }),
-        );
+        throttledPosition({ x: event.pageX, y: event.pageY });
       }
     },
-    [throttledOnMove, throttledPosition, reactFlow],
+    [throttledOnMove, throttledPosition],
   );
 
   /* onNodeDragStop, we update note */
