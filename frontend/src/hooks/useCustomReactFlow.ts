@@ -16,6 +16,8 @@ import { useWebsocketStore, useWhiteboardStore } from "~/store";
 import { Note } from "../features/Note/components/Note";
 
 export const useCustomReactFlow = () => {
+  const [reactFlowInstance, setReactFlowInstance] =
+    useState<ReactFlowInstance<unknown, unknown>>();
   /** Creade nodes elements for React Flow and add new "note" type */
   const [nodes, setNodes] = useState<Node[]>([]);
   const nodeTypes = useMemo(() => ({ note: Note }), []);
@@ -132,6 +134,7 @@ export const useCustomReactFlow = () => {
   /* onInit we use React Flow instance to set nodes */
   const onInit = useCallback(
     (instance: ReactFlowInstance) => {
+      setReactFlowInstance(instance);
       if (notes) {
         const newNodes = notes
           ?.sort(
@@ -172,10 +175,13 @@ export const useCustomReactFlow = () => {
   const onPaneMouseMove = useCallback(
     (event: React.MouseEvent) => {
       if (event) {
-        throttledPosition({ x: event.clientX, y: event.clientY });
+        const clientCoords = { x: event.clientX, y: event.clientY };
+        throttledPosition(
+          reactFlowInstance?.project(clientCoords) ?? clientCoords,
+        );
       }
     },
-    [throttledPosition],
+    [throttledPosition, reactFlowInstance],
   );
 
   /* onNodeDrag to track mouse and note positions */
@@ -186,11 +192,14 @@ export const useCustomReactFlow = () => {
         y: node.position.y,
       };
       if (coordinates) {
+        const clientCoords = { x: event.clientX, y: event.clientY };
         throttledOnMove({ _id: node.id, ...coordinates });
-        throttledPosition({ x: event.clientX, y: event.clientY });
+        throttledPosition(
+          reactFlowInstance?.project(clientCoords) ?? clientCoords,
+        );
       }
     },
-    [throttledOnMove, throttledPosition],
+    [throttledOnMove, throttledPosition, reactFlowInstance],
   );
 
   /* onNodeDragStop, we update note */
