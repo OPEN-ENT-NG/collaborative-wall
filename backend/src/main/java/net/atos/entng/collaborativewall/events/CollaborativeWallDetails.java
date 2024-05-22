@@ -36,15 +36,25 @@ public class CollaborativeWallDetails {
     this.owner = owner;
     // manage imported background as String
     if(background == null){
-      this.background = null;
+      // should not be null
+      this.background = new CollaborativeWallBackground("", "");
     }else if(background instanceof  CollaborativeWallBackground){
-      this.background = (CollaborativeWallBackground)background;
+      this.background = checkBackground((CollaborativeWallBackground)background);
     }else if (background instanceof String){
-      this.background =  new CollaborativeWallBackground(background.toString(), "");
+      this.background =  checkBackground(new CollaborativeWallBackground(background.toString(), ""));
     }else if(background instanceof Map){
-      this.background = CollaborativeWallBackground.fromJson(new JsonObject((Map<String, Object>) background));
+      this.background = checkBackground(CollaborativeWallBackground.fromJson(new JsonObject((Map<String, Object>) background)));
     }else {
       throw new IllegalArgumentException("Invalid type for background: "+background);
+    }
+    // should not contains custom background
+  }
+
+  private static CollaborativeWallBackground checkBackground(final CollaborativeWallBackground background){
+    if(background != null && background.getPath() != null && background.getPath().startsWith("/workspace/")){
+      return  new CollaborativeWallBackground("", background.getColor());
+    }else{
+      return background;
     }
   }
   public CollaborativeWallDetails(final String id, final CollaborativeWallDetails other) {
