@@ -22,22 +22,27 @@ export const WebsocketRenderedCursors = () => {
   const renderCursors = () => {
     if (!filteredUsers || !moveUsers) return null;
 
-    return moveUsers.map((moveUser) => {
-      const user = filteredUsers.find((user) => user.id === moveUser.id);
+    return moveUsers
+      .filter((moveUser) => {
+        const user = filteredUsers.find((user) => user.id === moveUser.id);
+        return !!user;
+      })
+      .map((moveUser) => {
+        const user = filteredUsers.find((user) => user.id === moveUser.id);
 
-      if (moveUser.x === 0 && moveUser.y === 0) return;
-      /* if (!user?.name) {
+        if (moveUser.x === 0 && moveUser.y === 0) return;
+        /* if (!user?.name) {
         // if missing  user => query for metadata
         queryForMetadata();
       } */
-      return (
-        <Cursor
-          key={moveUser.id}
-          username={user?.name}
-          point={[moveUser.x, moveUser.y]}
-        />
-      );
-    });
+        return (
+          <Cursor
+            key={moveUser.id}
+            username={user?.name}
+            point={[moveUser.x, moveUser.y]}
+          />
+        );
+      });
   };
 
   return numberOfUsers ? renderCursors() : null;
