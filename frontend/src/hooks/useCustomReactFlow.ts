@@ -177,7 +177,7 @@ export const useCustomReactFlow = () => {
       if (event) {
         const clientCoords = { x: event.clientX, y: event.clientY };
         throttledPosition(
-          reactFlowInstance?.project(clientCoords) ?? clientCoords,
+          reactFlowInstance?.screenToFlowPosition(clientCoords) ?? clientCoords,
         );
       }
     },
@@ -195,7 +195,7 @@ export const useCustomReactFlow = () => {
         const clientCoords = { x: event.clientX, y: event.clientY };
         throttledOnMove({ _id: node.id, ...coordinates });
         throttledPosition(
-          reactFlowInstance?.project(clientCoords) ?? clientCoords,
+          reactFlowInstance?.screenToFlowPosition(clientCoords) ?? clientCoords,
         );
       }
     },
