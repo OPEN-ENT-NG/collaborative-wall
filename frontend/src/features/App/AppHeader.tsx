@@ -56,7 +56,6 @@ export const AppHeader = () => {
     const newWall = await loadWall(wall._id);
 
     await sendWallUpdateEvent(newWall);
-
     await queryClient.invalidateQueries({
       queryKey: wallQueryOptions(wall._id).queryKey,
     });
@@ -73,9 +72,9 @@ export const AppHeader = () => {
         <Suspense fallback={<LoadingScreen position={false} />}>
           {openBackgroundModal && wall && (
             <BackgroundModal
-              setIsOpen={setIsOpenBackgroundModal}
-              isOpen={openBackgroundModal}
               wall={wall}
+              isOpen={openBackgroundModal}
+              setIsOpen={setIsOpenBackgroundModal}
             />
           )}
           {openUpdateModal && wall && (

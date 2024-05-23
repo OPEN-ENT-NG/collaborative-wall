@@ -12,6 +12,7 @@ export const useActions = () => {
       const availableRights = await sessionHasWorkflowRights([view, list]);
       return availableRights;
     },
+    staleTime: Infinity,
     select: (data) => {
       const actions: any[] = [
         {

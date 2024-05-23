@@ -164,6 +164,10 @@ export const useEvents = () => {
           deleteNoteQueryData(queryClient, event.note);
           break;
         }
+        case "connection": {
+          queryForMetadata();
+          break;
+        }
         case "disconnection": {
           queryForMetadata();
           break;

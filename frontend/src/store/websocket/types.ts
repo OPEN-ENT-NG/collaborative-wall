@@ -207,6 +207,12 @@ export type NoteAddedPayloadEvent = {
   };
 };
 
+export type ConnectionPayloadEvent = {
+  wallId: string;
+  userId: string;
+  type: "connection";
+};
+
 export type DisconnectionPayloadEvent = {
   wallId: string;
   userId: string;
@@ -229,6 +235,7 @@ export type EventPayload = (
   | NoteSelectedPayload
   | NoteDeletedPayloadEvent
   | DisconnectionPayloadEvent
+  | ConnectionPayloadEvent
 ) &
   ActionData;
 
