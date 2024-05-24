@@ -51,6 +51,7 @@
     "@edifice-ui/editor": "develop",
     "@edifice-ui/icons": "develop",
     "@edifice-ui/react": "develop",
+    "@edifice-ui/multimedia": "develop",
     "@mantine/hooks": "7.7.1",
     "@react-spring/web": "9.7.3",
     "@tanstack/react-query": "5.8.4",
