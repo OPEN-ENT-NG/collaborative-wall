@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "idwall": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "modified": {
+      "type": "object"
+    },
+    "x": {
+      "type": "integer"
+    },
+    "y": {
+      "type": "integer"
+    },
+    "color": {
+      "type": "array"
+    },
+    "media": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "content",
+    "x",
+    "y",
+    "color",
+    "idwall"
+  ]
+}

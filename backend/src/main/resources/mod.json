@@ -1,0 +1,14 @@
+{
+    "main" : "net.atos.entng.collaborativewall.CollaborativeWall",
+    "port": 8071,
+    "mode": "dev",
+    "auto-redeploy": true,
+    "host" : "http://localhost:8071",
+    "userbook-host" : "http://localhost:8003",
+    "app-name" : "CollaborativeWall",
+    "app-address" : "http://localhost:8071/collaborativewall",
+    "app-icon" : "collaborative-wall-large",
+    "real-time": {
+        "port": 9091
+    }
+}

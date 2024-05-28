@@ -1,0 +1,31 @@
+  	{
+      "name": "net.atos~collaborativewall~2.0.0",
+      "config": {
+        "main" : "net.atos.entng.collaborativewall.CollaborativeWall",
+        "port" : 8071,
+        "app-name" : "CollaborativeWall",
+        "app-address" : "/collaborativewall",
+        "app-icon" : "collaborative-wall-large",
+        "host": "${host}",
+        "ssl" : $ssl,
+        "userbook-host": "${host}",
+        "integration-mode" : "HTTP",
+        "app-registry.port" : 8012,
+        "app-type" : "END_USER",
+        "mode" : "${mode}",
+        "entcore.port" : 8009,
+        "real-time": {
+             "port": 9091,
+             "max-connected-user": 5
+        },
+        "publicConf": {
+          <% if ("true".equals(xitiSwitch)) { %>
+            "xiti": {
+              "ID_SERVICE": {
+                "default": 2
+              }
+            }
+          <% } %>
+        }
+      }
+    }

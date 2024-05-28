@@ -1,0 +1,7 @@
+.item {
+  min-width: 22px;
+  width: 22px;
+  height: 22px;
+  border: 1px solid;
+  border-radius: 22px;
+}
