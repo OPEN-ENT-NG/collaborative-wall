@@ -1,0 +1,1 @@
+db.collaborativewall.createIndex({ "name": "text", "description": "text" });

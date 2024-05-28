@@ -1,0 +1,36 @@
+.DS_Store
+.gradle
+.idea
+.classpath
+.project
+.settings
+.yardoc
+.yardopts
+bin
+build
+*/build
+target
+out
+*.iml
+*.ipr
+*.iws
+test-output
+test-results
+test-tmp
+*.class
+mods
+*/mods
+data
+developer.id
+/coverage/front/cobertura-coverage.xml
+rev-manifest.json
+/build
+/bin
+node_modules/
+gradle/
+gradlew*
+# Ignore the entire "resources" folder except jsonchema
+src/main/resources/public/*.js
+src/main/resources/public/*.css
+src/main/resources/view/index.html
+# src/main/resources/view
