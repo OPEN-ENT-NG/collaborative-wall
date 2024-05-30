@@ -11,6 +11,7 @@ import {
   linkRoleToUsers,
   activateUsers,
   getRolesOfStructure,
+  getTeacherRole
 } from "https://raw.githubusercontent.com/juniorode/edifice-k6-commons/develop/dist/index.js";
 import { WebSocket } from "k6/experimental/websockets";
 import { setTimeout, setInterval, clearInterval } from "k6/experimental/timers";
@@ -29,7 +30,7 @@ const nbUsers = parseInt(__ENV.NB_USERS || "10");
 const schoolName = __ENV.DATA_SCHOOL_NAME || "Tests Collaborative Wall 3";
 const dataRootPath = __ENV.DATA_ROOT_PATH || "../resources/data/";
 const NB_MESSAGES = parseInt(__ENV.NB_MESSAGES || "10");
-const gracefulStop = parseInt(__ENV.GRACEFUL_STOP || "2s");
+const gracefulStop = parseInt(__ENV.GRACEFUL_STOP || "10s");
 const userTimeToLiveInMs = parseInt(__ENV.USER_TTL || "20000");
 const checkNumberOfMessages = "false" !== __ENV.CHECK_NB_MESSAGES_RCV;
 
@@ -186,8 +187,8 @@ function createWall(structure, adminSession) {
     "fetch structure users": (r) => r.status == 200,
   });
   const users = JSON.parse(res.body);
-  const roles = getRolesOfStructure(structure.id, adminSession);
-  const groupIds = roles.map((role) => role.id);
+  const teacherGroup = getTeacherRole(structure, adminSession);
+  const teacherGroupId = teacherGroup.id;
   const user = users[0];
   const userSession = authenticateWeb(user.login, "password");
   const headers = getHeaders(userSession);
@@ -207,17 +208,14 @@ function createWall(structure, adminSession) {
   });
   const wallId = JSON.parse(res.body)["_id"];
   const groups = {};
-  groupIds.forEach(
-    (groupId) =>
-      (groups[groupId] = [
+  groups[teacherGroupId] = [
         "net-atos-entng-collaborativewall-controllers-CollaborativeWallController|getNote",
         "net-atos-entng-collaborativewall-controllers-CollaborativeWallController|retrieveAllNotes",
         "net-atos-entng-collaborativewall-controllers-CollaborativeWallController|retrieve",
         "net-atos-entng-collaborativewall-controllers-CollaborativeWallController|updateNote",
         "net-atos-entng-collaborativewall-controllers-CollaborativeWallController|deleteNote",
         "net-atos-entng-collaborativewall-controllers-CollaborativeWallController|createNote",
-      ])
-  );
+      ];
   const sharePayload = {
     bookmarks: {},
     groups: groups,
@@ -236,7 +234,7 @@ function createWall(structure, adminSession) {
 
 function getWsUrl(httpUrl) {
   const url = extractHostname(httpUrl);
-  return `ws://${url}:9091`;
+  return `wss://${url}/collaborativewall/realtime`;
 }
 
 function extractHostname(url) {
