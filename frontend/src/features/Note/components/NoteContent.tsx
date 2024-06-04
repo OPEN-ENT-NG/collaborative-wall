@@ -145,6 +145,7 @@ export const NoteContent = forwardRef(
           appCode={appCode}
           ref={mediaLibraryRef}
           multiple={false}
+          visibility="protected"
           {...mediaLibraryModalHandlers}
         />
       </>
