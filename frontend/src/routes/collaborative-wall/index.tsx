@@ -8,6 +8,7 @@ import {
 } from "~/services/queries";
 
 import { LoadingScreen, useTrashedResource } from "@edifice-ui/react";
+import { odeServices } from "edifice-ts-client";
 import { AppHeader } from "~/features/App/AppHeader";
 import { Description } from "~/features/Description/Description";
 import { Wall } from "~/features/Wall/Wall";
@@ -31,15 +32,16 @@ export const loader =
       }));
     }
 
-    const [wall, notes] = await Promise.all([
-      queryClient.ensureQueryData(queryWall),
-      queryClient.ensureQueryData(queryNotes),
-    ]);
+    const wall = await queryClient.ensureQueryData(queryWall);
+    const notes = await queryClient.ensureQueryData(queryNotes);
 
-    if (!wall || !notes) {
+    if (
+      odeServices.http().isResponseError() &&
+      odeServices.http().latestResponse.status === 401
+    ) {
       throw new Response("", {
-        status: 404,
-        statusText: "Not Found",
+        status: 401,
+        statusText: odeServices.http().latestResponse.statusText,
       });
     }
 
