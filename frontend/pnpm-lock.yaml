@@ -6,14 +6,14 @@ settings:
 
 dependencies:
   '@edifice-ui/editor':
-    specifier: develop
-    version: 1.5.9-develop.5(@edifice-ui/icons@1.5.9-develop.1)(@edifice-ui/react@1.5.9-develop.5)(@react-spring/web@9.7.3)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.1.0)(react@18.2.0)
+    specifier: develop-b2school
+    version: 1.5.10-develop-b2school.1(@edifice-ui/icons@1.5.10-develop-b2school.0)(@edifice-ui/react@1.5.10-develop-b2school.1)(@react-spring/web@9.7.3)(react-dom@18.2.0)(react-i18next@14.1.0)(react@18.2.0)
   '@edifice-ui/icons':
-    specifier: develop
-    version: 1.5.9-develop.1(react-dom@18.2.0)(react@18.2.0)
+    specifier: develop-b2school
+    version: 1.5.10-develop-b2school.0(react-dom@18.2.0)(react@18.2.0)
   '@edifice-ui/react':
-    specifier: develop
-    version: 1.5.9-develop.5(@babel/runtime@7.24.7)(@edifice-ui/icons@1.5.9-develop.1)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.2)(react-i18next@14.1.0)(react@18.2.0)
+    specifier: develop-b2school
+    version: 1.5.10-develop-b2school.1(@babel/runtime@7.24.7)(@edifice-ui/icons@1.5.10-develop-b2school.0)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.2)(react-i18next@14.1.0)(react@18.2.0)
   '@mantine/hooks':
     specifier: 7.7.1
     version: 7.7.1(react@18.2.0)
@@ -42,8 +42,8 @@ dependencies:
     specifier: 2.4.2
     version: 2.4.2
   ode-explorer:
-    specifier: develop
-    version: 1.4.11-develop.202406111120(@babel/runtime@7.24.7)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@tiptap/core@2.4.0)(@types/react@18.2.48)(csstype@3.1.3)(prop-types@15.8.1)
+    specifier: develop-b2school
+    version: 1.4.12-develop-b2school.202406121448(@babel/runtime@7.24.7)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@tiptap/core@2.4.0)(@types/react@18.2.48)(csstype@3.1.3)(prop-types@15.8.1)
   perfect-cursors:
     specifier: 1.0.5
     version: 1.0.5
@@ -119,11 +119,11 @@ devDependencies:
     specifier: 3.1.3
     version: 3.1.3
   edifice-bootstrap:
-    specifier: develop
-    version: 1.5.9-develop.2
+    specifier: develop-b2school
+    version: 1.5.10-develop-b2school.0
   edifice-ts-client:
-    specifier: develop
-    version: 1.5.9-develop.2
+    specifier: develop-b2school
+    version: 1.5.10-develop-b2school.0
   eslint:
     specifier: 8.56.0
     version: 8.56.0
@@ -408,8 +408,8 @@ packages:
       to-fast-properties: 2.0.0
     dev: true
 
-  /@edifice-tiptap-extensions/extension-alert@1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-mnejgsxwy7k/GkmcYVYCV/WLLE//Mx/+8Zso6kpiF0igxYcnF/q1P5polbovDR7tzJ8LOzWD0/N0H1BVB+qW3g==}
+  /@edifice-tiptap-extensions/extension-alert@1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-3RKXB/KQAWDkKSFGh0Wg1E49krPtAONog5JUz1+CsJQvJIcoF3yLdSnomw4TDHkTD7OeyRbcWC8c8L9ZGCykbQ==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -418,8 +418,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-attachment@1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-MP0UBOcuvM6eIwkHD52Wpl+s4Y6e8cAKwHn6O2CkH9jcMKsyepk0l8QbraJdLgzE0J13ljaZ6MHJq4m/N43bTQ==}
+  /@edifice-tiptap-extensions/extension-attachment@1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-KAo4mO0Zv3cszW4sW6s13P/Lj4XRotU5hUP7RHNS+i1FTTyPXDFe5VXNm3QoMDi8vWetPg4ns36UxsVdeO02xA==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -428,8 +428,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-audio@1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-vxkyCDTf70uh/0k301z98MOCWTNAvTHTAtfs1PdiGK3FWyL+boya4LwRxRlwtaR6+paOaQil3C8N68DEMIc1Og==}
+  /@edifice-tiptap-extensions/extension-audio@1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-eZX3/ddoTnG/H9RS4yt9WqNLW6MEu7e8kKWz7U186av/At8fhrkELQ2+12KwGsNKX5z8+G3qvaH+3yfh1AQF4A==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -438,22 +438,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-font-size@1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/extension-heading@2.3.0)(@tiptap/extension-text-style@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-sBf8i0Mb4hKVvp9g4vzGUy4iVto7yZXaIYyEoietLqhQuDDkHqQeu+KVazT9C7pIz91sOq/L0xn7KLD0jiIrEA==}
-    peerDependencies:
-      '@tiptap/core': 2.3.0
-      '@tiptap/extension-heading': 2.3.0
-      '@tiptap/extension-text-style': 2.3.0
-      '@tiptap/pm': 2.3.0
-    dependencies:
-      '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
-      '@tiptap/extension-heading': 2.3.0(@tiptap/core@2.4.0)
-      '@tiptap/extension-text-style': 2.3.0(@tiptap/core@2.4.0)
-      '@tiptap/pm': 2.3.0
-    dev: false
-
-  /@edifice-tiptap-extensions/extension-heading@1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/extension-heading@2.3.0)(@tiptap/extension-text-style@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-y9hFq93xOmzEzIwTH3RXnujZOStTGiYZ/J6SRHq6uhV9p+OKyd9kVm0gxpS/Nl03Itkxl/TwNrfcAYrk2dv+LQ==}
+  /@edifice-tiptap-extensions/extension-font-size@1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/extension-heading@2.3.0)(@tiptap/extension-text-style@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-TfvlgCJiZRkhT3ZrC3oHkFqOteJTczWjjRlLyuy+wv95ml6Ae97hzzBSyRmHWeSjPJYX4QSCOztPZtpzRrieZQ==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/extension-heading': 2.3.0
@@ -466,8 +452,22 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-highlight@1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/extension-highlight@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-mxTm/81IiPnXAgoZqAqqDXYYVCt+PcixzfOp+xUgMHk+elFjG7gmhjZRrBwjsbvGRT/DOALb0aXdwi190q8CXw==}
+  /@edifice-tiptap-extensions/extension-heading@1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/extension-heading@2.3.0)(@tiptap/extension-text-style@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-2clKPqXMRabbnF4iW49oHZvWSm9+dY0t1Ar4SpY0e9kosZsOFLNTGbV7mNnxOGs1CTRlY7UP1pxi9po28kghrA==}
+    peerDependencies:
+      '@tiptap/core': 2.3.0
+      '@tiptap/extension-heading': 2.3.0
+      '@tiptap/extension-text-style': 2.3.0
+      '@tiptap/pm': 2.3.0
+    dependencies:
+      '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
+      '@tiptap/extension-heading': 2.3.0(@tiptap/core@2.4.0)
+      '@tiptap/extension-text-style': 2.3.0(@tiptap/core@2.4.0)
+      '@tiptap/pm': 2.3.0
+    dev: false
+
+  /@edifice-tiptap-extensions/extension-highlight@1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/extension-highlight@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-kb6pZ59/atbqKL+nXiPAWa3R48CRbBPzyXgZOpYssoTHTViqlTVzed3Wocnr+OaghXKq6VPSmz1i7RpUc6EbUA==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/extension-highlight': 2.3.0
@@ -478,8 +478,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-hyperlink@1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/extension-link@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-yb+3MlVZfTFRQZZ4yjoFwWIECBhCJzmHGaYj1DkbVi2b6EcIXtZ9vN1cBiOcEO7jn1mTcb5wrZ6ZknM8NfrMuQ==}
+  /@edifice-tiptap-extensions/extension-hyperlink@1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/extension-link@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-5StwykWrY5fExTyxgZEI1M6/9feeQSi3+zef5cpRrID/6VYnJBRgEWT5nWkArXawjE0puVouCK22B8ae1BLdgw==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/extension-link': 2.3.0
@@ -490,8 +490,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-iframe@1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-zb2U1CqOCRuePkULNuK+byXvyUePecY+LBneuc2XUC/d5acOTG3YXnxLN/TdjvzVescMrXWS1luA8Why1Lx8/A==}
+  /@edifice-tiptap-extensions/extension-iframe@1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-pT4drWgCaffAhvcCywrYpVxE1DONjwsDFv7DHkv6odB0epPdQHh2KY++uVEpzGQg4ieKSh6o21qBpmLH/juc9Q==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -500,8 +500,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-image@1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-+0rLGJjXV/zk6FBk8o32Dz3HlN+rVj/yZJH2q8O7qraouNUWNbR2rqVbmTef6m+1cietEGPVroHa5fGhSiuiJg==}
+  /@edifice-tiptap-extensions/extension-image@1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-ELa1/ZgiDoOG6sZ5A55+jxe/WfMhqGYuJYDedXgYx86fajAaLTfHU6/EnfPtJO0zsJVc+Be+8gTxo1hrMGlilQ==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -511,8 +511,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-linker@1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/extension-link@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-3l5QFHmuszkV+IzB0WyaRGJ0C5bBPjxRnTxVZW+a0W216tlwCTzCMgrXH+emcgYG3gHvl5xYUZsH0uhY+0GLEQ==}
+  /@edifice-tiptap-extensions/extension-linker@1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/extension-link@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-mFmLJX016yiYII6eUBg1WfiNGWDU8xCyS7PO93d7MHGnICo7g9KMX7BDLoe7Po63ORFkjx8ONBkNEEawWT3AGA==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/extension-link': 2.3.0
@@ -523,8 +523,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-speechrecognition@1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-Rt2zmfL1QSrxmh7KCE3n0bspmBDLgZpbmFi5vVIzJLuIY6DJPATEJk9uqUaPyGuFR3lURhtfwVLNcNsOUnP1RA==}
+  /@edifice-tiptap-extensions/extension-speechrecognition@1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-+YFGUO0pIf/C8unF+5yEwHBAozxpcNL26Rkj1EOHo0qraDEvI3qLEQOmmeAgsCoPjh0l7S0fSA1G1NX7jKoazg==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -533,8 +533,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-speechsynthesis@1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-Srkmnb0w4X2oCflmLfx9kBYT5pctSxvVSF+AJLt1BQryiaUC92wmU4NsImOqwc3nPYi0FO6XCICmuQyyG+OUbQ==}
+  /@edifice-tiptap-extensions/extension-speechsynthesis@1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-SN97R3F8pL7yCHKJucxlI4FgMPt6vsGDM5trX0/Igp87WyNaOpUWLFNvpNgBHlTBV0JPZf8XbuBf5LGdZZyuyA==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -543,8 +543,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-table-cell@1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-QLsr9hdI3SUFB1FYpLSI866XGaak32jII90VCPPa4w8scuroU238uuFdwKol6uYHH/6g+fMwSdqTmgdepZ9clQ==}
+  /@edifice-tiptap-extensions/extension-table-cell@1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-3XWL7VF0kzJsSooXMsE0iR8xbIzDNe3ZUinPVMqcR1WmkK495YzKxe3gKiYgOPm/EKoScGovJPG8kl8/DV3FTQ==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -554,8 +554,8 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-tiptap-extensions/extension-video@1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
-    resolution: {integrity: sha512-I2nbuR+SYoEHqMR5h7PbhKEocVJxcaK9/jxlhR3feVocQqKccIamQ8V8qRU7doV+AQr2KfAA32StD8GbTGXxRg==}
+  /@edifice-tiptap-extensions/extension-video@1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0):
+    resolution: {integrity: sha512-FqmT3QYpJ5J6eZzeejpGS1iV9vpiS0+bHXk3GUMDo1LwQoi7opPVLryUQKQETJhWlvZra4arV7bHY8cQn6w/5A==}
     peerDependencies:
       '@tiptap/core': 2.3.0
       '@tiptap/pm': 2.3.0
@@ -564,33 +564,32 @@ packages:
       '@tiptap/pm': 2.3.0
     dev: false
 
-  /@edifice-ui/editor@1.5.9-develop.5(@edifice-ui/icons@1.5.9-develop.1)(@edifice-ui/react@1.5.9-develop.5)(@react-spring/web@9.7.3)(clsx@2.1.0)(react-dom@18.2.0)(react-i18next@14.1.0)(react@18.2.0):
-    resolution: {integrity: sha512-63iQxJ9l63DhG1qPlJOx9ngWy7QTn2zDmfGZ9Lo+weJZ0QaeAHQ4GQV9qCq8PE93WPo+UKyDHuZR/nDSgE4Bjg==}
+  /@edifice-ui/editor@1.5.10-develop-b2school.1(@edifice-ui/icons@1.5.10-develop-b2school.0)(@edifice-ui/react@1.5.10-develop-b2school.1)(@react-spring/web@9.7.3)(react-dom@18.2.0)(react-i18next@14.1.0)(react@18.2.0):
+    resolution: {integrity: sha512-bFrEFzf9yQuM0wKuWAvpvyiAfcayxqPsjEtlIHRS4VtXgWA8+2bwpZpGbwDaUoeNr+6i3A4tCHtj+ytqw6T6ig==}
     peerDependencies:
       '@edifice-ui/icons': '*'
       '@edifice-ui/react': '*'
       '@react-spring/web': 9.7.3
-      clsx: 2.1.0
       react: 18.2.0
       react-dom: 18.2.0
       react-i18next: 14.1.0
     dependencies:
-      '@edifice-tiptap-extensions/extension-alert': 1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-attachment': 1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-audio': 1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-font-size': 1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/extension-heading@2.3.0)(@tiptap/extension-text-style@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-heading': 1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/extension-heading@2.3.0)(@tiptap/extension-text-style@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-highlight': 1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/extension-highlight@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-hyperlink': 1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/extension-link@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-iframe': 1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-image': 1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-linker': 1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/extension-link@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-speechrecognition': 1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-speechsynthesis': 1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-table-cell': 1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-video': 1.5.9-develop.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
-      '@edifice-ui/icons': 1.5.9-develop.1(react-dom@18.2.0)(react@18.2.0)
-      '@edifice-ui/react': 1.5.9-develop.5(@babel/runtime@7.24.7)(@edifice-ui/icons@1.5.9-develop.1)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.2)(react-i18next@14.1.0)(react@18.2.0)
+      '@edifice-tiptap-extensions/extension-alert': 1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-attachment': 1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-audio': 1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-font-size': 1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/extension-heading@2.3.0)(@tiptap/extension-text-style@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-heading': 1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/extension-heading@2.3.0)(@tiptap/extension-text-style@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-highlight': 1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/extension-highlight@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-hyperlink': 1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/extension-link@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-iframe': 1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-image': 1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-linker': 1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/extension-link@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-speechrecognition': 1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-speechsynthesis': 1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-table-cell': 1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-video': 1.5.10-develop-b2school.0(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)
+      '@edifice-ui/icons': 1.5.10-develop-b2school.0(react-dom@18.2.0)(react@18.2.0)
+      '@edifice-ui/react': 1.5.10-develop-b2school.1(@babel/runtime@7.24.7)(@edifice-ui/icons@1.5.10-develop-b2school.0)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.2)(react-i18next@14.1.0)(react@18.2.0)
       '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
       '@tiptap-pro/extension-mathematics': 2.2.1(@tiptap/core@2.3.0)(@tiptap/pm@2.3.0)(katex@0.16.8)
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
@@ -625,8 +624,8 @@ packages:
       react-i18next: 14.1.0(i18next@23.8.1)(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
-  /@edifice-ui/icons@1.5.9-develop.1(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-fHsb9cK9uYr/jwDkNtLgyWzmuX4w4E+5GLsrges0edg9fCpb0AkgxxpTknj1hN8J5LSoE1NkliCfJrzuEh31DA==}
+  /@edifice-ui/icons@1.5.10-develop-b2school.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-ANNWBbmSTQq/sXmoBO5X667IlOpLE/XUhE58QRLwoT/NFm9ry/SIe3uxG/2b+5QglgH1sbo3J8lP3MRs/0TqTQ==}
     peerDependencies:
       react: 18.2.0
       react-dom: 18.2.0
@@ -635,19 +634,18 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@edifice-ui/react@1.5.9-develop.5(@babel/runtime@7.24.7)(@edifice-ui/icons@1.5.9-develop.1)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.2)(react-i18next@14.1.0)(react@18.2.0):
-    resolution: {integrity: sha512-Ne7jkRnJDBi8HNJk2TX4p08H9eqAIT62FfH/3f5WgIbq+XXZfvfZcyVv2IjKRLzswc0pbRTFYM+Hrq+DXaFUgQ==}
+  /@edifice-ui/react@1.5.10-develop-b2school.1(@babel/runtime@7.24.7)(@edifice-ui/icons@1.5.10-develop-b2school.0)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.2)(react-i18next@14.1.0)(react@18.2.0):
+    resolution: {integrity: sha512-7VohHvsUM3lqyx2eg6laGezE9b2qcAyl2BrYtJhNakbRVUVKXvdvSfhPdPTtuLEB8U6XuXdpSDG6KqifAZXZrw==}
     peerDependencies:
       '@edifice-ui/icons': '*'
       '@react-spring/web': 9.7.3
       '@tanstack/react-query': 5.8.4
-      clsx: 2.1.0
       react: 18.2.0
       react-dom: 18.2.0
       react-hook-form: 7.49.2
       react-i18next: 14.1.0
     dependencies:
-      '@edifice-ui/icons': 1.5.9-develop.1(react-dom@18.2.0)(react@18.2.0)
+      '@edifice-ui/icons': 1.5.10-develop-b2school.0(react-dom@18.2.0)(react@18.2.0)
       '@floating-ui/react': 0.26.0(react-dom@18.2.0)(react@18.2.0)
       '@pixi/mixin-get-child-by-name': 7.4.2(@pixi/display@7.4.2)
       '@pixi/react': 7.1.2(@babel/runtime@7.24.7)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
@@ -3315,15 +3313,15 @@ packages:
     resolution: {integrity: sha512-/pjZsA1b4RPHbeWZQn66SWS8nZZWLQQ23oE3Eam7aroEFGEvwKAsJfZ9ytiEMycfzXWpca4FA9QIOehf7PocBQ==}
     dev: false
 
-  /edifice-bootstrap@1.5.9-develop.2:
-    resolution: {integrity: sha512-EJRuuxGw/tHscKb8GJ+BQNyl0+e8jxVXIsgoTGYyqBM4Xj848ELJOPxo9s1gUMQ9IgQIFpY1xXNYfN0pnA3rsg==}
+  /edifice-bootstrap@1.5.10-develop-b2school.0:
+    resolution: {integrity: sha512-FpvBvLw4EXZCw48Gt5aggcpmus0sZInfZpb6Wh/S+ixBPe9jbvL00hwbfiHt8E53x3+xd8hkuUmooIGHbSyvcQ==}
     dependencies:
       '@popperjs/core': 2.11.8
       bootstrap: 5.3.2(@popperjs/core@2.11.8)
     dev: true
 
-  /edifice-ts-client@1.5.9-develop.2:
-    resolution: {integrity: sha512-Vi0S8iOJGVUzw7+fmSRO7wux03Pwh2/N927RTJTXq6Dw3Yq8KmBsa84yI55eZGRw0ZGil6hYdysZ3nSx1aakNg==}
+  /edifice-ts-client@1.5.10-develop-b2school.0:
+    resolution: {integrity: sha512-fnfPOpQ5Zzl11tWFd7NDcelUUZ5ni7iDYDZFdYEPVu9848TeFlHYwIzYXxNJ86byBuAUloeRWO7pf5GdRz9QCg==}
     dependencies:
       axios: 1.6.6
       core-js: 3.35.1
@@ -4694,13 +4692,13 @@ packages:
       es-object-atoms: 1.0.0
     dev: true
 
-  /ode-explorer@1.4.11-develop.202406111120(@babel/runtime@7.24.7)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@tiptap/core@2.4.0)(@types/react@18.2.48)(csstype@3.1.3)(prop-types@15.8.1):
-    resolution: {integrity: sha512-V+zXsxrMi29fe3HjWLavyS80JCgsYkL+OVYo8YOgj7ujrdB1klBMnwW8o8SKk/ro7l5Tk9VFC0UN1a8rgQLLoQ==}
+  /ode-explorer@1.4.12-develop-b2school.202406121448(@babel/runtime@7.24.7)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@tiptap/core@2.4.0)(@types/react@18.2.48)(csstype@3.1.3)(prop-types@15.8.1):
+    resolution: {integrity: sha512-6hcdBUmtAxqAsKVV/s9yYNWCBVU6zj5OetQR2bp9fMJAPAov3FGBRFLOn6HKJHhpQXtrZaUDipGoalxaVMRdFw==}
     engines: {node: 18 || 20}
     requiresBuild: true
     dependencies:
-      '@edifice-ui/icons': 1.5.9-develop.1(react-dom@18.2.0)(react@18.2.0)
-      '@edifice-ui/react': 1.5.9-develop.5(@babel/runtime@7.24.7)(@edifice-ui/icons@1.5.9-develop.1)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(clsx@2.1.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.2)(react-i18next@14.1.0)(react@18.2.0)
+      '@edifice-ui/icons': 1.5.10-develop-b2school.0(react-dom@18.2.0)(react@18.2.0)
+      '@edifice-ui/react': 1.5.10-develop-b2school.1(@babel/runtime@7.24.7)(@edifice-ui/icons@1.5.10-develop-b2school.0)(@pixi/app@7.4.2)(@pixi/constants@7.4.2)(@pixi/core@7.4.2)(@pixi/display@7.4.2)(@pixi/extensions@7.4.2)(@pixi/graphics@7.4.2)(@pixi/math@7.4.2)(@pixi/mesh-extras@7.4.2)(@pixi/mesh@7.4.2)(@pixi/particle-container@7.4.2)(@pixi/sprite-animated@7.4.2)(@pixi/sprite-tiling@7.4.2)(@pixi/sprite@7.4.2)(@pixi/text-bitmap@7.4.2)(@pixi/text@7.4.2)(@pixi/ticker@7.4.2)(@react-spring/web@9.7.3)(@tanstack/react-query@5.8.4)(@tiptap/core@2.4.0)(csstype@3.1.3)(prop-types@15.8.1)(react-dom@18.2.0)(react-hook-form@7.49.2)(react-i18next@14.1.0)(react@18.2.0)
       '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-query': 5.8.4(react-dom@18.2.0)(react@18.2.0)
       clsx: 2.1.0
