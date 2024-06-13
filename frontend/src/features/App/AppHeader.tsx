@@ -7,6 +7,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { IWebApp } from "edifice-ts-client";
 import { Suspense, lazy } from "react";
+import { useParams } from "react-router-dom";
 import { useShallow } from "zustand/react/shallow";
 import { loadWall } from "~/services/api";
 import { useWall, wallQueryOptions } from "~/services/queries";
@@ -24,6 +25,17 @@ const ShareModal = lazy(async () => await import("~/components/ShareModal"));
 
 export const AppHeader = () => {
   const queryClient = useQueryClient();
+  const params = useParams();
+
+  const data = queryClient.getQueryData(
+    wallQueryOptions(params.wallId!).queryKey,
+  );
+
+  const shareOptions = {
+    resourceCreatorId: data?.owner.userId,
+    resourceId: data?._id,
+    resourceRights: data?.rights,
+  };
 
   const {
     isMobile,
@@ -89,7 +101,7 @@ export const AppHeader = () => {
           {openShareModal && wall && (
             <ShareModal
               isOpen={openShareModal}
-              resourceId={wall._id}
+              shareOptions={shareOptions}
               onCancel={() => setOpenShareModal(false)}
               onSuccess={() => setOpenShareModal(false)}
             />
