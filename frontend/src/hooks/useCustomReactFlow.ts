@@ -61,14 +61,6 @@ export const useCustomReactFlow = () => {
   });
 
   useEffect(() => {
-    window.addEventListener("message", (event) => {
-      // Vérifiez l'origine du message pour des raisons de sécurité
-
-      console.log("Message reçu:", event.data);
-    });
-  }, []);
-
-  useEffect(() => {
     let timeoutId: NodeJS.Timeout | number;
 
     const sendEventWithDelay = () => {
