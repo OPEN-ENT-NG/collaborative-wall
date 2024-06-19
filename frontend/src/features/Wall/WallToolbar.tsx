@@ -123,7 +123,6 @@ export const CollaborativeWallToolbar = () => {
         onClick: () => zoomIn(),
       },
       tooltip: t("collaborativewall.toolbar.zoomin", { ns: appCode }),
-      visibility: showIf(allRolesButRead),
     },
     {
       type: "button",
@@ -144,7 +143,6 @@ export const CollaborativeWallToolbar = () => {
         onClick: () => zoomOut(),
       },
       tooltip: t("collaborativewall.toolbar.zoomout", { ns: appCode }),
-      visibility: showIf(allRolesButRead),
     },
     {
       type: "divider",
