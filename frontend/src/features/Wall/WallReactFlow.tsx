@@ -1,6 +1,5 @@
 import React from "react";
 import ReactFlow from "reactflow";
-import { useShallow } from "zustand/react/shallow";
 import { nodeExtent, translateExtent } from "~/config";
 import { useCustomReactFlow } from "~/hooks/useCustomReactFlow";
 import { useWhiteboardStore } from "~/store";
@@ -8,12 +7,7 @@ import { CollaborativeWallBackground } from "./WallBackground";
 import { CollaborativeWallToolbar } from "./WallToolbar";
 
 export const WallReactFlow = React.memo(() => {
-  const { dropdownState, isMobile } = useWhiteboardStore(
-    useShallow((state) => ({
-      isMobile: state.isMobile,
-      dropdownState: state.dropdownState,
-    })),
-  );
+  const dropdownState = useWhiteboardStore((state) => state.dropdownState);
 
   /* React Flow */
   const {

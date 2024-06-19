@@ -15,10 +15,10 @@ import {
   useOdeClient,
 } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
-import { useShallow } from "zustand/react/shallow";
 
+import { useAccessStore } from "~/hooks/useAccessStore";
 import { useWall } from "~/services/queries";
-import { useRightsStore, useWhiteboardStore } from "~/store";
+import { useWhiteboardStore } from "~/store";
 
 export type ActionDropdownMenuOptions = DropdownMenuOptions & {
   id: string;
@@ -31,12 +31,7 @@ export const AppActions = () => {
   const { t } = useTranslation();
 
   /** Store to handle correctly rights to access ressource to avoid unexpected re-renders  */
-  const { isCreator, isManager } = useRightsStore(
-    useShallow((state) => ({
-      isCreator: state.isCreator,
-      isManager: state.isManager,
-    })),
-  );
+  const { userRights } = useAccessStore();
 
   /* When destructring methods, it's okay to not shallow. We doesn't use stored state */
   const { setOpenShareModal, setOpenUpdateModal, setIsOpenBackgroundModal } =
@@ -48,21 +43,21 @@ export const AppActions = () => {
       label: t("collaborativewall.modal.background", { ns: appCode }),
       icon: <SetBackground />,
       action: () => setIsOpenBackgroundModal(true),
-      visibility: isCreator || isManager,
+      visibility: userRights.creator || userRights.manager,
     },
     {
       id: "share",
       label: t("share"),
       icon: <Share />,
       action: () => setOpenShareModal(true),
-      visibility: isCreator || isManager,
+      visibility: userRights.creator || userRights.manager,
     },
     {
       id: "properties",
       label: t("properties"),
       icon: <Settings />,
       action: () => setOpenUpdateModal(true),
-      visibility: isCreator || isManager,
+      visibility: userRights.creator || userRights.manager,
     },
     {
       id: "print",

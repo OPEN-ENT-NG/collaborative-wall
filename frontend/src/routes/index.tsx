@@ -2,7 +2,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { Explorer } from "ode-explorer/lib";
 import { RouteObject, createBrowserRouter } from "react-router-dom";
 
-import { explorerConfig } from "~/config/config";
+import { explorerConfig } from "~/config";
 import { PageError } from "~/routes/page-error";
 import { NotFound } from "./not-found";
 

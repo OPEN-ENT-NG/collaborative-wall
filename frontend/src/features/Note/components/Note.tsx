@@ -15,6 +15,14 @@ export const Note = ({ data }: NodeProps) => {
 
   const style = {
     borderRadius: "12px",
+    boxShadow: "0 0.2rem 0.6em rgba(0, 0, 0, 0.15)",
+    overflow: "clip",
+    backgroundColor: data.note.color?.[0],
+  };
+
+  const wrapperStyle = {
+    maxHeight: data.note.media?.url ? "302px" : "264px",
+    overflow: "hidden",
   };
 
   const extensions = [StarterKit];
@@ -31,26 +39,11 @@ export const Note = ({ data }: NodeProps) => {
   }, [data]);
 
   return (
-    <div
-      style={
-        {
-          ...style,
-          boxShadow: "0 0.2rem 0.6em rgba(0, 0, 0, 0.15)",
-          overflow: "clip",
-          backgroundColor: data.note.color?.[0],
-        } as React.CSSProperties
-      }
-      className="card-container"
-    >
+    <div style={style} className="card-container">
       <Card className="note" isSelectable={false}>
         <Card.Body>
           {data.note.media?.url && <NoteMedia media={data.note.media} />}
-          <div
-            style={{
-              maxHeight: data.note.media?.url ? "302px" : "264px",
-              overflow: "hidden",
-            }}
-          >
+          <div style={wrapperStyle}>
             <EditorContent editor={editor} />
           </div>
         </Card.Body>
