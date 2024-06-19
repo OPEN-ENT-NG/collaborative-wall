@@ -3431,27 +3431,27 @@ snapshots:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/pm': 2.3.0
 
-  '@edifice-tiptap-extensions/extension-font-size@1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-heading@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0)))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0)))(@tiptap/pm@2.3.0)':
+  '@edifice-tiptap-extensions/extension-font-size@1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-heading@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0)))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0)))(@tiptap/pm@2.3.0)':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/extension-heading': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
       '@tiptap/extension-text-style': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
       '@tiptap/pm': 2.3.0
 
-  '@edifice-tiptap-extensions/extension-heading@1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-heading@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0)))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0)))(@tiptap/pm@2.3.0)':
+  '@edifice-tiptap-extensions/extension-heading@1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-heading@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0)))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0)))(@tiptap/pm@2.3.0)':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/extension-heading': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
       '@tiptap/extension-text-style': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
       '@tiptap/pm': 2.3.0
 
-  '@edifice-tiptap-extensions/extension-highlight@1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-highlight@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0)))(@tiptap/pm@2.3.0)':
+  '@edifice-tiptap-extensions/extension-highlight@1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-highlight@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0)))(@tiptap/pm@2.3.0)':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/extension-highlight': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
       '@tiptap/pm': 2.3.0
 
-  '@edifice-tiptap-extensions/extension-hyperlink@1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-link@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)':
+  '@edifice-tiptap-extensions/extension-hyperlink@1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-link@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/extension-link': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
@@ -3468,7 +3468,7 @@ snapshots:
       '@tiptap/extension-image': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
       '@tiptap/pm': 2.3.0
 
-  '@edifice-tiptap-extensions/extension-linker@1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-link@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)':
+  '@edifice-tiptap-extensions/extension-linker@1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-link@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/extension-link': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
@@ -3500,13 +3500,13 @@ snapshots:
       '@edifice-tiptap-extensions/extension-alert': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-attachment': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-audio': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-font-size': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-heading@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0)))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0)))(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-heading': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-heading@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0)))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0)))(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-highlight': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-highlight@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0)))(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-hyperlink': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-link@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-font-size': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-heading@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0)))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0)))(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-heading': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-heading@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0)))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0)))(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-highlight': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-highlight@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0)))(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-hyperlink': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-link@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-iframe': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-image': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
-      '@edifice-tiptap-extensions/extension-linker': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-link@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
+      '@edifice-tiptap-extensions/extension-linker': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-link@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-speechrecognition': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-speechsynthesis': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
       '@edifice-tiptap-extensions/extension-table-cell': 1.5.10(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
@@ -3517,9 +3517,9 @@ snapshots:
       '@tiptap-pro/extension-mathematics': 2.2.1(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)(katex@0.16.10)
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/extension-character-count': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
-      '@tiptap/extension-color': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0)))
+      '@tiptap/extension-color': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0)))
       '@tiptap/extension-focus': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/pm@2.3.0)
-      '@tiptap/extension-font-family': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0)))
+      '@tiptap/extension-font-family': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0)))
       '@tiptap/extension-heading': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
       '@tiptap/extension-highlight': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
       '@tiptap/extension-image': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
@@ -4210,7 +4210,7 @@ snapshots:
     dependencies:
       '@tiptap/core': 2.4.0(@tiptap/pm@2.3.0)
 
-  '@tiptap/extension-color@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0)))':
+  '@tiptap/extension-color@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0)))':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/extension-text-style': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))
@@ -4241,7 +4241,7 @@ snapshots:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/pm': 2.3.0
 
-  '@tiptap/extension-font-family@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.4.0(@tiptap/pm@2.3.0)))':
+  '@tiptap/extension-font-family@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))(@tiptap/extension-text-style@2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0)))':
     dependencies:
       '@tiptap/core': 2.3.0(@tiptap/pm@2.3.0)
       '@tiptap/extension-text-style': 2.3.0(@tiptap/core@2.3.0(@tiptap/pm@2.3.0))

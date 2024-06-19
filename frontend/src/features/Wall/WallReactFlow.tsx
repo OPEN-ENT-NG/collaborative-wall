@@ -29,15 +29,12 @@ export const WallReactFlow = React.memo(() => {
         nodeTypes={nodeTypes}
         translateExtent={translateExtent}
         nodeExtent={nodeExtent}
-        minZoom={1}
-        maxZoom={1}
-        zoomOnScroll={false}
-        zoomOnPinch={false}
-        zoomOnDoubleClick={false}
+        maxZoom={2}
         panOnScroll={true}
         nodesFocusable={false}
         nodeDragThreshold={1}
         onInit={onInit}
+        nodesDraggable={isMobile ? false : true}
         onNodesChange={onNodesChange}
         onNodeClick={onNodeClick}
         onNodeDragStart={onNodeDragStart}

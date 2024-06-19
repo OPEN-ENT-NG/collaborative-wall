@@ -7,7 +7,7 @@ import {
   Paperclip,
   RecordVideo,
 } from "@edifice-ui/icons";
-import { Toolbar } from "@edifice-ui/react";
+import { Toolbar, ToolbarItem } from "@edifice-ui/react";
 import { useTranslation } from "react-i18next";
 
 export const NoteToolbar = ({
@@ -17,7 +17,7 @@ export const NoteToolbar = ({
 }) => {
   const { t } = useTranslation();
 
-  const toolbarItems: any[] = useMemo(() => {
+  const toolbarItems: ToolbarItem[] = useMemo(() => {
     return [
       //--------------- IMAGE ---------------//
       {

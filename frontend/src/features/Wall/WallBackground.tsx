@@ -3,14 +3,14 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useViewport } from "reactflow";
 import { useShallow } from "zustand/react/shallow";
-import { backgroundColors, backgroundImages } from "~/config";
+import { backgroundColors, backgroundImages, wallConfig } from "~/config";
 import { wallQueryOptions } from "~/services/queries";
 import { useWhiteboardStore } from "~/store";
 
 export const CollaborativeWallBackground = () => {
   const params = useParams();
 
-  const { x, y } = useViewport();
+  const { x, y, zoom } = useViewport();
   const { setPositionViewport } = useWhiteboardStore(
     useShallow((state) => ({
       setPositionViewport: state.setPositionViewport,
@@ -36,13 +36,14 @@ export const CollaborativeWallBackground = () => {
     <div
       style={{
         touchAction: "none",
-        width: 2880,
-        height: 1800,
+        width: wallConfig.WIDTH_WALL * zoom,
+        height: wallConfig.HEIGHT_WALL * zoom,
         position: "absolute",
         transform: `translate(${x}px, ${y}px)`,
-        background: hasBackgroundImage
+        backgroundImage: hasBackgroundImage
           ? renderBackgroundImage
           : renderBackgroundColor,
+        backgroundSize: "100%",
       }}
     ></div>
   );

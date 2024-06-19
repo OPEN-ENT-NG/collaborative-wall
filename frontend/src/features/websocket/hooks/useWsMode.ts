@@ -39,7 +39,7 @@ export const useWSMode = (): WSProvider => {
       getSocketURL,
       {
         share: true,
-        // reconnectAttempts,
+        reconnectAttempts: 5,
         reconnectInterval: 100,
         retryOnError: true,
         shouldReconnect: () => isWebsocketMode,
