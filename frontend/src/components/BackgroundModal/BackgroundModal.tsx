@@ -39,10 +39,10 @@ export default function BackgroundModal({
   const { sendWallUpdateEvent } = useWebsocketStore();
 
   const [backgroundImageValue, setBackgroundImageValue] = useState<string>(
-    wall.background.path,
+    wall?.background?.path || "",
   );
   const [backgroundColorValue, setBackgroundColorValue] = useState<string>(
-    wall.background.color,
+    wall?.background?.color || "",
   );
 
   const renderImage = useCallback(
@@ -60,27 +60,29 @@ export default function BackgroundModal({
     paddingBottom: "75%",
   });
 
+  const renderImageStyle = {
+    margin: "auto",
+    background: renderColor(backgroundColorValue),
+  };
+
+  const renderThumbnailStyle = {
+    width: THUMBNAIL_WIDTH,
+    height: THUMBNAIL_HEIGHT,
+    margin: "auto",
+    background: renderColor(backgroundColorValue),
+  };
+
   const renderMainChoice =
-    backgroundImageValue.length !== 0 ? (
+    backgroundImageValue !== "" ? (
       <Image
         src={renderImage(backgroundImageValue)}
         alt=""
         width={THUMBNAIL_WIDTH}
         height={THUMBNAIL_HEIGHT}
-        style={{
-          margin: "auto",
-          background: renderColor(backgroundColorValue),
-        }}
+        style={renderImageStyle}
       />
     ) : (
-      <div
-        style={{
-          width: THUMBNAIL_WIDTH,
-          height: THUMBNAIL_HEIGHT,
-          margin: "auto",
-          background: renderColor(backgroundColorValue),
-        }}
-      ></div>
+      <div style={renderThumbnailStyle}></div>
     );
 
   const handleClose = () => setIsOpen(false);
@@ -155,6 +157,8 @@ export default function BackgroundModal({
     },
   ];
 
+  const thumbnailStyle = { borderRadius: "4px" };
+
   return isOpen
     ? createPortal(
         <Modal
@@ -191,7 +195,7 @@ export default function BackgroundModal({
                                 src={thumbnail.render(item)}
                                 alt=""
                                 ratio="4"
-                                style={{ borderRadius: "4px" }}
+                                style={thumbnailStyle}
                               />
                             ) : (
                               <div style={renderColorStyle(item)}></div>
