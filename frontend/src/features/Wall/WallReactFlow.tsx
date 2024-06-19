@@ -53,7 +53,7 @@ export const WallReactFlow = React.memo(() => {
         panOnDrag={!dropdownState.isOpen}
       >
         <CollaborativeWallBackground />
-        <CollaborativeWallToolbar isMobile={isMobile} />
+        <CollaborativeWallToolbar />
       </ReactFlow>
     </div>
   );

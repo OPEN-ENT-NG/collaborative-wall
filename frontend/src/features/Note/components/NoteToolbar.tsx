@@ -84,13 +84,11 @@ export const NoteToolbar = ({
   }, []);
 
   return (
-    <>
-      <Toolbar
-        items={toolbarItems}
-        variant="no-shadow"
-        className="rounded-top px-16"
-        ariaControls="editorContent"
-      />
-    </>
+    <Toolbar
+      items={toolbarItems}
+      variant="no-shadow"
+      className="rounded-top px-16"
+      ariaControls="editorContent"
+    />
   );
 };

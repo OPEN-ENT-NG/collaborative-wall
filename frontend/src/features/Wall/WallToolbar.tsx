@@ -9,11 +9,7 @@ import { useShallow } from "zustand/react/shallow";
 import { useHistory } from "~/features/History/hooks/useHistory";
 import { useRightsStore, useWhiteboardStore } from "~/store";
 
-export const CollaborativeWallToolbar = ({
-  isMobile,
-}: {
-  isMobile: boolean;
-}) => {
+export const CollaborativeWallToolbar = () => {
   const navigate = useNavigate();
   const reactFlow = useReactFlow();
   const showIf = (truthy: boolean) => (truthy ? "show" : "hide");
@@ -23,9 +19,10 @@ export const CollaborativeWallToolbar = ({
   const { appCode } = useOdeClient();
   const { t } = useTranslation();
 
-  const { canMoveNote, toggleCanMoveNote } = useWhiteboardStore(
+  const { isMobile, canMoveNote, toggleCanMoveNote } = useWhiteboardStore(
     useShallow((state) => ({
       canMoveNote: state.canMoveNote,
+      isMobile: state.isMobile,
       toggleCanMoveNote: state.toggleCanMoveNote,
     })),
   );

@@ -10,6 +10,7 @@ import { NoteMedia } from "./NoteMedia";
 
 export const Note = ({ data }: NodeProps) => {
   const canMoveNote = useWhiteboardStore((state) => state.canMoveNote);
+  const isMobile = useWhiteboardStore((state) => state.isMobile);
   const { hasRightsToUpdateNote } = useAccessStore();
 
   const style = {
@@ -57,7 +58,7 @@ export const Note = ({ data }: NodeProps) => {
           <Card.Text>{data.note.owner?.displayName}</Card.Text>
         </Card.Footer>
       </Card>
-      {canMoveNote && hasRightsToUpdateNote(data.note) && (
+      {!isMobile && canMoveNote && hasRightsToUpdateNote(data.note) && (
         <NoteActions note={data.note}></NoteActions>
       )}
     </div>
