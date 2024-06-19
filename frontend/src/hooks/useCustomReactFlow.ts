@@ -61,6 +61,14 @@ export const useCustomReactFlow = () => {
   });
 
   useEffect(() => {
+    window.addEventListener("message", (event) => {
+      // Vérifiez l'origine du message pour des raisons de sécurité
+
+      console.log("Message reçu:", event.data);
+    });
+  }, []);
+
+  useEffect(() => {
     let timeoutId: NodeJS.Timeout | number;
 
     const sendEventWithDelay = () => {
@@ -132,9 +140,11 @@ export const useCustomReactFlow = () => {
   });
 
   /* onInit we use React Flow instance to set nodes */
-  const onInit = useCallback(
+  const onInit =
+    /* useCallback( */
     (instance: ReactFlowInstance) => {
       setReactFlowInstance(instance);
+
       if (notes) {
         const newNodes = notes
           ?.sort(
@@ -147,16 +157,15 @@ export const useCustomReactFlow = () => {
               type: "note",
               data: { note },
               position: { x: note.x, y: note.y },
-              draggable: hasRightsToMoveNote(note),
+              draggable: canMoveNote && hasRightsToMoveNote(note),
               zIndex: index,
             };
           });
         instance.setNodes(newNodes);
       }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [notes],
-  );
+    };
+  /* [canMoveNote, hasRightsToMoveNote, isMobile, notes],
+  ); */
 
   const onNodesChange = useCallback((changes: NodeChange[]) => {
     setNodes((nds) => applyNodeChanges(changes, nds));
@@ -165,10 +174,14 @@ export const useCustomReactFlow = () => {
   /* onNodeClick we navigate to note modal component */
   const onNodeClick = useCallback(
     (_event: React.MouseEvent, node: Node) => {
-      !isMobile ? navigate(`note/${node.id}?mode=read`) : undefined;
+      !isMobile
+        ? navigate(`note/${node.id}?mode=read`)
+        : window.postMessage(
+            `noteclicked ${node.id}`,
+            `${window.origin}/${node.id}`,
+          );
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [isMobile, navigate],
   );
 
   /* onPaneMouseMove is useful to track mouse position */
