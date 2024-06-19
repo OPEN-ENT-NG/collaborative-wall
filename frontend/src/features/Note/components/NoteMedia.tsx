@@ -106,17 +106,56 @@ export const NoteMedia = ({
     },
   ];
 
+  const noteMediaStyle = {
+    position: "relative",
+    width: "100%",
+  } as React.CSSProperties;
+
+  const noteMediaIconStyle = { zIndex: "1" };
+  const imageMediaStyle = {
+    borderRadius: "8px",
+    maxHeight: "350px",
+  };
+
+  const audioClassname = clsx(`media-center ${mediaClasses}`, {
+    "my-16": !modalNote,
+  });
+
+  const audioStyle = { zIndex: canMoveNote ? "1" : "0", marginBottom: "-8px" };
+  const videoStyle = {
+    marginBottom: "-8px",
+    zIndex: canMoveNote ? "1" : "0",
+  };
+  const iframeStyle = {
+    height: modalNote ? "350px" : "",
+    zIndex: canMoveNote ? "1" : "0",
+  };
+  const hyperlinkStyle = {
+    height: modalNote ? "200px" : "120px",
+    border: !modalNote ? "solid 1px #E4E4E4" : "",
+    borderRadius: !modalNote ? "8px" : "16px",
+  };
+  const urlStyle = {
+    maxWidth: modalNote ? "219px" : "113px",
+    borderRadius: modalNote ? "0px 16px" : "0px 8px",
+  };
+  const urlTextStyle = { color: "white", display: "block" };
+  const iconGlobeStyle = {
+    width: modalNote ? "80" : "40",
+    height: modalNote ? "80" : "40",
+  };
+
   switch (media.type) {
     case "image":
       return (
-        <div style={{ position: "relative", width: "100%" }}>
+        <div style={noteMediaStyle}>
           {!readonly && (
             <IconButton
               className="delete-button mt-8 me-8"
               icon={<Delete />}
               variant="outline"
               color="danger"
-              style={{ zIndex: "1" }}
+              style={noteMediaIconStyle}
               onClick={() => setMedia?.(null)}
             />
           )}
@@ -126,24 +165,19 @@ export const NoteMedia = ({
             width="100%"
             objectFit={modalNote ? "contain" : "cover"}
             ratio="16"
-            style={{
-              borderRadius: "8px",
-              maxHeight: "350px",
-            }}
+            style={imageMediaStyle}
           />
         </div>
       );
     case "audio":
       return (
-        <div
-          className={`${mediaClasses} ${modalNote ? "" : "my-16"} media-center`}
-        >
+        <div className={audioClassname}>
           <audio
             src={media.url}
             className="media-audio"
             controls
             data-document-id={media.id}
-            style={{ zIndex: canMoveNote ? "1" : "0", marginBottom: "-8px" }}
+            style={audioStyle}
           >
             <track default kind="captions" srcLang="fr" src=""></track>
           </audio>
@@ -207,10 +241,7 @@ export const NoteMedia = ({
               src={media.url}
               title={media.name}
               className="media-video"
-              style={{
-                height: modalNote ? "350px" : "",
-                zIndex: canMoveNote ? "1" : "0",
-              }}
+              style={iframeStyle}
             />
           ) : (
             <video
@@ -218,10 +249,7 @@ export const NoteMedia = ({
               data-document-id={media.id}
               controls
               className="media-video"
-              style={{
-                marginBottom: "-8px",
-                zIndex: canMoveNote ? "1" : "0",
-              }}
+              style={videoStyle}
             >
               <track default kind="captions" srcLang="fr" src=""></track>
             </video>
@@ -232,11 +260,7 @@ export const NoteMedia = ({
       return (
         <div
           className={`media-hyperlink ${media.application ? `bg-light-${hyperlinkCode}` : "bg-blue-200"}`}
-          style={{
-            height: modalNote ? "200px" : "120px",
-            border: !modalNote ? "solid 1px #E4E4E4" : "",
-            borderRadius: !modalNote ? "8px" : "16px",
-          }}
+          style={hyperlinkStyle}
         >
           {!readonly && (
             <Toolbar className="delete-button mt-8 me-8" items={LinkItems} />
@@ -253,26 +277,11 @@ export const NoteMedia = ({
                   size={modalNote ? "80" : "40"}
                 />
               ) : (
-                <Globe
-                  className="text-blue"
-                  style={{
-                    width: modalNote ? "80" : "40",
-                    height: modalNote ? "80" : "40",
-                  }}
-                />
+                <Globe className="text-blue" style={iconGlobeStyle} />
               )}
             </div>
-            <div
-              className="url-placement "
-              style={{
-                maxWidth: modalNote ? "219px" : "113px",
-                borderRadius: modalNote ? "0px 16px" : "0px 8px",
-              }}
-            >
-              <div
-                style={{ color: "white", display: "block" }}
-                className="text-truncate small"
-              >
+            <div className="url-placement" style={urlStyle}>
+              <div style={urlTextStyle} className="text-truncate small">
                 {media.name ?? media.url}
               </div>
             </div>

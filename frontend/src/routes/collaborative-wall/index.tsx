@@ -7,13 +7,13 @@ import {
   wallQueryOptions,
 } from "~/services/queries";
 
-import { LoadingScreen, useTrashedResource } from "@edifice-ui/react";
+import { checkUserRight, useTrashedResource } from "@edifice-ui/react";
 import { odeServices } from "edifice-ts-client";
 import { AppHeader } from "~/features/App/AppHeader";
 import { Description } from "~/features/Description/Description";
 import { Wall } from "~/features/Wall/Wall";
-import { useAccessStore } from "~/hooks/useAccessStore";
-import { useRightsStore, useWhiteboardStore } from "~/store";
+import { useWhiteboardStore } from "~/store";
+import { useUserRightsStore } from "~/store/rights/store";
 import "./index.css";
 
 export const loader =
@@ -35,6 +35,10 @@ export const loader =
     const wall = await queryClient.ensureQueryData(queryWall);
     const notes = await queryClient.ensureQueryData(queryNotes);
 
+    const userRights = await checkUserRight(wall.rights);
+    const { setUserRights } = useUserRightsStore.getState();
+    setUserRights(userRights);
+
     if (
       odeServices.http().isResponseError() &&
       odeServices.http().latestResponse.status === 401
@@ -49,15 +53,11 @@ export const loader =
   };
 
 export const Component = () => {
-  const isLoadingRights = useRightsStore((state) => state.isLoading);
   const isMobile = useWhiteboardStore((state) => state.isMobile);
 
   const { wall } = useWall();
 
-  useAccessStore();
   useTrashedResource(wall?._id);
-
-  if (isLoadingRights) return <LoadingScreen position={false} />;
 
   return (
     <>

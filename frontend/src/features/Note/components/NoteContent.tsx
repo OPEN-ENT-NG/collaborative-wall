@@ -11,6 +11,7 @@ import {
 import { WorkspaceElement } from "edifice-ts-client";
 import { useTranslation } from "react-i18next";
 
+import clsx from "clsx";
 import { useLinkToolbar } from "~/hooks/useLinkToolbar";
 import { useMediaLibrary } from "~/hooks/useMediaLibrary";
 import { MediaProps } from "~/models/media";
@@ -95,11 +96,10 @@ export const NoteContent = forwardRef(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [libraryMedia]);
 
+    const renderEditStyle = { border: "1px solid #f2f2f2" };
+
     const renderEdit = !isReadMode && (
-      <div
-        className="multimedia-section my-24"
-        style={{ border: "1px solid #f2f2f2" }}
-      >
+      <div className="multimedia-section my-24" style={renderEditStyle}>
         <div className="toolbar-media py-48 px-12">
           <NoteToolbar handleClickMedia={handleClickMedia} />
           {t("collaborativewall.add.media", { ns: appCode })}
@@ -107,11 +107,13 @@ export const NoteContent = forwardRef(
       </div>
     );
 
+    const renderReadStyle = { border: isReadMode ? "" : "1px solid #f2f2f2" };
+    const renderReadClass = clsx("multimedia-section", {
+      "mb-24": isReadMode,
+      "my-24": !isReadMode,
+    });
     const renderRead = (media: MediaProps) => (
-      <div
-        className={`multimedia-section ${isReadMode ? `mb-24` : `my-24`}`}
-        style={{ border: isReadMode ? "" : "1px solid #f2f2f2" }}
-      >
+      <div className={renderReadClass} style={renderReadStyle}>
         <NoteMedia
           media={media}
           modalNote={true}

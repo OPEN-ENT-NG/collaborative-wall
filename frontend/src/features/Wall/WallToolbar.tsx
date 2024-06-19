@@ -5,16 +5,19 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useReactFlow } from "reactflow";
 import { useShallow } from "zustand/react/shallow";
+import { resetViewport, transitionDuration } from "~/config";
 
 import { useHistory } from "~/features/History/hooks/useHistory";
-import { useRightsStore, useWhiteboardStore } from "~/store";
+import { useAccessStore } from "~/hooks/useAccessStore";
+import { useWhiteboardStore } from "~/store";
 
 export const CollaborativeWallToolbar = () => {
   const navigate = useNavigate();
-  const reactFlow = useReactFlow();
+  const { setViewport } = useReactFlow();
   const showIf = (truthy: boolean) => (truthy ? "show" : "hide");
   const handleCreateClick = () => navigate("note");
-  const allRolesButRead = useRightsStore((state) => state.allRolesButRead);
+
+  const { userRights } = useAccessStore();
 
   const { appCode } = useOdeClient();
   const { t } = useTranslation();
@@ -37,6 +40,9 @@ export const CollaborativeWallToolbar = () => {
     ["mod+shift+Z", () => canRedo && handleRedo()],
   ]);
 
+  const visibility =
+    userRights.contrib || userRights.manager || userRights.creator;
+
   const WhiteboardItems: ToolbarItem[] = [
     {
       type: "icon",
@@ -49,7 +55,7 @@ export const CollaborativeWallToolbar = () => {
         onClick: handleUndo,
       },
       tooltip: t("collaborativewall.toolbar.undo", { ns: appCode }),
-      visibility: showIf(allRolesButRead),
+      visibility: showIf(visibility),
     },
     {
       type: "icon",
@@ -62,12 +68,12 @@ export const CollaborativeWallToolbar = () => {
         onClick: handleRedo,
       },
       tooltip: t("collaborativewall.toolbar.redo", { ns: appCode }),
-      visibility: showIf(allRolesButRead),
+      visibility: showIf(visibility),
     },
     {
       type: "divider",
       name: "div-1",
-      visibility: showIf(allRolesButRead),
+      visibility: showIf(visibility),
     },
     {
       type: "icon",
@@ -80,13 +86,12 @@ export const CollaborativeWallToolbar = () => {
         onClick: () => toggleCanMoveNote(),
       },
       tooltip: t("collaborativewall.toolbar.movewhiteboard", { ns: appCode }),
-      visibility: showIf(allRolesButRead),
+      visibility: showIf(visibility),
     },
-
     {
       type: "divider",
       name: "div-2",
-      visibility: showIf(allRolesButRead),
+      visibility: showIf(visibility),
     },
     {
       type: "icon",
@@ -95,19 +100,14 @@ export const CollaborativeWallToolbar = () => {
         icon: <Center />,
         "aria-label": t("collaborativewall.toolbar.center"),
         color: "tertiary",
-        onClick: () =>
-          reactFlow.setViewport({
-            x: 0,
-            y: 0,
-            zoom: 1,
-          }),
+        onClick: () => setViewport(resetViewport, transitionDuration),
       },
       tooltip: t("collaborativewall.toolbar.center", { ns: appCode }),
     },
     {
       type: "divider",
       name: "div-3",
-      visibility: showIf(allRolesButRead),
+      visibility: showIf(visibility),
     },
     {
       type: "icon",
@@ -120,7 +120,7 @@ export const CollaborativeWallToolbar = () => {
         onClick: handleCreateClick,
       },
       tooltip: t("collaborativewall.toolbar.create", { ns: appCode }),
-      visibility: showIf(allRolesButRead),
+      visibility: showIf(visibility),
     },
   ];
 
