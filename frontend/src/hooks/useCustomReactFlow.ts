@@ -89,7 +89,7 @@ export const useCustomReactFlow = () => {
             type: "note",
             data: { note },
             position: { x: note.x, y: note.y },
-            draggable: canMoveNote && hasRightsToMoveNote(note),
+            draggable: !isMobile && canMoveNote && hasRightsToMoveNote(note),
             zIndex: index,
           };
         });
@@ -132,31 +132,28 @@ export const useCustomReactFlow = () => {
   });
 
   /* onInit we use React Flow instance to set nodes */
-  const onInit = useCallback(
-    (instance: ReactFlowInstance) => {
-      setReactFlowInstance(instance);
-      if (notes) {
-        const newNodes = notes
-          ?.sort(
-            (a: NoteProps, b: NoteProps) =>
-              (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
-          )
-          .map((note, index) => {
-            return {
-              id: note._id,
-              type: "note",
-              data: { note },
-              position: { x: note.x, y: note.y },
-              draggable: hasRightsToMoveNote(note),
-              zIndex: index,
-            };
-          });
-        instance.setNodes(newNodes);
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [notes],
-  );
+  const onInit = (instance: ReactFlowInstance) => {
+    setReactFlowInstance(instance);
+
+    if (notes) {
+      const newNodes = notes
+        ?.sort(
+          (a: NoteProps, b: NoteProps) =>
+            (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
+        )
+        .map((note, index) => {
+          return {
+            id: note._id,
+            type: "note",
+            data: { note },
+            position: { x: note.x, y: note.y },
+            draggable: !isMobile && canMoveNote && hasRightsToMoveNote(note),
+            zIndex: index,
+          };
+        });
+      instance.setNodes(newNodes);
+    }
+  };
 
   const onNodesChange = useCallback((changes: NodeChange[]) => {
     setNodes((nds) => applyNodeChanges(changes, nds));
