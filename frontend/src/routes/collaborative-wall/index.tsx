@@ -62,8 +62,12 @@ export const Component = () => {
   return (
     <>
       <div className="position-fixed z-3 top-0 start-0 end-0">
-        <AppHeader />
-        {wall?.description && !isMobile && <Description />}
+        {!isMobile ? (
+          <>
+            <AppHeader />
+            {wall?.description && <Description />}
+          </>
+        ) : null}
       </div>
       <Wall />
     </>

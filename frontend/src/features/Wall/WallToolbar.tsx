@@ -18,11 +18,7 @@ import { resetViewport, transitionDuration } from "~/config";
 import { useHistory } from "~/features/History/hooks/useHistory";
 import { useRightsStore, useWhiteboardStore } from "~/store";
 
-export const CollaborativeWallToolbar = ({
-  isMobile,
-}: {
-  isMobile: boolean;
-}) => {
+export const CollaborativeWallToolbar = () => {
   const navigate = useNavigate();
   const showIf = (truthy: boolean) => (truthy ? "show" : "hide");
   const handleCreateClick = () => navigate("note");
@@ -31,9 +27,10 @@ export const CollaborativeWallToolbar = ({
   const { appCode } = useOdeClient();
   const { t } = useTranslation();
 
-  const { canMoveNote, toggleCanMoveNote } = useWhiteboardStore(
+  const { isMobile, canMoveNote, toggleCanMoveNote } = useWhiteboardStore(
     useShallow((state) => ({
       canMoveNote: state.canMoveNote,
+      isMobile: state.isMobile,
       toggleCanMoveNote: state.toggleCanMoveNote,
     })),
   );
