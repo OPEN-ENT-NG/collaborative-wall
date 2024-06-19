@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { IAction } from "edifice-ts-client";
-import { workflows } from "~/config";
+import { workflows } from "~/config/workflows";
 import { sessionHasWorkflowRights } from "~/services/api";
 
 export const useActions = () => {

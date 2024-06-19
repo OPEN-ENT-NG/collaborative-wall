@@ -1,10 +1,19 @@
-import { Center, Plus, PointerHand, Redo, Undo } from "@edifice-ui/icons";
+import {
+  Center,
+  Plus,
+  PointerHand,
+  Redo,
+  Undo,
+  ZoomIn,
+  ZoomOut,
+} from "@edifice-ui/icons";
 import { Toolbar, ToolbarItem, useOdeClient } from "@edifice-ui/react";
 import { useHotkeys } from "@mantine/hooks";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { useReactFlow } from "reactflow";
+import { useReactFlow, useViewport } from "reactflow";
 import { useShallow } from "zustand/react/shallow";
+import { resetViewport, transitionDuration } from "~/config";
 
 import { useHistory } from "~/features/History/hooks/useHistory";
 import { useRightsStore, useWhiteboardStore } from "~/store";
@@ -15,7 +24,6 @@ export const CollaborativeWallToolbar = ({
   isMobile: boolean;
 }) => {
   const navigate = useNavigate();
-  const reactFlow = useReactFlow();
   const showIf = (truthy: boolean) => (truthy ? "show" : "hide");
   const handleCreateClick = () => navigate("note");
   const allRolesButRead = useRightsStore((state) => state.allRolesButRead);
@@ -31,6 +39,8 @@ export const CollaborativeWallToolbar = ({
   );
   const { canUndo, canRedo, handleUndo, handleRedo } = useHistory();
 
+  const { zoomIn, zoomOut, zoomTo, setViewport } = useReactFlow();
+  const { zoom } = useViewport();
   /**
    * feat/WB2-1584: hot keys for undo/redo
    * useHotkeys accepts [[]] with a key and a function
@@ -85,7 +95,6 @@ export const CollaborativeWallToolbar = ({
       tooltip: t("collaborativewall.toolbar.movewhiteboard", { ns: appCode }),
       visibility: showIf(allRolesButRead),
     },
-
     {
       type: "divider",
       name: "div-2",
@@ -98,14 +107,40 @@ export const CollaborativeWallToolbar = ({
         icon: <Center />,
         "aria-label": t("collaborativewall.toolbar.center"),
         color: "tertiary",
-        onClick: () =>
-          reactFlow.setViewport({
-            x: 0,
-            y: 0,
-            zoom: 1,
-          }),
+        onClick: () => setViewport(resetViewport, transitionDuration),
       },
       tooltip: t("collaborativewall.toolbar.center", { ns: appCode }),
+    },
+    {
+      type: "icon",
+      name: "zoomIn",
+      props: {
+        icon: <ZoomIn />,
+        "aria-label": t("collaborativewall.toolbar.zoomin"),
+        color: "tertiary",
+        onClick: () => zoomIn(),
+      },
+      tooltip: t("collaborativewall.toolbar.zoomin", { ns: appCode }),
+    },
+    {
+      type: "button",
+      name: "zoom",
+      props: {
+        children: (zoom * 100).toFixed(0) + "%",
+        className: "p-0 bg-transparent",
+        onClick: () => zoomTo(1, transitionDuration),
+      },
+    },
+    {
+      type: "icon",
+      name: "zoomOut",
+      props: {
+        icon: <ZoomOut />,
+        "aria-label": t("collaborativewall.toolbar.zoomout"),
+        color: "tertiary",
+        onClick: () => zoomOut(),
+      },
+      tooltip: t("collaborativewall.toolbar.zoomout", { ns: appCode }),
     },
     {
       type: "divider",
