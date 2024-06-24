@@ -13,7 +13,7 @@ const websocketState = {
   maxAttempts: 5,
   maxConnectedUsers: 0,
   readyState: false,
-  mode: Mode.WS,
+  mode: Mode.HTTP,
   status: Status.IDLE,
   connectedUsers: [],
   moveUsers: [],
@@ -150,6 +150,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
       sendNoteAddedEvent(note) {
         const { send, resourceId: wallId } = get();
         const { color, content, media, x, y, modified, ...other } = note;
+
         return send({
           wallId,
           type: "noteAdded",

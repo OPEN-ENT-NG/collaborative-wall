@@ -1,6 +1,6 @@
 import React from "react";
 import ReactFlow from "reactflow";
-import { nodeExtent, translateExtent } from "~/config";
+import { nodeExtent, translateExtent } from "~/config/wallConfig";
 import { useCustomReactFlow } from "~/hooks/useCustomReactFlow";
 import { useWhiteboardStore } from "~/store";
 import { CollaborativeWallBackground } from "./WallBackground";
