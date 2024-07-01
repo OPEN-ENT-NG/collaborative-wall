@@ -32,9 +32,9 @@ export const AppHeader = () => {
   );
 
   const shareOptions = {
-    resourceCreatorId: data?.owner.userId,
-    resourceId: data?._id,
-    resourceRights: data?.rights,
+    resourceCreatorId: data!.owner.userId,
+    resourceId: data!._id,
+    resourceRights: data!.rights,
   };
 
   const {
