@@ -10,7 +10,8 @@ import {
   updateWallQueryData,
   useWall,
 } from "~/services/queries";
-import { useHistoryStore, useWebsocketStore } from "~/store";
+import { useHistoryStore } from "~/store/history/store";
+import { useWebsocketStore } from "~/store/websocket/store";
 
 export const useEvents = () => {
   const queryClient = useQueryClient();

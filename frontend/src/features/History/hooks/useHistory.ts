@@ -4,10 +4,10 @@ import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useShallow } from "zustand/react/shallow";
 import { filterData } from "~/services/queries";
-import { useHistoryStore } from "~/store";
+import { useWebsocketStore } from "~/store";
+import { useHistoryStore } from "~/store/history/store";
 
 import { NewState } from "~/store/history/types";
-import { useWebsocketStore } from "~/store/websocket/store";
 
 export const useHistory = () => {
   const { t } = useTranslation();

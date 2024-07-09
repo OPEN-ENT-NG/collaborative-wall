@@ -7,7 +7,7 @@ import {
   notesQueryOptions,
   wallQueryOptions,
 } from "~/services/queries";
-import { useHistoryStore } from "~/store";
+import { useHistoryStore } from "~/store/history/store";
 import { ActionPayload, HttpProvider } from "../../../store/websocket/types";
 
 const REFETCH_INTERVAL = 20000;
