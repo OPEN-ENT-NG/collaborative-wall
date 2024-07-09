@@ -13,7 +13,7 @@ import { AppHeader } from "~/features/App/AppHeader";
 import { Description } from "~/features/Description/Description";
 import { Wall } from "~/features/Wall/Wall";
 import { useWhiteboardStore } from "~/store";
-import { useUserRightsStore } from "~/store/rights/store";
+import { useRightsStore } from "~/store/rights/store";
 import "./index.css";
 
 export const loader =
@@ -36,7 +36,7 @@ export const loader =
     const notes = await queryClient.ensureQueryData(queryNotes);
 
     const userRights = await checkUserRight(wall.rights);
-    const { setUserRights } = useUserRightsStore.getState();
+    const { setUserRights } = useRightsStore.getState();
     setUserRights(userRights);
 
     if (

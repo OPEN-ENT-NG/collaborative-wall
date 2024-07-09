@@ -12,7 +12,7 @@ interface UserRightsState {
  * Basic store for managing "rights" array
  * Must be use with a custom hook
  */
-export const useUserRightsStore = create<UserRightsState>((set) => ({
+export const useRightsStore = create<UserRightsState>((set) => ({
   userRights: {
     creator: false,
     contrib: false,
