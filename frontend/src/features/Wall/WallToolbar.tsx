@@ -13,12 +13,11 @@ import { useWhiteboardStore } from "~/store";
 
 export const CollaborativeWallToolbar = () => {
   const navigate = useNavigate();
-  const { setViewport } = useReactFlow();
   const showIf = (truthy: boolean) => (truthy ? "show" : "hide");
   const handleCreateClick = () => navigate("note");
 
+  const { setViewport } = useReactFlow();
   const { userRights } = useAccessStore();
-
   const { appCode } = useOdeClient();
   const { t } = useTranslation();
 
