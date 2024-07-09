@@ -3,12 +3,12 @@ import { Outlet } from "react-router-dom";
 import "reactflow/dist/base.css";
 import { useShallow } from "zustand/react/shallow";
 import { EmptyScreenError } from "~/components/EmptyScreenError/EmptyScreenError";
-import { useEvents } from "~/features/websocket/hooks/useEvents";
-import { useProviderConnection } from "~/features/websocket/hooks/useProviderConnection";
+import { useEvents } from "~/features/Websocket/hooks/useEvents";
+import { useProviderConnection } from "~/features/Websocket/hooks/useProviderConnection";
 import { useNotes, useWall } from "~/services/queries";
 import { useWebsocketStore } from "~/store";
 import { Mode, Status } from "~/store/websocket/types";
-import { WebsocketRenderedCursors } from "../websocket/components/WebsocketRenderedCursor";
+import { WebsocketRenderedCursors } from "../Websocket/components/WebsocketRenderedCursor";
 import { CollaborativeWallContainer } from "./WallContainer";
 import { WallReactFlow } from "./WallReactFlow";
 

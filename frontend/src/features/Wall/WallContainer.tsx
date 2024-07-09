@@ -4,7 +4,7 @@ import { useShallow } from "zustand/react/shallow";
 import { useWebsocketStore } from "~/store/websocket/store";
 
 const WebsocketModal = lazy(
-  async () => await import("~/features/websocket/components/WebsocketModal"),
+  async () => await import("~/features/Websocket/components/WebsocketModal"),
 );
 
 export const CollaborativeWallContainer = ({
