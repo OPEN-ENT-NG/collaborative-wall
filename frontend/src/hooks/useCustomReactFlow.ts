@@ -162,10 +162,14 @@ export const useCustomReactFlow = () => {
   /* onNodeClick we navigate to note modal component */
   const onNodeClick = useCallback(
     (_event: React.MouseEvent, node: Node) => {
-      !isMobile ? navigate(`note/${node.id}?mode=read`) : undefined;
+      !isMobile
+        ? navigate(`note/${node.id}?mode=read`)
+        : window.postMessage(
+            `noteclicked ${node.id}`,
+            `${window.origin}/${node.id}`,
+          );
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [isMobile, navigate],
   );
 
   /* onPaneMouseMove is useful to track mouse position */
