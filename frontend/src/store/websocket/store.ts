@@ -13,7 +13,7 @@ const websocketState = {
   maxAttempts: 5,
   maxConnectedUsers: 0,
   readyState: false,
-  mode: Mode.HTTP,
+  mode: Mode.WS,
   status: Status.IDLE,
   connectedUsers: [],
   moveUsers: [],
