@@ -1,10 +1,12 @@
 import { AppParams } from "ode-explorer/lib";
+import { CollaborativeWallResourceService } from "~/services/resource";
 import { workflows } from "./workflows";
 
 export const explorerConfig: AppParams = {
   app: "collaborativewall",
   types: ["collaborativewall"],
   libraryAppFilter: "CollaborativeWall",
+  service: CollaborativeWallResourceService,
   filters: [
     { id: "owner", defaultValue: true },
     { id: "public", defaultValue: false },
