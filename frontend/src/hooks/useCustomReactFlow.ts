@@ -15,6 +15,14 @@ import { useNotes } from "~/services/queries";
 import { useWebsocketStore, useWhiteboardStore } from "~/store";
 import { Note } from "../features/Note/components/Note";
 
+declare global {
+  interface Window {
+    ReactNativeWebView: {
+      postMessage: (message: string) => void;
+    };
+  }
+}
+
 export const useCustomReactFlow = () => {
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance<unknown, unknown>>();
@@ -164,10 +172,7 @@ export const useCustomReactFlow = () => {
     (_event: React.MouseEvent, node: Node) => {
       !isMobile
         ? navigate(`note/${node.id}?mode=read`)
-        : window.postMessage(
-            `noteclicked ${node.id}`,
-            `${window.origin}/${node.id}`,
-          );
+        : window.ReactNativeWebView.postMessage(node.id);
     },
     [isMobile, navigate],
   );
