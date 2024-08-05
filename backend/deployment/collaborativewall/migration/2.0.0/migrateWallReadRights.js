@@ -16,10 +16,19 @@ db.collaborativewall.find().forEach((wall) => {
     const newShared = wall.shared;
 
     newShared.forEach((sharedItem) => {
-      if (sharedItem[RETRIEVE_RIGHT]) {
+      let added = false;
+      if (sharedItem[RETRIEVE_RIGHT] && !sharedItem[GET_NOTE_RIGHT]) {
         sharedItem[GET_NOTE_RIGHT] = true;
+        added = true;
+      }
+
+      if (sharedItem[RETRIEVE_RIGHT] && !sharedItem[VIEW_NOTE_RIGHT]) {
         sharedItem[VIEW_NOTE_RIGHT] = true;
-        counter++;
+        added = true;
+      }
+
+      if (added) {
+        counter++
       }
     });
 
@@ -34,4 +43,4 @@ db.collaborativewall.find().forEach((wall) => {
   }
 });
 
-print("Number of wall updated:", counter);
+print("Number of shared items updated:", counter);
