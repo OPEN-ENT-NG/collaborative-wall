@@ -100,10 +100,13 @@ public class WallWebSocketController implements Handler<ServerWebSocket> {
 
                                     if (frame.isBinary()) {
                                         log.warn("Binary is not handled");
-                                    } else {
+                                    } else if(frame.isText()){
                                         final String message = frame.textData();
                                         final CollaborativeWallUserAction action = Json.decodeValue(message, CollaborativeWallUserAction.class);
                                         this.collaborativeWallRTService.pushEvent(wallId, session, action, wsId, false).onFailure(th -> this.sendError(th, ws));
+                                    } else if(frame.isClose()) {
+                                        log.debug("Received a close frame from the user");
+                                        onCloseWSConnection(wallId, userId, wsId);
                                     }
                                 } catch (Exception e) {
                                     log.error("An error occured while parsing message:", e);
