@@ -6,6 +6,16 @@ import {
   PickedCollaborativeWallProps,
 } from "~/models/wall";
 
+const checkHttpResponse = () => {
+  const { status } = odeServices.http().latestResponse;
+  if (status == 401) {
+    throw "unauthorized";
+  } else if (status == 404) {
+    throw "notfound";
+  } else if (status >= 400) {
+    throw "error";
+  }
+};
 /**
  * loadWall API
  * @param wallId wall id
@@ -17,7 +27,7 @@ export const loadWall = async (
   const wall = await odeServices
     .http()
     .get<CollaborativeWallProps>(`/collaborativewall/${wallId}`);
-
+  checkHttpResponse();
   return wall;
 };
 
@@ -30,7 +40,11 @@ export const updateWall = async (
   wallId: string,
   wall: PickedCollaborativeWallProps,
 ) => {
-  return await odeServices.http().put(`/collaborativewall/${wallId}`, wall);
+  const res = await odeServices
+    .http()
+    .put(`/collaborativewall/${wallId}`, wall);
+  checkHttpResponse();
+  return res;
 };
 
 /**
@@ -43,11 +57,12 @@ export const getNote = async (
   wallId: string,
   noteId: string,
 ): Promise<NoteProps> => {
-  return await odeServices
+  const res = await odeServices
     .http()
     .get<NoteProps>(`/collaborativewall/${wallId}/note/${noteId}`);
+  checkHttpResponse();
+  return res;
 };
-
 /**
  * getNotes API
  * @param wallId, wallId
@@ -57,6 +72,7 @@ export const getNotes = async (wallId: string) => {
   const notes = await odeServices
     .http()
     .get<NoteProps[]>(`/collaborativewall/${wallId}/notes`);
+  checkHttpResponse();
   return notes;
 };
 
@@ -71,9 +87,11 @@ export const updateNote = async (
   noteId: string,
   note: PickedNoteProps,
 ) => {
-  return await odeServices
+  const res = await odeServices
     .http()
     .put(`/collaborativewall/${wallId}/note/${noteId}`, note);
+  checkHttpResponse();
+  return res;
 };
 
 export const sessionHasWorkflowRights = async (actionRights: string[]) => {

@@ -16,6 +16,7 @@ import {
   authorizedModes,
   useNoteModal,
 } from "../../features/Note/hooks/useNoteModal";
+import { checkQueryResult } from "~/utils/checkQueryResult";
 
 export const noteLoader =
   (queryClient: QueryClient) =>
@@ -58,7 +59,7 @@ export const noteLoader =
   };
 
 export const Component = () => {
-  const { note } = useNote();
+  const { note, query } = useNote();
 
   const [colorValue, setColorValue] = useState<string[]>(
     note?.color || [noteColors.yellow.background],
@@ -89,6 +90,8 @@ export const Component = () => {
 
   const { t } = useTranslation();
   const { appCode } = useOdeClient();
+  // check whether query succeed else throw error
+  checkQueryResult(query);
 
   return createPortal(
     <Modal

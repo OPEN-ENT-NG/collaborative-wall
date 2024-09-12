@@ -11,13 +11,13 @@ import { useEvents } from "../Websocket/hooks/useEvents";
 import { useProviderConnection } from "../Websocket/hooks/useProviderConnection";
 import { CollaborativeWallContainer } from "./WallContainer";
 import { WallReactFlow } from "./WallReactFlow";
+import { checkQueryResult } from "~/utils/checkQueryResult";
 
 /* Lazy Loaded Modal */
 export const Wall = () => {
   /* Get fresh data from react query */
   const { wall, query } = useWall();
-  const { notes } = useNotes();
-
+  const { notes, query: queryNotes } = useNotes();
   /* Websocket Store */
   const { status, readyState } = useWebsocketStore(
     useShallow((state) => ({
@@ -37,6 +37,9 @@ export const Wall = () => {
 
   const mode = useWebsocketStore((state) => state.mode);
   const isWebsocketMode = mode === Mode.WS;
+  // check whether query succeed else throw error
+  checkQueryResult(query);
+  checkQueryResult(queryNotes);
 
   if (isPending || !readyState || isIDLE)
     return <LoadingScreen position={false} />;
