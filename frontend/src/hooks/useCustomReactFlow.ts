@@ -14,6 +14,7 @@ import { NoteProps } from "~/models/notes";
 import { useNotes } from "~/services/queries";
 import { useWebsocketStore, useWhiteboardStore } from "~/store";
 import { Note } from "../features/Note/components/Note";
+import { checkQueryResult } from "~/utils/checkQueryResult";
 
 declare global {
   interface Window {
@@ -52,7 +53,9 @@ export const useCustomReactFlow = () => {
   const { hasRightsToMoveNote } = useAccessStore();
 
   /* Notes data */
-  const { notes } = useNotes();
+  const { notes, query } = useNotes();
+  // check whether query succeed else throw error
+  checkQueryResult(query);
 
   const callbackFnToThrottlePosition = useCallback(
     ({ x, y }: { x: number; y: number }) => {
@@ -85,7 +88,7 @@ export const useCustomReactFlow = () => {
   }, [documentVisible, moveOut, sendNoteCursorMovedEvent]);
 
   useEffect(() => {
-    if (notes) {
+    if (notes && !query.isError) {
       const newNodes = notes
         ?.sort(
           (a: NoteProps, b: NoteProps) =>
