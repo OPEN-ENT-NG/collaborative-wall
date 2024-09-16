@@ -1,12 +1,22 @@
 import { Button, Heading, Layout } from "@edifice-ui/react";
 import { t } from "i18next";
-import { useNavigate, useRouteError } from "react-router-dom";
+import { useCallback } from "react";
+import { useLocation, useNavigate, useRouteError } from "react-router-dom";
 
 export const PageError = () => {
   const error = useRouteError();
   const navigate = useNavigate();
+  const location = useLocation();
   console.error(error);
 
+  const handleBack = useCallback(() => {
+    // check wether we were editing wall while having error => if so redirect to home
+    if (location.pathname.includes(`/id/`)) {
+      navigate("/");
+    } else {
+      navigate(-1);
+    }
+  }, [navigate, location]);
   return (
     <Layout>
       <div className="d-flex flex-column gap-16 align-items-center mt-64">
@@ -18,7 +28,7 @@ export const PageError = () => {
             ns: "collaborativewall",
           })}
         </div>
-        <Button color="primary" onClick={() => navigate(-1)}>
+        <Button color="primary" onClick={handleBack}>
           {t("back")}
         </Button>
       </div>
