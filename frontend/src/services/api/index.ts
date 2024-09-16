@@ -26,7 +26,10 @@ export const loadWall = async (
 ): Promise<CollaborativeWallProps> => {
   const wall = await odeServices
     .http()
-    .get<CollaborativeWallProps>(`/collaborativewall/${wallId}`);
+    // dont need notify here => redirect on error
+    .get<CollaborativeWallProps>(`/collaborativewall/${wallId}`, {
+      disableNotifications: true,
+    });
   checkHttpResponse();
   return wall;
 };
@@ -59,7 +62,10 @@ export const getNote = async (
 ): Promise<NoteProps> => {
   const res = await odeServices
     .http()
-    .get<NoteProps>(`/collaborativewall/${wallId}/note/${noteId}`);
+    // dont need notify here => redirect on error
+    .get<NoteProps>(`/collaborativewall/${wallId}/note/${noteId}`, {
+      disableNotifications: true,
+    });
   checkHttpResponse();
   return res;
 };
@@ -71,7 +77,10 @@ export const getNote = async (
 export const getNotes = async (wallId: string) => {
   const notes = await odeServices
     .http()
-    .get<NoteProps[]>(`/collaborativewall/${wallId}/notes`);
+    // dont need notify here => redirect on error
+    .get<NoteProps[]>(`/collaborativewall/${wallId}/notes`, {
+      disableNotifications: true,
+    });
   checkHttpResponse();
   return notes;
 };
