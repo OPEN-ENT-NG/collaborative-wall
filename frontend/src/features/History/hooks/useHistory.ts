@@ -1,13 +1,14 @@
-import { useOdeClient, useToast } from "@edifice-ui/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useCallback, useMemo } from "react";
-import { useTranslation } from "react-i18next";
-import { useShallow } from "zustand/react/shallow";
-import { filterData } from "~/services/queries";
-import { useWebsocketStore } from "~/store";
-import { useHistoryStore } from "~/store/history/store";
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+import { useOdeClient, useToast } from '@edifice-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useShallow } from 'zustand/react/shallow';
+import { filterData } from '~/services/queries';
+import { useWebsocketStore } from '~/store';
+import { useHistoryStore } from '~/store/history/store';
 
-import { NewState } from "~/store/history/types";
+import { NewState } from '~/store/history/types';
 
 export const useHistory = () => {
   const { t } = useTranslation();
@@ -36,7 +37,7 @@ export const useHistory = () => {
     await sendNoteDeletedEvent({
       _id: action.item._id,
       actionId: action.id,
-      actionType: isUndo ? "Undo" : "Redo",
+      actionType: isUndo ? 'Undo' : 'Redo',
     });
     filterData(queryClient, action);
   };
@@ -44,7 +45,7 @@ export const useHistory = () => {
   const createAction = async (action: NewState, isUndo: boolean) => {
     await sendNoteAddedEvent({
       actionId: action.id,
-      actionType: isUndo ? "Undo" : "Redo",
+      actionType: isUndo ? 'Undo' : 'Redo',
       color: action.item.color,
       content: action.item.content,
       idwall: action.item.idwall,
@@ -57,13 +58,13 @@ export const useHistory = () => {
   const moveAction = async (action: NewState, isUndo: boolean) => {
     const { previous, next, item } = action;
 
-    const x = isUndo ? previous?.x ?? 0 : next?.x ?? 0;
-    const y = isUndo ? previous?.y ?? 0 : next?.y ?? 0;
+    const x = isUndo ? (previous?.x ?? 0) : (next?.x ?? 0);
+    const y = isUndo ? (previous?.y ?? 0) : (next?.y ?? 0);
 
     try {
       await sendNoteUpdated({
         actionId: action.id,
-        actionType: isUndo ? "Undo" : "Redo",
+        actionType: isUndo ? 'Undo' : 'Redo',
         _id: item._id,
         content: item.content,
         color: item.color,
@@ -80,19 +81,19 @@ export const useHistory = () => {
     const { previous, next, item } = action;
 
     const color = isUndo
-      ? previous?.color ?? item.color
-      : next?.color ?? item.color;
+      ? (previous?.color ?? item.color)
+      : (next?.color ?? item.color);
     const content = isUndo
-      ? previous?.content ?? item.content
-      : next?.content ?? item.content;
+      ? (previous?.content ?? item.content)
+      : (next?.content ?? item.content);
     const media = isUndo ? previous?.media || null : next?.media || null;
-    const x = isUndo ? previous?.x ?? item.x : next?.x ?? item.x;
-    const y = isUndo ? previous?.y ?? item.y : next?.y ?? item.y;
+    const x = isUndo ? (previous?.x ?? item.x) : (next?.x ?? item.x);
+    const y = isUndo ? (previous?.y ?? item.y) : (next?.y ?? item.y);
 
     try {
       await sendNoteUpdated({
         actionId: action.id,
-        actionType: isUndo ? "Undo" : "Redo",
+        actionType: isUndo ? 'Undo' : 'Redo',
         _id: item._id,
         content,
         color,
@@ -107,21 +108,21 @@ export const useHistory = () => {
 
   const executeAction = async (action: NewState, isUndo: boolean) => {
     switch (action.type) {
-      case "create":
+      case 'create':
         isUndo
           ? await deleteAction(action, isUndo)
           : await createAction(action, isUndo);
         break;
-      case "delete":
+      case 'delete':
         isUndo
           ? await createAction(action, isUndo)
           : await deleteAction(action, isUndo);
         break;
-      case "move": {
+      case 'move': {
         await moveAction(action, isUndo);
         break;
       }
-      case "edit": {
+      case 'edit': {
         await editAction(action, isUndo);
         break;
       }
@@ -136,7 +137,7 @@ export const useHistory = () => {
     const lastAction = past[past.length - 1];
 
     executeAction(lastAction, true);
-    toast.success(t("collaborativewall.toast.undo", { ns: appCode }));
+    toast.success(t('collaborativewall.toast.undo', { ns: appCode }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [past, future]);
 
@@ -146,7 +147,7 @@ export const useHistory = () => {
     const nextAction = future[0];
 
     executeAction(nextAction, false);
-    toast.success(t("collaborativewall.toast.redo", { ns: appCode }));
+    toast.success(t('collaborativewall.toast.redo', { ns: appCode }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [future, future]);
 

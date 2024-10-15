@@ -1,7 +1,7 @@
-import { useUser } from "@edifice-ui/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { useShallow } from "zustand/react/shallow";
+import { useUser } from '@edifice-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import {
   deleteNoteQueryData,
   notesQueryOptions,
@@ -9,9 +9,9 @@ import {
   updateNoteQueryData,
   updateWallQueryData,
   useWall,
-} from "~/services/queries";
-import { useHistoryStore } from "~/store/history/store";
-import { useWebsocketStore } from "~/store/websocket/store";
+} from '~/services/queries';
+import { useHistoryStore } from '~/store/history/store';
+import { useWebsocketStore } from '~/store/websocket/store';
 
 export const useEvents = () => {
   const queryClient = useQueryClient();
@@ -47,26 +47,26 @@ export const useEvents = () => {
       const { type, ...otherProps } = event;
 
       switch (type) {
-        case "metadata": {
+        case 'metadata': {
           setConnectedUsers(event.connectedUsers);
           setMaxConnectedUsers(event.maxConnectedUsers);
           break;
         }
-        case "ping":
-        case "wallDeleted":
-        case "noteSelected":
-        case "noteUnselected": {
+        case 'ping':
+        case 'wallDeleted':
+        case 'noteSelected':
+        case 'noteUnselected': {
           // not used
           break;
         }
-        case "wallUpdate": {
+        case 'wallUpdate': {
           updateWallQueryData(queryClient, event.wall);
           break;
         }
-        case "noteAdded": {
+        case 'noteAdded': {
           if (user?.userId === event.userId) {
             setHistory({
-              type: "create",
+              type: 'create',
               item: event.note,
               ...otherProps,
             });
@@ -76,7 +76,7 @@ export const useEvents = () => {
           });
           break;
         }
-        case "cursorMove": {
+        case 'cursorMove': {
           if (user?.userId === event.userId) return;
 
           setMoveUsers({
@@ -86,19 +86,19 @@ export const useEvents = () => {
           });
           break;
         }
-        case "noteEditionStarted":
-        case "noteEditionEnded": {
+        case 'noteEditionStarted':
+        case 'noteEditionEnded': {
           //TODO
           break;
         }
-        case "noteMoved": {
+        case 'noteMoved': {
           updateNoteQueryData(queryClient, {
             ...event.note,
             wallid: event.wallId,
           });
           break;
         }
-        case "noteUpdated": {
+        case 'noteUpdated': {
           // if media is missing => it means that it has been deleted
           if (!event.note.media) event.note.media = null;
 
@@ -111,7 +111,7 @@ export const useEvents = () => {
             ) {
               // note has been moved
               setHistory({
-                type: "move",
+                type: 'move',
                 item: event.note,
                 previous: {
                   x: event.oldNote.x,
@@ -126,7 +126,7 @@ export const useEvents = () => {
             } else {
               // note has been updated
               setHistory({
-                type: "edit",
+                type: 'edit',
                 item: {
                   ...event.note,
                   content: event.note.content,
@@ -153,10 +153,10 @@ export const useEvents = () => {
           }
           break;
         }
-        case "noteDeleted": {
+        case 'noteDeleted': {
           if (user?.userId === event.userId) {
             setHistory({
-              type: "delete",
+              type: 'delete',
               item: event.note,
               ...otherProps,
             });
@@ -164,11 +164,11 @@ export const useEvents = () => {
           deleteNoteQueryData(queryClient, event.note);
           break;
         }
-        case "connection": {
+        case 'connection': {
           queryForMetadata();
           break;
         }
-        case "disconnection": {
+        case 'disconnection': {
           queryForMetadata();
           break;
         }

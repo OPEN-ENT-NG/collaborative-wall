@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
 import {
   Landscape,
@@ -6,9 +6,9 @@ import {
   Mic,
   Paperclip,
   RecordVideo,
-} from "@edifice-ui/icons";
-import { Toolbar } from "@edifice-ui/react";
-import { useTranslation } from "react-i18next";
+} from '@edifice-ui/icons';
+import { Toolbar } from '@edifice-ui/react';
+import { useTranslation } from 'react-i18next';
 
 export const NoteToolbar = ({
   handleClickMedia,
@@ -21,63 +21,63 @@ export const NoteToolbar = ({
     return [
       //--------------- IMAGE ---------------//
       {
-        type: "icon",
+        type: 'icon',
         props: {
-          icon: <Landscape />,
-          className: "bg-green-200",
-          "aria-label": t("tiptap.toolbar.picture"),
-          onClick: () => handleClickMedia("image"),
+          'icon': <Landscape />,
+          'className': 'bg-green-200',
+          'aria-label': t('tiptap.toolbar.picture'),
+          'onClick': () => handleClickMedia('image'),
         },
-        name: "image",
-        tooltip: t("tiptap.toolbar.picture"),
+        name: 'image',
+        tooltip: t('tiptap.toolbar.picture'),
       },
       //--------------- VIDEO ---------------//
       {
-        type: "icon",
+        type: 'icon',
         props: {
-          icon: <RecordVideo />,
-          className: "bg-purple-200",
-          "aria-label": t("tiptap.toolbar.video"),
-          onClick: () => handleClickMedia("video"),
+          'icon': <RecordVideo />,
+          'className': 'bg-purple-200',
+          'aria-label': t('tiptap.toolbar.video'),
+          'onClick': () => handleClickMedia('video'),
         },
-        name: "video",
-        tooltip: t("tiptap.toolbar.video"),
+        name: 'video',
+        tooltip: t('tiptap.toolbar.video'),
       },
       //--------------- AUDIO ---------------//
       {
-        type: "icon",
+        type: 'icon',
         props: {
-          icon: <Mic />,
-          className: "bg-red-200",
-          "aria-label": t("tiptap.toolbar.audio"),
-          onClick: () => handleClickMedia("audio"),
+          'icon': <Mic />,
+          'className': 'bg-red-200',
+          'aria-label': t('tiptap.toolbar.audio'),
+          'onClick': () => handleClickMedia('audio'),
         },
-        name: "audio",
-        tooltip: t("tiptap.toolbar.audio"),
+        name: 'audio',
+        tooltip: t('tiptap.toolbar.audio'),
       },
       //--------------- ATTACHMENT ---------------//
       {
-        type: "icon",
+        type: 'icon',
         props: {
-          icon: <Paperclip />,
-          className: "bg-yellow-200",
-          "aria-label": t("tiptap.toolbar.attachment"),
-          onClick: () => handleClickMedia("attachment"),
+          'icon': <Paperclip />,
+          'className': 'bg-yellow-200',
+          'aria-label': t('tiptap.toolbar.attachment'),
+          'onClick': () => handleClickMedia('attachment'),
         },
-        name: "attachment",
-        tooltip: t("tiptap.toolbar.attachment"),
+        name: 'attachment',
+        tooltip: t('tiptap.toolbar.attachment'),
       },
       //--------------- LINKER ---------------//
       {
-        type: "icon",
+        type: 'icon',
         props: {
-          icon: <Link />,
-          "aria-label": t("tiptap.toolbar.linker"),
-          className: "bg-blue-200",
-          onClick: () => handleClickMedia("hyperlink"),
+          'icon': <Link />,
+          'aria-label': t('tiptap.toolbar.linker'),
+          'className': 'bg-blue-200',
+          'onClick': () => handleClickMedia('hyperlink'),
         },
-        name: "linker",
-        tooltip: t("tiptap.toolbar.linker"),
+        name: 'linker',
+        tooltip: t('tiptap.toolbar.linker'),
       },
     ];
     // eslint-disable-next-line react-hooks/exhaustive-deps

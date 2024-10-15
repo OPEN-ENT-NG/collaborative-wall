@@ -1,6 +1,6 @@
-import i18n from "i18next";
-import Backend from "i18next-http-backend";
-import { initReactI18next } from "react-i18next";
+import i18n from 'i18next';
+import Backend from 'i18next-http-backend';
+import { initReactI18next } from 'react-i18next';
 
 i18n
   .use(Backend)
@@ -9,7 +9,7 @@ i18n
     backend: {
       loadPath: (_lngs: string[], namespaces: string[]) => {
         const urls = namespaces.map((namespace: string) => {
-          if (namespace === "common") {
+          if (namespace === 'common') {
             return `/i18n`;
           }
           return `/${namespace}/i18n`;
@@ -20,15 +20,15 @@ i18n
         return JSON.parse(data);
       },
     },
-    defaultNS: "common",
+    defaultNS: 'common',
     // you can add name of the app directly in the ns array
-    ns: ["common", "collaborativewall"],
-    fallbackLng: "fr",
-    lng: "fr",
+    ns: ['common', 'collaborativewall'],
+    fallbackLng: 'fr',
+    lng: 'fr',
     interpolation: {
       escapeValue: false,
-      prefix: "[[",
-      suffix: "]]",
+      prefix: '[[',
+      suffix: ']]',
     },
     debug: false,
   });

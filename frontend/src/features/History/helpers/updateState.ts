@@ -1,8 +1,8 @@
-import { NoteProps } from "~/models/notes";
-import { useHistoryStore } from "~/store";
-import { NewState } from "~/store/history/types";
-import { updateActionState } from "./updateActionState";
-import { updatePresentState } from "./updatePresentState";
+import { NoteProps } from '~/models/notes';
+import { useHistoryStore } from '~/store';
+import { NewState } from '~/store/history/types';
+import { updateActionState } from './updateActionState';
+import { updatePresentState } from './updatePresentState';
 
 export const updateState = (action: NewState, note: NoteProps) => {
   useHistoryStore.setState((state) => {

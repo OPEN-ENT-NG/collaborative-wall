@@ -1,7 +1,7 @@
-import { Layout, LoadingScreen, useOdeClient } from "@edifice-ui/react";
-import { Outlet, matchPath, useLocation } from "react-router-dom";
+import { Layout, LoadingScreen, useOdeClient } from '@edifice-ui/react';
+import { Outlet, matchPath, useLocation } from 'react-router-dom';
 
-import { basename } from "..";
+import { basename } from '..';
 
 /** Check old format URL and redirect if needed */
 export const loader = async () => {
@@ -9,13 +9,13 @@ export const loader = async () => {
 
   // Check if the URL is an old format (angular root with hash) and redirect to the new format
   if (hashLocation) {
-    const isWallPath = matchPath("/view/:wallId", hashLocation);
+    const isWallPath = matchPath('/view/:wallId', hashLocation);
 
     if (isWallPath) {
       // Redirect to the new format
       const redirectPath = `/id/${isWallPath?.params.wallId}`;
       location.replace(
-        location.origin + basename.replace(/\/$/g, "") + redirectPath,
+        location.origin + basename.replace(/\/$/g, '') + redirectPath,
       );
     }
   }
@@ -31,7 +31,7 @@ export const Root = () => {
   if (!init) return <LoadingScreen position={false} />;
 
   return (
-    <Layout headless={location.pathname !== "/"}>
+    <Layout headless={location.pathname !== '/'}>
       <Outlet />
     </Layout>
   );

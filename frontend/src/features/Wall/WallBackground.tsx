@@ -1,11 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { useViewport } from "reactflow";
-import { useShallow } from "zustand/react/shallow";
-import { backgroundColors, backgroundImages } from "~/config";
-import { wallQueryOptions } from "~/services/queries";
-import { useWhiteboardStore } from "~/store";
+/* eslint-disable no-constant-binary-expression */
+import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useViewport } from 'reactflow';
+import { useShallow } from 'zustand/react/shallow';
+import { backgroundColors, backgroundImages } from '~/config';
+import { wallQueryOptions } from '~/services/queries';
+import { useWhiteboardStore } from '~/store';
 
 export const CollaborativeWallBackground = () => {
   const params = useParams();
@@ -24,7 +25,7 @@ export const CollaborativeWallBackground = () => {
 
   const hasBackgroundImage = !!data?.background.path;
 
-  const renderBackgroundImage = `url(${import.meta.env.PROD ? `/collaborativewall/public/${data?.background.path}` ?? backgroundImages[0] : `/${data?.background.path ?? backgroundImages[0]}`}`;
+  const renderBackgroundImage = `url(${import.meta.env.PROD ? `/collaborativewall/public/${data?.background.path}` || backgroundImages[0] : `/${data?.background.path || backgroundImages[0]}`}`;
   const renderBackgroundColor = `linear-gradient(${data?.background.color || backgroundColors[0]})`;
 
   useEffect(() => {
@@ -35,15 +36,15 @@ export const CollaborativeWallBackground = () => {
   return (
     <div
       style={{
-        touchAction: "none",
+        touchAction: 'none',
         width: 2880,
         height: 1800,
-        position: "absolute",
+        position: 'absolute',
         transform: `translate(${x}px, ${y}px)`,
         background: hasBackgroundImage
           ? renderBackgroundImage
           : renderBackgroundColor,
       }}
-    ></div>
+    />
   );
 };

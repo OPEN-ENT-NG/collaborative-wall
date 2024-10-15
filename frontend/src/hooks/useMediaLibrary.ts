@@ -1,12 +1,12 @@
-import { useRef, useState } from "react";
+import { useRef, useState } from 'react';
 
 import {
   MediaLibraryRef,
   MediaLibraryResult,
   TabsItemProps,
   useWorkspaceFile,
-} from "@edifice-ui/react";
-import { WorkspaceElement } from "edifice-ts-client";
+} from '@edifice-ui/react';
+import { WorkspaceElement } from 'edifice-ts-client';
 
 export const useMediaLibrary = () => {
   const mediaLibraryRef = useRef<MediaLibraryRef>(null);
@@ -24,31 +24,31 @@ export const useMediaLibrary = () => {
     let updatedMedia;
 
     switch (mediaLibraryRef.current?.type) {
-      case "video": {
-        if (typeof result === "object") {
+      case 'video': {
+        if (typeof result === 'object') {
           updatedMedia = result[0];
         } else {
           const parser = new DOMParser();
-          const doc = parser.parseFromString(result, "text/html");
+          const doc = parser.parseFromString(result, 'text/html');
           const element = doc.body.firstChild as HTMLBodyElement;
 
-          const href = element?.getAttribute("src");
+          const href = element?.getAttribute('src');
           mediaLibraryRef.current?.hide();
           updatedMedia = href;
         }
         break;
       }
-      case "embedder": {
+      case 'embedder': {
         const parser = new DOMParser();
-        const doc = parser.parseFromString(result, "text/html");
+        const doc = parser.parseFromString(result, 'text/html');
         const element = doc.body.firstChild as HTMLBodyElement;
 
-        const href = element?.getAttribute("src");
+        const href = element?.getAttribute('src');
         mediaLibraryRef.current?.hide();
         updatedMedia = href;
         break;
       }
-      case "audio": {
+      case 'audio': {
         if (result.length === undefined) {
           updatedMedia = result;
         } else {
@@ -56,7 +56,7 @@ export const useMediaLibrary = () => {
         }
         break;
       }
-      case "hyperlink": {
+      case 'hyperlink': {
         updatedMedia = result;
         break;
       }

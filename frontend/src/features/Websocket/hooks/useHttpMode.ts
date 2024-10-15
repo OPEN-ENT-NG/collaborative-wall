@@ -1,14 +1,14 @@
-import { useQueries, useQueryClient } from "@tanstack/react-query";
-import { odeServices } from "edifice-ts-client";
+import { useQueries, useQueryClient } from '@tanstack/react-query';
+import { odeServices } from 'edifice-ts-client';
 
-import { NoteProps } from "~/models/notes";
+import { NoteProps } from '~/models/notes';
 import {
   deleteNoteQueryData,
   notesQueryOptions,
   wallQueryOptions,
-} from "~/services/queries";
-import { useHistoryStore } from "~/store/history/store";
-import { ActionPayload, HttpProvider } from "../../../store/websocket/types";
+} from '~/services/queries';
+import { useHistoryStore } from '~/store/history/store';
+import { ActionPayload, HttpProvider } from '../../../store/websocket/types';
 
 const REFETCH_INTERVAL = 20000;
 
@@ -55,7 +55,7 @@ export const useHttpMode = (
       notesQueryOptions(resourceId).queryKey,
     );
 
-    if (payload.type === "noteUpdated") {
+    if (payload.type === 'noteUpdated') {
       const oldNote = cache?.find((note) => note._id === payload.noteId);
 
       if (oldNote?.modified) {
@@ -67,7 +67,7 @@ export const useHttpMode = (
       if (oldNote?.x !== payload.note.x || oldNote?.y !== payload.note.y) {
         // note has been moved
         setHistory({
-          type: "move",
+          type: 'move',
           item: {
             ...payload.note,
             content: oldNote.content,
@@ -89,7 +89,7 @@ export const useHttpMode = (
       } else {
         // note has been updated
         setHistory({
-          type: "edit",
+          type: 'edit',
           item: {
             ...payload.note,
             content: payload.note.content,
@@ -117,12 +117,12 @@ export const useHttpMode = (
       }
     }
 
-    if (payload.type === "noteDeleted") {
+    if (payload.type === 'noteDeleted') {
       const note = cache?.find((note) => note._id === payload.noteId);
 
       if (note) {
         setHistory({
-          type: "delete",
+          type: 'delete',
           item: note,
           actionId: payload.actionId,
           actionType: payload.actionType,
@@ -138,7 +138,7 @@ export const useHttpMode = (
     // refresh
     const result = await refetch();
 
-    if (payload.type === "noteAdded") {
+    if (payload.type === 'noteAdded') {
       const notesArray = result.notes;
 
       if (!notesArray) return;
@@ -146,7 +146,7 @@ export const useHttpMode = (
       const newNote = notesArray[notesArray.length - 1];
 
       setHistory({
-        type: "create",
+        type: 'create',
         item: newNote,
         actionId: payload.actionId,
         actionType: payload.actionType,

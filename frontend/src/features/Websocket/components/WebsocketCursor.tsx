@@ -1,8 +1,8 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { useOdeTheme } from "@edifice-ui/react";
+import { useOdeTheme } from '@edifice-ui/react';
 
-import { usePerfectCursor } from "../hooks/usePerfectCursor";
+import { usePerfectCursor } from '../hooks/usePerfectCursor';
 
 export function Cursor({
   point,
@@ -18,7 +18,7 @@ export function Cursor({
     const elm = rCursor.current;
     if (!elm) return;
     elm.style.setProperty(
-      "transform",
+      'transform',
       `translate(${point[0]}px, ${point[1]}px)`,
     );
   }, []);
@@ -31,7 +31,7 @@ export function Cursor({
     <div
       ref={rCursor}
       style={{
-        position: "absolute",
+        position: 'absolute',
         zIndex: 99,
         top: -60,
         left: -15,
@@ -51,7 +51,7 @@ export function Cursor({
             fillRule="evenodd"
             clipRule="evenodd"
             d="M11.801 7.2849C11.5104 7.56894 11.4206 8.0006 11.5738 8.37699L19.3438 27.4688C19.498 27.8476 19.8673 28.0944 20.2763 28.0918C20.6854 28.0892 21.0516 27.8378 21.2009 27.4571L24.2266 19.7452L31.5766 17.0672C31.9612 16.9271 32.2215 16.5667 32.2338 16.1576C32.2461 15.7484 32.0078 15.3731 31.6322 15.2102L12.898 7.08264C12.5252 6.92091 12.0916 7.00085 11.801 7.2849Z"
-            fill={theme?.is1d ? "#ff8d2e" : "#2A9CC8"}
+            fill={theme?.is1d ? '#ff8d2e' : '#2A9CC8'}
           />
           <path
             fillRule="evenodd"

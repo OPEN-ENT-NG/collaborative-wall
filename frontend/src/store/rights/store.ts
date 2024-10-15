@@ -1,6 +1,6 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
-type RightRole = "contrib" | "creator" | "manager" | "read";
+type RightRole = 'contrib' | 'creator' | 'manager' | 'read';
 type UserRights = Record<RightRole, boolean>;
 
 interface UserRightsState {

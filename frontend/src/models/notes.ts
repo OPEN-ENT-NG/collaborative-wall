@@ -1,4 +1,4 @@
-import { MediaProps } from "./media";
+import { MediaProps } from './media';
 
 export interface NoteProps {
   _id: string;
@@ -19,5 +19,5 @@ export interface NoteProps {
 
 export type PickedNoteProps = Pick<
   NoteProps,
-  "content" | "x" | "y" | "idwall" | "color" | "modified" | "media"
+  'content' | 'x' | 'y' | 'idwall' | 'color' | 'modified' | 'media'
 >;

@@ -1,16 +1,16 @@
-import { NoteProps, PickedNoteProps } from "~/models/notes";
-import { MoveUser } from "~/models/types";
-import { CollaborativeWallProps } from "~/models/wall";
+import { NoteProps, PickedNoteProps } from '~/models/notes';
+import { MoveUser } from '~/models/types';
+import { CollaborativeWallProps } from '~/models/wall';
 
 export enum Mode {
-  WS = "ws",
-  HTTP = "http",
+  WS = 'ws',
+  HTTP = 'http',
 }
 
 export enum Status {
-  IDLE = "idle",
-  STARTED = "started",
-  STOPPED = "stopped",
+  IDLE = 'idle',
+  STARTED = 'started',
+  STOPPED = 'stopped',
 }
 export type HttpProvider = {
   refetch: () => Promise<{
@@ -39,7 +39,7 @@ export type WebsocketState = {
   isVisible: boolean;
 };
 export type ModifiedDate = { $date: number };
-export type ActionType = "Undo" | "Redo" | "Do";
+export type ActionType = 'Undo' | 'Redo' | 'Do';
 export type ActionData = { actionType: ActionType; actionId: string };
 export type WebsocketAction = {
   setResourceId: (resourceId: string) => void;
@@ -73,12 +73,12 @@ export type WebsocketAction = {
 
 export type CollaborativeWallPayload = Pick<
   CollaborativeWallProps,
-  "_id" | "name" | "description" | "background" | "icon"
+  '_id' | 'name' | 'description' | 'background' | 'icon'
 >;
 
 export type CollaborativeWallNotePayload = Pick<
   NoteProps,
-  "_id" | "content" | "owner" | "x" | "y" | "color" | "zIndex"
+  '_id' | 'content' | 'owner' | 'x' | 'y' | 'color' | 'zIndex'
 >;
 
 export type ConnectedUsers = {
@@ -88,35 +88,35 @@ export type ConnectedUsers = {
 
 export type MetadataPayload = {
   wallId: string;
-  type: "metadata";
+  type: 'metadata';
 };
 
 export type MetadataEvent = {
   wallId: string;
-  type: "metadata";
+  type: 'metadata';
   connectedUsers: ConnectedUsers[];
   maxConnectedUsers: number;
 };
 
 export type PingPayload = {
   wallId: string;
-  type: "ping";
+  type: 'ping';
 };
 
 export type WallUpdatedPayload = {
   wallId: string;
-  type: "wallUpdate";
+  type: 'wallUpdate';
   wall: CollaborativeWallPayload;
 };
 
 export type WallDeletedPayload = {
   wallId: string;
-  type: "wallDeleted";
+  type: 'wallDeleted';
 };
 
 export type NoteAddedPayloadAction = {
   wallId: string;
-  type: "noteAdded";
+  type: 'noteAdded';
   note: PickedNoteProps & {
     idwall: string;
   };
@@ -126,7 +126,7 @@ export type MoveList = Array<{ x: number; y: number }>;
 
 export type CursorMovedPayload = {
   wallId: string;
-  type: "cursorMove";
+  type: 'cursorMove';
   move: MoveList;
 };
 
@@ -136,21 +136,21 @@ export type CursorMovedEvent = {
 
 export type NoteEditionStartedPayload = {
   wallId: string;
-  type: "noteEditionStarted";
+  type: 'noteEditionStarted';
   noteId: string;
 };
 
 export type NoteEditionFinishedPayload = {
   wallId: string;
-  type: "noteEditionEnded";
+  type: 'noteEditionEnded';
   noteId: string;
 };
 
-export type PickedNotePosition = Pick<NoteProps, "_id" | "x" | "y">;
+export type PickedNotePosition = Pick<NoteProps, '_id' | 'x' | 'y'>;
 
 export type NoteMovedPayload = {
   wallId: string;
-  type: "noteMoved";
+  type: 'noteMoved';
   noteId: string;
   note: PickedNotePosition;
 };
@@ -158,11 +158,11 @@ export type NoteMovedPayload = {
 // TODO
 export type PickedNoteUpdate = Pick<
   NoteProps,
-  "_id" | "content" | "media" | "color" | "x" | "y"
+  '_id' | 'content' | 'media' | 'color' | 'x' | 'y'
 >;
 
 export type NoteUpdatedPayload = {
-  type: "noteUpdated";
+  type: 'noteUpdated';
   wallId: string;
   noteId: string;
 };
@@ -181,13 +181,13 @@ export type NoteUpdatedPayloadAction = {
 
 export type NoteSelectedPayload = {
   wallId: string;
-  type: "noteSelected" | "noteUnselected";
+  type: 'noteSelected' | 'noteUnselected';
   noteId: string;
 };
 
 export type NoteDeletedPayload = {
   wallId: string;
-  type: "noteDeleted";
+  type: 'noteDeleted';
   noteId: string;
 };
 
@@ -200,7 +200,7 @@ export type NoteDeletedPayloadEvent = {
 
 export type NoteAddedPayloadEvent = {
   wallId: string;
-  type: "noteAdded";
+  type: 'noteAdded';
   userId: string;
   note: NoteProps & {
     idwall: string;
@@ -210,13 +210,13 @@ export type NoteAddedPayloadEvent = {
 export type ConnectionPayloadEvent = {
   wallId: string;
   userId: string;
-  type: "connection";
+  type: 'connection';
 };
 
 export type DisconnectionPayloadEvent = {
   wallId: string;
   userId: string;
-  type: "disconnection";
+  type: 'disconnection';
   /* note: NoteProps & {
     idwall: string;
   }; */

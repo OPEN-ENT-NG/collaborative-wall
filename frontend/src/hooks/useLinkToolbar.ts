@@ -1,7 +1,7 @@
-import { RefObject, useCallback } from "react";
+import { RefObject, useCallback } from 'react';
 
-import { MediaLibraryRef } from "@edifice-ui/react";
-import { Editor } from "@tiptap/react";
+import { MediaLibraryRef } from '@edifice-ui/react';
+import { Editor } from '@tiptap/react';
 
 /**
  * Custom hook to handle LinkToolbar events.
@@ -17,21 +17,21 @@ export const useLinkToolbar = (
 ) => {
   const onEdit = useCallback(
     (attrs: any) => {
-      if (editor?.isActive("hyperlink"))
-        editor.commands.extendMarkRange("hyperlink");
+      if (editor?.isActive('hyperlink'))
+        editor.commands.extendMarkRange('hyperlink');
 
       const attrsLinker = attrs;
-      if (attrsLinker["data-id"] || attrsLinker["data-app-prefix"]) {
+      if (attrsLinker['data-id'] || attrsLinker['data-app-prefix']) {
         mediaLibraryRef.current?.showLink({
           target: attrs.target,
-          resourceId: attrsLinker["data-id"],
-          appPrefix: attrsLinker["data-app-prefix"],
+          resourceId: attrsLinker['data-id'],
+          appPrefix: attrsLinker['data-app-prefix'],
         });
       } else {
         const { href, target, name } = attrs;
         mediaLibraryRef.current?.showLink({
           link: {
-            url: href || "",
+            url: href || '',
             target: target || undefined,
             text: name,
           },
@@ -42,7 +42,7 @@ export const useLinkToolbar = (
   );
 
   const onOpen = (attrs: any) => {
-    window.open(attrs.href || "about:blank", "_blank");
+    window.open(attrs.href || 'about:blank', '_blank');
   };
 
   return {

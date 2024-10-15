@@ -1,10 +1,10 @@
-import { Button, Modal, useOdeClient } from "@edifice-ui/react";
-import { createPortal } from "react-dom";
-import { useTranslation } from "react-i18next";
-import { useShallow } from "zustand/react/shallow";
-import { useWall } from "~/services/queries";
+import { Button, Modal, useOdeClient } from '@edifice-ui/react';
+import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
+import { useShallow } from 'zustand/react/shallow';
+import { useWall } from '~/services/queries';
 
-import { useWhiteboardStore } from "~/store";
+import { useWhiteboardStore } from '~/store';
 
 export default function DescriptionModal() {
   const { appCode } = useOdeClient();
@@ -31,7 +31,7 @@ export default function DescriptionModal() {
           focusId="nextButtonId"
         >
           <Modal.Header onModalClose={handleClose}>
-            {t("collaborativewall.modal.description", { ns: appCode })}
+            {t('collaborativewall.modal.description', { ns: appCode })}
           </Modal.Header>
           <Modal.Body>
             <p>{wall?.description}</p>
@@ -43,11 +43,11 @@ export default function DescriptionModal() {
               variant="filled"
               onClick={handleClose}
             >
-              {t("close")}
+              {t('close')}
             </Button>
           </Modal.Footer>
         </Modal>,
-        document.getElementById("portal") as HTMLElement,
+        document.getElementById('portal') as HTMLElement,
       )
     : null;
 }

@@ -1,17 +1,17 @@
-import { LoadingScreen } from "@edifice-ui/react";
-import { Outlet } from "react-router-dom";
-import "reactflow/dist/base.css";
-import { useShallow } from "zustand/react/shallow";
-import { EmptyScreenError } from "~/components/EmptyScreenError/EmptyScreenError";
-import { useNotes, useWall } from "~/services/queries";
-import { useWebsocketStore } from "~/store";
-import { Mode, Status } from "~/store/websocket/types";
-import { WebsocketRenderedCursors } from "../Websocket/components/WebsocketRenderedCursor";
-import { useEvents } from "../Websocket/hooks/useEvents";
-import { useProviderConnection } from "../Websocket/hooks/useProviderConnection";
-import { CollaborativeWallContainer } from "./WallContainer";
-import { WallReactFlow } from "./WallReactFlow";
-import { checkQueryResult } from "~/utils/checkQueryResult";
+import { LoadingScreen } from '@edifice-ui/react';
+import { Outlet } from 'react-router-dom';
+import 'reactflow/dist/base.css';
+import { useShallow } from 'zustand/react/shallow';
+import { EmptyScreenError } from '~/components/EmptyScreenError/EmptyScreenError';
+import { useNotes, useWall } from '~/services/queries';
+import { useWebsocketStore } from '~/store';
+import { Mode, Status } from '~/store/websocket/types';
+import { WebsocketRenderedCursors } from '../Websocket/components/WebsocketRenderedCursor';
+import { useEvents } from '../Websocket/hooks/useEvents';
+import { useProviderConnection } from '../Websocket/hooks/useProviderConnection';
+import { CollaborativeWallContainer } from './WallContainer';
+import { WallReactFlow } from './WallReactFlow';
+import { checkQueryResult } from '~/utils/checkQueryResult';
 
 /* Lazy Loaded Modal */
 export const Wall = () => {

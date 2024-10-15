@@ -1,6 +1,6 @@
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from 'react';
 
-import { PerfectCursor } from "perfect-cursors";
+import { PerfectCursor } from 'perfect-cursors';
 
 export function usePerfectCursor(
   cb: (point: number[]) => void,

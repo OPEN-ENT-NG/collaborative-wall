@@ -1,16 +1,16 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect } from 'react';
 
-import useWebSocket, { ReadyState } from "react-use-websocket";
+import useWebSocket, { ReadyState } from 'react-use-websocket';
 
-import { useShallow } from "zustand/react/shallow";
-import { useWall } from "~/services/queries";
-import { useWebsocketStore } from "~/store";
+import { useShallow } from 'zustand/react/shallow';
+import { useWall } from '~/services/queries';
+import { useWebsocketStore } from '~/store';
 import {
   ActionPayload,
   Mode,
   Status,
   WSProvider,
-} from "../../../store/websocket/types";
+} from '../../../store/websocket/types';
 
 export const useWSMode = (): WSProvider => {
   const { wall } = useWall();
@@ -25,7 +25,7 @@ export const useWSMode = (): WSProvider => {
   );
   const isWebsocketMode = mode === Mode.WS;
 
-  const isLocalhost = window.location.hostname === "localhost";
+  const isLocalhost = window.location.hostname === 'localhost';
 
   const getSocketURL = useCallback(() => {
     return isLocalhost
@@ -59,14 +59,14 @@ export const useWSMode = (): WSProvider => {
         },
         onReconnectStop(attempt) {
           console.error(
-            "[collaborativewall][realtime] Reconnect max attempt:",
+            '[collaborativewall][realtime] Reconnect max attempt:',
             attempt,
           );
           onReady(Mode.HTTP);
         },
         onError(event) {
           console.error(
-            "[collaborativewall][realtime] Server has sent error:",
+            '[collaborativewall][realtime] Server has sent error:',
             event,
           );
         },

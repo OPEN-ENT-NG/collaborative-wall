@@ -3,25 +3,25 @@ import {
   Breadcrumb,
   LoadingScreen,
   useOdeClient,
-} from "@edifice-ui/react";
-import { useQueryClient } from "@tanstack/react-query";
-import { IWebApp } from "edifice-ts-client";
-import { Suspense, lazy } from "react";
-import { useParams } from "react-router-dom";
-import { useShallow } from "zustand/react/shallow";
-import { loadWall } from "~/services/api";
-import { useWall, wallQueryOptions } from "~/services/queries";
-import { useWebsocketStore, useWhiteboardStore } from "~/store";
-import { AppActions } from "./AppActions";
+} from '@edifice-ui/react';
+import { useQueryClient } from '@tanstack/react-query';
+import { IWebApp } from 'edifice-ts-client';
+import { Suspense, lazy } from 'react';
+import { useParams } from 'react-router-dom';
+import { useShallow } from 'zustand/react/shallow';
+import { loadWall } from '~/services/api';
+import { useWall, wallQueryOptions } from '~/services/queries';
+import { useWebsocketStore, useWhiteboardStore } from '~/store';
+import { AppActions } from './AppActions';
 
 /* Lazy Loaded Modals */
 const UpdateModal = lazy(
-  async () => await import("~/components/ResourceModal"),
+  async () => await import('~/components/ResourceModal'),
 );
 const BackgroundModal = lazy(
-  async () => await import("~/components/BackgroundModal/BackgroundModal"),
+  async () => await import('~/components/BackgroundModal/BackgroundModal'),
 );
-const ShareModal = lazy(async () => await import("~/components/ShareModal"));
+const ShareModal = lazy(async () => await import('~/components/ShareModal'));
 
 export const AppHeader = () => {
   const queryClient = useQueryClient();

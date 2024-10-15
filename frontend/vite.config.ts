@@ -1,8 +1,12 @@
-import { defineConfig, loadEnv } from "vite";
-import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
+/// <reference types="vitest/config" />
+import react from '@vitejs/plugin-react';
+import { defineConfig, loadEnv } from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
+import {
+  hashEdificeBootstrap,
+  queryHashVersion,
+} from './plugins/vite-plugin-edifice';
 
-// https://vitejs.dev/config/
 export default ({ mode }: { mode: string }) => {
   // Checking environement files
   const envFile = loadEnv(mode, process.cwd());
@@ -10,16 +14,13 @@ export default ({ mode }: { mode: string }) => {
   const hasEnvFile = Object.keys(envFile).length;
 
   // Proxy variables
-  const headers = {
-    cookie: `oneSessionId=${envs.VITE_ONE_SESSION_ID};authenticated=true; XSRF-TOKEN=${envs.VITE_XSRF_TOKEN}`,
-  };
-  const resHeaders = hasEnvFile
+  const headers = hasEnvFile
     ? {
-        "set-cookie": [
+        'set-cookie': [
           `oneSessionId=${envs.VITE_ONE_SESSION_ID}`,
           `XSRF-TOKEN=${envs.VITE_XSRF_TOKEN}`,
         ],
-        "Cache-Control": "public, max-age=300",
+        'Cache-Control': 'public, max-age=300',
       }
     : {};
 
@@ -27,61 +28,85 @@ export default ({ mode }: { mode: string }) => {
     ? {
         target: envs.VITE_RECETTE,
         changeOrigin: true,
-        headers,
+        headers: {
+          cookie: `oneSessionId=${envs.VITE_ONE_SESSION_ID};authenticated=true; XSRF-TOKEN=${envs.VITE_XSRF_TOKEN}`,
+        },
       }
     : {
-        target: envs.VITE_LOCALHOST || "http://localhost:8090",
+        target: 'http://localhost:8090',
         changeOrigin: false,
       };
 
-  const proxy = {
-    "/applications-list": proxyObj,
-    "/conf/public": proxyObj,
-    "^/(?=help-1d|help-2d)": proxyObj,
-    "^/(?=assets)": proxyObj,
-    "^/(?=theme|locale|i18n|skin)": proxyObj,
-    "^/(?=auth|appregistry|cas|userbook|directory|communication|conversation|portal|session|timeline|workspace|infra)":
-      proxyObj,
-    "/explorer": proxyObj,
-    "/collaborativewall": proxyObj,
-    "/xiti": proxyObj,
-    "/analyticsConf": proxyObj,
-    "/video": proxyObj,
-  };
+  /* Replace "/" the name of your application (e.g : blog | mindmap | collaborativewall) */
+  return defineConfig({
+    base: mode === 'production' ? '/collaborativewall' : '',
+    root: __dirname,
+    cacheDir: './node_modules/.vite/collaborativewall',
 
-  const base = mode === "production" ? "/collaborativewall" : "";
+    server: {
+      proxy: {
+        '/applications-list': proxyObj,
+        '/conf/public': proxyObj,
+        '^/(?=help-1d|help-2d)': proxyObj,
+        '^/(?=assets)': proxyObj,
+        '^/(?=theme|locale|i18n|skin)': proxyObj,
+        '^/(?=auth|appregistry|archive|cas|userbook|directory|communication|conversation|portal|session|timeline|workspace|infra)':
+          proxyObj,
+        '/xiti': proxyObj,
+        '/analyticsConf': proxyObj,
+        '/explorer': proxyObj,
+        '/collaborativewall': proxyObj,
+      },
+      port: 4200,
+      headers,
+      host: 'localhost',
+    },
 
-  const build = {
-    assetsDir: "public",
-    chunkSizeWarningLimit: 2000,
-    rollupOptions: {
-      external: ["edifice-ts-client"],
-      output: {
-        paths: {
-          "edifice-ts-client": "/assets/js/edifice-ts-client/index.js",
+    preview: {
+      port: 4300,
+      headers,
+      host: 'localhost',
+    },
+
+    plugins: [
+      react(),
+      tsconfigPaths(),
+      hashEdificeBootstrap({
+        hash: queryHashVersion,
+      }),
+    ],
+
+    build: {
+      outDir: './dist',
+      emptyOutDir: true,
+      reportCompressedSize: true,
+      commonjsOptions: {
+        transformMixedEsModules: true,
+      },
+      assetsDir: 'public',
+      chunkSizeWarningLimit: 5000,
+      rollupOptions: {
+        external: ['edifice-ts-client'],
+        output: {
+          inlineDynamicImports: true,
+          paths: {
+            'edifice-ts-client': `/assets/js/edifice-ts-client/index.js?${queryHashVersion}`,
+          },
         },
       },
     },
-  };
 
-  const plugins = [react(), tsconfigPaths()];
-
-  const server = {
-    proxy,
-    /* hmr: {
-      host: "localhost",
-      protocol: "ws",
-    }, */
-    host: "0.0.0.0",
-    port: 3000,
-    headers: resHeaders,
-    open: true,
-  };
-
-  return defineConfig({
-    base,
-    build,
-    plugins,
-    server,
+    test: {
+      watch: false,
+      globals: true,
+      environment: 'jsdom',
+      include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+      setupFiles: ['./src/mocks/setup.ts'],
+      reporters: ['default'],
+      coverage: {
+        reportsDirectory: './coverage/collaborativewall',
+        provider: 'v8',
+      },
+    },
   });
 };

@@ -3,21 +3,21 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-} from "@tanstack/react-query";
-import { ID, odeServices } from "edifice-ts-client";
-import { useParams } from "react-router-dom";
-import { NoteProps, PickedNoteProps } from "~/models/notes";
-import { getNote, getNotes, updateNote } from "~/services/api";
+} from '@tanstack/react-query';
+import { ID, odeServices } from 'edifice-ts-client';
+import { useParams } from 'react-router-dom';
+import { NoteProps, PickedNoteProps } from '~/models/notes';
+import { getNote, getNotes, updateNote } from '~/services/api';
 
 export const notesQueryOptions = (wallId: string) =>
   queryOptions({
-    queryKey: ["notes", wallId],
+    queryKey: ['notes', wallId],
     queryFn: async () => getNotes(wallId as string),
   });
 
 export const noteQueryOptions = (wallId: string, noteId: string) =>
   queryOptions({
-    queryKey: ["note", wallId, noteId],
+    queryKey: ['note', wallId, noteId],
     queryFn: async () => getNote(wallId, noteId),
   });
 
@@ -50,7 +50,7 @@ export const useCreateNote = () => {
         .http()
         .post(`/collaborativewall/${data.idwall}/note`, data),
     onSuccess: async () => {
-      queryClient.invalidateQueries({ queryKey: ["notes"] });
+      queryClient.invalidateQueries({ queryKey: ['notes'] });
     },
   });
 };

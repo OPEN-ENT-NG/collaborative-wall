@@ -1,5 +1,5 @@
-import { NoteProps } from "~/models/notes";
-import { NewState } from "~/store/history/types";
+import { NoteProps } from '~/models/notes';
+import { NewState } from '~/store/history/types';
 
 export const updatePresentState = (
   state: NewState | null,

@@ -1,8 +1,8 @@
-import { ID } from "edifice-ts-client";
-import { MediaProps } from "~/models/media";
-import { NoteProps } from "~/models/notes";
+import { ID } from 'edifice-ts-client';
+import { MediaProps } from '~/models/media';
+import { NoteProps } from '~/models/notes';
 
-import { ActionData } from "~/store/websocket/types";
+import { ActionData } from '~/store/websocket/types';
 
 /* History Store */
 export type UpdatedNote =
@@ -45,7 +45,7 @@ export type NewState = {
 };
 
 export type HistoryAction = {
-  setHistory: (newState: Omit<NewState, "id"> & ActionData) => void;
+  setHistory: (newState: Omit<NewState, 'id'> & ActionData) => void;
   undo: () => void;
   redo: () => void;
   undoById: (id: string) => void;

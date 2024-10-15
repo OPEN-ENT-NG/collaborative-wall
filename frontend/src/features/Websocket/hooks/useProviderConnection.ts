@@ -1,9 +1,9 @@
-import { useEffect } from "react";
-import { useWall } from "~/services/queries";
-import { useWebsocketStore } from "~/store/websocket/store";
-import { Mode, Status } from "~/store/websocket/types";
-import { useHttpMode } from "./useHttpMode";
-import { useWSMode } from "./useWsMode";
+import { useEffect } from 'react';
+import { useWall } from '~/services/queries';
+import { useWebsocketStore } from '~/store/websocket/store';
+import { Mode, Status } from '~/store/websocket/types';
+import { useHttpMode } from './useHttpMode';
+import { useWSMode } from './useWsMode';
 
 export const useProviderConnection = () => {
   const { wall } = useWall();

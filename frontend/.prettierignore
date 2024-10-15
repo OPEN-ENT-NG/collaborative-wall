@@ -1,6 +1,11 @@
-# Ignore everything:
-/*
-src/vite-env.d.ts
-
-# Except web-app:
-!/src
+# Add files here to ignore them from prettier formatting
+/dist
+/old
+/public
+/coverage
+/.nx/cache
+/.nx/workspace-data
+.prettierrc
+nx.json
+package.json
+project.json

@@ -19,5 +19,5 @@ export interface CollaborativeWallProps {
 
 export type PickedCollaborativeWallProps = Pick<
   CollaborativeWallProps,
-  "background" | "name" | "description" | "icon"
+  'background' | 'name' | 'description' | 'icon'
 >;
