@@ -1,6 +1,6 @@
-import { useUser } from "@edifice-ui/react";
-import { useWebsocketStore } from "~/store";
-import { Cursor } from "./WebsocketCursor";
+import { useUser } from '@edifice-ui/react';
+import { useWebsocketStore } from '~/store';
+import { Cursor } from './WebsocketCursor';
 
 export const WebsocketRenderedCursors = () => {
   const { user } = useUser();

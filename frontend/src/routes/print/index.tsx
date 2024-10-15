@@ -1,21 +1,21 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-import { Card, Heading } from "@edifice-ui/react";
-import { QueryClient } from "@tanstack/react-query";
-import { LoaderFunctionArgs, useParams } from "react-router-dom";
+import { Card, Heading } from '@edifice-ui/react';
+import { QueryClient } from '@tanstack/react-query';
+import { LoaderFunctionArgs, useParams } from 'react-router-dom';
 
-import { NoteProps } from "~/models/notes";
-import { useWallWithNotes } from "~/services/queries";
+import { NoteProps } from '~/models/notes';
+import { useWallWithNotes } from '~/services/queries';
 
-import { Editor } from "@edifice-ui/editor";
-import { backgroundColors, backgroundImages, wallConfig } from "~/config";
-import { NoteMedia } from "~/features/Note/components/NoteMedia";
-import { CollaborativeWallProps } from "~/models/wall";
-import "../collaborative-wall/index.css";
+import { Editor } from '@edifice-ui/editor';
+import { backgroundColors, backgroundImages, wallConfig } from '~/config';
+import { NoteMedia } from '~/features/Note/components/NoteMedia';
+import { CollaborativeWallProps } from '~/models/wall';
+import '../collaborative-wall/index.css';
 // import "./index.css";
-import { notesQueryOptions } from "~/services/queries/notes";
-import { wallQueryOptions } from "~/services/queries/wall";
-import styles from "./print.module.css";
+import { notesQueryOptions } from '~/services/queries/notes';
+import { wallQueryOptions } from '~/services/queries/wall';
+import styles from './print.module.css';
 
 export const wallLoader =
   (queryClient: QueryClient) =>
@@ -31,9 +31,9 @@ export const wallLoader =
     ]);
 
     if (!wall || !notes) {
-      throw new Response("", {
+      throw new Response('', {
         status: 404,
-        statusText: "Not Found",
+        statusText: 'Not Found',
       });
     }
 
@@ -57,10 +57,10 @@ export const Component = () => {
   const path = hasBackgroundImage ? wall?.background.path : backgroundImages[0];
 
   return (
-    <div className={styles["print-full-page"]}>
-      <div className={styles["transform-wrapper-print"]}>
+    <div className={styles['print-full-page']}>
+      <div className={styles['transform-wrapper-print']}>
         <div
-          className={styles["transform-component-print"]}
+          className={styles['transform-component-print']}
           style={{
             transform: `scale(${1000 / wallConfig.WIDTH_WALL})`,
           }}
@@ -75,8 +75,8 @@ export const Component = () => {
             <div
               style={{
                 backgroundImage: `url(${import.meta.env.PROD ? `/collaborativewall/public/${path}` : `/${path}`})`,
-                width: "100%",
-                height: "100%",
+                width: '100%',
+                height: '100%',
               }}
             >
               {notes
@@ -89,9 +89,9 @@ export const Component = () => {
                     <div
                       style={
                         {
-                          borderRadius: "1.2rem",
+                          borderRadius: '1.2rem',
                           zIndex: i,
-                          position: "absolute",
+                          position: 'absolute',
                           backgroundColor: note.color?.[0],
                           transform: `translate(${note.x}px, ${note.y}px)`,
                         } as React.CSSProperties
@@ -102,8 +102,8 @@ export const Component = () => {
                           {note.media?.url && <NoteMedia media={note.media} />}
                           <div
                             style={{
-                              maxHeight: note.media?.url ? "302px" : "264px",
-                              overflow: "hidden",
+                              maxHeight: note.media?.url ? '302px' : '264px',
+                              overflow: 'hidden',
                             }}
                           >
                             <Editor

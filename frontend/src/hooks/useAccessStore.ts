@@ -1,6 +1,6 @@
-import { useUser } from "@edifice-ui/react";
-import { NoteProps } from "~/models/notes";
-import { useRightsStore } from "~/store/rights/store";
+import { useUser } from '@edifice-ui/react';
+import { NoteProps } from '~/models/notes';
+import { useRightsStore } from '~/store/rights/store';
 
 export const useAccessStore = () => {
   const { user } = useUser();

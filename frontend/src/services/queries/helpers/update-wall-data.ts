@@ -1,6 +1,6 @@
-import { QueryClient } from "@tanstack/react-query";
-import { CollaborativeWallProps } from "~/models/wall";
-import { wallQueryOptions } from "..";
+import { QueryClient } from '@tanstack/react-query';
+import { CollaborativeWallProps } from '~/models/wall';
+import { wallQueryOptions } from '..';
 
 export const updateWallQueryData = (
   queryClient: QueryClient,

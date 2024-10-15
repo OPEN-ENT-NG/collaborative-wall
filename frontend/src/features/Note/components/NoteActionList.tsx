@@ -1,9 +1,9 @@
-import { Fragment, RefAttributes, useEffect } from "react";
+import { Fragment, RefAttributes, useEffect } from 'react';
 
-import { Options } from "@edifice-ui/icons";
-import { Dropdown, IconButton, IconButtonProps } from "@edifice-ui/react";
-import { NoteDropdownMenuOptions } from "~/features/Note/components/NoteActions";
-import { useWhiteboardStore } from "~/store";
+import { Options } from '@edifice-ui/icons';
+import { Dropdown, IconButton, IconButtonProps } from '@edifice-ui/react';
+import { NoteDropdownMenuOptions } from '~/features/Note/components/NoteActions';
+import { useWhiteboardStore } from '~/store';
 
 export const NoteActionList = ({
   noteId,
@@ -12,7 +12,7 @@ export const NoteActionList = ({
 }: {
   noteId: string;
   triggerProps: JSX.IntrinsicAttributes &
-    Omit<IconButtonProps, "ref"> &
+    Omit<IconButtonProps, 'ref'> &
     RefAttributes<HTMLButtonElement>;
   dropdownOptions: NoteDropdownMenuOptions[];
 }) => {
@@ -20,12 +20,12 @@ export const NoteActionList = ({
 
   useEffect(() => {
     setDropdownState({
-      isOpen: triggerProps["aria-expanded"] as boolean,
+      isOpen: triggerProps['aria-expanded'] as boolean,
       idDropdown: noteId,
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [triggerProps["aria-expanded"]]);
+  }, [triggerProps['aria-expanded']]);
 
   return (
     <>
@@ -41,7 +41,7 @@ export const NoteActionList = ({
       <Dropdown.Menu>
         {dropdownOptions.map((dropdownOption, index) => (
           <Fragment key={index}>
-            {dropdownOption.type === "divider" ? (
+            {dropdownOption.type === 'divider' ? (
               <Dropdown.Separator />
             ) : (
               !dropdownOption.hidden && (

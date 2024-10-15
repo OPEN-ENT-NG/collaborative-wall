@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { updateState } from "~/features/History/helpers/updateState";
-import { ActionData } from "../websocket/types";
-import { HistoryAction, HistoryState, NewState } from "./types";
+import { create } from 'zustand';
+import { updateState } from '~/features/History/helpers/updateState';
+import { ActionData } from '../websocket/types';
+import { HistoryAction, HistoryState, NewState } from './types';
 
 const MAX_HISTORY = 40;
 const historyState = {
@@ -13,10 +13,10 @@ const historyState = {
 
 const recreateNote = (
   present: NewState,
-  newState: Omit<NewState, "id"> & ActionData,
+  newState: Omit<NewState, 'id'> & ActionData,
   type: string,
 ) => {
-  if (type === "create") {
+  if (type === 'create') {
     updateState(
       {
         id: present?.id,
@@ -33,7 +33,7 @@ export const useHistoryStore = create<HistoryState & HistoryAction>(
     ...historyState,
     setHistory: (newState) => {
       switch (newState.actionType) {
-        case "Do": {
+        case 'Do': {
           set((state) => {
             const newStateWithId = { ...newState, id: newState.actionId };
             if (newStateWithId === state.present) {
@@ -50,12 +50,12 @@ export const useHistoryStore = create<HistoryState & HistoryAction>(
           });
           break;
         }
-        case "Redo": {
+        case 'Redo': {
           const { redoById, present } = get();
           if (present) recreateNote(present, newState, newState.type);
           return redoById(newState.actionId);
         }
-        case "Undo": {
+        case 'Undo': {
           const { undoById, present } = get();
           if (present) recreateNote(present, newState, newState.type);
           return undoById(newState.actionId);

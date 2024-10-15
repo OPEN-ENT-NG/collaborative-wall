@@ -1,6 +1,6 @@
-import clsx from "clsx";
+import clsx from 'clsx';
 
-import styles from "./NoteColorItem.module.css";
+import styles from './NoteColorItem.module.css';
 
 export const NoteColorItem = ({
   borderColor,

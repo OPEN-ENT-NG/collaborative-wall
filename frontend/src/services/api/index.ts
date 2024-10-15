@@ -1,19 +1,19 @@
-import { odeServices } from "edifice-ts-client";
+import { odeServices } from 'edifice-ts-client';
 
-import { NoteProps, PickedNoteProps } from "~/models/notes";
+import { NoteProps, PickedNoteProps } from '~/models/notes';
 import {
   CollaborativeWallProps,
   PickedCollaborativeWallProps,
-} from "~/models/wall";
+} from '~/models/wall';
 
 const checkHttpResponse = () => {
   const { status } = odeServices.http().latestResponse;
   if (status == 401) {
-    throw "unauthorized";
+    throw 'unauthorized';
   } else if (status == 404) {
-    throw "notfound";
+    throw 'notfound';
   } else if (status >= 400) {
-    throw "error";
+    throw 'error';
   }
 };
 /**

@@ -1,4 +1,4 @@
-import { Fragment, RefAttributes } from "react";
+import { Fragment, RefAttributes } from 'react';
 
 import {
   Options,
@@ -6,19 +6,19 @@ import {
   SetBackground,
   Settings,
   Share,
-} from "@edifice-ui/icons";
+} from '@edifice-ui/icons';
 import {
   Dropdown,
   DropdownMenuOptions,
   IconButton,
   IconButtonProps,
   useOdeClient,
-} from "@edifice-ui/react";
-import { useTranslation } from "react-i18next";
+} from '@edifice-ui/react';
+import { useTranslation } from 'react-i18next';
 
-import { useAccessStore } from "~/hooks/useAccessStore";
-import { useWall } from "~/services/queries";
-import { useWhiteboardStore } from "~/store";
+import { useAccessStore } from '~/hooks/useAccessStore';
+import { useWall } from '~/services/queries';
+import { useWhiteboardStore } from '~/store';
 
 export type ActionDropdownMenuOptions = DropdownMenuOptions & {
   id: string;
@@ -39,29 +39,29 @@ export const AppActions = () => {
 
   const dropdownOptions: ActionDropdownMenuOptions[] = [
     {
-      id: "background",
-      label: t("collaborativewall.modal.background", { ns: appCode }),
+      id: 'background',
+      label: t('collaborativewall.modal.background', { ns: appCode }),
       icon: <SetBackground />,
       action: () => setIsOpenBackgroundModal(true),
       visibility: userRights.creator || userRights.manager,
     },
     {
-      id: "share",
-      label: t("share"),
+      id: 'share',
+      label: t('share'),
       icon: <Share />,
       action: () => setOpenShareModal(true),
       visibility: userRights.creator || userRights.manager,
     },
     {
-      id: "properties",
-      label: t("properties"),
+      id: 'properties',
+      label: t('properties'),
       icon: <Settings />,
       action: () => setOpenUpdateModal(true),
       visibility: userRights.creator || userRights.manager,
     },
     {
-      id: "print",
-      label: t("print"),
+      id: 'print',
+      label: t('print'),
       icon: <Print />,
       action: () => window.open(`/collaborativewall/print/id/${wall?._id}`),
       visibility: true,
@@ -72,7 +72,7 @@ export const AppActions = () => {
     <Dropdown>
       {(
         triggerProps: JSX.IntrinsicAttributes &
-          Omit<IconButtonProps, "ref"> &
+          Omit<IconButtonProps, 'ref'> &
           RefAttributes<HTMLButtonElement>,
       ) => (
         <>
@@ -88,7 +88,7 @@ export const AppActions = () => {
           <Dropdown.Menu>
             {dropdownOptions.map((option) => (
               <Fragment key={option.id}>
-                {option.type === "divider" ? (
+                {option.type === 'divider' ? (
                   <Dropdown.Separator />
                 ) : (
                   option.visibility && (

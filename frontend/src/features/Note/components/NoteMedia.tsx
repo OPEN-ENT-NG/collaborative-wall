@@ -1,4 +1,4 @@
-import { Delete, Download, Edit, ExternalLink, Globe } from "@edifice-ui/icons";
+import { Delete, Download, Edit, ExternalLink, Globe } from '@edifice-ui/icons';
 import {
   AppIcon,
   Attachment,
@@ -8,13 +8,13 @@ import {
   ToolbarItem,
   useOdeClient,
   useOdeIcons,
-} from "@edifice-ui/react";
-import clsx from "clsx";
-import { useTranslation } from "react-i18next";
-import { useShallow } from "zustand/react/shallow";
+} from '@edifice-ui/react';
+import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
+import { useShallow } from 'zustand/react/shallow';
 
-import { MediaProps } from "~/models/media";
-import { useWhiteboardStore } from "~/store";
+import { MediaProps } from '~/models/media';
+import { useWhiteboardStore } from '~/store';
 
 export interface NoteMediaProps {
   media: MediaProps;
@@ -42,30 +42,30 @@ export const NoteMedia = ({
   );
 
   const mediaClasses = clsx({
-    "media-center": !modalNote,
-    "d-block": !modalNote,
-    "px-64": modalNote,
-    "py-32": modalNote,
+    'media-center': !modalNote,
+    'd-block': !modalNote,
+    'px-64': modalNote,
+    'py-32': modalNote,
   });
 
   const { getIconCode } = useOdeIcons();
 
-  const hyperlinkCode = getIconCode(media.application) ?? "";
+  const hyperlinkCode = getIconCode(media.application) ?? '';
 
   const LinkItems: ToolbarItem[] = [
     {
-      type: "icon",
-      name: "modify",
+      type: 'icon',
+      name: 'modify',
       props: {
-        icon: <Edit />,
-        "aria-label": t("edit"),
-        color: "tertiary",
-        onClick: () => {
+        'icon': <Edit />,
+        'aria-label': t('edit'),
+        'color': 'tertiary',
+        'onClick': () => {
           if (media.application) {
             onEdit?.({
-              target: media.targetUrl,
-              "data-id": media.id,
-              "data-app-prefix": media.application,
+              'target': media.targetUrl,
+              'data-id': media.id,
+              'data-app-prefix': media.application,
             });
           } else {
             onEdit?.({
@@ -76,77 +76,77 @@ export const NoteMedia = ({
           }
         },
       },
-      tooltip: t("edit"),
+      tooltip: t('edit'),
     },
     {
-      type: "icon",
-      name: "open",
+      type: 'icon',
+      name: 'open',
       props: {
-        icon: <ExternalLink />,
-        "aria-label": t("collaborativewall.toolbar.open"),
-        color: "tertiary",
-        onClick: () =>
+        'icon': <ExternalLink />,
+        'aria-label': t('collaborativewall.toolbar.open'),
+        'color': 'tertiary',
+        'onClick': () =>
           onOpen?.({
             href: media.url,
-            target: "_blank",
+            target: '_blank',
           }),
       },
-      tooltip: t("collaborativewall.toolbar.open", { ns: appCode }),
+      tooltip: t('collaborativewall.toolbar.open', { ns: appCode }),
     },
     {
-      type: "icon",
-      name: "delete",
+      type: 'icon',
+      name: 'delete',
       props: {
-        icon: <Delete />,
-        "aria-label": t("collaborativewall.toolbar.delete"),
-        color: "danger",
-        onClick: () => setMedia?.(null),
+        'icon': <Delete />,
+        'aria-label': t('collaborativewall.toolbar.delete'),
+        'color': 'danger',
+        'onClick': () => setMedia?.(null),
       },
-      tooltip: t("collaborativewall.toolbar.delete", { ns: appCode }),
+      tooltip: t('collaborativewall.toolbar.delete', { ns: appCode }),
     },
   ];
 
   const noteMediaStyle = {
-    position: "relative",
-    width: "100%",
+    position: 'relative',
+    width: '100%',
   } as React.CSSProperties;
 
-  const noteMediaIconStyle = { zIndex: "1" };
+  const noteMediaIconStyle = { zIndex: '1' };
   const imageMediaStyle = {
-    borderRadius: "8px",
-    maxHeight: "350px",
+    borderRadius: '8px',
+    maxHeight: '350px',
   };
 
   const audioClassname = clsx(`media-center ${mediaClasses}`, {
-    "my-16": !modalNote,
+    'my-16': !modalNote,
   });
 
-  const audioStyle = { zIndex: canMoveNote ? "1" : "0", marginBottom: "-8px" };
+  const audioStyle = { zIndex: canMoveNote ? '1' : '0', marginBottom: '-8px' };
   const videoStyle = {
-    marginBottom: "-8px",
-    zIndex: canMoveNote ? "1" : "0",
+    marginBottom: '-8px',
+    zIndex: canMoveNote ? '1' : '0',
   };
   const iframeStyle = {
-    height: modalNote ? "350px" : "",
-    zIndex: canMoveNote ? "1" : "0",
+    height: modalNote ? '350px' : '',
+    zIndex: canMoveNote ? '1' : '0',
   };
   const hyperlinkStyle = {
-    height: modalNote ? "200px" : "120px",
-    border: !modalNote ? "solid 1px #E4E4E4" : "",
-    borderRadius: !modalNote ? "8px" : "16px",
+    height: modalNote ? '200px' : '120px',
+    border: !modalNote ? 'solid 1px #E4E4E4' : '',
+    borderRadius: !modalNote ? '8px' : '16px',
   };
   const urlStyle = {
-    maxWidth: modalNote ? "219px" : "113px",
-    borderRadius: modalNote ? "0px 16px" : "0px 8px",
+    maxWidth: modalNote ? '219px' : '113px',
+    borderRadius: modalNote ? '0px 16px' : '0px 8px',
   };
-  const urlTextStyle = { color: "white", display: "block" };
+  const urlTextStyle = { color: 'white', display: 'block' };
   const iconGlobeStyle = {
-    width: modalNote ? "80" : "40",
-    height: modalNote ? "80" : "40",
+    width: modalNote ? '80' : '40',
+    height: modalNote ? '80' : '40',
   };
 
   switch (media.type) {
-    case "image":
+    case 'image':
       return (
         <div style={noteMediaStyle}>
           {!readonly && (
@@ -163,13 +163,13 @@ export const NoteMedia = ({
             src={media.url}
             alt={media.type}
             width="100%"
-            objectFit={modalNote ? "contain" : "cover"}
+            objectFit={modalNote ? 'contain' : 'cover'}
             ratio="16"
             style={imageMediaStyle}
           />
         </div>
       );
-    case "audio":
+    case 'audio':
       return (
         <div className={audioClassname}>
           <audio
@@ -192,9 +192,9 @@ export const NoteMedia = ({
           )}
         </div>
       );
-    case "attachment":
+    case 'attachment':
       return (
-        <div className={`${mediaClasses} ${modalNote ? "" : "my-16"}`}>
+        <div className={`${mediaClasses} ${modalNote ? '' : 'my-16'}`}>
           <Attachment
             name={media.name}
             options={
@@ -206,7 +206,7 @@ export const NoteMedia = ({
                       color="tertiary"
                       type="button"
                       variant="ghost"
-                      aria-label={t("download")}
+                      aria-label={t('download')}
                     />
                   </a>
                   {!readonly && (
@@ -214,7 +214,7 @@ export const NoteMedia = ({
                       icon={<Delete />}
                       variant="ghost"
                       color="danger"
-                      aria-label={t("remove")}
+                      aria-label={t('remove')}
                       onClick={() => setMedia?.(null)}
                     />
                   )}
@@ -224,9 +224,9 @@ export const NoteMedia = ({
           ></Attachment>
         </div>
       );
-    case "video":
+    case 'video':
       return (
-        <div style={{ position: "relative" }}>
+        <div style={{ position: 'relative' }}>
           {!readonly && (
             <IconButton
               className="delete-button mt-8 me-8"
@@ -256,10 +256,10 @@ export const NoteMedia = ({
           )}
         </div>
       );
-    case "hyperlink":
+    case 'hyperlink':
       return (
         <div
-          className={`media-hyperlink ${media.application ? `bg-light-${hyperlinkCode}` : "bg-blue-200"}`}
+          className={`media-hyperlink ${media.application ? `bg-light-${hyperlinkCode}` : 'bg-blue-200'}`}
           style={hyperlinkStyle}
         >
           {!readonly && (
@@ -268,13 +268,13 @@ export const NoteMedia = ({
           <a
             href={media.url}
             target={media.targetUrl}
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
           >
             <div className="application-background">
               {media.application ? (
                 <AppIcon
                   app={media.application}
-                  size={modalNote ? "80" : "40"}
+                  size={modalNote ? '80' : '40'}
                 />
               ) : (
                 <Globe className="text-blue" style={iconGlobeStyle} />

@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { Action, State } from "./types";
+import { create } from 'zustand';
+import { Action, State } from './types';
 
 const initialState = {
   isMobile: false,
@@ -8,7 +8,7 @@ const initialState = {
   isDragging: false,
   dropdownState: {
     isOpen: false,
-    idDropdown: "",
+    idDropdown: '',
   },
   openShareModal: false,
   openUpdateModal: false,
@@ -24,7 +24,7 @@ const initialState = {
 
 export const useWhiteboardStore = create<State & Action>((set) => ({
   ...initialState,
-  setIsMobile: (query) => set({ isMobile: query === "mobile" }),
+  setIsMobile: (query) => set({ isMobile: query === 'mobile' }),
   toggleCanMoveBoard: () =>
     set((state) => ({
       canMoveBoard: !state.canMoveBoard,

@@ -1,13 +1,13 @@
-import { Button, LoadingScreen, useOdeClient } from "@edifice-ui/react";
-import { Suspense, lazy } from "react";
-import { useTranslation } from "react-i18next";
-import { useShallow } from "zustand/react/shallow";
-import { useWall } from "~/services/queries";
+import { Button, LoadingScreen, useOdeClient } from '@edifice-ui/react';
+import { Suspense, lazy } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useShallow } from 'zustand/react/shallow';
+import { useWall } from '~/services/queries';
 
-import { useWhiteboardStore } from "~/store";
+import { useWhiteboardStore } from '~/store';
 
 const DescriptionModal = lazy(
-  async () => await import("~/features/Description/DescriptionModal"),
+  async () => await import('~/features/Description/DescriptionModal'),
 );
 
 export const Description = () => {
@@ -28,9 +28,9 @@ export const Description = () => {
         variant="ghost"
         color="tertiary"
         onClick={() => setOpenDescriptionModal(true)}
-        style={{ whiteSpace: "nowrap" }}
+        style={{ whiteSpace: 'nowrap' }}
       >
-        {t("collaborativewall.see.more", { ns: appCode })}
+        {t('collaborativewall.see.more', { ns: appCode })}
       </Button>
 
       <Suspense fallback={<LoadingScreen position={false} />}>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
 
 import {
   Button,
@@ -11,16 +11,16 @@ import {
   Image,
   Modal,
   useOdeClient,
-} from "@edifice-ui/react";
-import { createPortal } from "react-dom";
-import { useTranslation } from "react-i18next";
+} from '@edifice-ui/react';
+import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 
-import { backgroundColors, backgroundImages } from "~/config";
+import { backgroundColors, backgroundImages } from '~/config';
 import {
   CollaborativeWallProps,
   PickedCollaborativeWallProps,
-} from "~/models/wall";
-import { useWebsocketStore } from "~/store";
+} from '~/models/wall';
+import { useWebsocketStore } from '~/store';
 
 const THUMBNAIL_WIDTH = 288;
 const THUMBNAIL_HEIGHT = 180;
@@ -39,10 +39,10 @@ export default function BackgroundModal({
   const { sendWallUpdateEvent } = useWebsocketStore();
 
   const [backgroundImageValue, setBackgroundImageValue] = useState<string>(
-    wall?.background?.path || "",
+    wall?.background?.path || '',
   );
   const [backgroundColorValue, setBackgroundColorValue] = useState<string>(
-    wall?.background?.color || "",
+    wall?.background?.color || '',
   );
 
   const renderImage = useCallback(
@@ -55,25 +55,25 @@ export default function BackgroundModal({
 
   const renderColorStyle = (color: string) => ({
     background: renderColor(color),
-    width: "100%",
-    height: "52px",
-    paddingBottom: "75%",
+    width: '100%',
+    height: '52px',
+    paddingBottom: '75%',
   });
 
   const renderImageStyle = {
-    margin: "auto",
+    margin: 'auto',
     background: renderColor(backgroundColorValue),
   };
 
   const renderThumbnailStyle = {
     width: THUMBNAIL_WIDTH,
     height: THUMBNAIL_HEIGHT,
-    margin: "auto",
+    margin: 'auto',
     background: renderColor(backgroundColorValue),
   };
 
   const renderMainChoice =
-    backgroundImageValue !== "" ? (
+    backgroundImageValue !== '' ? (
       <Image
         src={renderImage(backgroundImageValue)}
         alt=""
@@ -89,12 +89,12 @@ export default function BackgroundModal({
 
   const handleOnSelectImage = useCallback((image: string) => {
     setBackgroundImageValue(image);
-    setBackgroundColorValue("");
+    setBackgroundColorValue('');
   }, []);
 
   const handleOnSelectColor = useCallback((color: string) => {
     setBackgroundColorValue(color);
-    setBackgroundImageValue("");
+    setBackgroundImageValue('');
   }, []);
 
   const handleSaveWall = async () => {
@@ -123,33 +123,33 @@ export default function BackgroundModal({
     onClick: () => void;
   }[] = [
     {
-      type: "button",
-      color: "tertiary",
-      variant: "ghost",
-      text: t("close"),
+      type: 'button',
+      color: 'tertiary',
+      variant: 'ghost',
+      text: t('close'),
       onClick: handleClose,
     },
     {
-      type: "button",
-      color: "primary",
-      variant: "filled",
-      text: t("edit"),
+      type: 'button',
+      color: 'primary',
+      variant: 'filled',
+      text: t('edit'),
       onClick: handleSaveWall,
     },
   ];
 
   const thumbnails = [
     {
-      type: "image",
-      text: "collaborativewall.label.images",
+      type: 'image',
+      text: 'collaborativewall.label.images',
       elements: backgroundImages,
       value: backgroundImageValue,
       onClick: handleOnSelectImage,
       render: renderImage,
     },
     {
-      type: "color",
-      text: "collaborativewall.label.colors",
+      type: 'color',
+      text: 'collaborativewall.label.colors',
       elements: backgroundColors,
       value: backgroundColorValue,
       onClick: handleOnSelectColor,
@@ -157,7 +157,7 @@ export default function BackgroundModal({
     },
   ];
 
-  const thumbnailStyle = { borderRadius: "4px" };
+  const thumbnailStyle = { borderRadius: '4px' };
 
   return isOpen
     ? createPortal(
@@ -169,7 +169,7 @@ export default function BackgroundModal({
           focusId="nextButtonId"
         >
           <Modal.Header onModalClose={handleClose}>
-            {t("collaborativewall.modal.background", { ns: appCode })}
+            {t('collaborativewall.modal.background', { ns: appCode })}
           </Modal.Header>
           <Modal.Body>
             <div className="my-16">{renderMainChoice}</div>
@@ -190,7 +190,7 @@ export default function BackgroundModal({
                           onClick={() => thumbnail.onClick(item)}
                         >
                           <Card.Body space="0">
-                            {thumbnail.type === "image" ? (
+                            {thumbnail.type === 'image' ? (
                               <Image
                                 src={thumbnail.render(item)}
                                 alt=""
@@ -223,7 +223,7 @@ export default function BackgroundModal({
             ))}
           </Modal.Footer>
         </Modal>,
-        document.getElementById("portal") as HTMLElement,
+        document.getElementById('portal') as HTMLElement,
       )
     : null;
 }

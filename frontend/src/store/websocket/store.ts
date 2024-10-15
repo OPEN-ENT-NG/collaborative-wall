@@ -1,5 +1,5 @@
-import { v4 as uuid } from "uuid";
-import { create } from "zustand";
+import { v4 as uuid } from 'uuid';
+import { create } from 'zustand';
 
 import {
   Mode,
@@ -7,7 +7,7 @@ import {
   Subscriber,
   WebsocketAction,
   WebsocketState,
-} from "~/store/websocket/types";
+} from '~/store/websocket/types';
 
 const websocketState = {
   maxAttempts: 5,
@@ -17,7 +17,7 @@ const websocketState = {
   status: Status.IDLE,
   connectedUsers: [],
   moveUsers: [],
-  resourceId: "",
+  resourceId: '',
   subscribers: [],
   openSocketModal: false,
   isVisible: false,
@@ -86,12 +86,12 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         const { mode, resourceId, httpProvider, wsProvider } = get();
         if (mode === Mode.HTTP) {
           if (!httpProvider) {
-            throw "[store][send] Http provider not defined";
+            throw '[store][send] Http provider not defined';
           }
           await httpProvider.send(resourceId, payload);
         } else {
           if (!wsProvider) {
-            throw "[store][send] WS provider not defined";
+            throw '[store][send] WS provider not defined';
           }
           wsProvider.send(payload);
         }
@@ -108,8 +108,8 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
 
         return send({
           wallId,
-          type: "metadata",
-          actionType: "Do",
+          type: 'metadata',
+          actionType: 'Do',
           actionId: uuid(),
         });
       },
@@ -121,8 +121,8 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         }
         return send({
           wallId,
-          type: "ping",
-          actionType: "Do",
+          type: 'ping',
+          actionType: 'Do',
           actionId: uuid(),
         });
       },
@@ -131,9 +131,9 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
 
         return send({
           wallId,
-          type: "wallUpdate",
+          type: 'wallUpdate',
           wall,
-          actionType: "Do",
+          actionType: 'Do',
           actionId: uuid(),
         });
       },
@@ -142,8 +142,8 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
 
         return send({
           wallId,
-          type: "wallDeleted",
-          actionType: "Do",
+          type: 'wallDeleted',
+          actionType: 'Do',
           actionId: uuid(),
         });
       },
@@ -153,7 +153,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
 
         return send({
           wallId,
-          type: "noteAdded",
+          type: 'noteAdded',
           note: {
             color,
             content,
@@ -174,9 +174,9 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         }
         return send({
           wallId,
-          type: "cursorMove",
+          type: 'cursorMove',
           move,
-          actionType: "Do",
+          actionType: 'Do',
           actionId: uuid(),
         });
       },
@@ -188,9 +188,9 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         }
         return send({
           wallId,
-          type: "noteEditionStarted",
+          type: 'noteEditionStarted',
           noteId,
-          actionType: "Do",
+          actionType: 'Do',
           actionId: uuid(),
         });
       },
@@ -199,9 +199,9 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
 
         return send({
           wallId,
-          type: "noteEditionEnded",
+          type: 'noteEditionEnded',
           noteId,
-          actionType: "Do",
+          actionType: 'Do',
           actionId: uuid(),
         });
       },
@@ -213,10 +213,10 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         }
         return send({
           wallId,
-          type: "noteMoved",
+          type: 'noteMoved',
           noteId,
           note,
-          actionType: "Do",
+          actionType: 'Do',
           actionId: uuid(),
         });
       },
@@ -225,7 +225,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         const { _id, color, content, media, x, y, ...other } = note;
         return send({
           wallId,
-          type: "noteUpdated",
+          type: 'noteUpdated',
           noteId: note._id,
           note: {
             _id,
@@ -246,9 +246,9 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         }
         return send({
           wallId,
-          type: selected ? "noteSelected" : "noteUnselected",
+          type: selected ? 'noteSelected' : 'noteUnselected',
           noteId,
-          actionType: "Do",
+          actionType: 'Do',
           actionId: uuid(),
         });
       },
@@ -257,7 +257,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
 
         return send({
           wallId,
-          type: "noteDeleted",
+          type: 'noteDeleted',
           noteId: _id,
           ...actionData,
         });

@@ -7,15 +7,15 @@ import {
   ResourceService,
   ResourceType,
   UpdateResult,
-} from "edifice-ts-client";
+} from 'edifice-ts-client';
 
-const APP = "collaborativewall";
-const RESOURCE = "collaborativewall";
+const APP = 'collaborativewall';
+const RESOURCE = 'collaborativewall';
 
 const backgroundImages = [
-  "img/blue-topo.png",
-  "img/green-hill.png",
-  "img/orange-hill.png",
+  'img/blue-topo.png',
+  'img/green-hill.png',
+  'img/orange-hill.png',
 ];
 
 const randomNumber = Math.trunc(
@@ -24,7 +24,7 @@ const randomNumber = Math.trunc(
 
 export class CollaborativeWallResourceService extends ResourceService {
   getEditUrl(): string {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
   async create(parameters: CreateParameters): Promise<CreateResult> {
     const thumbnail = await this.getThumbnailPath(parameters.thumbnail);
@@ -34,7 +34,7 @@ export class CollaborativeWallResourceService extends ResourceService {
       folder: parameters.folder,
       background: {
         path: backgroundImages[randomNumber],
-        color: "115deg, #E5F5FF 0.32%, #46AFE6 100%",
+        color: '115deg, #E5F5FF 0.32%, #46AFE6 100%',
       },
       icon: thumbnail,
     });

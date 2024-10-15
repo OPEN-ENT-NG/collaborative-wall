@@ -1,20 +1,20 @@
-import { useDocumentVisibility, usePageLeave } from "@mantine/hooks";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useDocumentVisibility, usePageLeave } from '@mantine/hooks';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Node,
   NodeChange,
   ReactFlowInstance,
   applyNodeChanges,
-} from "reactflow";
-import { v4 as uuid } from "uuid";
-import { useAccessStore } from "~/hooks/useAccessStore";
-import { useThrottledFunction } from "~/hooks/useThrottledFunction";
-import { NoteProps } from "~/models/notes";
-import { useNotes } from "~/services/queries";
-import { useWebsocketStore, useWhiteboardStore } from "~/store";
-import { Note } from "../features/Note/components/Note";
-import { checkQueryResult } from "~/utils/checkQueryResult";
+} from 'reactflow';
+import { v4 as uuid } from 'uuid';
+import { useAccessStore } from '~/hooks/useAccessStore';
+import { useThrottledFunction } from '~/hooks/useThrottledFunction';
+import { NoteProps } from '~/models/notes';
+import { useNotes } from '~/services/queries';
+import { useWebsocketStore, useWhiteboardStore } from '~/store';
+import { checkQueryResult } from '~/utils/checkQueryResult';
+import { Note } from '../features/Note/components/Note';
 
 declare global {
   interface Window {
@@ -97,7 +97,7 @@ export const useCustomReactFlow = () => {
         .map((note, index) => {
           return {
             id: note._id,
-            type: "note",
+            type: 'note',
             data: { note },
             position: { x: note.x, y: note.y },
             draggable: !isMobile && canMoveNote && hasRightsToMoveNote(note),
@@ -155,7 +155,7 @@ export const useCustomReactFlow = () => {
         .map((note, index) => {
           return {
             id: note._id,
-            type: "note",
+            type: 'note',
             data: { note },
             position: { x: note.x, y: note.y },
             draggable: !isMobile && canMoveNote && hasRightsToMoveNote(note),
@@ -173,6 +173,7 @@ export const useCustomReactFlow = () => {
   /* onNodeClick we navigate to note modal component */
   const onNodeClick = useCallback(
     (_event: React.MouseEvent, node: Node) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       !isMobile
         ? navigate(`note/${node.id}?mode=read`)
         : window.ReactNativeWebView.postMessage(node.id);
@@ -230,7 +231,7 @@ export const useCustomReactFlow = () => {
       await sendNoteUpdated({
         ...findNote,
         ...position,
-        actionType: "Do",
+        actionType: 'Do',
         actionId: uuid(),
       });
     },

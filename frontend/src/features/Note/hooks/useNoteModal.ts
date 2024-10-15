@@ -1,24 +1,24 @@
-import { RefObject, useCallback } from "react";
+import { RefObject, useCallback } from 'react';
 
-import { EditorRef } from "@edifice-ui/editor";
-import { useOdeClient } from "@edifice-ui/react";
-import { useTranslation } from "react-i18next";
+import { EditorRef } from '@edifice-ui/editor';
+import { useOdeClient } from '@edifice-ui/react';
+import { useTranslation } from 'react-i18next';
 import {
   useBeforeUnload,
   useNavigate,
   useParams,
   useSearchParams,
-} from "react-router-dom";
-import { v4 as uuid } from "uuid";
+} from 'react-router-dom';
+import { v4 as uuid } from 'uuid';
 
-import { useShallow } from "zustand/react/shallow";
-import { useInvalidateNoteQueries } from "~/hooks/useInvalidateNoteQueries";
-import { MediaProps } from "~/models/media";
-import { NoteProps, PickedNoteProps } from "~/models/notes";
-import { useWebsocketStore, useWhiteboardStore } from "~/store";
+import { useShallow } from 'zustand/react/shallow';
+import { useInvalidateNoteQueries } from '~/hooks/useInvalidateNoteQueries';
+import { MediaProps } from '~/models/media';
+import { NoteProps, PickedNoteProps } from '~/models/notes';
+import { useWebsocketStore, useWhiteboardStore } from '~/store';
 
-export type EditionMode = "read" | "edit" | "create";
-export const authorizedModes: EditionMode[] = ["read", "edit", "create"];
+export type EditionMode = 'read' | 'edit' | 'create';
+export const authorizedModes: EditionMode[] = ['read', 'edit', 'create'];
 
 /**  Outside function to handle random position
  * Defined outside the hook so that this method is recreated on each render
@@ -39,11 +39,11 @@ export const useNoteModal = (
   const [searchParams] = useSearchParams();
 
   const editionMode: EditionMode =
-    (searchParams.get("mode") as EditionMode) || "create";
+    (searchParams.get('mode') as EditionMode) || 'create';
 
-  const isReadMode = editionMode === "read";
-  const isEditMode = editionMode === "edit";
-  const isCreateMode = editionMode === "create";
+  const isReadMode = editionMode === 'read';
+  const isEditMode = editionMode === 'edit';
+  const isCreateMode = editionMode === 'create';
 
   /* Invalidate Notes Queries after mutation */
   const invalidateNoteQueries = useInvalidateNoteQueries();
@@ -70,7 +70,7 @@ export const useNoteModal = (
   const isDirty = useCallback(() => {
     return (
       loadedData?.color?.[0] != colorValue[0] ||
-      loadedData.content != (editorRef.current?.getContent("html") as string) ||
+      loadedData.content != (editorRef.current?.getContent('html') as string) ||
       loadedData.media?.id != media?.id
     );
   }, [loadedData, colorValue, editorRef, media]);
@@ -81,15 +81,15 @@ export const useNoteModal = (
     }
   });
 
-  const navigateBack = () => navigate("..");
+  const navigateBack = () => navigate('..');
 
   const handleCreateNote = async () => {
     if (!wallId) {
-      throw Error("Wall id is undefined");
+      throw Error('Wall id is undefined');
     }
 
     const note: PickedNoteProps = {
-      content: editorRef.current?.getContent("html") as string,
+      content: editorRef.current?.getContent('html') as string,
       color: colorValue,
       idwall: wallId,
       media: media,
@@ -110,7 +110,7 @@ export const useNoteModal = (
     try {
       await sendNoteAddedEvent({
         ...note,
-        actionType: "Do",
+        actionType: 'Do',
         actionId: uuid(),
       });
       await invalidateNoteQueries();
@@ -124,7 +124,7 @@ export const useNoteModal = (
     if (!loadedData) return;
 
     const note: PickedNoteProps = {
-      content: editorRef.current?.getContent("html") as string,
+      content: editorRef.current?.getContent('html') as string,
       color: colorValue,
       idwall: loadedData?.idwall as string,
       media: media || null,
@@ -139,7 +139,7 @@ export const useNoteModal = (
       color: note.color,
       x: note.x,
       y: note.y,
-      actionType: "Do",
+      actionType: 'Do',
       actionId: uuid(),
     });
 
@@ -151,7 +151,7 @@ export const useNoteModal = (
   const handleClose = () => {
     if (isCreateMode || (isEditMode && isDirty())) {
       const res: boolean = window.confirm(
-        t("collaborativewall.modal.note.confirm.close", { ns: appCode }),
+        t('collaborativewall.modal.note.confirm.close', { ns: appCode }),
       );
       if (res) {
         navigateBack();

@@ -1,15 +1,15 @@
-import { QueryClient } from "@tanstack/react-query";
-import { Explorer } from "ode-explorer/lib";
-import { RouteObject, createBrowserRouter } from "react-router-dom";
+import { QueryClient } from '@tanstack/react-query';
+import { Explorer } from 'ode-explorer/lib';
+import { RouteObject, createBrowserRouter } from 'react-router-dom';
 
-import { explorerConfig } from "~/config";
-import { PageError } from "~/routes/page-error";
-import { NotFound } from "./not-found";
+import { explorerConfig } from '~/config';
+import { PageError } from '~/routes/page-error';
+import { NotFound } from './not-found';
 const routes = (queryClient: QueryClient): RouteObject[] => [
   {
-    path: "/*",
+    path: '/*',
     async lazy() {
-      const { loader, Root: Component } = await import("~/routes/root");
+      const { loader, Root: Component } = await import('~/routes/root');
       return {
         loader,
         Component,
@@ -21,9 +21,9 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
         element: <Explorer config={explorerConfig} />,
       },
       {
-        path: "id/:wallId",
+        path: 'id/:wallId',
         async lazy() {
-          const { loader, Component } = await import("./collaborative-wall");
+          const { loader, Component } = await import('./collaborative-wall');
           return {
             loader: loader(queryClient),
             Component,
@@ -31,16 +31,16 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
         },
         children: [
           {
-            path: "note",
+            path: 'note',
             async lazy() {
-              const { Component } = await import("./note-modal");
+              const { Component } = await import('./note-modal');
               return { Component };
             },
           },
           {
-            path: "note/:noteId",
+            path: 'note/:noteId',
             async lazy() {
-              const { noteLoader, Component } = await import("./note-modal");
+              const { noteLoader, Component } = await import('./note-modal');
               return { loader: noteLoader(queryClient), Component };
             },
           },
@@ -50,14 +50,14 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
     ],
   },
   {
-    path: "*",
+    path: '*',
     element: <NotFound />,
     errorElement: <PageError />,
   },
   {
-    path: "print/id/:wallId",
+    path: 'print/id/:wallId',
     async lazy() {
-      const { wallLoader, Component } = await import("./print");
+      const { wallLoader, Component } = await import('./print');
       return {
         loader: wallLoader(queryClient),
         Component,
@@ -67,7 +67,7 @@ const routes = (queryClient: QueryClient): RouteObject[] => [
   },
 ];
 
-export const basename = import.meta.env.PROD ? "/collaborativewall" : "/";
+export const basename = import.meta.env.PROD ? '/collaborativewall' : '/';
 
 export const router = (queryClient: QueryClient) =>
   createBrowserRouter(routes(queryClient), {

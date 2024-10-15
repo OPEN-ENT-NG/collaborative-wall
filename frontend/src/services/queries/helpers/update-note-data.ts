@@ -1,6 +1,6 @@
-import { QueryClient } from "@tanstack/react-query";
-import { NoteProps } from "~/models/notes";
-import { notesQueryOptions } from "../notes";
+import { QueryClient } from '@tanstack/react-query';
+import { NoteProps } from '~/models/notes';
+import { notesQueryOptions } from '../notes';
 
 export const updateNoteQueryData = (
   queryClient: QueryClient,

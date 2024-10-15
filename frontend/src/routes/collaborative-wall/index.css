@@ -173,7 +173,7 @@
 
 .note .card-container:hover .card-actions-btn,
 .react-flow__node-note .card-container:hover .card-actions-btn,
-.react-flow__node-note .card-container .card-actions-btn[aria-expanded="true"] {
+.react-flow__node-note .card-container .card-actions-btn[aria-expanded='true'] {
   opacity: 1;
 }
 

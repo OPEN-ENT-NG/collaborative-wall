@@ -1,20 +1,20 @@
-import { QueryClient } from "@tanstack/react-query";
-import { LoaderFunctionArgs } from "react-router-dom";
+import { QueryClient } from '@tanstack/react-query';
+import { LoaderFunctionArgs } from 'react-router-dom';
 
 import {
   notesQueryOptions,
   useWall,
   wallQueryOptions,
-} from "~/services/queries";
+} from '~/services/queries';
 
-import { checkUserRight, useTrashedResource } from "@edifice-ui/react";
-import { odeServices } from "edifice-ts-client";
-import { AppHeader } from "~/features/App/AppHeader";
-import { Description } from "~/features/Description/Description";
-import { Wall } from "~/features/Wall/Wall";
-import { useWhiteboardStore } from "~/store";
-import { useRightsStore } from "~/store/rights/store";
-import "./index.css";
+import { checkUserRight, useTrashedResource } from '@edifice-ui/react';
+import { odeServices } from 'edifice-ts-client';
+import { AppHeader } from '~/features/App/AppHeader';
+import { Description } from '~/features/Description/Description';
+import { Wall } from '~/features/Wall/Wall';
+import { useWhiteboardStore } from '~/store';
+import { useRightsStore } from '~/store/rights/store';
+import './index.css';
 
 export const loader =
   (queryClient: QueryClient) =>
@@ -23,7 +23,7 @@ export const loader =
     const queryNotes = notesQueryOptions(params.wallId as string);
 
     const { searchParams } = new URL(request.url);
-    const query = searchParams.get("xApp");
+    const query = searchParams.get('xApp');
 
     if (query) {
       useWhiteboardStore.setState((state) => ({
@@ -43,7 +43,7 @@ export const loader =
       odeServices.http().isResponseError() &&
       odeServices.http().latestResponse.status === 401
     ) {
-      throw new Response("", {
+      throw new Response('', {
         status: 401,
         statusText: odeServices.http().latestResponse.statusText,
       });

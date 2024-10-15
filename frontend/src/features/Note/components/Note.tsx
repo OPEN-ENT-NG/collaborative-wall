@@ -1,12 +1,12 @@
-import { Card } from "@edifice-ui/react";
-import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import { useEffect } from "react";
-import { NodeProps } from "reactflow";
-import { NoteActions } from "~/features/Note/components/NoteActions";
-import { useAccessStore } from "~/hooks/useAccessStore";
-import { useWhiteboardStore } from "~/store";
-import { NoteMedia } from "./NoteMedia";
+import { Card } from '@edifice-ui/react';
+import { EditorContent, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import { useEffect } from 'react';
+import { NodeProps } from 'reactflow';
+import { NoteActions } from '~/features/Note/components/NoteActions';
+import { useAccessStore } from '~/hooks/useAccessStore';
+import { useWhiteboardStore } from '~/store';
+import { NoteMedia } from './NoteMedia';
 
 export const Note = ({ data }: NodeProps) => {
   const canMoveNote = useWhiteboardStore((state) => state.canMoveNote);
@@ -14,15 +14,15 @@ export const Note = ({ data }: NodeProps) => {
   const { hasRightsToUpdateNote } = useAccessStore();
 
   const style = {
-    borderRadius: "12px",
-    boxShadow: "0 0.2rem 0.6em rgba(0, 0, 0, 0.15)",
-    overflow: "clip",
+    borderRadius: '12px',
+    boxShadow: '0 0.2rem 0.6em rgba(0, 0, 0, 0.15)',
+    overflow: 'clip',
     backgroundColor: data.note.color?.[0],
   };
 
   const wrapperStyle = {
-    maxHeight: data.note.media?.url ? "302px" : "264px",
-    overflow: "hidden",
+    maxHeight: data.note.media?.url ? '302px' : '264px',
+    overflow: 'hidden',
   };
 
   const extensions = [StarterKit];
