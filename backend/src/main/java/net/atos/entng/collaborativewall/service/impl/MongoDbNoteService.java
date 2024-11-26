@@ -33,6 +33,7 @@ import org.entcore.common.service.CrudService;
 import org.entcore.common.service.impl.MongoDbCrudService;
 import org.entcore.common.user.UserInfos;
 
+import java.time.Instant;
 import java.util.Iterator;
 
 import static com.mongodb.client.model.Filters.*;
@@ -124,7 +125,7 @@ public class MongoDbNoteService implements NoteService {
                         }
                     }
 
-                    Long lastEditDB = noteDB.getJsonObject(NOTES_FIELD_MODIFIED).getLong(NOTES_MODIFIED_ATTR_DATE);
+                    Long lastEditDB = Instant.parse(noteDB.getJsonObject(NOTES_FIELD_MODIFIED).getString(NOTES_MODIFIED_ATTR_DATE)).toEpochMilli();
 
                     if (lastEditDB != null && !lastEditDB.equals(lastEdit) && checkConcurrency) {
                         //Concurrent access
