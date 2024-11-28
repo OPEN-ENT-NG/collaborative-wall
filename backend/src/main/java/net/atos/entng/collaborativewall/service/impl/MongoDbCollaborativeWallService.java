@@ -17,6 +17,7 @@ import org.entcore.common.share.ShareModel;
 import org.entcore.common.share.ShareRoles;
 import org.entcore.common.user.UserInfos;
 
+import java.time.Instant;
 import java.util.*;
 
 public class MongoDbCollaborativeWallService implements CollaborativeWallService {
@@ -193,7 +194,10 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
                 promise.fail(resGet.left().getValue());
             } else {
                 // skip concurrency
-                final Long modified = resGet.right().getValue().getJsonObject(MongoDbNoteService.NOTES_FIELD_MODIFIED, new JsonObject()).getLong(MongoDbNoteService.NOTES_MODIFIED_ATTR_DATE, 0l);
+                final Long modified = Instant.parse(resGet.right().getValue()
+                        .getJsonObject(MongoDbNoteService.NOTES_FIELD_MODIFIED, new JsonObject())
+                        .getString(MongoDbNoteService.NOTES_MODIFIED_ATTR_DATE, "0l"))
+                        .toEpochMilli();
                 // delete note
                 this.noteService.delete(noteId, modified, user, checkConcurency, result -> {
                     if (result.isRight()) {
