@@ -26,13 +26,18 @@ import fr.wseduc.webutils.Either;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import net.atos.entng.collaborativewall.events.CollaborativeWallNote;
 import net.atos.entng.collaborativewall.service.NoteService;
 import org.bson.conversions.Bson;
 import org.entcore.common.mongodb.MongoDbResult;
 import org.entcore.common.service.CrudService;
 import org.entcore.common.service.impl.MongoDbCrudService;
 import org.entcore.common.user.UserInfos;
+import org.entcore.common.utils.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.text.ParseException;
 import java.time.Instant;
 import java.util.Iterator;
 
@@ -41,6 +46,7 @@ import static com.mongodb.client.model.Filters.*;
 
 public class MongoDbNoteService implements NoteService {
 
+    private static final Logger log = LoggerFactory.getLogger(MongoDbNoteService.class);
 
     public static final String COLLABORATIVEWALL_NOTES = "collaborativewall.notes";
 
@@ -125,7 +131,7 @@ public class MongoDbNoteService implements NoteService {
                         }
                     }
 
-                    Long lastEditDB = Instant.parse(noteDB.getJsonObject(NOTES_FIELD_MODIFIED).getString(NOTES_MODIFIED_ATTR_DATE)).toEpochMilli();
+                    Long lastEditDB = getTimestamp(NOTES_FIELD_MODIFIED, noteDB);
 
                     if (lastEditDB != null && !lastEditDB.equals(lastEdit) && checkConcurrency) {
                         //Concurrent access
@@ -157,14 +163,39 @@ public class MongoDbNoteService implements NoteService {
         });
     }
 
+    private Long getTimestamp(String notesFieldModified, JsonObject noteDB) {
+        Object value = noteDB.getValue(notesFieldModified);
+        long ts = -1;
+        if(value instanceof Number) {
+            ts = (long) value;
+        } else if(value instanceof String) {
+            try {
+                ts = MongoDb.parseDate((String)value).getTime();
+            } catch (ParseException e) {
+                log.error("Cannot adapt date " + notesFieldModified  + ": " + value, e);
+            }
+        } else if(value instanceof JsonObject) {
+            Object dateValue = ((JsonObject) value).getValue("$date");
+            if(dateValue instanceof String) {
+                ts = DateUtils.parseIsoDate((JsonObject) value).getTime();
+            } else if(dateValue instanceof Number){
+                ts = (long) dateValue;
+            } else {
+                log.error("Cannot adapt date " + notesFieldModified  + ": " + value);
+            }
+        }
+        return ts;
+    }
+
     private void update(String id, JsonObject data, Handler<Either<String, JsonObject>> handler) {
         Bson query = eq("_id", id);
         MongoUpdateBuilder modifier = new MongoUpdateBuilder();
-        Iterator var7 = data.fieldNames().iterator();
+        final JsonObject mongoDBData = CollaborativeWallNote.toMongoDb(data);
+        Iterator var7 = mongoDBData.fieldNames().iterator();
 
         while(var7.hasNext()) {
             String attr = (String)var7.next();
-            modifier.set(attr, data.getValue(attr));
+            modifier.set(attr, mongoDBData.getValue(attr));
         }
         final JsonObject now = MongoDb.now();
         modifier.set("modified", now);

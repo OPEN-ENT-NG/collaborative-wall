@@ -1,17 +1,20 @@
 package net.atos.entng.collaborativewall.events;
 
 import com.fasterxml.jackson.annotation.*;
+import fr.wseduc.mongodb.MongoDb;
 import io.vertx.core.json.JsonObject;
 import org.entcore.common.user.UserInfos;
+import org.entcore.common.utils.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CollaborativeWallNote {
+    private static final Logger log = LoggerFactory.getLogger(CollaborativeWallNote.class);
     @JsonProperty("_id")
     private final String id;
     private final String content;
@@ -24,6 +27,12 @@ public class CollaborativeWallNote {
     private final String lastEdit;
     private final CollaborativeWallNoteMedia media;
     private final String idwall;
+
+    private static final List<String> dates_to_adapt = new ArrayList<>();
+    static {
+        dates_to_adapt.add("created");
+        dates_to_adapt.add("modified");
+    }
 
     @JsonCreator
     public CollaborativeWallNote(@JsonProperty("_id") final String id,
@@ -100,6 +109,31 @@ public class CollaborativeWallNote {
                 new JsonObject().put("$date", modified).getMap());
     }
 
+    /**
+     * Handle dates format to be upserted in MongoDB
+     * @param note Note to be upserted in MongoDB
+     * @return A copy of this note ready to be inserted into MongoDB
+     */
+    public static JsonObject toMongoDb(JsonObject note) {
+        final JsonObject copy = note.copy();
+        for (String dateName : dates_to_adapt) {
+            Object value = copy.getValue(dateName);
+            long ts = -1;
+            if(value instanceof Number) {
+                ts = (long)value;
+            } else if(value instanceof JsonObject) {
+                Object dateValue = ((JsonObject) value).getValue("$date");
+                if(dateValue instanceof Number) {
+                    ts = (long)dateValue;
+                }
+            }
+            if(ts > 0) {
+                copy.put(dateName, new JsonObject().put("$date", DateUtils.formatUtcDateTime(new Date(ts))));
+            }
+        }
+        return copy;
+    }
+
     public String getId() {
         return id;
     }
@@ -156,7 +190,32 @@ public class CollaborativeWallNote {
     }
 
     public static CollaborativeWallNote fromJson(final JsonObject json) {
-        return json.mapTo(CollaborativeWallNote.class);
+        return adaptDates(json).mapTo(CollaborativeWallNote.class);
+    }
+
+    private static JsonObject adaptDates(JsonObject json) {
+        for (String dateName : dates_to_adapt) {
+            Object value = json.getValue(dateName);
+            long ts = -1;
+            if(value instanceof Number) {
+                ts = (long) value;
+            } else if(value instanceof String) {
+              try {
+                ts = MongoDb.parseDate((String)value).getTime();
+              } catch (ParseException e) {
+                  log.error("Cannot adapt date " + dateName  + ": " + value, e);
+              }
+            } else if(value instanceof JsonObject) {
+                Object dateValue = ((JsonObject) value).getValue("$date");
+                if(dateValue instanceof String) {
+                    ts = DateUtils.parseIsoDate((JsonObject) value).getTime();
+                }
+            }
+            if(ts > 0) {
+                json.put(dateName, new JsonObject().put("$date", ts));
+            }
+        }
+        return json;
     }
 
     public JsonObject getCreated() {
