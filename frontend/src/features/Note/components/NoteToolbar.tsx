@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 
+import { Toolbar } from '@edifice.io/react';
 import {
-  Landscape,
-  Link,
-  Mic,
-  Paperclip,
-  RecordVideo,
-} from '@edifice-ui/icons';
-import { Toolbar } from '@edifice-ui/react';
+  IconLandscape,
+  IconLink,
+  IconMic,
+  IconPaperclip,
+  IconRecordVideo,
+} from '@edifice.io/react/icons';
 import { useTranslation } from 'react-i18next';
 
 export const NoteToolbar = ({
@@ -23,7 +23,7 @@ export const NoteToolbar = ({
       {
         type: 'icon',
         props: {
-          'icon': <Landscape />,
+          'icon': <IconLandscape />,
           'className': 'bg-green-200',
           'aria-label': t('tiptap.toolbar.picture'),
           'onClick': () => handleClickMedia('image'),
@@ -35,7 +35,7 @@ export const NoteToolbar = ({
       {
         type: 'icon',
         props: {
-          'icon': <RecordVideo />,
+          'icon': <IconRecordVideo />,
           'className': 'bg-purple-200',
           'aria-label': t('tiptap.toolbar.video'),
           'onClick': () => handleClickMedia('video'),
@@ -47,7 +47,7 @@ export const NoteToolbar = ({
       {
         type: 'icon',
         props: {
-          'icon': <Mic />,
+          'icon': <IconMic />,
           'className': 'bg-red-200',
           'aria-label': t('tiptap.toolbar.audio'),
           'onClick': () => handleClickMedia('audio'),
@@ -59,7 +59,7 @@ export const NoteToolbar = ({
       {
         type: 'icon',
         props: {
-          'icon': <Paperclip />,
+          'icon': <IconPaperclip />,
           'className': 'bg-yellow-200',
           'aria-label': t('tiptap.toolbar.attachment'),
           'onClick': () => handleClickMedia('attachment'),
@@ -71,7 +71,7 @@ export const NoteToolbar = ({
       {
         type: 'icon',
         props: {
-          'icon': <Link />,
+          'icon': <IconLink />,
           'aria-label': t('tiptap.toolbar.linker'),
           'className': 'bg-blue-200',
           'onClick': () => handleClickMedia('hyperlink'),

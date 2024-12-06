@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { EditorRef } from '@edifice-ui/editor';
-import { Button, Modal, useOdeClient } from '@edifice-ui/react';
+import { Button, Modal, useEdificeClient } from '@edifice.io/react';
+import { EditorRef } from '@edifice.io/react/editor';
 import { QueryClient } from '@tanstack/react-query';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
@@ -11,12 +11,12 @@ import { NoteContent } from '~/features/Note/components/NoteContent';
 import { useAccessStore } from '~/hooks/useAccessStore';
 import { MediaProps } from '~/models/media';
 import { noteQueryOptions, useNote } from '~/services/queries';
+import { checkQueryResult } from '~/utils/checkQueryResult';
 import {
   EditionMode,
   authorizedModes,
   useNoteModal,
 } from '../../features/Note/hooks/useNoteModal';
-import { checkQueryResult } from '~/utils/checkQueryResult';
 
 export const noteLoader =
   (queryClient: QueryClient) =>
@@ -89,7 +89,7 @@ export const Component = () => {
   const { hasRightsToUpdateNote } = useAccessStore();
 
   const { t } = useTranslation();
-  const { appCode } = useOdeClient();
+  const { appCode } = useEdificeClient();
   // check whether query succeed else throw error
   checkQueryResult(query);
 

@@ -1,4 +1,4 @@
-import { odeServices } from 'edifice-ts-client';
+import { odeServices } from '@edifice.io/client';
 
 import { NoteProps, PickedNoteProps } from '~/models/notes';
 import {

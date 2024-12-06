@@ -1,5 +1,6 @@
 /// <reference types="vitest/config" />
 import react from '@vitejs/plugin-react';
+import { resolve } from 'node:path';
 import { defineConfig, loadEnv } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import {
@@ -43,7 +44,23 @@ export default ({ mode }: { mode: string }) => {
     root: __dirname,
     cacheDir: './node_modules/.vite/collaborativewall',
 
+    resolve: {
+      alias: {
+        '@images': resolve(
+          __dirname,
+          'node_modules/@edifice.io/bootstrap/dist/images',
+        ),
+      },
+    },
+
     server: {
+      fs: {
+        /**
+         * Allow the server to access the node_modules folder (for the images)
+         * This is a solution to allow the server to access the images and fonts of the bootstrap package for 1D theme
+         */
+        allow: ['../../'],
+      },
       proxy: {
         '/applications-list': proxyObj,
         '/conf/public': proxyObj,
@@ -86,12 +103,8 @@ export default ({ mode }: { mode: string }) => {
       assetsDir: 'public',
       chunkSizeWarningLimit: 5000,
       rollupOptions: {
-        external: ['edifice-ts-client'],
         output: {
           inlineDynamicImports: true,
-          paths: {
-            'edifice-ts-client': `/assets/js/edifice-ts-client/index.js?${queryHashVersion}`,
-          },
         },
       },
     },
@@ -106,6 +119,11 @@ export default ({ mode }: { mode: string }) => {
       coverage: {
         reportsDirectory: './coverage/collaborativewall',
         provider: 'v8',
+      },
+      server: {
+        deps: {
+          inline: ['@edifice.io/react'],
+        },
       },
     },
   });

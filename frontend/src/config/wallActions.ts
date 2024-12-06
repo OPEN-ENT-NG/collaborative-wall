@@ -1,4 +1,4 @@
-import { ACTION, IAction } from 'edifice-ts-client';
+import { ACTION, IAction } from '@edifice.io/client';
 import { workflows } from './workflows';
 
 export const wallActions: IAction[] = [
