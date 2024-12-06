@@ -1,3 +1,4 @@
+import { ID } from '@edifice.io/client';
 import {
   queryOptions,
   useMutation,
@@ -5,7 +6,6 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { ID } from 'edifice-ts-client';
 import { useParams } from 'react-router-dom';
 import { PickedCollaborativeWallProps } from '~/models/wall';
 import { loadWall, updateWall } from '~/services/api';

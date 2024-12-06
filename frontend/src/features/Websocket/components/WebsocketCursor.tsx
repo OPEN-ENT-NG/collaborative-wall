@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { useOdeTheme } from '@edifice-ui/react';
+import { useEdificeTheme } from '@edifice.io/react';
 
 import { usePerfectCursor } from '../hooks/usePerfectCursor';
 
@@ -11,7 +11,7 @@ export function Cursor({
   point: number[];
   username: string | undefined;
 }) {
-  const { theme } = useOdeTheme();
+  const { theme } = useEdificeTheme();
   const rCursor = React.useRef<HTMLDivElement>(null);
 
   const animateCursor = React.useCallback((point: number[]) => {

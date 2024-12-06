@@ -1,4 +1,4 @@
-import { Select, useOdeClient } from '@edifice-ui/react';
+import { Select, useEdificeClient } from '@edifice.io/react';
 import { useTranslation } from 'react-i18next';
 import { noteColors } from '~/config';
 
@@ -13,7 +13,7 @@ export const NoteColorSelect = ({
   dataNote?: NoteProps;
 }) => {
   const { t } = useTranslation();
-  const { appCode } = useOdeClient();
+  const { appCode } = useEdificeClient();
 
   const colorsList = [
     {

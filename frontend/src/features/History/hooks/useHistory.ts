@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import { useOdeClient, useToast } from '@edifice-ui/react';
+import { useEdificeClient, useToast } from '@edifice.io/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,7 +12,7 @@ import { NewState } from '~/store/history/types';
 
 export const useHistory = () => {
   const { t } = useTranslation();
-  const { appCode } = useOdeClient();
+  const { appCode } = useEdificeClient();
 
   const { sendNoteUpdated, sendNoteDeletedEvent, sendNoteAddedEvent } =
     useWebsocketStore();
