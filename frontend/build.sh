@@ -57,11 +57,11 @@ done
 
 clean () {
   rm -rf .nx
-  rm -rf node_modules 
+  rm -rf node_modules
   rm -rf dist 
   rm -rf build 
   rm -rf .pnpm-store
-  # rm -f package.json 
+  # rm -f package.json
   rm -f pnpm-lock.yaml
 }
 
@@ -138,7 +138,7 @@ linkDependencies () {
   # Check if ode-explorer exists in package.json using sed
   if [ -n "$(sed -n '/"ode-explorer":/p' package.json)" ]; then
     echo "ode-explorer found in package.json"
-    
+
     # Check if explorer frontend path exists
     if [ -d "$PWD/../../explorer/frontend" ]; then
       echo "explorer/frontend directory exists"
