@@ -1,4 +1,4 @@
-import { Button, LoadingScreen, useOdeClient } from '@edifice-ui/react';
+import { Button, LoadingScreen, useEdificeClient } from '@edifice.io/react';
 import { Suspense, lazy } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useShallow } from 'zustand/react/shallow';
@@ -11,7 +11,7 @@ const DescriptionModal = lazy(
 );
 
 export const Description = () => {
-  const { appCode } = useOdeClient();
+  const { appCode } = useEdificeClient();
   const { t } = useTranslation();
   const { wall } = useWall();
   const { openDescriptionModal, setOpenDescriptionModal } = useWhiteboardStore(

@@ -1,4 +1,4 @@
-import { useUser } from '@edifice-ui/react';
+import { useUser } from '@edifice.io/react';
 import { NoteProps } from '~/models/notes';
 import { useRightsStore } from '~/store/rights/store';
 

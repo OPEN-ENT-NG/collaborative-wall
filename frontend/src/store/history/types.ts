@@ -1,4 +1,4 @@
-import { ID } from 'edifice-ts-client';
+import { ID } from '@edifice.io/ts-client';
 import { MediaProps } from '~/models/media';
 import { NoteProps } from '~/models/notes';
 
