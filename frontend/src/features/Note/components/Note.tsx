@@ -1,4 +1,4 @@
-import { Card } from '@edifice-ui/react';
+import { Card } from '@edifice.io/react';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useEffect } from 'react';

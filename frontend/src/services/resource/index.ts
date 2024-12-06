@@ -7,7 +7,7 @@ import {
   ResourceService,
   ResourceType,
   UpdateResult,
-} from 'edifice-ts-client';
+} from '@edifice.io/client';
 
 const APP = 'collaborativewall';
 const RESOURCE = 'collaborativewall';

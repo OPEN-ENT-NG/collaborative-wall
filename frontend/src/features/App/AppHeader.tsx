@@ -2,10 +2,10 @@ import {
   AppHeader as BaseAppHeader,
   Breadcrumb,
   LoadingScreen,
-  useOdeClient,
-} from '@edifice-ui/react';
+  useEdificeClient,
+} from '@edifice.io/react';
+import { IWebApp } from '@edifice.io/client';
 import { useQueryClient } from '@tanstack/react-query';
-import { IWebApp } from 'edifice-ts-client';
 import { Suspense, lazy } from 'react';
 import { useParams } from 'react-router-dom';
 import { useShallow } from 'zustand/react/shallow';
@@ -59,7 +59,7 @@ export const AppHeader = () => {
 
   const { sendWallUpdateEvent } = useWebsocketStore();
 
-  const { currentApp } = useOdeClient();
+  const { currentApp } = useEdificeClient();
   const { wall } = useWall();
 
   const handleOnUpdateSuccess = async () => {
