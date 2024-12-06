@@ -1,13 +1,14 @@
-import { usePaths, EmptyScreen } from '@edifice-ui/react';
+import { EmptyScreen } from '@edifice.io/react';
 import { useTranslation } from 'react-i18next';
 
+import illuError from '@images/emptyscreen/illu-error.svg';
+
 export const EmptyScreenError = () => {
-  const [imagePath] = usePaths();
   const { t } = useTranslation();
 
   return (
     <EmptyScreen
-      imageSrc={`${imagePath}/emptyscreen/illu-error.svg`}
+      imageSrc={illuError}
       imageAlt={t('explorer.emptyScreen.error.alt')}
       text={'explorer.emptyScreen.error.text'}
     />

@@ -1,6 +1,6 @@
 import { RefObject, useCallback } from 'react';
 
-import { MediaLibraryRef } from '@edifice-ui/react';
+import { MediaLibraryRef } from '@edifice.io/react/multimedia';
 import { Editor } from '@tiptap/react';
 
 /**

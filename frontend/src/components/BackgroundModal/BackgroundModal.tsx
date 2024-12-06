@@ -10,8 +10,8 @@ import {
   Heading,
   Image,
   Modal,
-  useOdeClient,
-} from '@edifice-ui/react';
+  useEdificeClient,
+} from '@edifice.io/react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -34,7 +34,7 @@ export default function BackgroundModal({
   isOpen: boolean;
   setIsOpen: (bool: boolean) => void;
 }): JSX.Element | null {
-  const { appCode } = useOdeClient();
+  const { appCode } = useEdificeClient();
   const { t } = useTranslation();
   const { sendWallUpdateEvent } = useWebsocketStore();
 

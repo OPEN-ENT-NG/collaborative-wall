@@ -1,5 +1,11 @@
-import { Center, Plus, PointerHand, Redo, Undo } from '@edifice-ui/icons';
-import { Toolbar, ToolbarItem, useOdeClient } from '@edifice-ui/react';
+import { Toolbar, ToolbarItem, useEdificeClient } from '@edifice.io/react';
+import {
+  IconCenter,
+  IconPlus,
+  IconPointerHand,
+  IconRedo,
+  IconUndo,
+} from '@edifice.io/react/icons';
 import { useHotkeys } from '@mantine/hooks';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +24,7 @@ export const CollaborativeWallToolbar = () => {
 
   const { setViewport } = useReactFlow();
   const { userRights } = useAccessStore();
-  const { appCode } = useOdeClient();
+  const { appCode } = useEdificeClient();
   const { t } = useTranslation();
 
   const { isMobile, canMoveNote, toggleCanMoveNote } = useWhiteboardStore(
@@ -47,7 +53,7 @@ export const CollaborativeWallToolbar = () => {
       type: 'icon',
       name: 'undo',
       props: {
-        'icon': <Undo />,
+        'icon': <IconUndo />,
         'aria-label': t('collaborativewall.toolbar.undo'),
         'color': 'tertiary',
         'disabled': !canUndo,
@@ -60,7 +66,7 @@ export const CollaborativeWallToolbar = () => {
       type: 'icon',
       name: 'redo',
       props: {
-        'icon': <Redo />,
+        'icon': <IconRedo />,
         'aria-label': t('collaborativewall.toolbar.redo'),
         'color': 'tertiary',
         'disabled': !canRedo,
@@ -78,7 +84,7 @@ export const CollaborativeWallToolbar = () => {
       type: 'icon',
       name: 'pointerHand',
       props: {
-        'icon': <PointerHand />,
+        'icon': <IconPointerHand />,
         'aria-label': t('collaborativewall.toolbar.movewhiteboard'),
         'color': 'tertiary',
         'className': `${!canMoveNote ? 'is-selected' : ''} move`,
@@ -96,7 +102,7 @@ export const CollaborativeWallToolbar = () => {
       type: 'icon',
       name: 'center',
       props: {
-        'icon': <Center />,
+        'icon': <IconCenter />,
         'aria-label': t('collaborativewall.toolbar.center'),
         'color': 'tertiary',
         'onClick': () => setViewport(resetViewport, transitionDuration),
@@ -113,7 +119,7 @@ export const CollaborativeWallToolbar = () => {
       name: 'create',
       props: {
         'aria-label': t('collaborativewall.toolbar.create'),
-        'icon': <Plus />,
+        'icon': <IconPlus />,
         'variant': 'filled',
         'color': 'secondary',
         'onClick': handleCreateClick,
