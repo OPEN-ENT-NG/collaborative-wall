@@ -1,11 +1,11 @@
 import { RefAttributes } from 'react';
 
-import { Delete, Edit } from '@edifice-ui/icons';
 import {
   Dropdown,
   DropdownMenuOptions,
   IconButtonProps,
-} from '@edifice-ui/react';
+} from '@edifice.io/react';
+import { IconDelete, IconEdit } from '@edifice.io/react/icons';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -56,13 +56,13 @@ export const NoteActions = ({ note }: { note: NoteProps }) => {
 
   const dropdownOptions: NoteDropdownMenuOptions[] = [
     {
-      icon: <Edit />,
+      icon: <IconEdit />,
       label: t('edit'),
       action: handleEdit,
       hidden: !hasRightsToUpdateNote(note),
     },
     {
-      icon: <Delete />,
+      icon: <IconDelete />,
       label: t('remove'),
       action: handleDelete,
       hidden: !hasRightsToUpdateNote(note),
