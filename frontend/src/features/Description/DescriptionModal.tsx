@@ -1,4 +1,4 @@
-import { Button, Modal, useOdeClient } from '@edifice-ui/react';
+import { Button, Modal, useEdificeClient } from '@edifice.io/react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useShallow } from 'zustand/react/shallow';
@@ -7,7 +7,7 @@ import { useWall } from '~/services/queries';
 import { useWhiteboardStore } from '~/store';
 
 export default function DescriptionModal() {
-  const { appCode } = useOdeClient();
+  const { appCode } = useEdificeClient();
   const { t } = useTranslation();
 
   const { wall } = useWall();

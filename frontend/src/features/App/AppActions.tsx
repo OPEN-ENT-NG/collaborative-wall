@@ -1,19 +1,19 @@
 import { Fragment, RefAttributes } from 'react';
 
 import {
-  Options,
-  Print,
-  SetBackground,
-  Settings,
-  Share,
-} from '@edifice-ui/icons';
-import {
   Dropdown,
   DropdownMenuOptions,
   IconButton,
   IconButtonProps,
-  useOdeClient,
-} from '@edifice-ui/react';
+  useEdificeClient,
+} from '@edifice.io/react';
+import {
+  IconOptions,
+  IconPrint,
+  IconSetBackground,
+  IconSettings,
+  IconShare,
+} from '@edifice.io/react/icons';
 import { useTranslation } from 'react-i18next';
 
 import { useAccessStore } from '~/hooks/useAccessStore';
@@ -27,7 +27,7 @@ export type ActionDropdownMenuOptions = DropdownMenuOptions & {
 
 export const AppActions = () => {
   const { wall } = useWall();
-  const { appCode } = useOdeClient();
+  const { appCode } = useEdificeClient();
   const { t } = useTranslation();
 
   /** Store to handle correctly rights to access ressource to avoid unexpected re-renders  */
@@ -41,28 +41,28 @@ export const AppActions = () => {
     {
       id: 'background',
       label: t('collaborativewall.modal.background', { ns: appCode }),
-      icon: <SetBackground />,
+      icon: <IconSetBackground />,
       action: () => setIsOpenBackgroundModal(true),
       visibility: userRights.creator || userRights.manager,
     },
     {
       id: 'share',
       label: t('share'),
-      icon: <Share />,
+      icon: <IconShare />,
       action: () => setOpenShareModal(true),
       visibility: userRights.creator || userRights.manager,
     },
     {
       id: 'properties',
       label: t('properties'),
-      icon: <Settings />,
+      icon: <IconSettings />,
       action: () => setOpenUpdateModal(true),
       visibility: userRights.creator || userRights.manager,
     },
     {
       id: 'print',
       label: t('print'),
-      icon: <Print />,
+      icon: <IconPrint />,
       action: () => window.open(`/collaborativewall/print/id/${wall?._id}`),
       visibility: true,
     },
@@ -82,7 +82,7 @@ export const AppActions = () => {
             aria-label="label"
             color="primary"
             variant="outline"
-            icon={<Options />}
+            icon={<IconOptions />}
           />
 
           <Dropdown.Menu>

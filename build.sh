@@ -7,8 +7,7 @@ cd ..
 
 # Create directory structure and copy frontend dist
 cd backend
-rm -rf ./src/main/resources/public/*.js
-rm -rf ./src/main/resources/public/*.css
+find ./src/main/resources/public/ -maxdepth 1 -type f -exec rm -f {} +
 cp -R ../frontend/dist/* ./src/main/resources/
 
 # Copy Files

@@ -1,6 +1,7 @@
 import React, { StrictMode } from 'react';
 
-import { OdeClientProvider, ThemeProvider } from '@edifice-ui/react';
+import '@edifice.io/bootstrap/dist/index.css';
+import { EdificeClientProvider, EdificeThemeProvider } from '@edifice.io/react';
 import {
   QueryCache,
   QueryClient,
@@ -40,15 +41,15 @@ const queryClient = new QueryClient({
 root.render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <OdeClientProvider
+      <EdificeClientProvider
         params={{
           app: 'collaborativewall',
         }}
       >
-        <ThemeProvider>
+        <EdificeThemeProvider>
           <RouterProvider router={router(queryClient)} />
-        </ThemeProvider>
-      </OdeClientProvider>
+        </EdificeThemeProvider>
+      </EdificeClientProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </StrictMode>,

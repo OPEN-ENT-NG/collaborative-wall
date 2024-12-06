@@ -1,4 +1,4 @@
-import { useUser } from '@edifice-ui/react';
+import { useUser } from '@edifice.io/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';

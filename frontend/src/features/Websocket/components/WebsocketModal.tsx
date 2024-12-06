@@ -1,4 +1,4 @@
-import { Button, Modal, useOdeClient } from '@edifice-ui/react';
+import { Button, Modal, useEdificeClient } from '@edifice.io/react';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -10,7 +10,7 @@ interface ModalProps {
 
 export default function WebsocketModal({ isOpen, onClose }: ModalProps) {
   const { t } = useTranslation();
-  const { appCode } = useOdeClient();
+  const { appCode } = useEdificeClient();
 
   return isOpen
     ? createPortal(

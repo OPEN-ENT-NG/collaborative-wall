@@ -1,7 +1,7 @@
 import { Fragment, RefAttributes, useEffect } from 'react';
 
-import { Options } from '@edifice-ui/icons';
-import { Dropdown, IconButton, IconButtonProps } from '@edifice-ui/react';
+import { Dropdown, IconButton, IconButtonProps } from '@edifice.io/react';
+import { IconOptions } from '@edifice.io/react/icons';
 import { NoteDropdownMenuOptions } from '~/features/Note/components/NoteActions';
 import { useWhiteboardStore } from '~/store';
 
@@ -35,7 +35,7 @@ export const NoteActionList = ({
         aria-label="label"
         color="secondary"
         variant="ghost"
-        icon={<Options />}
+        icon={<IconOptions />}
         className="card-actions-btn bg-white"
       />
       <Dropdown.Menu>
