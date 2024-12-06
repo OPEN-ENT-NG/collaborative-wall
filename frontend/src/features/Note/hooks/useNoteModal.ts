@@ -1,7 +1,7 @@
 import { RefObject, useCallback } from 'react';
 
-import { EditorRef } from '@edifice-ui/editor';
-import { useOdeClient } from '@edifice-ui/react';
+import { useEdificeClient } from '@edifice.io/react';
+import { EditorRef } from '@edifice.io/react/editor';
 import { useTranslation } from 'react-i18next';
 import {
   useBeforeUnload,
@@ -52,7 +52,7 @@ export const useNoteModal = (
   const navigate = useNavigate();
 
   const { t } = useTranslation();
-  const { appCode } = useOdeClient();
+  const { appCode } = useEdificeClient();
 
   /* Get wall id based on frontend route */
   const { wallId } = useParams();

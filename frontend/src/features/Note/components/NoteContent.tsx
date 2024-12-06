@@ -1,14 +1,14 @@
 import { Ref, forwardRef, useEffect } from 'react';
 
-import { Editor, EditorRef } from '@edifice-ui/editor';
+import { useEdificeClient } from '@edifice.io/react';
+import { Editor, EditorRef } from '@edifice.io/react/editor';
 import {
   IExternalLink,
   InternalLinkTabResult,
   MediaLibrary,
   MediaLibraryType,
-  useOdeClient,
-} from '@edifice-ui/react';
-import { WorkspaceElement } from 'edifice-ts-client';
+} from '@edifice.io/react/multimedia';
+import { WorkspaceElement } from '@edifice.io/client';
 import { useTranslation } from 'react-i18next';
 
 import clsx from 'clsx';
@@ -39,7 +39,7 @@ export const NoteContent = forwardRef(
     ref: Ref<EditorRef>,
   ) => {
     const { t } = useTranslation();
-    const { appCode } = useOdeClient();
+    const { appCode } = useEdificeClient();
 
     const {
       ref: mediaLibraryRef,

@@ -5,6 +5,38 @@ const now = new Date();
 
 const BRANCH = executeGitCommand('git rev-parse --abbrev-ref HEAD');
 
+function getCorrectVersion(lib) {
+  let branch;
+  switch (BRANCH) {
+    case 'main': {
+      branch = executeGitCommand(`npm view ${lib} version`);
+      break;
+    }
+
+    case 'develop': {
+      branch = 'develop';
+      break;
+    }
+
+    case 'develop-pedago': {
+      branch = 'develop-pedago';
+      break;
+    }
+
+    case 'develop-b2school': {
+      branch = 'develop-b2school';
+      break;
+    }
+
+    default: {
+      branch = 'develop';
+      break;
+    }
+  }
+
+  return branch;
+}
+
 function executeGitCommand(command) {
   return execSync(command)
     .toString('utf8')
@@ -42,21 +74,16 @@ function generatePackage(content) {
 }
 
 function generateDeps(content) {
-  return {
-    ...content.dependencies,
-    '@edifice-ui/editor': BRANCH,
-    '@edifice-ui/icons': BRANCH,
-    '@edifice-ui/react': BRANCH,
-    'ode-explorer': BRANCH,
-  };
-}
+  const deps = { ...content.dependencies };
 
-function generateDevDeps(content) {
-  return {
-    ...content.devDependencies,
-    'edifice-ts-client': BRANCH,
-    'edifice-bootstrap': BRANCH,
-  };
+  // Find all @edifice.io dependencies and update their versions
+  Object.keys(deps).forEach((dep) => {
+    if (dep.startsWith('@edifice.io/')) {
+      deps[dep] = getCorrectVersion(dep);
+    }
+  });
+
+  return deps;
 }
 
 function createPackage() {
@@ -76,7 +103,6 @@ function createPackage() {
 
       content.version = version;
       content.dependencies = generateDeps(content);
-      content.devDependencies = generateDevDeps(content);
 
       generatePackage(content);
     },

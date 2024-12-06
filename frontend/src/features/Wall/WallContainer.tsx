@@ -1,4 +1,4 @@
-import { LoadingScreen } from '@edifice-ui/react';
+import { LoadingScreen } from '@edifice.io/react';
 import { ReactNode, Suspense, lazy } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useWebsocketStore } from '~/store/websocket/store';

@@ -1,4 +1,4 @@
-import { Button, Heading, Layout } from '@edifice-ui/react';
+import { Button, Heading, Layout } from '@edifice.io/react';
 import { t } from 'i18next';
 import { useCallback } from 'react';
 import { useLocation, useNavigate, useRouteError } from 'react-router-dom';

@@ -1,4 +1,3 @@
-import { Delete, Download, Edit, ExternalLink, Globe } from '@edifice-ui/icons';
 import {
   AppIcon,
   Attachment,
@@ -6,9 +5,16 @@ import {
   Image,
   Toolbar,
   ToolbarItem,
-  useOdeClient,
-  useOdeIcons,
-} from '@edifice-ui/react';
+  useEdificeClient,
+  useEdificeIcons,
+} from '@edifice.io/react';
+import {
+  IconDelete,
+  IconDownload,
+  IconEdit,
+  IconExternalLink,
+  IconGlobe,
+} from '@edifice.io/react/icons';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { useShallow } from 'zustand/react/shallow';
@@ -34,7 +40,7 @@ export const NoteMedia = ({
   onOpen,
 }: NoteMediaProps) => {
   const { t } = useTranslation();
-  const { appCode } = useOdeClient();
+  const { appCode } = useEdificeClient();
   const { canMoveNote } = useWhiteboardStore(
     useShallow((state) => ({
       canMoveNote: state.canMoveNote,
@@ -48,7 +54,7 @@ export const NoteMedia = ({
     'py-32': modalNote,
   });
 
-  const { getIconCode } = useOdeIcons();
+  const { getIconCode } = useEdificeIcons();
 
   const hyperlinkCode = getIconCode(media.application) ?? '';
 
@@ -57,7 +63,7 @@ export const NoteMedia = ({
       type: 'icon',
       name: 'modify',
       props: {
-        'icon': <Edit />,
+        'icon': <IconEdit />,
         'aria-label': t('edit'),
         'color': 'tertiary',
         'onClick': () => {
@@ -82,7 +88,7 @@ export const NoteMedia = ({
       type: 'icon',
       name: 'open',
       props: {
-        'icon': <ExternalLink />,
+        'icon': <IconExternalLink />,
         'aria-label': t('collaborativewall.toolbar.open'),
         'color': 'tertiary',
         'onClick': () =>
@@ -97,7 +103,7 @@ export const NoteMedia = ({
       type: 'icon',
       name: 'delete',
       props: {
-        'icon': <Delete />,
+        'icon': <IconDelete />,
         'aria-label': t('collaborativewall.toolbar.delete'),
         'color': 'danger',
         'onClick': () => setMedia?.(null),
@@ -152,7 +158,7 @@ export const NoteMedia = ({
           {!readonly && (
             <IconButton
               className="delete-button mt-8 me-8"
-              icon={<Delete />}
+              icon={<IconDelete />}
               variant="outline"
               color="danger"
               style={noteMediaIconStyle}
@@ -184,7 +190,7 @@ export const NoteMedia = ({
           {!readonly && (
             <IconButton
               className="ms-8"
-              icon={<Delete />}
+              icon={<IconDelete />}
               variant="outline"
               color="danger"
               onClick={() => setMedia?.(null)}
@@ -202,7 +208,7 @@ export const NoteMedia = ({
                 <>
                   <a href={media.url} download>
                     <IconButton
-                      icon={<Download />}
+                      icon={<IconDownload />}
                       color="tertiary"
                       type="button"
                       variant="ghost"
@@ -211,7 +217,7 @@ export const NoteMedia = ({
                   </a>
                   {!readonly && (
                     <IconButton
-                      icon={<Delete />}
+                      icon={<IconDelete />}
                       variant="ghost"
                       color="danger"
                       aria-label={t('remove')}
@@ -230,7 +236,7 @@ export const NoteMedia = ({
           {!readonly && (
             <IconButton
               className="delete-button mt-8 me-8"
-              icon={<Delete />}
+              icon={<IconDelete />}
               variant="outline"
               color="danger"
               onClick={() => setMedia?.(null)}
@@ -277,7 +283,7 @@ export const NoteMedia = ({
                   size={modalNote ? '80' : '40'}
                 />
               ) : (
-                <Globe className="text-blue" style={iconGlobeStyle} />
+                <IconGlobe className="text-blue" style={iconGlobeStyle} />
               )}
             </div>
             <div className="url-placement" style={urlStyle}>

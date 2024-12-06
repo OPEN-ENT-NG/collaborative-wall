@@ -30,7 +30,7 @@ node_modules/
 gradle/
 gradlew*
 # Ignore the entire "resources" folder except jsonchema
-src/main/resources/public/*.js
-src/main/resources/public/*.css
+src/main/resources/public/*
+!src/main/resources/public/js
+!src/main/resources/public/template
 src/main/resources/view/index.html
-# src/main/resources/view

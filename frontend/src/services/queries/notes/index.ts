@@ -1,10 +1,10 @@
+import { ID, odeServices } from '@edifice.io/client';
 import {
   queryOptions,
   useMutation,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { ID, odeServices } from 'edifice-ts-client';
 import { useParams } from 'react-router-dom';
 import { NoteProps, PickedNoteProps } from '~/models/notes';
 import { getNote, getNotes, updateNote } from '~/services/api';
