@@ -1,7 +1,7 @@
 import { Ref, forwardRef, useEffect } from 'react';
 
 import { useEdificeClient } from '@edifice.io/react';
-import { Editor, EditorRef } from '@edifice.io/react/editor';
+import { Editor, EditorRef, useCantooModal } from '@edifice-ui/editor';
 import {
   IExternalLink,
   InternalLinkTabResult,
@@ -20,6 +20,7 @@ import { EditionMode } from '../hooks/useNoteModal';
 import { NoteColorSelect } from './NoteColorSelect';
 import { NoteMedia } from './NoteMedia';
 import { NoteToolbar } from './NoteToolbar';
+import NoteCantooModal from './NoteCantooModal';
 
 export const NoteContent = forwardRef(
   (
@@ -46,6 +47,9 @@ export const NoteContent = forwardRef(
       libraryMedia,
       ...mediaLibraryModalHandlers
     } = useMediaLibrary();
+
+    const { toggle: toggleNoteCantooModal, ...noteCantooModalHandlers } =
+      useCantooModal();
 
     const { onEdit, onOpen } = useLinkToolbar(null, mediaLibraryRef);
 
@@ -101,7 +105,10 @@ export const NoteContent = forwardRef(
     const renderEdit = !isReadMode && (
       <div className="multimedia-section my-24" style={renderEditStyle}>
         <div className="toolbar-media py-48 px-12">
-          <NoteToolbar handleClickMedia={handleClickMedia} />
+          <NoteToolbar
+            handleClickMedia={handleClickMedia}
+            toggleNoteCantooModal={toggleNoteCantooModal}
+          />
           {t('collaborativewall.add.media', { ns: appCode })}
         </div>
       </div>
@@ -150,6 +157,12 @@ export const NoteContent = forwardRef(
           visibility="protected"
           {...mediaLibraryModalHandlers}
         />
+        {noteCantooModalHandlers.isOpen && (
+          <NoteCantooModal
+            {...noteCantooModalHandlers}
+            contentText={dataNote?.content}
+          />
+        )}
       </>
     );
   },
