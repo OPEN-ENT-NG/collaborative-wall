@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import { RefAttributes, useMemo } from 'react';
 
+import { EditorToolbarCantoo, useCantooEditor } from '@edifice-ui/editor';
 import {
   Landscape,
   Link,
@@ -7,15 +8,18 @@ import {
   Paperclip,
   RecordVideo,
 } from '@edifice-ui/icons';
-import { Toolbar } from '@edifice-ui/react';
+import { IconButtonProps, Toolbar } from '@edifice-ui/react';
 import { useTranslation } from 'react-i18next';
 
 export const NoteToolbar = ({
   handleClickMedia,
+  toggleCantooModal,
 }: {
   handleClickMedia: (type: any) => void;
+  toggleCantooModal: () => void;
 }) => {
   const { t } = useTranslation();
+  const { isAvailable: canUseCantoo } = useCantooEditor(null);
 
   const toolbarItems: any[] = useMemo(() => {
     return [
@@ -78,6 +82,25 @@ export const NoteToolbar = ({
         },
         name: 'linker',
         tooltip: t('tiptap.toolbar.linker'),
+      },
+      //--------------- CANTOO ---------------//
+      {
+        type: 'dropdown',
+        props: {
+          children: (
+            triggerProps: JSX.IntrinsicAttributes &
+              Omit<IconButtonProps, 'ref'> &
+              RefAttributes<HTMLButtonElement>,
+          ) => (
+            <EditorToolbarCantoo
+              triggerProps={triggerProps}
+              openModal={toggleCantooModal}
+            />
+          ),
+        },
+        name: 'cantoo',
+        visibility: canUseCantoo ? 'show' : 'hide',
+        tooltip: t('tiptap.toolbar.cantoo.choice'),
       },
     ];
     // eslint-disable-next-line react-hooks/exhaustive-deps

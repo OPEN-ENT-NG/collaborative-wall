@@ -1,6 +1,11 @@
 import { Ref, forwardRef, useEffect } from 'react';
 
-import { Editor, EditorRef } from '@edifice-ui/editor';
+import {
+  CantooModal,
+  Editor,
+  EditorRef,
+  useCantooModal,
+} from '@edifice-ui/editor';
 import {
   IExternalLink,
   InternalLinkTabResult,
@@ -46,6 +51,9 @@ export const NoteContent = forwardRef(
       libraryMedia,
       ...mediaLibraryModalHandlers
     } = useMediaLibrary();
+
+    const { toggle: toggleCantooModal, ...cantooModalHandlers } =
+      useCantooModal();
 
     const { onEdit, onOpen } = useLinkToolbar(null, mediaLibraryRef);
 
@@ -101,7 +109,10 @@ export const NoteContent = forwardRef(
     const renderEdit = !isReadMode && (
       <div className="multimedia-section my-24" style={renderEditStyle}>
         <div className="toolbar-media py-48 px-12">
-          <NoteToolbar handleClickMedia={handleClickMedia} />
+          <NoteToolbar
+            handleClickMedia={handleClickMedia}
+            toggleCantooModal={toggleCantooModal}
+          />
           {t('collaborativewall.add.media', { ns: appCode })}
         </div>
       </div>
@@ -150,6 +161,7 @@ export const NoteContent = forwardRef(
           visibility="protected"
           {...mediaLibraryModalHandlers}
         />
+        {cantooModalHandlers.isOpen && <CantooModal {...cantooModalHandlers} />}
       </>
     );
   },
