@@ -1,6 +1,6 @@
 {
   "name": "collaborative-wall",
-  "version": "3.0.0",
+  "version": "3.0.0-%branch%.%generateVersion%",
   "description": "Collaborative editor for ENT Core.",
   "homepage": "https://github.com/OPEN-ENT-NG/collaborative-wall#readme",
   "bugs": {
@@ -39,9 +39,9 @@
     ]
   },
   "dependencies": {
-    "@edifice-ui/editor": "1.7.4",
-    "@edifice-ui/icons": "1.7.4",
-    "@edifice-ui/react": "1.7.4",
+    "@edifice-ui/editor": "%packageVersion%%",
+    "@edifice-ui/icons": "%packageVersion%",
+    "@edifice-ui/react": "%packageVersion%",
     "@mantine/hooks": "7.7.1",
     "@react-spring/web": "^9.7.5",
     "@tiptap/pm": "2.3.0",
@@ -51,7 +51,7 @@
     "clsx": "^2.1.1",
     "i18next": "23.8.1",
     "i18next-http-backend": "2.4.2",
-    "ode-explorer": "2.0.0",
+    "ode-explorer": "%packageVersion%",
     "perfect-cursors": "1.0.5",
     "react-use-websocket": "4.8.1",
     "uuid": "9.0.1",
@@ -80,8 +80,8 @@
     "@vitejs/plugin-react": "^4.3.2",
     "@vitest/coverage-v8": "^2.1.3",
     "@vitest/ui": "^2.1.3",
-    "edifice-bootstrap": "1.7.4",
-    "edifice-ts-client": "1.7.4",
+    "edifice-bootstrap": "%packageVersion%",
+    "edifice-ts-client": "%packageVersion%",
     "eslint": "^9.12.0",
     "eslint-plugin-react-hooks": "5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.12",
