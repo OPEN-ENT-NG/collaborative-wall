@@ -51,7 +51,7 @@
     "clsx": "^2.1.1",
     "i18next": "23.8.1",
     "i18next-http-backend": "2.4.2",
-    "ode-explorer": "feat-WB-2749-migration-vertx4",
+    "ode-explorer": "develop-pedago",
     "perfect-cursors": "1.0.5",
     "react-use-websocket": "4.8.1",
     "uuid": "9.0.1",
