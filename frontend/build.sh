@@ -86,6 +86,7 @@ doInit () {
   else
     sed -i "s/%packageVersion%/${BRANCH_NAME}/" package.json
   fi
+ }
 
 init() {
   if [ "$NO_DOCKER" = "true" ] ; then
@@ -191,3 +192,4 @@ do
     exit 1
   fi
 done
+
