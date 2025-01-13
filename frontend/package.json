@@ -39,9 +39,9 @@
     ]
   },
   "dependencies": {
-    "@edifice.io/react": "develop-pedago",
-    "@edifice.io/bootstrap": "develop-pedago",
-    "@edifice.io/client": "develop-pedago",
+    "@edifice.io/react": "develop",
+    "@edifice.io/bootstrap": "develop",
+    "@edifice.io/client": "develop",
     "@mantine/hooks": "7.7.1",
     "@react-spring/web": "^9.7.5",
     "@tiptap/pm": "2.3.0",
@@ -51,7 +51,7 @@
     "clsx": "^2.1.1",
     "i18next": "23.8.1",
     "i18next-http-backend": "2.4.2",
-    "ode-explorer": "feat-WB-2749-migration-vertx4",
+    "ode-explorer": "develop",
     "perfect-cursors": "1.0.5",
     "react-use-websocket": "4.8.1",
     "uuid": "9.0.1",
