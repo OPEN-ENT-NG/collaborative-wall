@@ -16,6 +16,8 @@ const backgroundImages = [
   'img/blue-topo.png',
   'img/green-hill.png',
   'img/orange-hill.png',
+  'img/fond-violet-colonnes.png',
+  'img/world-map.png',
 ];
 
 const randomNumber = Math.trunc(
