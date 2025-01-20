@@ -72,6 +72,8 @@ export const backgroundImages = [
   'img/green-hill.png',
   'img/blue-topo.png',
   'img/orange-hill.png',
+  'img/fond-violet-colonnes.png',
+  'img/world-map.png',
 ];
 
 export const backgroundColors = [
