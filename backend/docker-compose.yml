@@ -6,8 +6,10 @@ services:
     volumes:
       - ./:/usr/src/maven
       - ~/.m2:/var/maven/.m2
+      - ../.git:/usr/src/.git:ro
     environment:
       MAVEN_CONFIG: /var/maven/.m2
+      GIT_DIR: /usr/src/.git
   load-tester:
     image: grafana/k6:master
     volumes:
