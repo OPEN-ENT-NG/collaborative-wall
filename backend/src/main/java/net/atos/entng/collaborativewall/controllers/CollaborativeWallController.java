@@ -144,6 +144,8 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void viewById(HttpServerRequest request) {
         renderView(request, new JsonObject(), "index.html", null);
+        // add access event when user access to the wall without passing through the home page
+		eventHelper.onAccess(request);
         /* final boolean useNewUi = this.config.getBoolean("use-explorer-ui", true);
         if(useNewUi){
             renderView(request, new JsonObject(), "index.html", null);
@@ -161,6 +163,8 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     @SecuredAction(value = "collaborativewall.read", type = ActionType.RESOURCE)
     public void viewNote(HttpServerRequest request) {
         renderView(request, new JsonObject(), "index.html", null);
+        // add access event when user access to the note without passing through the home page
+		eventHelper.onAccess(request);
     }
 
     /**
