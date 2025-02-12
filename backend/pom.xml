@@ -30,7 +30,7 @@
 
     <properties>
         <web-utils.version></web-utils.version>
-        <entCoreVersion></entCoreVersion>
+        <entCoreVersion>6.0-develop-pedago-SNAPSHOT</entCoreVersion>
         <gatlingHighchartsVersion>2.3.1</gatlingHighchartsVersion>
         <junitVersion>4.10</junitVersion>
     </properties>
