@@ -1,7 +1,7 @@
 import { RefObject, useCallback } from 'react';
 
 import { MediaLibraryRef } from '@edifice.io/react/multimedia';
-import { Editor } from '@tiptap/react';
+import { EditorInstance } from '@edifice.io/react/editor';
 
 /**
  * Custom hook to handle LinkToolbar events.
@@ -12,7 +12,7 @@ import { Editor } from '@tiptap/react';
  * }
  */
 export const useLinkToolbar = (
-  editor: Editor | null,
+  editor: EditorInstance | null,
   mediaLibraryRef: RefObject<MediaLibraryRef>,
 ) => {
   const onEdit = useCallback(

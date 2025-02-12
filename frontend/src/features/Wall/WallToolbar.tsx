@@ -1,9 +1,9 @@
 import { Toolbar, ToolbarItem, useEdificeClient } from '@edifice.io/react';
 import {
-  IconCenter,
+  IconHandMove,
   IconPlus,
-  IconPointerHand,
   IconRedo,
+  IconToolCenter,
   IconUndo,
 } from '@edifice.io/react/icons';
 import { useHotkeys } from '@mantine/hooks';
@@ -84,10 +84,10 @@ export const CollaborativeWallToolbar = () => {
       type: 'icon',
       name: 'pointerHand',
       props: {
-        'icon': <IconPointerHand />,
+        'icon': <IconHandMove />,
         'aria-label': t('collaborativewall.toolbar.movewhiteboard'),
         'color': 'tertiary',
-        'className': `${!canMoveNote ? 'is-selected' : ''} move`,
+        'className': `${canMoveNote ? 'is-selected' : ''} move`,
         'onClick': () => toggleCanMoveNote(),
       },
       tooltip: t('collaborativewall.toolbar.movewhiteboard', { ns: appCode }),
@@ -102,7 +102,7 @@ export const CollaborativeWallToolbar = () => {
       type: 'icon',
       name: 'center',
       props: {
-        'icon': <IconCenter />,
+        'icon': <IconToolCenter />,
         'aria-label': t('collaborativewall.toolbar.center'),
         'color': 'tertiary',
         'onClick': () => setViewport(resetViewport, transitionDuration),

@@ -58,7 +58,6 @@ export const AppHeader = () => {
   );
 
   const { sendWallUpdateEvent } = useWebsocketStore();
-
   const { currentApp } = useEdificeClient();
   const { wall } = useWall();
 
