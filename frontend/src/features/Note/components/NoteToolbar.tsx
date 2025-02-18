@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
+import { RefAttributes, useMemo } from 'react';
 
-import { Toolbar } from '@edifice.io/react';
+import { IconButtonProps, Toolbar, useHasWorkflow } from '@edifice.io/react';
 import {
   IconLandscape,
   IconLink,
@@ -9,13 +9,23 @@ import {
   IconRecordVideo,
 } from '@edifice.io/react/icons';
 import { useTranslation } from 'react-i18next';
+import { NoteCantoo } from '~/features/Note/components/NoteCantoo';
+import { CantooAdaptTextBox } from '@edifice.io/react/editor';
 
 export const NoteToolbar = ({
   handleClickMedia,
+  cantooAdaptTextBoxRef,
+  content,
 }: {
   handleClickMedia: (type: any) => void;
+  cantooAdaptTextBoxRef: CantooAdaptTextBox;
+  content: string;
 }) => {
   const { t } = useTranslation();
+
+  const canUseCantoo = useHasWorkflow(
+    'org.entcore.portal.controllers.PortalController|optionalFeatureCantoo',
+  );
 
   const toolbarItems: any[] = useMemo(() => {
     return [
@@ -79,9 +89,30 @@ export const NoteToolbar = ({
         name: 'linker',
         tooltip: t('tiptap.toolbar.linker'),
       },
+
+      //--------------- CANTOO ---------------//
+      {
+        type: 'dropdown',
+        props: {
+          children: (
+            triggerProps: JSX.IntrinsicAttributes &
+              Omit<IconButtonProps, 'ref'> &
+              RefAttributes<HTMLButtonElement>,
+          ) => (
+            <NoteCantoo
+              triggerProps={triggerProps}
+              content={content}
+              openCantooAdaptTextBox={cantooAdaptTextBoxRef.toggle}
+            />
+          ),
+        },
+        name: 'cantoo',
+        visibility: canUseCantoo ? 'show' : 'hide',
+        tooltip: t('tiptap.toolbar.cantoo.choice'),
+      },
     ];
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [canUseCantoo]);
 
   return (
     <Toolbar
