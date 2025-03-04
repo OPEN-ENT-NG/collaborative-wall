@@ -84,6 +84,7 @@ export type CollaborativeWallNotePayload = Pick<
 export type ConnectedUsers = {
   id: string;
   name: string;
+  groupIds: string[];
 };
 
 export type MetadataPayload = {

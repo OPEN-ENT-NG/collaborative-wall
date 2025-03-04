@@ -22,7 +22,7 @@ export const Description = () => {
   );
 
   return (
-    <div className="description-wall d-flex justify-content-between py-8 px-16 px-md-48">
+    <div className="description-wall d-flex justify-content-between py-8 px-16 px-md-48 z-1">
       <p className="text-truncate">{wall?.description}</p>
       <Button
         variant="ghost"

@@ -41,7 +41,7 @@ public class CollaborativeWallUsersMetadata {
   }
 
   public void addConnectedUser(final UserInfos user){
-    this.connectedUsers.add(new CollaborativeWallUser(user.getUserId(), user.getUsername()));
+    this.connectedUsers.add(new CollaborativeWallUser(user.getUserId(), user.getUsername(), user.getGroupsIds()));
   }
 
   public void removeConnectedUser(final String userId){
