@@ -13,6 +13,7 @@ import { loadWall } from '~/services/api';
 import { useWall, wallQueryOptions } from '~/services/queries';
 import { useWebsocketStore, useWhiteboardStore } from '~/store';
 import { AppActions } from './AppActions';
+import { UserList } from './UserList';
 
 /* Lazy Loaded Modals */
 const UpdateModal = lazy(
@@ -77,7 +78,15 @@ export const AppHeader = () => {
   return (
     !isMobile && (
       <>
-        <BaseAppHeader isFullscreen render={() => <AppActions />}>
+        <BaseAppHeader
+          isFullscreen
+          render={() => (
+            <>
+              <UserList />
+              <AppActions />
+            </>
+          )}
+        >
           <Breadcrumb app={currentApp as IWebApp} name={wall?.name} />
         </BaseAppHeader>
         <Suspense fallback={<LoadingScreen position={false} />}>
