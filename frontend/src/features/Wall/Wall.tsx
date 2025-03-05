@@ -19,10 +19,11 @@ export const Wall = () => {
   const { wall, query } = useWall();
   const { notes, query: queryNotes } = useNotes();
   /* Websocket Store */
-  const { status, readyState } = useWebsocketStore(
+  const { status, readyState, showCursors } = useWebsocketStore(
     useShallow((state) => ({
       status: state.status,
       readyState: state.readyState,
+      showCursors: state.showCursors,
     })),
   );
 
@@ -48,7 +49,7 @@ export const Wall = () => {
 
   return (
     <CollaborativeWallContainer>
-      {isWebsocketMode && <WebsocketRenderedCursors />}
+      {isWebsocketMode && showCursors && <WebsocketRenderedCursors />}
       <WallReactFlow />
       <Outlet />
     </CollaborativeWallContainer>

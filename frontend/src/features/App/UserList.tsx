@@ -21,7 +21,7 @@ export interface User {
 
 export const UserList: FC = () => {
   const { appCode } = useEdificeClient();
-  const { connectedUsers } = useUserList();
+  const { connectedUsers, showCursors, toggleShowCursors } = useUserList();
   const { t } = useTranslation();
   const userLabel =
     connectedUsers.length === 1
@@ -71,6 +71,8 @@ export const UserList: FC = () => {
                     ns: appCode,
                   })}
                   labelClassName="small"
+                  onChange={toggleShowCursors}
+                  checked={showCursors}
                 />
               </PreventPropagation>
             </Card.Body>

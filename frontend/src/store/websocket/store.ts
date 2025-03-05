@@ -21,6 +21,7 @@ const websocketState = {
   subscribers: [],
   openSocketModal: false,
   isVisible: false,
+  showCursors: true,
 };
 
 export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
@@ -50,6 +51,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
         set({ status: Status.STOPPED, readyState: false });
       },
       setIsVisible: (isVisible) => set({ isVisible }),
+      setShowCursors: (showCursors) => set({ showCursors }),
       setResourceId(resourceId) {
         set({ resourceId });
       },
