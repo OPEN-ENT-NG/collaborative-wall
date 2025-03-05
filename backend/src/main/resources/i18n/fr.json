@@ -37,6 +37,8 @@
   "collaborativewall.modal.cancel": "Annuler",
   "collaborativewall.modal.modify": "Modifier",
   "collaborativewall.modal.save": "Enregistrer",
+  "collaborativewall.modal.override": "Ecraser",
+  "collaborativewall.modal.override.detail": "La note a été modifiée par un autre utilisateur. Voulez-vous écraser ses modifications ?",
   "collaborativewall.modal.add": "Ajouter",
   "collaborativewall.modal.title.read": "Note",
   "collaborativewall.modal.title.edit": "Modification",

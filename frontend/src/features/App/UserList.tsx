@@ -70,6 +70,7 @@ export const UserList: FC = () => {
                   label={t('collaborativewall.user.cursors.display', {
                     ns: appCode,
                   })}
+                  variant="secondary"
                   labelClassName="small"
                   onChange={toggleShowCursors}
                   checked={showCursors}

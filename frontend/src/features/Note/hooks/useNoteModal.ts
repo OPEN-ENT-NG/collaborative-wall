@@ -1,4 +1,4 @@
-import { RefObject, useCallback } from 'react';
+import { RefObject, useCallback, useEffect, useState } from 'react';
 
 import { useEdificeClient } from '@edifice.io/react';
 import { EditorRef } from '@edifice.io/react/editor';
@@ -16,6 +16,8 @@ import { useInvalidateNoteQueries } from '~/hooks/useInvalidateNoteQueries';
 import { MediaProps } from '~/models/media';
 import { NoteProps, PickedNoteProps } from '~/models/notes';
 import { useWebsocketStore, useWhiteboardStore } from '~/store';
+import { useNote } from '~/services/queries';
+import { noteColors } from '~/config';
 
 export type EditionMode = 'read' | 'edit' | 'create';
 export const authorizedModes: EditionMode[] = ['read', 'edit', 'create'];
@@ -29,18 +31,58 @@ const randomPosition = () => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const useNoteModal = (
-  editorRef: RefObject<EditorRef>,
-  colorValue: string[],
-  loadedData: NoteProps | undefined,
-  media: MediaProps | null,
-) => {
+export const useNoteModal = (editorRef: RefObject<EditorRef>) => {
   /* Search params for read | edit mode */
   const [searchParams] = useSearchParams();
-
+  // Get mode from query params
   const editionMode: EditionMode =
     (searchParams.get('mode') as EditionMode) || 'create';
+  // Get notes from query params
+  const { note: loadedNote, query } = useNote();
+  // Define state for colorValue
+  const [override, setOverride] = useState<boolean>(false);
+  // Define state for colorValue
+  const [colorValue, setColorValue] = useState<string[]>(
+    loadedNote?.color || [noteColors.yellow.background],
+  );
+  // Define state for media
+  const [media, setMedia] = useState<MediaProps | null>(
+    loadedNote?.media ?? null,
+  );
+  // Define state for note
+  const [note, setNote] = useState<NoteProps | undefined>(loadedNote);
+  // Update media when note changed
+  useEffect(() => {
+    // If we are in edit mode and the note is already loaded, do nothing
+    if (
+      editionMode === 'edit' &&
+      loadedNote?._id &&
+      note?._id &&
+      loadedNote._id === note._id
+    ) {
+      return;
+    }
+    // set the media
+    if (loadedNote) {
+      setMedia(loadedNote?.media);
+    }
+  }, [loadedNote, note, editionMode]);
+  // Update note when note changed
+  useEffect(() => {
+    // If we are in edit mode and the note is already loaded, do nothing
+    if (
+      editionMode === 'edit' &&
+      loadedNote?._id &&
+      note?._id &&
+      loadedNote._id === note._id
+    ) {
+      return;
+    }
+    // set the note
+    setNote(loadedNote);
+  }, [loadedNote, note, editionMode]);
 
+  // Define mode
   const isReadMode = editionMode === 'read';
   const isEditMode = editionMode === 'edit';
   const isCreateMode = editionMode === 'create';
@@ -58,8 +100,22 @@ export const useNoteModal = (
   const { wallId } = useParams();
 
   /* Websocket methods to perform mutations */
-  const { sendNoteAddedEvent, sendNoteUpdated } = useWebsocketStore();
+  const { sendNoteAddedEvent, sendNoteUpdated, subscribe } =
+    useWebsocketStore();
 
+  // Subscribe to websocket events
+  useEffect(() => {
+    const unsubscribe = subscribe((event) => {
+      if (event.type === 'noteUpdated' && event.note._id === loadedNote?._id) {
+        setOverride(true);
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [loadedNote, subscribe]);
+
+  /** Get positionViewport from whiteboard store */
   const { positionViewport } = useWhiteboardStore(
     useShallow((state) => ({
       positionViewport: state.positionViewport,
@@ -69,11 +125,11 @@ export const useNoteModal = (
   /** Function to handle confirmed modal when use leaves page or closes modal */
   const isDirty = useCallback(() => {
     return (
-      loadedData?.color?.[0] != colorValue[0] ||
-      loadedData.content != (editorRef.current?.getContent('html') as string) ||
-      loadedData.media?.id != media?.id
+      loadedNote?.color?.[0] != colorValue[0] ||
+      loadedNote.content != (editorRef.current?.getContent('html') as string) ||
+      loadedNote.media?.id != media?.id
     );
-  }, [loadedData, colorValue, editorRef, media]);
+  }, [loadedNote, colorValue, editorRef, media]);
 
   useBeforeUnload((event) => {
     if (isCreateMode || (isEditMode && isDirty())) {
@@ -121,19 +177,19 @@ export const useNoteModal = (
   };
 
   const handleSaveNote = async () => {
-    if (!loadedData) return;
+    if (!loadedNote) return;
 
     const note: PickedNoteProps = {
       content: editorRef.current?.getContent('html') as string,
       color: colorValue,
-      idwall: loadedData?.idwall as string,
+      idwall: loadedNote?.idwall as string,
       media: media || null,
-      modified: loadedData?.modified,
-      x: loadedData?.x,
-      y: loadedData?.y,
+      modified: loadedNote?.modified,
+      x: loadedNote?.x,
+      y: loadedNote?.y,
     };
     await sendNoteUpdated({
-      _id: loadedData?._id,
+      _id: loadedNote?._id,
       content: note.content,
       media: note.media,
       color: note.color,
@@ -162,16 +218,24 @@ export const useNoteModal = (
   };
 
   const handleNavigateToEditMode = () => {
-    if (!loadedData) return;
+    if (!loadedNote) return;
 
-    navigate(`../note/${loadedData._id}?mode=edit`);
+    navigate(`../note/${loadedNote._id}?mode=edit`);
   };
 
   return {
+    query,
+    media,
+    setMedia,
+    colorValue,
+    setColorValue,
     editionMode,
     isReadMode,
     isEditMode,
     isCreateMode,
+    note,
+    setNote,
+    override,
     handleNavigateToEditMode,
     handleCreateNote,
     handleSaveNote,

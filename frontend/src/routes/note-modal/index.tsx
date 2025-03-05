@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 import { Button, Modal, useEdificeClient } from '@edifice.io/react';
 import { EditorRef } from '@edifice.io/react/editor';
@@ -6,11 +6,9 @@ import { QueryClient } from '@tanstack/react-query';
 import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { LoaderFunctionArgs } from 'react-router-dom';
-import { noteColors } from '~/config';
 import { NoteContent } from '~/features/Note/components/NoteContent';
 import { useAccessStore } from '~/hooks/useAccessStore';
-import { MediaProps } from '~/models/media';
-import { noteQueryOptions, useNote } from '~/services/queries';
+import { noteQueryOptions } from '~/services/queries';
 import { checkQueryResult } from '~/utils/checkQueryResult';
 import {
   EditionMode,
@@ -59,20 +57,6 @@ export const noteLoader =
   };
 
 export const Component = () => {
-  const { note, query } = useNote();
-
-  const [colorValue, setColorValue] = useState<string[]>(
-    note?.color || [noteColors.yellow.background],
-  );
-
-  const [media, setMedia] = useState<MediaProps | null>(note?.media ?? null);
-
-  useEffect(() => {
-    if (note) {
-      setMedia(note?.media);
-    }
-  }, [note]);
-
   const editorRef = useRef<EditorRef>(null);
 
   const {
@@ -84,7 +68,13 @@ export const Component = () => {
     handleSaveNote,
     handleCreateNote,
     handleClose,
-  } = useNoteModal(editorRef, colorValue, note, media);
+    note,
+    media,
+    query,
+    setColorValue,
+    setMedia,
+    override,
+  } = useNoteModal(editorRef);
 
   const { hasRightsToUpdateNote } = useAccessStore();
 
@@ -120,6 +110,11 @@ export const Component = () => {
           setColorValue={setColorValue}
           setMedia={setMedia}
         />
+        {isEditMode && override && (
+          <i className="text-danger">
+            {t('collaborativewall.modal.override.detail', { ns: appCode })}
+          </i>
+        )}
       </Modal.Body>
       <Modal.Footer>
         {isReadMode && note && !hasRightsToUpdateNote(note) && (
@@ -167,11 +162,13 @@ export const Component = () => {
         {isEditMode && (
           <Button
             type="button"
-            color="primary"
+            color={override ? 'danger' : 'primary'}
             variant="filled"
             onClick={handleSaveNote}
           >
-            {t('collaborativewall.modal.save', { ns: appCode })}
+            {t(`collaborativewall.modal.${override ? 'override' : 'save'}`, {
+              ns: appCode,
+            })}
           </Button>
         )}
         {isCreateMode && (
