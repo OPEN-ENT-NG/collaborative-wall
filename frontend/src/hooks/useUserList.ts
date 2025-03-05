@@ -3,6 +3,8 @@ import { useWall } from '~/services/queries';
 import { useWebsocketStore } from '~/store';
 
 export const useUserList = () => {
+  const { showCursors, setShowCursors } = useWebsocketStore();
+  // Get the current wall
   const { wall } = useWall();
   // get the current user
   const { user } = useUser();
@@ -45,5 +47,13 @@ export const useUserList = () => {
       avatar: `/userbook/avatar/${u.id}`,
     };
   });
-  return { connectedUsers: connectedUsersWithAvatar };
+
+  const toggleShowCursors = () => {
+    setShowCursors(!showCursors);
+  };
+  return {
+    connectedUsers: connectedUsersWithAvatar,
+    showCursors,
+    toggleShowCursors,
+  };
 };

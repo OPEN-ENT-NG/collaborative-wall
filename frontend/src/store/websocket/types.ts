@@ -37,6 +37,7 @@ export type WebsocketState = {
   httpProvider?: HttpProvider;
   wsProvider?: WSProvider;
   isVisible: boolean;
+  showCursors: boolean;
 };
 export type ModifiedDate = { $date: number };
 export type ActionType = 'Undo' | 'Redo' | 'Do';
@@ -54,6 +55,7 @@ export type WebsocketAction = {
   subscribe(callback: Subscriber): Subscription;
   queryForMetadata: () => Promise<void>;
   setIsVisible: (value: boolean) => void;
+  setShowCursors: (value: boolean) => void;
   sendPing: () => Promise<void>;
   sendWallDeletedEvent: () => Promise<void>;
   sendWallUpdateEvent: (wall: CollaborativeWallPayload) => Promise<void>;
