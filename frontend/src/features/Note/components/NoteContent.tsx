@@ -136,8 +136,8 @@ export const NoteContent = forwardRef(
           ref={ref}
           content={dataNote?.content || ''}
           mode={isReadMode ? 'read' : 'edit'}
-          toolbar="none"
-          variant="ghost"
+          toolbar="full"
+          variant={isReadMode ? 'ghost' : 'outline'}
           focus={isReadMode ? null : 'end'}
           placeholder={t('collaborativewall.modal.note.content.placeholder', {
             ns: appCode,
