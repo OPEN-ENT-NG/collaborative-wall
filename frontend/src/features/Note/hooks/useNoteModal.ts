@@ -1,6 +1,6 @@
 import { RefObject, useCallback, useEffect, useState } from 'react';
 
-import { useEdificeClient } from '@edifice.io/react';
+import { useEdificeClient, useUser } from '@edifice.io/react';
 import { EditorRef } from '@edifice.io/react/editor';
 import { useTranslation } from 'react-i18next';
 import {
@@ -51,6 +51,8 @@ export const useNoteModal = (editorRef: RefObject<EditorRef>) => {
   );
   // Define state for note
   const [note, setNote] = useState<NoteProps | undefined>(loadedNote);
+  // Get current user
+  const { user } = useUser();
   // Update media when note changed
   useEffect(() => {
     // If we are in edit mode and the note is already loaded, do nothing
@@ -106,14 +108,18 @@ export const useNoteModal = (editorRef: RefObject<EditorRef>) => {
   // Subscribe to websocket events
   useEffect(() => {
     const unsubscribe = subscribe((event) => {
-      if (event.type === 'noteUpdated' && event.note._id === loadedNote?._id) {
+      if (
+        event.type === 'noteUpdated' &&
+        event.note._id === loadedNote?._id &&
+        event.userId !== user?.userId
+      ) {
         setOverride(true);
       }
     });
     return () => {
       unsubscribe();
     };
-  }, [loadedNote, subscribe]);
+  }, [loadedNote, subscribe, user]);
 
   /** Get positionViewport from whiteboard store */
   const { positionViewport } = useWhiteboardStore(
