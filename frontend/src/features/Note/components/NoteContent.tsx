@@ -1,6 +1,6 @@
-import { Ref, forwardRef, useEffect } from 'react';
+import { Ref, forwardRef, useEffect, useState } from 'react';
 
-import { useEdificeClient } from '@edifice.io/react';
+import { Switch, useEdificeClient } from '@edifice.io/react';
 import { Editor, EditorRef } from '@edifice.io/react/editor';
 import {
   IExternalLink,
@@ -40,6 +40,7 @@ export const NoteContent = forwardRef(
   ) => {
     const { t } = useTranslation();
     const { appCode } = useEdificeClient();
+    const [isMediaVisible, setIsMediaVisible] = useState<boolean>(!!media?.url);
 
     const {
       ref: mediaLibraryRef,
@@ -130,19 +131,29 @@ export const NoteContent = forwardRef(
         {!isReadMode && (
           <NoteColorSelect dataNote={dataNote} setColorValue={setColorValue} />
         )}
-
-        {!media?.url ? renderEdit : renderRead(media)}
-        <Editor
-          ref={ref}
-          content={dataNote?.content || ''}
-          mode={isReadMode ? 'read' : 'edit'}
-          toolbar="full"
-          variant={isReadMode ? 'ghost' : 'outline'}
-          focus={isReadMode ? null : 'end'}
-          placeholder={t('collaborativewall.modal.note.content.placeholder', {
-            ns: appCode,
-          })}
-        />
+        <div className="d-flex mt-8">
+          <Switch
+            onChange={() => setIsMediaVisible(!isMediaVisible)}
+            checked={isMediaVisible}
+          />
+          <div className="ms-12">
+            {t('collaborativewall.show.media', { ns: appCode })}
+          </div>
+        </div>
+        {isMediaVisible && (!media?.url ? renderEdit : renderRead(media))}
+        <div className="mt-24">
+          <Editor
+            ref={ref}
+            content={dataNote?.content || ''}
+            mode={isReadMode ? 'read' : 'edit'}
+            toolbar="full"
+            variant={isReadMode ? 'ghost' : 'outline'}
+            focus={isReadMode ? null : 'end'}
+            placeholder={t('collaborativewall.modal.note.content.placeholder', {
+              ns: appCode,
+            })}
+          />
+        </div>
         <MediaLibrary
           appCode={appCode}
           ref={mediaLibraryRef}

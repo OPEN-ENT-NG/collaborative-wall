@@ -123,5 +123,6 @@
   "collaborativewall.user.right.manager": "Gestionnaire",
   "collaborativewall.user.online.single": "1 utilisateur en ligne",
   "collaborativewall.user.online.many": "[[count]] utilisateurs en ligne",
-  "collaborativewall.user.cursors.display": "Afficher les curseurs des utilisateurs"
+  "collaborativewall.user.cursors.display": "Afficher les curseurs des utilisateurs",
+  "collaborativewall.show.media": "Mettre en avant un média"
 }
