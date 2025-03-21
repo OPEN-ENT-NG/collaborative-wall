@@ -19,7 +19,7 @@ public class CollaborativeWallTest {
 
     @Test
     public void shouldSerializeNote(TestContext context) {
-        final CollaborativeWallNote note = new CollaborativeWallNote("ID", "CONTANT", new JsonObject().put("_id", "ID").getMap(), 10l, 10l, new ArrayList<>(), "LAS", new CollaborativeWallNoteMedia("ID", "NAME", "APP", "TYPE", "URL", "TARGET"), "WALLID", new HashMap<>(), new HashMap<>());
+        final CollaborativeWallNote note = new CollaborativeWallNote("ID", "CONTANT", new JsonObject().put("_id", "ID").getMap(), 10l, 10l, new ArrayList<>(), true, "LAS", new CollaborativeWallNoteMedia("ID", "NAME", "APP", "TYPE", "URL", "TARGET"), "WALLID", new HashMap<>(), new HashMap<>());
         // parse
         final String toJson1 = note.toJson(true).toString();
         // parse then serialize
@@ -29,7 +29,7 @@ public class CollaborativeWallTest {
 
     @Test
     public void shouldSerializeNoteUsingStringMedia(TestContext context) {
-        final CollaborativeWallNote note = new CollaborativeWallNote("ID", "CONTANT", new JsonObject().put("_id", "ID").getMap(), 10l, 10l, new ArrayList<>(), "LAS", new CollaborativeWallNoteMedia("URL", "", "", "", "URL", ""), "WALLID", new HashMap<>(), new HashMap<>());
+        final CollaborativeWallNote note = new CollaborativeWallNote("ID", "CONTANT", new JsonObject().put("_id", "ID").getMap(), 10l, 10l, new ArrayList<>(), true, "LAS", new CollaborativeWallNoteMedia("URL", "", "", "", "URL", ""), "WALLID", new HashMap<>(), new HashMap<>());
         // parse
         final String toJson1 = note.toJson(true).toString();
         // parse then serialize
