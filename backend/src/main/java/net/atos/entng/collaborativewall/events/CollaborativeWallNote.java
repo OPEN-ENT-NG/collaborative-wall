@@ -24,6 +24,7 @@ public class CollaborativeWallNote {
     private final Long x;
     private final Long y;
     private final List<String> color;
+    private final Boolean isMediaVisible;
     private final String lastEdit;
     private final CollaborativeWallNoteMedia media;
     private final String idwall;
@@ -41,6 +42,7 @@ public class CollaborativeWallNote {
                                  @JsonProperty("x") final Long x,
                                  @JsonProperty("y") final Long y,
                                  @JsonProperty("color") final List<String> color,
+                                 @JsonProperty("isMediaVisible") final Boolean isMediaVisible,
                                  @JsonProperty("lastEdit") final String lastEdit,
                                  @JsonProperty("media") final Object media,
                                  @JsonProperty("idwall") final String idwall,
@@ -54,6 +56,7 @@ public class CollaborativeWallNote {
         this.x = x;
         this.y = y;
         this.color = color;
+        this.isMediaVisible = isMediaVisible;
         this.lastEdit = lastEdit;
         this.idwall = idwall;
         // manage imported media as String
@@ -76,6 +79,7 @@ public class CollaborativeWallNote {
                 other.x,
                 other.y,
                 other.color != null ? new ArrayList<>(other.color) : new ArrayList<>(),
+                other.isMediaVisible,
                 other.lastEdit,
                 other.media != null ? new CollaborativeWallNoteMedia(other.media) : null,
                 other.idwall,
@@ -89,6 +93,7 @@ public class CollaborativeWallNote {
                 other.x,
                 other.y,
                 other.color != null ? new ArrayList<>(other.color) : new ArrayList<>(),
+                other.isMediaVisible,
                 other.lastEdit,
                 other.media != null ? new CollaborativeWallNoteMedia(other.media) : null,
                 other.idwall,
@@ -102,6 +107,7 @@ public class CollaborativeWallNote {
                 other.x,
                 other.y,
                 other.color != null ? new ArrayList<>(other.color) : new ArrayList<>(),
+                other.isMediaVisible,
                 other.lastEdit,
                 other.media != null ? new CollaborativeWallNoteMedia(other.media) : null,
                 other.idwall,
@@ -161,6 +167,10 @@ public class CollaborativeWallNote {
 
     public List<String> getColor() {
         return color;
+    }
+
+    public Boolean getIsMediaVisible() {
+        return isMediaVisible;
     }
 
     public String getLastEdit() {

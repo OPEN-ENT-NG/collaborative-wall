@@ -21,6 +21,9 @@
     "color": {
       "type": "array"
     },
+    "isMediaVisible": {
+      "type": "boolean"
+    },
     "media": {
       "type": [
         "object",
@@ -33,6 +36,7 @@
     "x",
     "y",
     "color",
+    "isMediaVisible",
     "idwall"
   ]
 }
