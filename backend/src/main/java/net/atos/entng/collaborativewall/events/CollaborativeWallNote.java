@@ -24,7 +24,7 @@ public class CollaborativeWallNote {
     private final Long x;
     private final Long y;
     private final List<String> color;
-    private final Boolean isMediaVisible;
+    private final boolean isMediaVisible;
     private final String lastEdit;
     private final CollaborativeWallNoteMedia media;
     private final String idwall;
@@ -42,7 +42,7 @@ public class CollaborativeWallNote {
                                  @JsonProperty("x") final Long x,
                                  @JsonProperty("y") final Long y,
                                  @JsonProperty("color") final List<String> color,
-                                 @JsonProperty("isMediaVisible") final Boolean isMediaVisible,
+                                 @JsonProperty("isMediaVisible") final boolean isMediaVisible,
                                  @JsonProperty("lastEdit") final String lastEdit,
                                  @JsonProperty("media") final Object media,
                                  @JsonProperty("idwall") final String idwall,
@@ -169,7 +169,7 @@ public class CollaborativeWallNote {
         return color;
     }
 
-    public Boolean getIsMediaVisible() {
+    public boolean getIsMediaVisible() {
         return isMediaVisible;
     }
 
