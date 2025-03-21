@@ -151,13 +151,23 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
       },
       sendNoteAddedEvent(note) {
         const { send, resourceId: wallId } = get();
-        const { color, content, media, x, y, modified, ...other } = note;
+        const {
+          color,
+          isMediaVisible,
+          content,
+          media,
+          x,
+          y,
+          modified,
+          ...other
+        } = note;
 
         return send({
           wallId,
           type: 'noteAdded',
           note: {
             color,
+            isMediaVisible,
             content,
             media,
             x,
@@ -224,7 +234,8 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
       },
       sendNoteUpdated(note) {
         const { send, resourceId: wallId } = get();
-        const { _id, color, content, media, x, y, ...other } = note;
+        const { _id, color, isMediaVisible, content, media, x, y, ...other } =
+          note;
         return send({
           wallId,
           type: 'noteUpdated',
@@ -233,6 +244,7 @@ export const useWebsocketStore = create<WebsocketState & WebsocketAction>(
             _id,
             color,
             content,
+            isMediaVisible,
             media,
             x,
             y,

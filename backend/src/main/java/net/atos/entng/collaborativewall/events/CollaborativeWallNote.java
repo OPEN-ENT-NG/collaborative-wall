@@ -169,7 +169,7 @@ public class CollaborativeWallNote {
         return color;
     }
 
-    public boolean getMediaVisible() {
+    public boolean getIsMediaVisible() {
         return isMediaVisible;
     }
 

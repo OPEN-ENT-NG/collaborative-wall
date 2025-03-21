@@ -45,6 +45,9 @@ export const useNoteModal = (editorRef: RefObject<EditorRef>) => {
   const [colorValue, setColorValue] = useState<string[]>(
     loadedNote?.color || [noteColors.yellow.background],
   );
+  const [isMediaVisible, setIsMediaVisible] = useState<boolean>(
+    loadedNote?.isMediaVisible ?? false,
+  );
   // Define state for media
   const [media, setMedia] = useState<MediaProps | null>(
     loadedNote?.media ?? null,
@@ -153,6 +156,7 @@ export const useNoteModal = (editorRef: RefObject<EditorRef>) => {
     const note: PickedNoteProps = {
       content: editorRef.current?.getContent('html') as string,
       color: colorValue,
+      isMediaVisible: isMediaVisible,
       idwall: wallId,
       media: media,
       x: Math.trunc(
@@ -188,6 +192,7 @@ export const useNoteModal = (editorRef: RefObject<EditorRef>) => {
     const note: PickedNoteProps = {
       content: editorRef.current?.getContent('html') as string,
       color: colorValue,
+      isMediaVisible: isMediaVisible,
       idwall: loadedNote?.idwall as string,
       media: media || null,
       modified: loadedNote?.modified,
@@ -199,6 +204,7 @@ export const useNoteModal = (editorRef: RefObject<EditorRef>) => {
       content: note.content,
       media: note.media,
       color: note.color,
+      isMediaVisible: note.isMediaVisible,
       x: note.x,
       y: note.y,
       actionType: 'Do',
@@ -235,6 +241,8 @@ export const useNoteModal = (editorRef: RefObject<EditorRef>) => {
     setMedia,
     colorValue,
     setColorValue,
+    isMediaVisible,
+    setIsMediaVisible,
     editionMode,
     isReadMode,
     isEditMode,

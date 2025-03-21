@@ -74,6 +74,8 @@ export const Component = () => {
     setColorValue,
     setMedia,
     override,
+    setIsMediaVisible,
+    isMediaVisible,
   } = useNoteModal(editorRef);
 
   const { hasRightsToUpdateNote } = useAccessStore();
@@ -109,6 +111,8 @@ export const Component = () => {
           media={media}
           setColorValue={setColorValue}
           setMedia={setMedia}
+          setIsMediaVisible={setIsMediaVisible}
+          isMediaVisible={isMediaVisible}
         />
         {isEditMode && override && (
           <i className="text-danger">

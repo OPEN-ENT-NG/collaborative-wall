@@ -7,6 +7,7 @@ export interface NoteProps {
   y: number;
   idwall: string;
   color: string[];
+  isMediaVisible: boolean;
   media: MediaProps | null;
   created?: { $date: number };
   modified?: { $date: number };
@@ -19,5 +20,12 @@ export interface NoteProps {
 
 export type PickedNoteProps = Pick<
   NoteProps,
-  'content' | 'x' | 'y' | 'idwall' | 'color' | 'modified' | 'media'
+  | 'content'
+  | 'x'
+  | 'y'
+  | 'idwall'
+  | 'color'
+  | 'modified'
+  | 'media'
+  | 'isMediaVisible'
 >;

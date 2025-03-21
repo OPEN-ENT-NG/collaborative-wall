@@ -1,4 +1,4 @@
-import { Ref, forwardRef, useEffect, useState } from 'react';
+import { Ref, forwardRef, useEffect } from 'react';
 
 import { Switch, useEdificeClient } from '@edifice.io/react';
 import { Editor, EditorRef } from '@edifice.io/react/editor';
@@ -27,20 +27,23 @@ export const NoteContent = forwardRef(
       media,
       editionMode,
       dataNote,
+      isMediaVisible,
       setColorValue,
       setMedia,
+      setIsMediaVisible,
     }: {
       media: MediaProps | null;
       editionMode: EditionMode;
       dataNote?: NoteProps;
+      isMediaVisible: boolean;
       setColorValue: (value: string[]) => void;
       setMedia: (value: MediaProps | null) => void;
+      setIsMediaVisible: (value: boolean) => void;
     },
     ref: Ref<EditorRef>,
   ) => {
     const { t } = useTranslation();
     const { appCode } = useEdificeClient();
-    const [isMediaVisible, setIsMediaVisible] = useState<boolean>(!!media?.url);
 
     const {
       ref: mediaLibraryRef,
@@ -129,17 +132,22 @@ export const NoteContent = forwardRef(
     return (
       <>
         {!isReadMode && (
-          <NoteColorSelect dataNote={dataNote} setColorValue={setColorValue} />
+          <>
+            <NoteColorSelect
+              dataNote={dataNote}
+              setColorValue={setColorValue}
+            />
+            <div className="d-flex mt-8">
+              <Switch
+                onChange={() => setIsMediaVisible(!isMediaVisible)}
+                checked={isMediaVisible}
+              />
+              <div className="ms-12">
+                {t('collaborativewall.show.media', { ns: appCode })}
+              </div>
+            </div>
+          </>
         )}
-        <div className="d-flex mt-8">
-          <Switch
-            onChange={() => setIsMediaVisible(!isMediaVisible)}
-            checked={isMediaVisible}
-          />
-          <div className="ms-12">
-            {t('collaborativewall.show.media', { ns: appCode })}
-          </div>
-        </div>
         {isMediaVisible && (!media?.url ? renderEdit : renderRead(media))}
         <div className="mt-24">
           <Editor
