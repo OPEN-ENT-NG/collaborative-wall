@@ -41,7 +41,9 @@ export const Note = ({ data }: NodeProps) => {
     <div style={style} className="card-container">
       <Card className="note" isSelectable={false}>
         <Card.Body>
-          {data.note.media?.url && <NoteMedia media={data.note.media} />}
+          {data.note.media?.url && data.note.isMediaVisible && (
+            <NoteMedia media={data.note.media} />
+          )}
           <div style={wrapperStyle}>
             <EditorContent editor={editor} />
           </div>
