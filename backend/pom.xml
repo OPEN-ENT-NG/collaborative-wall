@@ -12,7 +12,7 @@
 
     <groupId>net.atos</groupId>
     <artifactId>collaborativewall</artifactId>
-    <version>3.1-objectstorage-SNAPSHOT</version>
+    <version>3.1-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:https://github.com/OPEN-ENT-NG/collaborative-wall.git</connection>
