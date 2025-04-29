@@ -87,7 +87,7 @@ export const NoteToolbar = ({
     <Toolbar
       items={toolbarItems}
       variant="no-shadow"
-      className="rounded-top px-16"
+      className="rounded-top px-16 z-1"
       ariaControls="editorContent"
     />
   );
