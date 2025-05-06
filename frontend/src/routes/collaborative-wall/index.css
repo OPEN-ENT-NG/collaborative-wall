@@ -51,6 +51,10 @@
   z-index: 900;
 }
 
+#UpdateNoteModal .modal-content {
+  min-height: 665px;
+}
+
 /* MEDIAS */
 .toolbar-media {
   display: flex;
