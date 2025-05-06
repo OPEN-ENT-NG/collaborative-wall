@@ -269,7 +269,10 @@ export const NoteMedia = ({
           style={hyperlinkStyle}
         >
           {!readonly && (
-            <Toolbar className="delete-button mt-8 me-8" items={LinkItems} />
+            <Toolbar
+              className="delete-button mt-8 me-8 z-1"
+              items={LinkItems}
+            />
           )}
           <a
             href={media.url}
