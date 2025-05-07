@@ -125,6 +125,7 @@ export const NoteMedia = ({
 
   const audioClassname = clsx(`media-center ${mediaClasses}`, {
     'my-16': !modalNote,
+    'my-32': modalNote,
   });
 
   const audioStyle = { zIndex: canMoveNote ? '1' : '0', marginBottom: '-8px' };
@@ -200,7 +201,7 @@ export const NoteMedia = ({
       );
     case 'attachment':
       return (
-        <div className={`${mediaClasses} ${modalNote ? '' : 'my-16'}`}>
+        <div className={`${mediaClasses} ${modalNote ? 'my-32' : 'my-16'}`}>
           <Attachment
             name={media.name}
             options={
