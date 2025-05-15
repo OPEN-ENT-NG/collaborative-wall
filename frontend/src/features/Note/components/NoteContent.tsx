@@ -159,6 +159,7 @@ export const NoteContent = forwardRef(
             placeholder={t('collaborativewall.modal.note.content.placeholder', {
               ns: appCode,
             })}
+            cantooParam="simplify"
           />
         </div>
         <MediaLibrary
