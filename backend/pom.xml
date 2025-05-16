@@ -12,7 +12,7 @@
 
     <groupId>net.atos</groupId>
     <artifactId>collaborativewall</artifactId>
-    <version>3.1.10</version>
+    <version>3.1-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:https://github.com/OPEN-ENT-NG/collaborative-wall.git</connection>
@@ -29,8 +29,8 @@
     </repositories>
 
     <properties>
-        <web-utils.version>3.1.1</web-utils.version>
-        <entCoreVersion>6.6.5</entCoreVersion>
+        <web-utils.version>3.1-SNAPSHOT</web-utils.version>
+        <entCoreVersion>6.6-SNAPSHOT</entCoreVersion>
         <gatlingHighchartsVersion>2.3.1</gatlingHighchartsVersion>
         <junitVersion>4.10</junitVersion>
     </properties>
