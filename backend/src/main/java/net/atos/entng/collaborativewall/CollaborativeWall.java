@@ -40,6 +40,12 @@ import org.entcore.common.service.impl.MongoDbSearchService;
 
 import java.util.HashMap;
 import java.util.Map;
+import net.atos.entng.collaborativewall.listeners.ResourceBrokerListenerImpl;
+import org.entcore.common.share.ShareService;
+import org.entcore.common.share.impl.ShareBrokerListenerImpl;
+import org.entcore.broker.api.utils.AddressParameter;
+import org.entcore.broker.api.utils.BrokerProxyUtils;
+import java.util.List;
 
 /**
  * Server to manage collaborative walls. This class is the entry point of the Vert.x module.
@@ -128,7 +134,13 @@ public class CollaborativeWall extends BaseServer {
                     }
                 });
         }
-        this.plugin.start();
+        this.plugin.start();        
+        // add broker listener for workspace resources
+        BrokerProxyUtils.addBrokerProxy(new ResourceBrokerListenerImpl(), vertx, new AddressParameter("application", "collaborativewall"));
+        // add broker listener for share service
+		final Map<String, List<String>> groupedActions = new HashMap<>();
+        final ShareService shareService = this.plugin.createShareService(groupedActions);
+        BrokerProxyUtils.addBrokerProxy(new ShareBrokerListenerImpl(this.securedActions, shareService), vertx, new AddressParameter("application", "collaborativewall"));
         startPromise.tryComplete();
     }
 
