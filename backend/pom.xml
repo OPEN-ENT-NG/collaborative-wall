@@ -30,7 +30,7 @@
 
     <properties>
         <web-utils.version>3.1-develop-b2school-SNAPSHOT</web-utils.version>
-        <entCoreVersion>6.6-develop-b2school-SNAPSHOT</entCoreVersion>
+        <entCoreVersion>6.7-SNAPSHOT</entCoreVersion>
         <gatlingHighchartsVersion>2.3.1</gatlingHighchartsVersion>
         <junitVersion>4.10</junitVersion>
     </properties>
