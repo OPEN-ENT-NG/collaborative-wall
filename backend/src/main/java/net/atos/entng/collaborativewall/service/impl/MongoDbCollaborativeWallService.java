@@ -3,14 +3,20 @@ package net.atos.entng.collaborativewall.service.impl;
 import fr.wseduc.webutils.security.SecuredAction;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import net.atos.entng.collaborativewall.CollaborativeWall;
 import net.atos.entng.collaborativewall.events.CollaborativeWallDetails;
 import net.atos.entng.collaborativewall.events.CollaborativeWallNote;
 import net.atos.entng.collaborativewall.explorer.WallExplorerPlugin;
 import net.atos.entng.collaborativewall.service.CollaborativeWallService;
 import net.atos.entng.collaborativewall.service.NoteService;
 import org.apache.commons.lang3.StringUtils;
+import org.entcore.broker.api.dto.resources.ResourcesDeletedDTO;
+import org.entcore.broker.api.publisher.BrokerPublisherFactory;
+import org.entcore.broker.api.utils.AddressParameter;
+import org.entcore.broker.proxy.ResourceBrokerPublisher;
 import org.entcore.common.explorer.IdAndVersion;
 import org.entcore.common.service.CrudService;
 import org.entcore.common.share.ShareModel;
@@ -27,8 +33,9 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
     private final NoteService noteService;
     private final WallExplorerPlugin plugin;
     private final Map<String, SecuredAction> securedActions;
+    private final ResourceBrokerPublisher resourcePublisher;
 
-    public MongoDbCollaborativeWallService(final CrudService crudService,
+    public MongoDbCollaborativeWallService(final Vertx vertx, final CrudService crudService,
                                            final NoteService noteService,
                                            final WallExplorerPlugin plugin,
                                            final Map<String, SecuredAction> securedActions) {
@@ -36,6 +43,12 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
         this.noteService = noteService;
         this.securedActions = securedActions;
         this.plugin = plugin;
+        // Initialize resource publisher for deletion notifications
+        this.resourcePublisher = BrokerPublisherFactory.create(
+                ResourceBrokerPublisher.class,
+                vertx,
+                new AddressParameter("application", CollaborativeWall.APPLICATION)
+        );
     }
 
     @Override
@@ -86,6 +99,10 @@ public class MongoDbCollaborativeWallService implements CollaborativeWallService
         final Promise<Void> promise = Promise.promise();
         this.crudService.delete(wallId, result -> {
             if (result.isRight()) {
+                // Notify resource deletion via broker and don't wait for completion
+                final ResourcesDeletedDTO notification = ResourcesDeletedDTO.forSingleResource(wallId, CollaborativeWall.TYPE);
+                resourcePublisher.notifyResourcesDeleted(notification);
+                // Notify EUR and Wait for explorer notifications to complete
                 this.plugin.notifyDeleteById(user, new IdAndVersion(wallId, System.currentTimeMillis())).onSuccess(e -> {
                     promise.complete();
                 }).onFailure(e -> {
