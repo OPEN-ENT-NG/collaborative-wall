@@ -9,6 +9,10 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.MongoClient;
 import net.atos.entng.collaborativewall.CollaborativeWall;
+import org.entcore.broker.api.dto.resources.ResourcesDeletedDTO;
+import org.entcore.broker.api.publisher.BrokerPublisherFactory;
+import org.entcore.broker.api.utils.AddressParameter;
+import org.entcore.broker.proxy.ResourceBrokerPublisher;
 import org.entcore.common.explorer.ExplorerMessage;
 import org.entcore.common.explorer.ExplorerPluginFactory;
 import org.entcore.common.explorer.IExplorerPlugin;
@@ -32,6 +36,7 @@ public class WallExplorerPlugin extends ExplorerPluginResourceMongo {
     private final MongoClient mongoClient;
     private ShareService shareService;
     private final Map<String, SecuredAction> securedActions;
+    private final ResourceBrokerPublisher resourcePublisher;
 
     public static WallExplorerPlugin create(final Map<String, SecuredAction> securedActions) throws Exception {
         final IExplorerPlugin plugin = ExplorerPluginFactory.createMongoPlugin((params)->{
@@ -44,6 +49,12 @@ public class WallExplorerPlugin extends ExplorerPluginResourceMongo {
         super(communication, mongoClient);
         this.mongoClient = mongoClient;
         this.securedActions = securedActions;
+        // Initialize resource publisher for deletion notifications
+        this.resourcePublisher = BrokerPublisherFactory.create(
+                ResourceBrokerPublisher.class,
+                communication.vertx(),
+                new AddressParameter("application", CollaborativeWall.APPLICATION)
+        );
     }
 
     public MongoClient getMongoClient() {return mongoClient;}
@@ -122,5 +133,14 @@ public class WallExplorerPlugin extends ExplorerPluginResourceMongo {
     @Override
     protected List<ExplorerSubResource> getSubResourcesPlugin() {
         return Collections.EMPTY_LIST;
+    }
+
+    @Override
+    protected Future<List<Boolean>> doDelete(UserInfos user, List<String> ids) {
+        return super.doDelete(user, ids).onSuccess(result -> {
+            // Notify resource deletion via broker and dont wait for completion
+            final ResourcesDeletedDTO notification = new ResourcesDeletedDTO(ids, CollaborativeWall.TYPE);
+            resourcePublisher.notifyResourcesDeleted(notification);
+        });
     }
 }
