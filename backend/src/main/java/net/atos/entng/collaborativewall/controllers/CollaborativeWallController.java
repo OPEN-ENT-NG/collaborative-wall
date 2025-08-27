@@ -40,6 +40,10 @@ import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
 import net.atos.entng.collaborativewall.service.CollaborativeWallService;
 import net.atos.entng.collaborativewall.service.NoteService;
 import net.atos.entng.collaborativewall.service.impl.MongoDbCollaborativeWallService;
+import org.entcore.broker.api.dto.resources.ResourcesDeletedDTO;
+import org.entcore.broker.api.publisher.BrokerPublisherFactory;
+import org.entcore.broker.api.utils.AddressParameter;
+import org.entcore.broker.proxy.ResourceBrokerPublisher;
 import org.entcore.common.controller.ControllerHelper;
 import org.entcore.common.events.EventHelper;
 import org.entcore.common.events.EventStore;
@@ -73,6 +77,7 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
     private final WallExplorerPlugin plugin;
     private final NoteService noteService;
     private CollaborativeWallService collaborativeWallService;
+    private final ResourceBrokerPublisher resourcePublisher;
     private Optional<CollaborativeWallRTService> wallRTService = Optional.empty();
 
 	@Override
@@ -86,21 +91,26 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
         this.notesHelper.init(vertx, config, rm, securedActions);
         final Map<String, List<String>> groupedActions = new HashMap<>();
         this.shareService = plugin.createShareService(groupedActions);
-        this.collaborativeWallService =  new MongoDbCollaborativeWallService(this.crudService, noteService, plugin, securedActions);
+        this.collaborativeWallService =  new MongoDbCollaborativeWallService(vertx, this.crudService, noteService, plugin, securedActions);
 	}
 
     /**
      * Default constructor.
      *
-     * @param collection MongoDB collection to request.
      */
-    public CollaborativeWallController(String collection, NoteService noteService, WallExplorerPlugin plugin) {
+    public CollaborativeWallController(Vertx vertx, String collection, NoteService noteService, WallExplorerPlugin plugin) {
         super(collection);
         this.plugin = plugin;
         final EventStore eventStore = EventStoreFactory.getFactory().getEventStore(CollaborativeWall.class.getSimpleName());
         this.eventHelper = new EventHelper(eventStore);
         this.noteService = noteService;
         this.notesHelper = new NotesHelper(noteService, this.eventHelper);
+        // Initialize resource publisher for deletion notifications
+        this.resourcePublisher = BrokerPublisherFactory.create(
+                ResourceBrokerPublisher.class,
+                vertx,
+                new AddressParameter("application", CollaborativeWall.APPLICATION)
+        );
     }
 
     public void setWallRTService(final CollaborativeWallRTService wallRTService) {
@@ -349,7 +359,10 @@ public class CollaborativeWallController extends MongoDbControllerHelper {
                                 // if fail return error
                                 handler.handle(new Either.Left<>(r.left().getValue()));
                             } else {
-                                // notify EUR
+                                // Notify resource deletion via broker and don't wait for completion
+                                final ResourcesDeletedDTO notification = ResourcesDeletedDTO.forSingleResource(idWall, CollaborativeWall.TYPE);
+                                resourcePublisher.notifyResourcesDeleted(notification);
+                                // Notify EUR and Wait for explorer notifications to complete
                                 plugin.notifyDeleteById(user, new IdAndVersion(idWall, System.currentTimeMillis())).onSuccess(e -> {
                                     // on success return 200
                                     handler.handle(r);

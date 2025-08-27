@@ -36,6 +36,7 @@ import org.entcore.common.explorer.impl.ExplorerRepositoryEvents;
 import org.entcore.common.http.BaseServer;
 import org.entcore.common.http.filter.ShareAndOwner;
 import org.entcore.common.mongodb.MongoDbConf;
+import org.entcore.common.resources.ResourceBrokerRepositoryEvents;
 import org.entcore.common.service.impl.MongoDbSearchService;
 
 import java.util.HashMap;
@@ -45,6 +46,8 @@ import org.entcore.common.share.ShareService;
 import org.entcore.common.share.impl.ShareBrokerListenerImpl;
 import org.entcore.broker.api.utils.AddressParameter;
 import org.entcore.broker.api.utils.BrokerProxyUtils;
+import org.entcore.common.user.RepositoryEvents;
+
 import java.util.List;
 
 /**
@@ -74,7 +77,9 @@ public class CollaborativeWall extends BaseServer {
         final Map<String, IExplorerPluginClient> pluginClientPerCollection = new HashMap<>();
         pluginClientPerCollection.put(COLLABORATIVE_WALL_COLLECTION, mainClient);
         pluginClientPerCollection.put(COLLABORATIVE_WALL_NOTES_COLLECTION, IExplorerPluginClient.withBus(vertx, APPLICATION, NOTE_TYPE));
-        setRepositoryEvents(new ExplorerRepositoryEvents(new CollaborativeWallRepositoryEvents(vertx), pluginClientPerCollection,mainClient));
+        final RepositoryEvents explorerRepository = new ExplorerRepositoryEvents(new CollaborativeWallRepositoryEvents(vertx), pluginClientPerCollection,mainClient);
+        final RepositoryEvents resourceRepository = new ResourceBrokerRepositoryEvents(explorerRepository, vertx, APPLICATION, TYPE);
+        setRepositoryEvents(resourceRepository);
 
         if (config.getBoolean("searching-event", true)) {
             setSearchingEvents(new CollaborativeWallSearchingEvents(new MongoDbSearchService(COLLABORATIVE_WALL_COLLECTION)));
@@ -89,11 +94,11 @@ public class CollaborativeWall extends BaseServer {
 
         setDefaultResourceFilter(new ShareAndOwner());
 
-        final CollaborativeWallController controller = new CollaborativeWallController(COLLABORATIVE_WALL_COLLECTION, noteService, this.plugin);
+        final CollaborativeWallController controller = new CollaborativeWallController(vertx, COLLABORATIVE_WALL_COLLECTION, noteService, this.plugin);
 
         addController(controller);
 
-        final CollaborativeWallService collaborativeWallService = new MongoDbCollaborativeWallService(
+        final CollaborativeWallService collaborativeWallService = new MongoDbCollaborativeWallService(vertx,
             controller.getCrudService(),
             noteService, plugin, securedActions);
 
