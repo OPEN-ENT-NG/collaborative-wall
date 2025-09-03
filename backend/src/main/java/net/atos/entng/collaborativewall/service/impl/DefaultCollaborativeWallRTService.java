@@ -27,7 +27,8 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
 
     private final Vertx vertx;
     private final CollaborativeWallService collaborativeWallService;
-    private final JsonObject config;
+    private final JsonObject realTimeConfig;
+    private final String redisConf;
     private RedisClient redisClient;
     private final String serverId;
     private RealTimeStatus realTimeStatus;
@@ -53,19 +54,20 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
 
     private final RedisConnectionWrapper subscriberConnection = new RedisConnectionWrapper();
 
-    public DefaultCollaborativeWallRTService(Vertx vertx, final JsonObject config,
+    public DefaultCollaborativeWallRTService(Vertx vertx, final JsonObject realTimeConfig, final String redisConf,
                                              final CollaborativeWallService collaborativeWallService) {
         this.vertx = vertx;
-        this.config = config;
+        this.realTimeConfig = realTimeConfig;
+        this.redisConf = redisConf;
         this.collaborativeWallService = collaborativeWallService;
         this.realTimeStatus = RealTimeStatus.STOPPED;
         this.serverId = UUID.randomUUID().toString();
         this.messageFactory = new CollaborativeMessageFactory(serverId);
         this.statusSubscribers = new ArrayList<>();
         this.messagesSubscribers = new ArrayList<>();
-        this.reConnectionDelay = config.getLong("reconnection-delay-in-ms", 1000L);
-        this.publishPeriodInMs = config.getLong("publish-context-period-in-ms", 60000L);
-        this.maxConnectedUser = config.getLong("max-connected-user", 5l);
+        this.reConnectionDelay = realTimeConfig.getLong("reconnection-delay-in-ms", 1000L);
+        this.publishPeriodInMs = realTimeConfig.getLong("publish-context-period-in-ms", 60000L);
+        this.maxConnectedUser = realTimeConfig.getLong("max-connected-user", 5l);
         metadataByWallId = new HashMap<>();
     }
 
@@ -79,9 +81,10 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
         } else {
             changeRealTimeStatus(RealTimeStatus.STARTING);
             try {
-                redisClient = RedisClient.create(vertx, config);
-                future = listenToRedis();
-                future.onSuccess(e -> publishContextLoop());
+                future = RedisClient.create(vertx, realTimeConfig).compose(client -> {
+                    redisClient = client;
+                    return listenToRedis();
+                }).onSuccess(e -> publishContextLoop());
             } catch (Exception e) {
                 future = Future.failedFuture(e);
             }
@@ -95,7 +98,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             promise.complete();
         } else {
             log.info("Connecting to Redis....");
-            Redis.createClient(vertx, redisClient.getRedisOptions())
+            Redis.createClient(vertx, getRedisOptions(redisConf, realTimeConfig))
               .connect(onConnect -> {
                   if (onConnect.succeeded()) {
                       log.info(".... connection to redis established");
@@ -270,6 +273,31 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             final List<CollaborativeWallMessage> messages = newArrayList(message);
             this.broadcastMessagesToUsers(messages, false, true, null);
         }
+    }
+
+    private RedisOptions getRedisOptions(String redisConf, JsonObject realTimeConfig) {
+        JsonObject redisConfig = realTimeConfig.getJsonObject("redisConfig");
+
+
+        if (redisConfig == null) {
+            if (redisConf == null) {
+                throw new IllegalStateException("missing.redis.config");
+            } else {
+                redisConfig = new JsonObject(redisConf);
+            }
+        }
+        String redisConnectionString = redisConfig.getString("connection-string");
+        if (Utils.isEmpty(redisConnectionString)) {
+            redisConnectionString =
+                    "redis://" + (redisConfig.containsKey("auth") ? ":" + redisConfig.getString("auth") + "@" : "") +
+                            redisConfig.getString("host") + ":" + redisConfig.getInteger("port") + "/" +
+                            redisConfig.getInteger("select", 0);
+        }
+        return new RedisOptions()
+                .setConnectionString(redisConnectionString)
+                .setMaxPoolSize(redisConfig.getInteger("pool-size", 32))
+                .setMaxWaitingHandlers(redisConfig.getInteger("maxWaitingHandlers", 100))
+                .setMaxPoolWaiting(redisConfig.getInteger("maxPoolWaiting", 100));
     }
 
     @Override

@@ -7,12 +7,12 @@
     <parent>
         <groupId>io.edifice</groupId>
         <artifactId>app-parent</artifactId>
-        <version>1.0.1</version>
+        <version>1.1-zookeeper-SNAPSHOT</version>
     </parent>
 
     <groupId>net.atos</groupId>
     <artifactId>collaborativewall</artifactId>
-    <version>3.3-SNAPSHOT</version>
+    <version>3.3-zookeeper-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:https://github.com/OPEN-ENT-NG/collaborative-wall.git</connection>
@@ -29,8 +29,7 @@
     </repositories>
 
     <properties>
-        <web-utils.version>3.2-SNAPSHOT</web-utils.version>
-        <entCoreVersion>6.12-SNAPSHOT</entCoreVersion>
+        <entCoreVersion>6.10-zookeeper-SNAPSHOT</entCoreVersion>
         <gatlingHighchartsVersion>2.3.1</gatlingHighchartsVersion>
         <junitVersion>4.10</junitVersion>
     </properties>
