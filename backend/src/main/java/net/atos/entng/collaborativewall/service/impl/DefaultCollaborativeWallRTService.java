@@ -26,7 +26,8 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
 
     private final Vertx vertx;
     private final CollaborativeWallService collaborativeWallService;
-    private final JsonObject config;
+    private final JsonObject realTimeConfig;
+    private final String redisConf;
     private RedisAPI redisPublisher;
     private final String serverId;
     private RealTimeStatus realTimeStatus;
@@ -52,19 +53,20 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
 
     private final RedisConnectionWrapper subscriberConnection = new RedisConnectionWrapper();
 
-    public DefaultCollaborativeWallRTService(Vertx vertx, final JsonObject config,
+    public DefaultCollaborativeWallRTService(Vertx vertx, final JsonObject realTimeConfig, final String redisConf,
                                              final CollaborativeWallService collaborativeWallService) {
         this.vertx = vertx;
-        this.config = config;
+        this.realTimeConfig = realTimeConfig;
+        this.redisConf = redisConf;
         this.collaborativeWallService = collaborativeWallService;
         this.realTimeStatus = RealTimeStatus.STOPPED;
         this.serverId = UUID.randomUUID().toString();
         this.messageFactory = new CollaborativeMessageFactory(serverId);
         this.statusSubscribers = new ArrayList<>();
         this.messagesSubscribers = new ArrayList<>();
-        this.reConnectionDelay = config.getLong("reconnection-delay-in-ms", 1000L);
-        this.publishPeriodInMs = config.getLong("publish-context-period-in-ms", 60000L);
-        this.maxConnectedUser = config.getLong("max-connected-user", 5l);
+        this.reConnectionDelay = realTimeConfig.getLong("reconnection-delay-in-ms", 1000L);
+        this.publishPeriodInMs = realTimeConfig.getLong("publish-context-period-in-ms", 60000L);
+        this.maxConnectedUser = realTimeConfig.getLong("max-connected-user", 5l);
         metadataByWallId = new HashMap<>();
     }
 
@@ -78,7 +80,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
         } else {
             changeRealTimeStatus(RealTimeStatus.STARTING);
             try {
-                final RedisOptions redisOptions = getRedisOptions(vertx, config);
+                final RedisOptions redisOptions = getRedisOptions(redisConf, realTimeConfig);
                 final Redis publisherClient = Redis.createClient(vertx, redisOptions);
                 redisPublisher = RedisAPI.api(publisherClient);
                 future = listenToRedis();
@@ -96,7 +98,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             promise.complete();
         } else {
             log.info("Connecting to Redis....");
-            Redis.createClient(vertx, getRedisOptions(vertx, config))
+            Redis.createClient(vertx, getRedisOptions(redisConf, realTimeConfig))
               .connect(onConnect -> {
                   if (onConnect.succeeded()) {
                       log.info(".... connection to redis established");
@@ -273,12 +275,11 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
         }
     }
 
-    private RedisOptions getRedisOptions(Vertx vertx, JsonObject conf) {
-        JsonObject redisConfig = conf.getJsonObject("redisConfig");
+    private RedisOptions getRedisOptions(String redisConf, JsonObject realTimeConfig) {
+        JsonObject redisConfig = realTimeConfig.getJsonObject("redisConfig");
 
 
         if (redisConfig == null) {
-            final String redisConf = (String) vertx.sharedData().getLocalMap("server").get("redisConfig");
             if (redisConf == null) {
                 throw new IllegalStateException("missing.redis.config");
             } else {
