@@ -15,7 +15,12 @@ import org.entcore.common.http.response.DefaultResponseHandler;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class NotesHelper extends ControllerHelper {
 
@@ -25,6 +30,7 @@ public class NotesHelper extends ControllerHelper {
     public static final String NOTE_MODIFIED_ATTR = "modified";
     public static final String NOTE_MODIFIED_DATE_FIELD = "$date";
     public static final String NOTE_LASTEDIT_PARAMETER = "lastEdit";
+    public static final String NOTE_Z_INDEX = "zIndex";
     private final NoteService noteService;
     private final EventHelper eventHelper;
 
@@ -40,8 +46,40 @@ public class NotesHelper extends ControllerHelper {
             return;
         }
 
-        noteService.listAllNotes(idWall, DefaultResponseHandler.arrayResponseHandler(request));
+        noteService.listAllNotes(idWall, listAllNotesHandler(request));
+    }
 
+    //Transform the listAllNotes response to add a z index for each note based on modified date
+    private Handler<Either<String, JsonArray>> listAllNotesHandler(final HttpServerRequest request) {
+        return notesResponse -> {
+                if(notesResponse.isRight()) {
+                    List<JsonObject> values = new ArrayList<>();
+                    JsonArray notes = notesResponse.right().getValue();
+                    int nNotes = notes.size();
+                    for(int i = 0; i < nNotes; i++){
+                        values.add(notes.getJsonObject(i));
+                    }
+                    //Sort by modified date
+                    try {
+                        values.sort(Comparator.comparing(o ->
+                                o.getJsonObject(NOTE_MODIFIED_ATTR).getString(NOTE_MODIFIED_DATE_FIELD)
+                        ));
+                    } catch (Exception e) {
+                        log.error("An error occurred while sorting wall notes by modified date: ", e);
+                    }
+                    //Add z-index to notes based on previous ordering
+                    JsonArray res = new JsonArray(
+                            IntStream.range(0, nNotes)
+                                    .mapToObj( i -> values.get(i).put(NOTE_Z_INDEX, i))
+                                    .collect(Collectors.toList())
+                    );
+                    renderJson(request, res);
+                }
+                else {
+                    JsonObject error = (new JsonObject()).put("error", notesResponse.left().getValue());
+                    Renders.renderJson(request, error, 400);
+                }
+        };
     }
 
     /**
@@ -227,30 +265,6 @@ public class NotesHelper extends ControllerHelper {
         noteService.countNotes(walls, callback);
     }
 
-
-    private Handler<Either<String, JsonObject>> listAllNotesHandler(final String idWall, final HttpServerRequest request) {
-        return new Handler<Either<String, JsonObject>>() {
-            @Override
-            public void handle(final Either<String, JsonObject> accessConcurrentResponse) {
-
-                noteService.listAllNotes(idWall, new Handler<Either<String, JsonArray>>() {
-                    @Override
-                    public void handle(Either<String, JsonArray> allNotesResponse) {
-                        if (accessConcurrentResponse.isRight()) {
-                            //send back wall to front + status ok
-                            renderJson(request, addStatus("ok", allNotesResponse));
-                        } else {
-                            //send back wall and message to front
-                            renderJson(request, addStatus(accessConcurrentResponse.left().getValue(), allNotesResponse));
-                        }
-                    }
-                });
-
-
-            }
-        };
-    }
-
     private JsonObject addStatus(String status, Either<String, JsonArray> allNotesResponse) {
 
         JsonObject json = new JsonObject();
@@ -263,8 +277,6 @@ public class NotesHelper extends ControllerHelper {
         }
         return json;
     }
-
-
 
     public static String extractParameter(final HttpServerRequest request, final String parameterKey) {
         try {
