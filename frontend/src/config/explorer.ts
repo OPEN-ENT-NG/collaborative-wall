@@ -42,7 +42,7 @@ export const explorerConfig: AppParams = {
     },
     {
       id: 'copy',
-      workflow: workflows.view,
+      workflow: workflows.create,
       target: 'actionbar',
       right: 'read',
     },
