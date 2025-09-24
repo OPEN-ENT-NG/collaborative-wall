@@ -46,13 +46,9 @@ public class ResourceBrokerListenerImpl extends MongoResourceBrokerListenerImpl 
             
             // Use description field if it exists, otherwise empty string
             final String description = resource.getString("description", "");
-            
-            // Get thumbnail from background.path if available
-            String thumbnail = "";
-            final JsonObject background = resource.getJsonObject("background");
-            if (background != null && background.getString("path") != null) {
-                thumbnail = background.getString("path");
-            }
+
+            // Get thumbnail from icon field (icon is the "vignette" uploaded by user)
+            final String thumbnail = resource.getString("icon", "");
             
             // Extract owner information
             final JsonObject owner = resource.getJsonObject("owner", new JsonObject());
