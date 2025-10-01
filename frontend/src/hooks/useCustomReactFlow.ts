@@ -94,14 +94,14 @@ export const useCustomReactFlow = () => {
           (a: NoteProps, b: NoteProps) =>
             (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
         )
-        .map((note, index) => {
+        .map((note) => {
           return {
             id: note._id,
             type: 'note',
             data: { note },
             position: { x: note.x, y: note.y },
             draggable: !isMobile && canMoveNote && hasRightsToMoveNote(note),
-            zIndex: index,
+            zIndex: note.zIndex,
           };
         });
       setNodes(newNodes);
