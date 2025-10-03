@@ -1,6 +1,6 @@
 {
   "name": "collaborative-wall",
-  "version": "3.1.24-develop.1",
+  "version": "3.2.0",
   "description": "Collaborative editor for ENT Core.",
   "homepage": "https://github.com/OPEN-ENT-NG/collaborative-wall#readme",
   "bugs": {
@@ -39,16 +39,16 @@
     ]
   },
   "dependencies": {
-    "@edifice.io/react": "develop",
-    "@edifice.io/bootstrap": "develop",
-    "@edifice.io/client": "develop",
+    "@edifice.io/react": "2.4.0",
+    "@edifice.io/bootstrap": "2.4.0",
+    "@edifice.io/client": "2.4.0",
     "@mantine/hooks": "7.7.1",
     "@react-spring/web": "^9.7.5",
     "@tanstack/react-query": "5.62.7",
     "clsx": "^2.1.1",
     "i18next": "23.8.1",
     "i18next-http-backend": "2.4.2",
-    "ode-explorer": "develop",
+    "ode-explorer": "2.3.0",
     "perfect-cursors": "1.0.5",
     "react-use-websocket": "4.8.1",
     "uuid": "9.0.1",
