@@ -89,19 +89,23 @@ export const useCustomReactFlow = () => {
 
   useEffect(() => {
     if (notes && !query.isError) {
+      notes.sort(
+        (a: NoteProps, b: NoteProps) =>
+          (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
+      );
       const newNodes = notes
         ?.sort(
           (a: NoteProps, b: NoteProps) =>
             (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
         )
-        .map((note) => {
+        .map((note, i) => {
           return {
             id: note._id,
             type: 'note',
             data: { note },
             position: { x: note.x, y: note.y },
             draggable: !isMobile && canMoveNote && hasRightsToMoveNote(note),
-            zIndex: note.zIndex,
+            zIndex: i,
           };
         });
       setNodes(newNodes);
