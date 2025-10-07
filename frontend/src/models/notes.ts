@@ -28,4 +28,5 @@ export type PickedNoteProps = Pick<
   | 'modified'
   | 'media'
   | 'isMediaVisible'
+  | 'zIndex'
 >;
