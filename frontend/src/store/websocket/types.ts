@@ -161,7 +161,14 @@ export type NoteMovedPayload = {
 // TODO
 export type PickedNoteUpdate = Pick<
   NoteProps,
-  '_id' | 'content' | 'media' | 'color' | 'x' | 'y' | 'isMediaVisible'
+  | '_id'
+  | 'content'
+  | 'media'
+  | 'color'
+  | 'x'
+  | 'y'
+  | 'isMediaVisible'
+  | 'zIndex'
 >;
 
 export type NoteUpdatedPayload = {
