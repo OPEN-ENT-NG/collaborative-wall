@@ -14,6 +14,7 @@ import net.atos.entng.collaborativewall.service.CollaborativeWallRTService;
 import net.atos.entng.collaborativewall.service.CollaborativeWallService;
 import org.apache.commons.lang3.tuple.Pair;
 import org.entcore.common.user.UserInfos;
+import org.entcore.common.redis.RedisClient;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
     private final Vertx vertx;
     private final CollaborativeWallService collaborativeWallService;
     private final JsonObject config;
-    private RedisAPI redisPublisher;
+    private RedisClient redisClient;
     private final String serverId;
     private RealTimeStatus realTimeStatus;
     private final CollaborativeMessageFactory messageFactory;
@@ -78,9 +79,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
         } else {
             changeRealTimeStatus(RealTimeStatus.STARTING);
             try {
-                final RedisOptions redisOptions = getRedisOptions(vertx, config);
-                final Redis publisherClient = Redis.createClient(vertx, redisOptions);
-                redisPublisher = RedisAPI.api(publisherClient);
+                redisClient = RedisClient.create(vertx, config);
                 future = listenToRedis();
                 future.onSuccess(e -> publishContextLoop());
             } catch (Exception e) {
@@ -96,7 +95,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             promise.complete();
         } else {
             log.info("Connecting to Redis....");
-            Redis.createClient(vertx, getRedisOptions(vertx, config))
+            Redis.createClient(vertx, redisClient.getRedisOptions())
               .connect(onConnect -> {
                   if (onConnect.succeeded()) {
                       log.info(".... connection to redis established");
@@ -182,7 +181,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
         final Promise<Void> promise = Promise.promise();
         log.debug("Publishing contexts to Redis...");
         final String payload = Json.encode(metadataByWallId);
-        redisPublisher.set(newArrayList(
+        redisClient.getClient().set(newArrayList(
                 metadataCollectionPrefix + serverId,
                 payload,
                 "PX",
@@ -255,7 +254,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             log.error("Cannot close redis subscriber", e);
         }
         try {
-            redisPublisher.close();
+            redisClient.getClient().close();
         } catch (Exception e) {
             log.error("Cannot close redis publisher", e);
         }
@@ -271,32 +270,6 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             final List<CollaborativeWallMessage> messages = newArrayList(message);
             this.broadcastMessagesToUsers(messages, false, true, null);
         }
-    }
-
-    private RedisOptions getRedisOptions(Vertx vertx, JsonObject conf) {
-        JsonObject redisConfig = conf.getJsonObject("redisConfig");
-
-
-        if (redisConfig == null) {
-            final String redisConf = (String) vertx.sharedData().getLocalMap("server").get("redisConfig");
-            if (redisConf == null) {
-                throw new IllegalStateException("missing.redis.config");
-            } else {
-                redisConfig = new JsonObject(redisConf);
-            }
-        }
-        String redisConnectionString = redisConfig.getString("connection-string");
-        if (Utils.isEmpty(redisConnectionString)) {
-            redisConnectionString =
-                    "redis://" + (redisConfig.containsKey("auth") ? ":" + redisConfig.getString("auth") + "@" : "") +
-                            redisConfig.getString("host") + ":" + redisConfig.getInteger("port") + "/" +
-                            redisConfig.getInteger("select", 0);
-        }
-        return new RedisOptions()
-                .setConnectionString(redisConnectionString)
-                .setMaxPoolSize(redisConfig.getInteger("pool-size", 32))
-                .setMaxWaitingHandlers(redisConfig.getInteger("maxWaitingHandlers", 100))
-                .setMaxPoolWaiting(redisConfig.getInteger("maxPoolWaiting", 100));
     }
 
     @Override
@@ -344,11 +317,11 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
 
     private Future<CollaborativeWallUsersMetadata> getUsersContext(final String wallId) {
         final Promise<CollaborativeWallUsersMetadata> promise = Promise.promise();
-        this.redisPublisher.keys(metadataCollectionPrefix + "*", e -> {
+        // Use SCAN instead of KEYS to avoid blocking Redis
+        this.redisClient.scanAll(metadataCollectionPrefix + "*").onComplete(e -> {
             if (e.succeeded()) {
                 log.debug("Fetched context ok");
                 final List<String> keys = e.result().stream()
-                        .map(Response::toString)
                         .filter(key -> !key.endsWith(serverId))
                         .distinct()
                         .collect(Collectors.toList());
@@ -372,7 +345,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
         if (keys.isEmpty()) {
             promise.complete(new CollaborativeWallUsersMetadata());
         } else {
-            this.redisPublisher.mget(keys, entriesResponse -> {
+            this.redisClient.getClient().mget(keys, entriesResponse -> {
                 if (entriesResponse.succeeded()) {
                     final CollaborativeWallUsersMetadata otherAppsContext = entriesResponse.result().stream()
                             .map(entry -> new JsonObject(entry.toString()))
@@ -544,7 +517,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
             promise.complete();
         } else {
             final String payload = Json.encode(messages.get(0));
-            redisPublisher.publish(channelName, payload, e -> {
+            redisClient.getClient().publish(channelName, payload, e -> {
                 if (e.succeeded()) {
                     publishMessagesOnRedis(messages, index + 1).onComplete(promise);
                 } else {
