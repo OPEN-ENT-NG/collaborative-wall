@@ -34,7 +34,7 @@ export default function DescriptionModal() {
             {t('collaborativewall.modal.description', { ns: appCode })}
           </Modal.Header>
           <Modal.Body>
-            <p>{wall?.description}</p>
+            <p style={{ whiteSpace: 'pre-line' }}>{wall?.description}</p>
           </Modal.Body>
           <Modal.Footer>
             <Button
