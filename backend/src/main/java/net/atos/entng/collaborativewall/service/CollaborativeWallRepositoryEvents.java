@@ -32,6 +32,7 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import net.atos.entng.collaborativewall.CollaborativeWall;
 import org.entcore.common.service.impl.MongoDbRepositoryEvents;
+import org.entcore.common.user.position.ExportResourceResult;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -55,7 +56,7 @@ public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
 
     @Override
     public void exportResources(JsonArray resourcesIds, boolean exportDocuments, boolean exportSharedResources, String exportId, String userId,
-                                JsonArray groups, String exportPath, String locale, String host, Handler<Boolean> handler)
+                                JsonArray groups, String exportPath, String locale, String host, Handler<ExportResourceResult> handler)
     {
         Bson findByAuthor = eq("owner.userId", userId);
         Bson findByShared = or(
@@ -122,11 +123,11 @@ public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
                                                 @Override
                                                 public void handle(Boolean bool)
                                                 {
-                                                    exportFiles(results, path, new HashSet<String>(), exported, handler);
+                                                    exportFiles(results, path, new HashSet<>(), exported, e -> new ExportResourceResult(e, path));
                                                 }
                                             };
 
-                                            if(exportDocuments == true)
+                                            if(exportDocuments)
                                                 exportDocumentsDependancies(results, path, finish);
                                             else
                                                 finish.handle(Boolean.TRUE);
@@ -134,7 +135,7 @@ public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
                                         }
                                         else
                                         {
-                                            handler.handle(exported.get());
+                                            handler.handle(new ExportResourceResult(exported.get(), path));
                                         }
                                     }
                                 });
@@ -142,7 +143,7 @@ public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
                             else
                             {
                                 log.error("Blog : Could not proceed query " + query2.encode(), event2.body().getString("message"));
-                                handler.handle(exported.get());
+                                handler.handle(new ExportResourceResult(false, null));
                             }
                         }
                     });
@@ -150,7 +151,7 @@ public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
                 else
                 {
                     log.error("Blog : Could not proceed query " + query.encode(), event.body().getString("message"));
-                    handler.handle(exported.get());
+                    handler.handle(new ExportResourceResult(exported.get(), null));
                 }
             }
         });

@@ -38,11 +38,9 @@ public class WallExplorerPlugin extends ExplorerPluginResourceMongo {
     private final Map<String, SecuredAction> securedActions;
     private final ResourceBrokerPublisher resourcePublisher;
 
-    public static WallExplorerPlugin create(final Map<String, SecuredAction> securedActions) throws Exception {
-        final IExplorerPlugin plugin = ExplorerPluginFactory.createMongoPlugin((params)->{
-            return new WallExplorerPlugin(params.getCommunication(), params.getDb(), securedActions);
-        });
-        return (WallExplorerPlugin) plugin;
+    public static Future<WallExplorerPlugin> create(final Map<String, SecuredAction> securedActions) {
+        return ExplorerPluginFactory.createMongoPlugin((params)-> new WallExplorerPlugin(params.getCommunication(), params.getDb(), securedActions))
+                .map(plugin -> (WallExplorerPlugin) plugin);
     }
 
     public WallExplorerPlugin(final IExplorerPluginCommunication communication, final MongoClient mongoClient, final Map<String, SecuredAction> securedActions) {

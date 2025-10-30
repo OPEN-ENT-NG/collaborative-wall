@@ -95,74 +95,72 @@ public class CollaborativeWall extends BaseServer {
             setSearchingEvents(new CollaborativeWallSearchingEvents(new MongoDbSearchService(COLLABORATIVE_WALL_COLLECTION)));
         }
 
-	    try {
-		    this.plugin = WallExplorerPlugin.create(securedActions);
-	    } catch (Exception e) {
-		    return Future.failedFuture(e);
-	    }
-	    MongoDbConf conf = MongoDbConf.getInstance();
-        conf.setCollection(COLLABORATIVE_WALL_COLLECTION);
-        conf.setResourceIdLabel("id");
+	    return WallExplorerPlugin.create(securedActions).compose(p -> {
+            this.plugin = p;
+            MongoDbConf conf = MongoDbConf.getInstance();
+            conf.setCollection(COLLABORATIVE_WALL_COLLECTION);
+            conf.setResourceIdLabel("id");
 
-        final NoteService noteService = new MongoDbNoteService(COLLABORATIVE_WALL_NOTES_COLLECTION);
+            final NoteService noteService = new MongoDbNoteService(COLLABORATIVE_WALL_NOTES_COLLECTION);
 
-        setDefaultResourceFilter(new ShareAndOwner());
+            setDefaultResourceFilter(new ShareAndOwner());
 
         final CollaborativeWallController controller = new CollaborativeWallController(vertx, COLLABORATIVE_WALL_COLLECTION, noteService, this.plugin);
 
-        addController(controller);
+            addController(controller);
 
         final CollaborativeWallService collaborativeWallService = new MongoDbCollaborativeWallService(vertx,
-            controller.getCrudService(),
-            noteService, plugin, securedActions);
+                    controller.getCrudService(),
+                    noteService, plugin, securedActions);
 
-        final JsonObject rtConfig = config.getJsonObject("real-time");
-        if(rtConfig == null) {
-            log.info("This instance won't be listening for real time messages");
-        } else {
-            log.info("Starting real time services");
-            final String metricsConfig = (String) collaborativeWallMap.get("metricsOptions");
-            final String redisConfig = (String) collaborativeWallMap.get("redisConfig");
-            CollaborativeWallMetricsRecorderFactory.init(metricsConfig, rtConfig);
-            final int port = rtConfig.getInteger("port");
-            final int maxConnections = rtConfig.getInteger("max-connections", 0);
-            this.collaborativeWallRTService = new DefaultCollaborativeWallRTService(vertx, rtConfig, redisConfig, collaborativeWallService);
-            final WallWebSocketController rtController = new WallWebSocketController(vertx, maxConnections, collaborativeWallRTService, collaborativeWallService);
-            controller.setWallRTService(this.collaborativeWallRTService);
-            final CollaborativeWallMetricsRecorder metricsRecorder = CollaborativeWallMetricsRecorderFactory.getRecorder(rtController, collaborativeWallRTService);
-            final HttpServerOptions options = new HttpServerOptions().setMaxWebSocketFrameSize(1024 * 1024);
-            vertx.createHttpServer(options)
-                .webSocketHandler(rtController)
-                .listen(port, asyncResult -> {
-                    if(asyncResult.succeeded()) {
-                        log.info("Websocket server started for collaborativewall and listening on port " + port);
-                        collaborativeWallRTService.start(metricsRecorder)
-                            .onSuccess(e -> {
-                                log.info("Real time server started");
-                                collaborativeWallRTService.subscribeToStatusChanges(newStatus -> {
-                                    switch (newStatus) {
-                                        case ERROR:
-                                        case STOPPED:
-                                            log.warn("Real-time server is in state " + collaborativeWallRTService.getStatus() + ". Restarting....");
-                                            collaborativeWallRTService.start(metricsRecorder);
-                                            break;
-                                    }
-                                });
-                            })
-                            .onFailure(th -> log.error("Error while starting real time server", th));
-                    } else {
-                        log.error("Cannot start websocket controller", asyncResult.cause());
-                    }
-                });
-        }
-        this.plugin.start();
-        // add broker listener for workspace resources
-        BrokerProxyUtils.addBrokerProxy(new ResourceBrokerListenerImpl(), vertx, new AddressParameter("application", "collaborativewall"));
-        // add broker listener for share service
-		final Map<String, List<String>> groupedActions = new HashMap<>();
-        final ShareService shareService = this.plugin.createShareService(groupedActions);
-        BrokerProxyUtils.addBrokerProxy(new ShareBrokerListenerImpl(this.securedActions, shareService), vertx, new AddressParameter("application", "collaborativewall"));
-		return Future.succeededFuture();
+            final JsonObject rtConfig = config.getJsonObject("real-time");
+            if (rtConfig == null) {
+                log.info("This instance won't be listening for real time messages");
+            } else {
+                log.info("Starting real time services");
+                final String metricsConfig = (String) collaborativeWallMap.get("metricsOptions");
+                final String redisConfig = (String) collaborativeWallMap.get("redisConfig");
+                CollaborativeWallMetricsRecorderFactory.init(metricsConfig, rtConfig);
+                final int port = rtConfig.getInteger("port");
+                final int maxConnections = rtConfig.getInteger("max-connections", 0);
+                this.collaborativeWallRTService = new DefaultCollaborativeWallRTService(vertx, rtConfig, redisConfig, collaborativeWallService);
+                final WallWebSocketController rtController = new WallWebSocketController(vertx, maxConnections, collaborativeWallRTService, collaborativeWallService);
+                controller.setWallRTService(this.collaborativeWallRTService);
+                final CollaborativeWallMetricsRecorder metricsRecorder = CollaborativeWallMetricsRecorderFactory.getRecorder(rtController, collaborativeWallRTService);
+                final HttpServerOptions options = new HttpServerOptions().setMaxWebSocketFrameSize(1024 * 1024);
+                vertx.createHttpServer(options)
+                        .webSocketHandler(rtController)
+                        .listen(port, asyncResult -> {
+                            if (asyncResult.succeeded()) {
+                                log.info("Websocket server started for collaborativewall and listening on port " + port);
+                                collaborativeWallRTService.start(metricsRecorder)
+                                        .onSuccess(e -> {
+                                            log.info("Real time server started");
+                                            collaborativeWallRTService.subscribeToStatusChanges(newStatus -> {
+                                                switch (newStatus) {
+                                                    case ERROR:
+                                                    case STOPPED:
+                                                        log.warn("Real-time server is in state " + collaborativeWallRTService.getStatus() + ". Restarting....");
+                                                        collaborativeWallRTService.start(metricsRecorder);
+                                                        break;
+                                                }
+                                            });
+                                        })
+                                        .onFailure(th -> log.error("Error while starting real time server", th));
+                            } else {
+                                log.error("Cannot start websocket controller", asyncResult.cause());
+                            }
+                        });
+            }
+            this.plugin.start();
+            // add broker listener for workspace resources
+            BrokerProxyUtils.addBrokerProxy(new ResourceBrokerListenerImpl(), vertx, new AddressParameter("application", "collaborativewall"));
+            // add broker listener for share service
+            final Map<String, List<String>> groupedActions = new HashMap<>();
+            final ShareService shareService = this.plugin.createShareService(groupedActions);
+            BrokerProxyUtils.addBrokerProxy(new ShareBrokerListenerImpl(this.securedActions, shareService), vertx, new AddressParameter("application", "collaborativewall"));
+            return Future.succeededFuture();
+        });
     }
 
     @Override
