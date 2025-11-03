@@ -26,13 +26,10 @@ import io.vertx.core.eventbus.Message;
 import org.bson.conversions.Bson;
 import org.entcore.common.service.impl.MongoDbRepositoryEvents;
 import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.Message;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import net.atos.entng.collaborativewall.CollaborativeWall;
-import org.entcore.common.service.impl.MongoDbRepositoryEvents;
-import org.entcore.common.user.position.ExportResourceResult;
+import org.entcore.common.user.ExportResourceResult;
 
 import java.util.HashSet;
 import java.util.Map;
