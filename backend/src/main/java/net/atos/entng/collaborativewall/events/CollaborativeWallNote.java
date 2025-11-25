@@ -97,8 +97,8 @@ public class CollaborativeWallNote {
                 other.lastEdit,
                 other.media != null ? new CollaborativeWallNoteMedia(other.media) : null,
                 other.idwall,
-                new JsonObject().put("$date", created).getMap(),
-                new JsonObject().put("$date", created).getMap());
+                new JsonObject().put("$date", DateUtils.formatUtcDateTime(new Date(created))).getMap(),
+                new JsonObject().put("$date", DateUtils.formatUtcDateTime(new Date(created))).getMap());
     }
 
     public CollaborativeWallNote(final CollaborativeWallNote previous, final CollaborativeWallNote other, final long modified) {
@@ -112,7 +112,7 @@ public class CollaborativeWallNote {
                 other.media != null ? new CollaborativeWallNoteMedia(other.media) : null,
                 other.idwall,
                 previous.created != null ? new HashMap<>(previous.created.getMap()) : new HashMap<>(),
-                new JsonObject().put("$date", modified).getMap());
+                new JsonObject().put("$date", DateUtils.formatUtcDateTime(new Date(modified))).getMap());
     }
 
     /**
@@ -200,32 +200,7 @@ public class CollaborativeWallNote {
     }
 
     public static CollaborativeWallNote fromJson(final JsonObject json) {
-        return adaptDates(json).mapTo(CollaborativeWallNote.class);
-    }
-
-    private static JsonObject adaptDates(JsonObject json) {
-        for (String dateName : dates_to_adapt) {
-            Object value = json.getValue(dateName);
-            long ts = -1;
-            if(value instanceof Number) {
-                ts = (long) value;
-            } else if(value instanceof String) {
-              try {
-                ts = MongoDb.parseDate((String)value).getTime();
-              } catch (ParseException e) {
-                  log.error("Cannot adapt date " + dateName  + ": " + value, e);
-              }
-            } else if(value instanceof JsonObject) {
-                Object dateValue = ((JsonObject) value).getValue("$date");
-                if(dateValue instanceof String) {
-                    ts = DateUtils.parseIsoDate((JsonObject) value).getTime();
-                }
-            }
-            if(ts > 0) {
-                json.put(dateName, new JsonObject().put("$date", ts));
-            }
-        }
-        return json;
+        return json.mapTo(CollaborativeWallNote.class);
     }
 
     public JsonObject getCreated() {
