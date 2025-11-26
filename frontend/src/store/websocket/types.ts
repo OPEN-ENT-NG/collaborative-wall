@@ -177,7 +177,7 @@ export type NoteUpdatedPayloadEvent = {
 } & NoteUpdatedPayload;
 
 export type NoteUpdatedPayloadAction = {
-  note: PickedNoteUpdate & { modified?: { $date: number } };
+  note: PickedNoteUpdate & { modified?: { $date: string } };
 } & NoteUpdatedPayload;
 
 // TODO fin
