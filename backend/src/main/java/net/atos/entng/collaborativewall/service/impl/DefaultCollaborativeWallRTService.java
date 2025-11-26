@@ -516,7 +516,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
         if (messages == null || messages.size() <= index) {
             promise.complete();
         } else {
-            final String payload = Json.encode(messages.get(0));
+            final String payload = Json.encode(messages.get(index));
             redisClient.getClient().publish(channelName, payload, e -> {
                 if (e.succeeded()) {
                     publishMessagesOnRedis(messages, index + 1).onComplete(promise);

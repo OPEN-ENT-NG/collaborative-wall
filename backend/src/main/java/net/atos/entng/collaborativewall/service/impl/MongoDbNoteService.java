@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.time.Instant;
+import java.util.Date;
 import java.util.Iterator;
 
 import static com.mongodb.client.model.Filters.*;
@@ -101,37 +102,39 @@ public class MongoDbNoteService implements NoteService {
             handler.handle(new Either.Left<String, JsonObject>("KO"));
             return;
         }
-        updateDBWithConncurrentAccessControl(id, note.getJsonObject(NOTES_FIELD_MODIFIED).getLong(NOTES_MODIFIED_ATTR_DATE), user, handler, note, checkConcurency);
+        final String lastEdit = note.getJsonObject(NOTES_FIELD_MODIFIED).getString(NOTES_MODIFIED_ATTR_DATE);
+        updateDBWithConncurrentAccessControl(id, lastEdit, user, handler, note, checkConcurency);
 
     }
 
     @Override
     public void delete(String id, Long lastEdit, UserInfos user, boolean checkConcurency, Handler<Either<String, JsonObject>> handler) {
-        updateDBWithConncurrentAccessControl(id, lastEdit, user, handler, null, checkConcurency);
+      final String lastEditStr = DateUtils.formatUtcDateTime(new Date(lastEdit));
+      updateDBWithConncurrentAccessControl(id, lastEditStr, user, handler, null, checkConcurency);
     }
 
 
-    private void updateDBWithConncurrentAccessControl(final String id, final Long lastEdit, final UserInfos user, final Handler<Either<String, JsonObject>> handler, final JsonObject note, final boolean checkConcurrency) {
-        //Check if delete is allowed : lastEdit dates from front and in db must matched
+    private void updateDBWithConncurrentAccessControl(final String id, final String lastEdit, final UserInfos user, final Handler<Either<String, JsonObject>> handler, final JsonObject note, final boolean checkConcurrency) {
+        //Check if delete is allowed : lastEdit dates from front and in db must match
         crudService.retrieve(id, user, new Handler<Either<String, JsonObject>>() {
             @Override
             public void handle(Either<String, JsonObject> retrieveResponse) {
                 if (retrieveResponse.isRight()) {
                     JsonObject noteDB = retrieveResponse.right().getValue();
 
-                    if(noteDB.size()==0){
+                    if(noteDB.isEmpty()){
                         if (note == null) {
                             // already deleted
                             handler.handle(new Either.Right<String, JsonObject>(new JsonObject()));
                             return;
                         } else {
-                            //Note doesn't exist any more
+                            //Note doesn't exist anymore
                             handler.handle(new Either.Left<String, JsonObject>(ERROR_CODE_NOTE_NOT_EXISTS));
                             return;
                         }
                     }
 
-                    Long lastEditDB = getTimestamp(NOTES_FIELD_MODIFIED, noteDB);
+                    String lastEditDB = getDateIsoString(NOTES_FIELD_MODIFIED, noteDB);
 
                     if (lastEditDB != null && !lastEditDB.equals(lastEdit) && checkConcurrency) {
                         //Concurrent access
@@ -163,28 +166,28 @@ public class MongoDbNoteService implements NoteService {
         });
     }
 
-    private Long getTimestamp(String notesFieldModified, JsonObject noteDB) {
+    private String getDateIsoString(String notesFieldModified, JsonObject noteDB) {
         Object value = noteDB.getValue(notesFieldModified);
-        long ts = -1;
-        if(value instanceof Number) {
-            ts = (long) value;
-        } else if(value instanceof String) {
+        String result = "";
+        if(value instanceof String) {
             try {
-                ts = MongoDb.parseDate((String)value).getTime();
+                MongoDb.parseDate((String)value);
+                result = (String)value;
             } catch (ParseException e) {
-                log.error("Cannot adapt date " + notesFieldModified  + ": " + value, e);
+                log.error("Cannot parse date " + notesFieldModified  + ": " + value, e);
             }
         } else if(value instanceof JsonObject) {
             Object dateValue = ((JsonObject) value).getValue("$date");
             if(dateValue instanceof String) {
-                ts = DateUtils.parseIsoDate((JsonObject) value).getTime();
-            } else if(dateValue instanceof Number){
-                ts = (long) dateValue;
-            } else {
-                log.error("Cannot adapt date " + notesFieldModified  + ": " + value);
+              try {
+                MongoDb.parseDate((String)dateValue);
+                result = (String)dateValue;
+              } catch (ParseException e) {
+                log.error("Cannot parse date " + notesFieldModified  + ": " + value, e);
+              }
             }
         }
-        return ts;
+        return result;
     }
 
     private void update(String id, JsonObject data, Handler<Either<String, JsonObject>> handler) {
