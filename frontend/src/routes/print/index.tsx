@@ -80,9 +80,11 @@ export const Component = () => {
               }}
             >
               {notes
-                ?.sort(
-                  (a: NoteProps, b: NoteProps) =>
-                    (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
+                ?.sort((a: NoteProps, b: NoteProps) =>
+                  //Sort by modified date, ascending
+                  (a.modified?.$date ?? '') < (b.modified?.$date ?? '')
+                    ? -1
+                    : 1,
                 )
                 .map((note: NoteProps, i: number) => {
                   return (

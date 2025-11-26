@@ -89,23 +89,19 @@ export const useCustomReactFlow = () => {
 
   useEffect(() => {
     if (notes && !query.isError) {
-      notes.sort(
-        (a: NoteProps, b: NoteProps) =>
-          (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
-      );
       const newNodes = notes
-        ?.sort(
-          (a: NoteProps, b: NoteProps) =>
-            (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
+        ?.sort((a: NoteProps, b: NoteProps) =>
+          //Sort by modified date, ascending
+          (a.modified?.$date ?? '') < (b.modified?.$date ?? '') ? -1 : 1,
         )
-        .map((note, i) => {
+        .map((note, index) => {
           return {
             id: note._id,
             type: 'note',
             data: { note },
             position: { x: note.x, y: note.y },
             draggable: !isMobile && canMoveNote && hasRightsToMoveNote(note),
-            zIndex: i,
+            zIndex: index,
           };
         });
       setNodes(newNodes);
@@ -151,21 +147,16 @@ export const useCustomReactFlow = () => {
     setReactFlowInstance(instance);
 
     if (notes) {
-      const newNodes = notes
-        ?.sort(
-          (a: NoteProps, b: NoteProps) =>
-            (a.modified?.$date ?? 0) - (b.modified?.$date ?? 0),
-        )
-        .map((note, index) => {
-          return {
-            id: note._id,
-            type: 'note',
-            data: { note },
-            position: { x: note.x, y: note.y },
-            draggable: !isMobile && canMoveNote && hasRightsToMoveNote(note),
-            zIndex: index,
-          };
-        });
+      const newNodes = notes?.map((note) => {
+        return {
+          id: note._id,
+          type: 'note',
+          data: { note },
+          position: { x: note.x, y: note.y },
+          draggable: !isMobile && canMoveNote && hasRightsToMoveNote(note),
+          zIndex: note.zIndex,
+        };
+      });
       instance.setNodes(newNodes);
     }
   };

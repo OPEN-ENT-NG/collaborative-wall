@@ -13,7 +13,7 @@ export const updateActionState = (
         item: {
           ...state.item,
           modified: {
-            $date: item.modified?.$date as number,
+            $date: item.modified?.$date as string,
           },
           _id: item._id,
         },

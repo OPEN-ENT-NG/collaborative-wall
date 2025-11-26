@@ -9,8 +9,8 @@ export interface NoteProps {
   color: string[];
   isMediaVisible: boolean;
   media: MediaProps | null;
-  created?: { $date: number };
-  modified?: { $date: number };
+  created?: { $date: string };
+  modified?: { $date: string };
   owner?: {
     userId: string;
     displayName: string;
