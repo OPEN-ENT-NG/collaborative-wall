@@ -1,0 +1,32 @@
+{
+  "name": "net.atos~collaborativewall",
+  "config": {
+    "main": "net.atos.entng.collaborativewall.CollaborativeWall",
+    "port": 8071,
+    "csrf-token": {{ csrfToken | default('true') }},
+    "app-name": "CollaborativeWall",
+    "app-address": "/collaborativewall",
+    "app-icon": "collaborative-wall-large",
+    "app-type" : "END_USER",
+    "host": "https://{{ host }}",
+    "ssl": true,
+    "userbook-host": "https://{{ host }}",
+    "integration-mode": "{{ integration_mode|default('HTTP') }}",
+    "app-registry.port": 8012,
+    "mode": "prod",
+    {% if (collaborativeWallRealtimeEnabled | default(True)) != 'False' -%}
+    "real-time": {
+     "port": {{ collaborativeWallWSPort | default('9091') }},
+     "max-connected-user": {{ collaborativeWallMaxUsers | default('5') }},
+     "redisConfig": {
+         "maxPoolWaiting": {{ redisPoolWaitingExplorer|default('2024') }},
+         "maxWaitingHandlers": {{ redisWaitingHandlerExplorer|default('2024') }},
+         "host": "{{ redisUrl | default('') }}",
+         "port": {{ redisPort|default('6379') }},
+         "auth": "{{ credentials_redis_2_password }}"
+         }
+    },
+    {%- endif %}
+    "entcore.port": 8009
+  }
+}
