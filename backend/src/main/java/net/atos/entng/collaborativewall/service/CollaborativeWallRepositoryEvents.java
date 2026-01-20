@@ -120,7 +120,7 @@ public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
                                                 @Override
                                                 public void handle(Boolean bool)
                                                 {
-                                                    exportFiles(results, path, new HashSet<>(), exported, e -> new ExportResourceResult(e, path));
+                                                    exportFiles(results, path, new HashSet<>(), exported, e -> handler.handle(new ExportResourceResult(e, path)));
                                                 }
                                             };
 
@@ -132,7 +132,7 @@ public class CollaborativeWallRepositoryEvents extends MongoDbRepositoryEvents {
                                         }
                                         else
                                         {
-                                            handler.handle(new ExportResourceResult(exported.get(), path));
+                                            handler.handle(ExportResourceResult.KO);
                                         }
                                     }
                                 });
