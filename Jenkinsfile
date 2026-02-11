@@ -1,7 +1,13 @@
 #!/usr/bin/env groovy
 
 pipeline {
-  agent any
+    agent any
+
+    environment {
+        NPM_TOKEN = credentials('npm-token')
+        TIPTAP_PRO_TOKEN = credentials('tiptap-pro-token')
+    }
+    
     stages {
       stage("Initialization") {
         steps {
