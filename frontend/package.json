@@ -39,9 +39,9 @@
     ]
   },
   "dependencies": {
-    "@edifice.io/react": "develop",
-    "@edifice.io/bootstrap": "develop",
-    "@edifice.io/client": "develop",
+    "@edifice.io/react": "develop-b2school",
+    "@edifice.io/bootstrap": "develop-b2school",
+    "@edifice.io/client": "develop-b2school",
     "@mantine/hooks": "7.7.1",
     "@react-spring/web": "9.7.5",
     "@tanstack/react-query": "5.62.7",
