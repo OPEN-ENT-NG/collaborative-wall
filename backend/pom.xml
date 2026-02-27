@@ -12,7 +12,7 @@
 
     <groupId>net.atos</groupId>
     <artifactId>collaborativewall</artifactId>
-    <version>3.4-SNAPSHOT</version>
+    <version>3.4-separation-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:https://github.com/OPEN-ENT-NG/collaborative-wall.git</connection>
@@ -29,7 +29,8 @@
     </repositories>
 
     <properties>
-        <entCoreVersion>6.14-SNAPSHOT</entCoreVersion>
+        <entCoreVersion>6.14-separation-SNAPSHOT</entCoreVersion>
+        <entCoreLibsVersion>6.14-separation-SNAPSHOT</entCoreLibsVersion>
         <gatlingHighchartsVersion>2.3.1</gatlingHighchartsVersion>
         <junitVersion>4.10</junitVersion>
     </properties>
@@ -44,7 +45,7 @@
         <dependency>
             <groupId>org.entcore</groupId>
             <artifactId>common</artifactId>
-            <version>${entCoreVersion}</version>
+            <version>${entCoreLibsVersion}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -70,6 +71,13 @@
             <artifactId>junit</artifactId>
             <version>${junitVersion}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.entcore</groupId>
+            <artifactId>session</artifactId>
+            <version>${entCoreLibsVersion}</version>
+            <scope>runtime</scope>
+            <classifier>fat</classifier>
         </dependency>
     </dependencies>
 </project>
