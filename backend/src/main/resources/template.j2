@@ -2,6 +2,10 @@
   "name": "net.atos~collaborativewall",
   "config": {
     "main": "net.atos.entng.collaborativewall.CollaborativeWall",
+    "probes": [
+      "org.entcore.common.http.health.Neo4jProbe",
+      "org.entcore.common.http.health.MongoProbe"
+    ],
     "port": 8071,
     "csrf-token": {{ csrfToken | default('true') }},
     "app-name": "CollaborativeWall",
