@@ -59,24 +59,6 @@ fi
 init() {
   me=`id -u`:`id -g`
   echo "DEFAULT_DOCKER_USER=$me" > .env
-  # If CLI_VERSION is empty set $cli_version to latest
-  if [ -z "$CLI_VERSION" ]; then
-    CLI_VERSION="latest"
-  fi
-  # Create a build.compose.yaml file from following template
-  cat <<EOF > build.compose.yaml
-services:
-  edifice-cli:
-    image: opendigitaleducation/edifice-cli:$CLI_VERSION
-    user: "$DEFAULT_DOCKER_USER"
-EOF
-  	# Copy /root/edifice from edifice-cli container to host machine
-  	docker compose -f build.compose.yaml create edifice-cli
-  	docker compose -f build.compose.yaml cp edifice-cli:/root/edifice ./edifice
-  	docker compose -f build.compose.yaml rm -fsv edifice-cli
-  	rm -f build.compose.yaml
-  	chmod +x edifice
-  	./edifice version $EDIFICE_CLI_DEBUG_OPTION
 }
 
 clean () {
