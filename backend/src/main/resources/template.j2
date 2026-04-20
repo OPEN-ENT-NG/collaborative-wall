@@ -20,15 +20,17 @@
     "mode": "prod",
     {% if (collaborativeWallRealtimeEnabled | default(True)) != 'False' -%}
     "real-time": {
-     "port": {{ collaborativeWallWSPort | default('9091') }},
-     "max-connected-user": {{ collaborativeWallMaxUsers | default('5') }},
+     {% if collaborativeWallRedisUrl is defined %}
      "redisConfig": {
-         "maxPoolWaiting": {{ redisPoolWaitingExplorer|default('2024') }},
-         "maxWaitingHandlers": {{ redisWaitingHandlerExplorer|default('2024') }},
-         "host": "{{ redisUrl | default('') }}",
-         "port": {{ redisPort|default('6379') }},
-         "auth": "{{ credentials_redis_2_password }}"
-         }
+         "maxPoolWaiting": {{ collaborativeWallRedisPoolWaitingExplorer|default('2024') }},
+         "maxWaitingHandlers": {{ collaborativeWallRedisWaitingHandlerExplorer|default('2024') }},
+         "host": "{{ collaborativeWallRedisUrl | default('') }}",
+         "port": {{ collaborativeWallRedisPort|default('6379') }},
+         "auth": "{{ collaborativeWallRedisAuth }}"
+     },
+     {% endif %}
+     "port": {{ collaborativeWallWSPort | default('9091') }},
+     "max-connected-user": {{ collaborativeWallMaxUsers | default('5') }}
     },
     {%- endif %}
     "entcore.port": 8009
