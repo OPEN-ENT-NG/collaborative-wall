@@ -286,18 +286,7 @@ public class DefaultCollaborativeWallRTService implements CollaborativeWallRTSer
                 redisConfig = new JsonObject(redisConf);
             }
         }
-        String redisConnectionString = redisConfig.getString("connection-string");
-        if (Utils.isEmpty(redisConnectionString)) {
-            redisConnectionString =
-                    "redis://" + (redisConfig.containsKey("auth") ? ":" + redisConfig.getString("auth") + "@" : "") +
-                            redisConfig.getString("host") + ":" + redisConfig.getInteger("port") + "/" +
-                            redisConfig.getInteger("select", 0);
-        }
-        return new RedisOptions()
-                .setConnectionString(redisConnectionString)
-                .setMaxPoolSize(redisConfig.getInteger("pool-size", 32))
-                .setMaxWaitingHandlers(redisConfig.getInteger("maxWaitingHandlers", 100))
-                .setMaxPoolWaiting(redisConfig.getInteger("maxPoolWaiting", 100));
+        return RedisClient.getOptions(redisConfig);
     }
 
     @Override
