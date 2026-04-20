@@ -76,8 +76,8 @@ public class CollaborativeWall extends BaseServer {
         final Promise<Void> promise = Promise.promise();
         super.start(promise);
         promise.future()
-		        .compose(init -> SharedDataHelper.getInstance().getMulti("server", "metricsOptions", "redisConfig"))
-		        .compose(collaborativeWallMap -> initCollaborativeWall(collaborativeWallMap))
+		        .compose(init -> SharedDataHelper.getInstance().getLocalMulti("server", "metricsOptions", "redisConfig"))
+		        .compose(this::initCollaborativeWall)
 		        .onComplete(startPromise);
     }
 
