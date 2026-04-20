@@ -1,14 +1,12 @@
 package net.atos.entng.collaborativewall.events;
 
 import com.fasterxml.jackson.annotation.*;
-import fr.wseduc.mongodb.MongoDb;
 import io.vertx.core.json.JsonObject;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.ParseException;
 import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -29,10 +27,10 @@ public class CollaborativeWallNote {
     private final CollaborativeWallNoteMedia media;
     private final String idwall;
 
-    private static final List<String> dates_to_adapt = new ArrayList<>();
+    private static final List<String> datesToAdapt = new ArrayList<>();
     static {
-        dates_to_adapt.add("created");
-        dates_to_adapt.add("modified");
+        datesToAdapt.add("created");
+        datesToAdapt.add("modified");
     }
 
     @JsonCreator
@@ -122,7 +120,7 @@ public class CollaborativeWallNote {
      */
     public static JsonObject toMongoDb(JsonObject note) {
         final JsonObject copy = note.copy();
-        for (String dateName : dates_to_adapt) {
+        for (String dateName : datesToAdapt) {
             Object value = copy.getValue(dateName);
             long ts = -1;
             if(value instanceof Number) {
@@ -200,7 +198,14 @@ public class CollaborativeWallNote {
     }
 
     public static CollaborativeWallNote fromJson(final JsonObject json) {
-        return json.mapTo(CollaborativeWallNote.class);
+        final JsonObject copy = json.copy();
+        for (final String dateName : datesToAdapt) {
+            final Object value = copy.getValue(dateName);
+            if (value instanceof String) {
+                copy.put(dateName, new JsonObject().put("$date", (String) value));
+            }
+        }
+        return copy.mapTo(CollaborativeWallNote.class);
     }
 
     public JsonObject getCreated() {
