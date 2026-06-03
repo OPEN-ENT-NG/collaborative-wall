@@ -11,7 +11,7 @@
   </parent>
   <groupId>net.atos</groupId>
   <artifactId>collaborativewall</artifactId>
-  <version>3.5-develop-pedago-SNAPSHOT</version>
+  <version>3.5-SNAPSHOT</version>
   <scm>
     <connection>scm:git:https://github.com/OPEN-ENT-NG/collaborative-wall.git</connection>
     <developerConnection>scm:git:https://github.com/OPEN-ENT-NG/collaborative-wall.git</developerConnection>
