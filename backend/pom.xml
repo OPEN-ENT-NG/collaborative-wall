@@ -11,7 +11,7 @@
   </parent>
   <groupId>net.atos</groupId>
   <artifactId>collaborativewall</artifactId>
-  <version>3.5-SNAPSHOT</version>
+  <version>3.5-develop-pedago-SNAPSHOT</version>
   <scm>
     <connection>scm:git:https://github.com/OPEN-ENT-NG/collaborative-wall.git</connection>
     <developerConnection>scm:git:https://github.com/OPEN-ENT-NG/collaborative-wall.git</developerConnection>
@@ -25,11 +25,11 @@
     </repository>
   </repositories>
   <properties>
-    <entCoreVersion>6.16-SNAPSHOT</entCoreVersion>
-    <entCoreLibsVersion>6.16-SNAPSHOT</entCoreLibsVersion>
+    <entCoreVersion>6.16-develop-pedago-SNAPSHOT</entCoreVersion>
+    <entCoreLibsVersion>6.16-develop-pedago-SNAPSHOT</entCoreLibsVersion>
     <gatlingHighchartsVersion>2.3.1</gatlingHighchartsVersion>
     <junitVersion>4.10</junitVersion>
-    <modMongoVersion>4.2-SNAPSHOT</modMongoVersion>
+    <modMongoVersion>4.2-develop-pedago-SNAPSHOT</modMongoVersion>
     <modJsonSchemaValidatorVersion>2.2-SNAPSHOT</modJsonSchemaValidatorVersion>
   </properties>
   <dependencies>
