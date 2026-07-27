@@ -25,7 +25,7 @@
     </repository>
   </repositories>
   <properties>
-    <entCoreVersion>6.16-develop-enabling-SNAPSHOT</entCoreVersion>
+    <entCoreVersion>6.16-SNAPSHOT</entCoreVersion>
     <entCoreLibsVersion>6.16-SNAPSHOT</entCoreLibsVersion>
     <gatlingHighchartsVersion>2.3.1</gatlingHighchartsVersion>
     <junitVersion>4.10</junitVersion>
