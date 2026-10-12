@@ -101,12 +101,7 @@ export default ({ mode }: { mode: string }) => {
         transformMixedEsModules: true,
       },
       assetsDir: 'public',
-      chunkSizeWarningLimit: 5000,
-      rollupOptions: {
-        output: {
-          inlineDynamicImports: true,
-        },
-      },
+      chunkSizeWarningLimit: 1600,
     },
 
     test: {
