@@ -25,8 +25,8 @@
     </repository>
   </repositories>
   <properties>
-    <entCoreVersion>6.17-SNAPSHOT</entCoreVersion>
-    <entCoreLibsVersion>6.16-SNAPSHOT</entCoreLibsVersion>
+    <entCoreVersion>6.17-develop-pedago-SNAPSHOT</entCoreVersion>
+    <entCoreLibsVersion>6.16-develop-pedago-SNAPSHOT</entCoreLibsVersion>
     <gatlingHighchartsVersion>2.3.1</gatlingHighchartsVersion>
     <junitVersion>4.10</junitVersion>
     <modMongoVersion>4.2-develop-pedago-SNAPSHOT</modMongoVersion>
