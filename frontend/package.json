@@ -51,7 +51,7 @@
     "ode-explorer": "develop",
     "perfect-cursors": "1.0.5",
     "react-use-websocket": "4.8.1",
-    "uuid": "9.0.1",
+    "uuid": "14.0.0",
     "reactflow": "11.11.2",
     "react": "18.3.1",
     "react-dom": "18.3.1",
